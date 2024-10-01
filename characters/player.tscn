@@ -1,17 +1,26 @@
-[gd_scene load_steps=5 format=3 uid="uid://dgmulq68rm1md"]
+[gd_scene load_steps=7 format=3 uid="uid://dgmulq68rm1md"]
 
 [ext_resource type="Script" path="res://characters/player.gd" id="1_so47p"]
-[ext_resource type="Texture2D" uid="uid://d1pd83jl5jb28" path="res://textures/icon.svg" id="2_sl2dj"]
+[ext_resource type="Shader" path="res://shaders/outline.gdshader" id="2_j5ppi"]
 [ext_resource type="PackedScene" uid="uid://d3d3q8u26hymf" path="res://characters/abilities/zap.tscn" id="3_65jju"]
+[ext_resource type="Texture2D" uid="uid://dxcvjcqv1ubau" path="res://textures/test_avatar.png" id="3_axx35"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_bfe6u"]
+shader = ExtResource("2_j5ppi")
+shader_parameter/line_color = Color(0, 0.770704, 0.652882, 0)
+shader_parameter/line_thickness = 2.0
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_g7ocv"]
 
 [node name="Player" type="CharacterBody2D"]
+z_index = 1
 script = ExtResource("1_so47p")
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
-scale = Vector2(0.33, 0.33)
-texture = ExtResource("2_sl2dj")
+[node name="Sprite" type="Sprite2D" parent="."]
+unique_name_in_owner = true
+material = SubResource("ShaderMaterial_bfe6u")
+texture = ExtResource("3_axx35")
+region_rect = Rect2(-2, -2, 36, 36)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 scale = Vector2(2, 2)

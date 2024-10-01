@@ -8,8 +8,9 @@ class_name Character
 @onready var cur_ap: int = max_ap
 @onready var cur_mp: int = max_mp
 @onready var cur_hp: int = max_hp
+@onready var sprite: Sprite2D = %Sprite
 var in_combat: bool = false
-var interactive_in_range: Interactive = null
+var moving: bool = false
 
 func activate_ability(ability: Ability)->void:
 	if ability.ap_cost>cur_ap && in_combat:
@@ -31,11 +32,22 @@ func _take_damage(_source: Ability, amount: int)->void:
 	if cur_hp <= 0:
 		_defeated()
 
-func _enter_interactive_area(this_interactive: Interactive)->void:
-	interactive_in_range = this_interactive
+func interact(interactive: Interactive)->void:
+	interactive.call_deferred("_interacted", self)
 
-func _exit_interactive_area()->void:
-	interactive_in_range = null
+func select()->void:
+	var line_color: Color = sprite.material.get_shader_parameter("line_color")
+	sprite.material.set_shader_parameter("line_color", Color(line_color, 180.0/255.0))
 
-func interact()->void:
-	interactive_in_range.call_deferred("_interacted", self)
+func deselect()->void:
+	var line_color: Color = sprite.material.get_shader_parameter("line_color")
+	sprite.material.set_shader_parameter("line_color", Color(line_color, 0))
+
+func move(target_position: Vector2i)->void:
+	if moving:
+		return
+	moving = true
+	var path: Array[Vector2i] = GlobalRes.map.get_nav_path(position, target_position)
+	for cell in path:
+		await create_tween().tween_property(self, "position", GlobalRes.map.map_to_local(cell), .2).finished
+	moving = false
