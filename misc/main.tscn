@@ -1,3 +1,26 @@
-[gd_scene format=3 uid="uid://c6tflifn824fs"]
+[gd_scene load_steps=4 format=3 uid="uid://c6tflifn824fs"]
+
+[ext_resource type="PackedScene" uid="uid://dgmulq68rm1md" path="res://characters/player.tscn" id="1_w0mst"]
+[ext_resource type="PackedScene" uid="uid://bcfynfjod3hx0" path="res://maps/interactives/fuck_sun.tscn" id="2_tphgx"]
+[ext_resource type="PackedScene" uid="uid://t1lqjxny1int" path="res://misc/hud.tscn" id="3_tdt8p"]
 
 [node name="Main" type="Node2D"]
+
+[node name="Player" parent="." instance=ExtResource("1_w0mst")]
+
+[node name="Camera" type="Camera2D" parent="Player"]
+
+[node name="HUD" parent="Player" instance=ExtResource("3_tdt8p")]
+unique_name_in_owner = true
+anchors_preset = 4
+anchor_top = 0.5
+anchor_right = 0.0
+anchor_bottom = 0.5
+offset_left = -572.0
+grow_horizontal = 1
+
+[node name="FuckSun" parent="." instance=ExtResource("2_tphgx")]
+position = Vector2(129, 20)
+
+[editable path="Player"]
+[editable path="Player/HUD"]

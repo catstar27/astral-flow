@@ -1,0 +1,20 @@
+[gd_scene load_steps=5 format=3 uid="uid://dgmulq68rm1md"]
+
+[ext_resource type="Script" path="res://characters/player.gd" id="1_so47p"]
+[ext_resource type="Texture2D" uid="uid://d1pd83jl5jb28" path="res://textures/icon.svg" id="2_sl2dj"]
+[ext_resource type="PackedScene" uid="uid://d3d3q8u26hymf" path="res://characters/abilities/zap.tscn" id="3_65jju"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_g7ocv"]
+
+[node name="Player" type="CharacterBody2D"]
+script = ExtResource("1_so47p")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(0.33, 0.33)
+texture = ExtResource("2_sl2dj")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+scale = Vector2(2, 2)
+shape = SubResource("RectangleShape2D_g7ocv")
+
+[node name="Zap" parent="." instance=ExtResource("3_65jju")]
