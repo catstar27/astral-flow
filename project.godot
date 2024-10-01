@@ -15,6 +15,10 @@ run/main_scene="res://misc/main.tscn"
 config/features=PackedStringArray("4.3", "Forward Plus")
 config/icon="res://textures/icon.svg"
 
+[autoload]
+
+GlobalRes="*res://misc/global_res.gd"
+
 [display]
 
 window/vsync/vsync_mode=0
