@@ -9,7 +9,7 @@ var hovering: Node2D = null
 var moving: bool = false
 
 func _ready() -> void:
-	GlobalRes.hud = %HUD
+	GlobalRes.update_var(%HUD)
 	update_color()
 
 func update_color()->void:
@@ -44,7 +44,8 @@ func move_stop()->void:
 func select(pos: Vector2i)->void:
 	if hovering == null:
 		if selected is Character:
-			selected.move(pos)
+			selected.target_position = pos
+			selected.call_deferred("move")
 	else:
 		if selected is Character && hovering is Interactive:
 			selected.call_deferred("interact", hovering)

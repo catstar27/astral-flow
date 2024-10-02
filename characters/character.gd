@@ -1,7 +1,6 @@
 extends CharacterBody2D
 class_name Character
 
-@export var move_speed: float = 5.0
 @export var max_ap: int = 5
 @export var max_mp: int = 5
 @export var max_hp: int = 10
@@ -9,6 +8,7 @@ class_name Character
 @onready var cur_mp: int = max_mp
 @onready var cur_hp: int = max_hp
 @onready var sprite: Sprite2D = %Sprite
+@onready var target_position: Vector2 = position
 var in_combat: bool = false
 var moving: bool = false
 
@@ -43,11 +43,17 @@ func deselect()->void:
 	var line_color: Color = sprite.material.get_shader_parameter("line_color")
 	sprite.material.set_shader_parameter("line_color", Color(line_color, 0))
 
-func move(target_position: Vector2i)->void:
+func move()->void:
 	if moving:
 		return
-	moving = true
+	GlobalRes.map.update_occupied_tiles(GlobalRes.map.local_to_map(position), false)
+	var cur_target: Vector2 = target_position
 	var path: Array[Vector2i] = GlobalRes.map.get_nav_path(position, target_position)
 	for cell in path:
+		moving = true
 		await create_tween().tween_property(self, "position", GlobalRes.map.map_to_local(cell), .2).finished
-	moving = false
+		moving = false
+		if cur_target != target_position:
+			call_deferred("move")
+			return
+	GlobalRes.map.update_occupied_tiles(GlobalRes.map.local_to_map(position), true)

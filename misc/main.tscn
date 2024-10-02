@@ -1,14 +1,10 @@
-[gd_scene load_steps=4 format=3 uid="uid://c6tflifn824fs"]
+[gd_scene load_steps=3 format=3 uid="uid://c6tflifn824fs"]
 
 [ext_resource type="Script" path="res://misc/main.gd" id="1_518bh"]
-[ext_resource type="PackedScene" uid="uid://dgmulq68rm1md" path="res://characters/player.tscn" id="1_w0mst"]
 [ext_resource type="PackedScene" uid="uid://b85mlpg1agp8h" path="res://misc/selection_cursor.tscn" id="4_lfpb3"]
 
 [node name="Main" type="Node2D"]
 script = ExtResource("1_518bh")
-
-[node name="Player" parent="." instance=ExtResource("1_w0mst")]
-unique_name_in_owner = true
 
 [node name="SelectionCursor" parent="." instance=ExtResource("4_lfpb3")]
 unique_name_in_owner = true

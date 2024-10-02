@@ -2,8 +2,11 @@ extends TileMapLayer
 class_name GameMap
 
 @export var player_start_pos: Vector2i = Vector2i.ZERO
-@export var cursor_start_pos: Vector2i = Vector2i.ZERO
 @onready var astar: AStarGrid2D = AStarGrid2D.new()
+
+func update_occupied_tiles(tile: Vector2i, occupied: bool = false)->void:
+	print(tile)
+	astar.set_point_solid(tile, occupied)
 
 func _astar_setup()->void:
 	astar.region = get_used_rect()
@@ -26,5 +29,7 @@ func get_nav_path(start_pos: Vector2, end_pos: Vector2)->Array[Vector2i]:
 		return astar.get_id_path(start_cell, end_cell, true)
 	return []
 
-func _ready() -> void:
+func prep_map()->void:
 	_astar_setup()
+	for child in get_children():
+		update_occupied_tiles(local_to_map(child.position), true)

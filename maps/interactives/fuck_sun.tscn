@@ -13,9 +13,9 @@ shader_parameter/line_thickness = 0.5
 [sub_resource type="CircleShape2D" id="CircleShape2D_ngh6q"]
 radius = 11.0
 
-[node name="FuckSun" type="RigidBody2D"]
+[node name="FuckSun" type="StaticBody2D"]
 z_index = 1
-gravity_scale = 0.0
+scale = Vector2(2, 2)
 script = ExtResource("1_ryve7")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]

@@ -1,4 +1,5 @@
 extends Control
+class_name HUD
 
 @onready var ability_list: VBoxContainer = %AbilityList
 @onready var ability_button_scn: PackedScene = preload("res://misc/ability_button.tscn")
