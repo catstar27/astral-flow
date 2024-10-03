@@ -11,6 +11,7 @@ class_name Character
 @onready var target_position: Vector2 = position
 var in_combat: bool = false
 var moving: bool = false
+signal move_interrupt
 
 func activate_ability(ability: Ability)->void:
 	if ability.ap_cost>cur_ap && in_combat:
@@ -33,7 +34,9 @@ func _take_damage(_source: Ability, amount: int)->void:
 		_defeated()
 
 func interact(interactive: Interactive)->void:
-	interactive.call_deferred("_interacted", self)
+	var reached: bool = await move()
+	if reached:
+		interactive.call_deferred("_interacted", self)
 
 func select()->void:
 	var line_color: Color = sprite.material.get_shader_parameter("line_color")
@@ -43,17 +46,19 @@ func deselect()->void:
 	var line_color: Color = sprite.material.get_shader_parameter("line_color")
 	sprite.material.set_shader_parameter("line_color", Color(line_color, 0))
 
-func move()->void:
+func move()->bool:
 	if moving:
-		return
+		return false
+	moving = true
 	GlobalRes.map.update_occupied_tiles(GlobalRes.map.local_to_map(position), false)
 	var cur_target: Vector2 = target_position
 	var path: Array[Vector2i] = GlobalRes.map.get_nav_path(position, target_position)
 	for cell in path:
-		moving = true
 		await create_tween().tween_property(self, "position", GlobalRes.map.map_to_local(cell), .2).finished
-		moving = false
 		if cur_target != target_position:
-			call_deferred("move")
-			return
+			moving = false
+			move_interrupt.emit()
+			return false
 	GlobalRes.map.update_occupied_tiles(GlobalRes.map.local_to_map(position), true)
+	moving = false
+	return true

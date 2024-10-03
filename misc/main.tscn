@@ -8,3 +8,4 @@ script = ExtResource("1_518bh")
 
 [node name="SelectionCursor" parent="." instance=ExtResource("4_lfpb3")]
 unique_name_in_owner = true
+tint = Color(0, 1, 1, 1)

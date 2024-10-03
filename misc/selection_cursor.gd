@@ -45,9 +45,14 @@ func select(pos: Vector2i)->void:
 	if hovering == null:
 		if selected is Character:
 			selected.target_position = pos
+			if selected.moving:
+				await selected.move_interrupt
 			selected.call_deferred("move")
 	else:
 		if selected is Character && hovering is Interactive:
+			selected.target_position = pos
+			if selected.moving:
+				await selected.move_interrupt
 			selected.call_deferred("interact", hovering)
 		if hovering is Character:
 			selected = hovering

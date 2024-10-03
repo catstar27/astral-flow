@@ -5,7 +5,6 @@ class_name GameMap
 @onready var astar: AStarGrid2D = AStarGrid2D.new()
 
 func update_occupied_tiles(tile: Vector2i, occupied: bool = false)->void:
-	print(tile)
 	astar.set_point_solid(tile, occupied)
 
 func _astar_setup()->void:
@@ -26,7 +25,16 @@ func get_nav_path(start_pos: Vector2, end_pos: Vector2)->Array[Vector2i]:
 	var start_cell: Vector2i = local_to_map(start_pos)
 	var end_cell: Vector2i = local_to_map(end_pos)
 	if astar.is_in_boundsv(start_cell) && astar.is_in_boundsv(end_cell):
-		return astar.get_id_path(start_cell, end_cell, true)
+		if !astar.is_point_solid(end_cell):
+			return astar.get_id_path(start_cell, end_cell, true)
+		else:
+			var dist_compare: Callable = (func(a,b): return a.distance_to(start_cell)<b.distance_to(start_cell))
+			var neighbors_sorted: Array[Vector2i] = get_surrounding_cells(end_cell)
+			neighbors_sorted.sort_custom(dist_compare)
+			for cell in neighbors_sorted:
+				if !astar.is_point_solid(cell):
+					return astar.get_id_path(start_cell, cell, true)
+			return []
 	return []
 
 func prep_map()->void:
