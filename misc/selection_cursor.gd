@@ -7,6 +7,7 @@ class_name SelectionCursor
 var selected: Node2D = null
 var hovering: Node2D = null
 var moving: bool = false
+var move_dir: Vector2i = Vector2i.ZERO
 
 func _ready() -> void:
 	GlobalRes.update_var(%HUD)
@@ -15,20 +16,25 @@ func _ready() -> void:
 func update_color()->void:
 	sprite.modulate = tint
 
-func _physics_process(_delta: float) -> void:
-	var move_dir: Vector2i = Vector2i.ZERO
-	if Input.is_action_pressed("left"):
+func _unhandled_input(event: InputEvent) -> void:
+	if Dialogic.Text.is_textbox_visible():
+		return
+	if event.is_action_pressed("left"):
 		move_dir += Vector2i.LEFT
-	if Input.is_action_pressed("right"):
+	if event.is_action_pressed("right"):
 		move_dir += Vector2i.RIGHT
-	if Input.is_action_pressed("up"):
+	if event.is_action_pressed("up"):
 		move_dir += Vector2i.UP
-	if Input.is_action_pressed("down"):
+	if event.is_action_pressed("down"):
 		move_dir += Vector2i.DOWN
-	if !moving && move_dir != Vector2i.ZERO:
-		move(move_dir)
 	if Input.is_action_just_released("interact"):
 		select(position)
+
+func _physics_process(delta: float) -> void:
+	if !moving && move_dir != Vector2i.ZERO:
+		var prev_move: Vector2i = move_dir
+		move_dir = Vector2i.ZERO
+		move(prev_move)
 
 func move(move_dir: Vector2i)->void:
 	moving = true
@@ -50,10 +56,11 @@ func select(pos: Vector2i)->void:
 			selected.call_deferred("move")
 	else:
 		if selected is Character && hovering is Interactive:
+			var hovering_select: Interactive = hovering
 			selected.target_position = pos
 			if selected.moving:
 				await selected.move_interrupt
-			selected.call_deferred("interact", hovering)
+			selected.call_deferred("interact", hovering_select)
 		if hovering is Character:
 			selected = hovering
 			selected.call_deferred("select")
