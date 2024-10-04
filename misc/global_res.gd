@@ -4,6 +4,7 @@ var player: Player
 var selection_cursor: SelectionCursor
 var map: GameMap
 var hud: HUD
+var timer: Timer
 var selection_cursor_scene: PackedScene = preload("res://misc/selection_cursor.tscn")
 var player_scene: PackedScene = preload("res://characters/player.tscn")
 signal globals_initialized
@@ -17,5 +18,7 @@ func update_var(new_value)->void:
 		map = new_value
 	if new_value is HUD:
 		hud = new_value
+	if new_value is Timer:
+		timer = new_value
 	if player != null && selection_cursor != null && map != null && hud != null:
 		globals_initialized.emit()

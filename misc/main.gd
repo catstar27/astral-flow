@@ -1,6 +1,7 @@
 extends Node2D
 
 func _ready() -> void:
+	GlobalRes.update_var(%GlobalTimer)
 	GlobalRes.update_var(%SelectionCursor)
 	load_map("res://maps/test_map.tscn")
 
