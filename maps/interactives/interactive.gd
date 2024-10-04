@@ -20,5 +20,5 @@ func _setup()->void:
 func _interacted(_character: Character):
 	audio.play()
 	if dialogue_timeline != null:
-		Dialogic.start(dialogue_timeline)
+		GlobalRes.current_timeline = Dialogic.start(dialogue_timeline)
 	interacted.emit()

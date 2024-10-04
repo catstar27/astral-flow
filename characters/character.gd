@@ -13,7 +13,7 @@ var in_combat: bool = false
 var moving: bool = false
 signal move_interrupt
 
-func activate_ability(ability: Ability)->void:
+func activate_ability(ability: Ability, destination: Vector2)->void:
 	if ability.ap_cost>cur_ap && in_combat:
 		print("Not enough ap")
 		return
@@ -22,7 +22,7 @@ func activate_ability(ability: Ability)->void:
 		return
 	cur_ap -= ability.ap_cost
 	cur_mp -= ability.mp_cost
-	ability.activate()
+	ability.activate(destination)
 
 func _defeated()->void:
 	print("Defeated "+name)
@@ -49,11 +49,15 @@ func deselect()->void:
 func move()->bool:
 	if moving:
 		return false
+	if in_combat && cur_ap == 0:
+		return false
 	moving = true
 	GlobalRes.map.update_occupied_tiles(GlobalRes.map.local_to_map(position), false)
 	var cur_target: Vector2 = target_position
 	var path: Array[Vector2i] = GlobalRes.map.get_nav_path(position, target_position)
 	for cell in path:
+		if in_combat:
+			cur_ap -= 1
 		await create_tween().tween_property(self, "position", GlobalRes.map.map_to_local(cell), .2).finished
 		if cur_target != target_position:
 			moving = false

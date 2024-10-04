@@ -1,8 +1,7 @@
 The couch looks oddly pristine, but smells like potato chips...
-if {test_room_puzzle_index} == 1:
-	- Poke
-		You hear a click...
-		[signal arg="test_room_couch_click"]
-		[end_timeline]
-	- Leave
-		[end_timeline]
+- Poke
+	You hear a click...
+	[signal arg="test_room_couch_click"]
+	[end_timeline]
+- Leave
+	[end_timeline]

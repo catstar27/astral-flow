@@ -1,8 +1,7 @@
 This thing looks a bit like the sun. For some reason, it does not actually emit light.
-if {test_room_puzzle_index} == 0:
-	- Poke
-		Somehow, it isn't hot, and you hear a click...
-		[signal arg="test_room_sun_click"]
-		[end_timeline]
-	- Leave
-		[end_timeline]
+- Poke
+	Somehow, it isn't hot, and you hear a click...
+	[signal arg="test_room_sun_click"]
+	[end_timeline]
+- Leave
+	[end_timeline]

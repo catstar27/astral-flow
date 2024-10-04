@@ -2,7 +2,7 @@ extends Character
 class_name Player
 
 func _ready() -> void:
-	GlobalRes.connect("globals_initialized", populate_ability_list)
+	GlobalRes.globals_initialized.connect(populate_ability_list)
 
 func populate_ability_list()->void:
 	for child in get_children():

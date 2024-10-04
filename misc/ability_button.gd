@@ -7,4 +7,7 @@ func _ready() -> void:
 	text = ability.name
 
 func _on_pressed() -> void:
-	GlobalRes.player.activate_ability(ability)
+	if !GlobalRes.selection_cursor.selected == ability:
+		GlobalRes.selection_cursor.select(ability)
+	else:
+		GlobalRes.selection_cursor.select(null)

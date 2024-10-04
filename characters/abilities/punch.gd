@@ -1,4 +1,4 @@
 extends Ability
 
-func activate()->void:
+func activate(destination: Vector2)->void:
 	print("Punch!")

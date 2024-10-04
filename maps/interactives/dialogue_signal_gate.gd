@@ -28,6 +28,8 @@ func _interacted(_character: Character):
 		interacted.emit()
 
 func advance_unlock(signal_event: String)->void:
+	if !signal_event in signals_needed:
+		return
 	if !signal_index>=signals_needed.size():
 		if signal_event==signals_needed[signal_index]:
 			signal_index += 1

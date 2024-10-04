@@ -1,10 +1,9 @@
 join dog left [animation="Slide In Up"]
 \dog: Woof!
 - Pet
-	\dog: *Happy Noises*
-	if {test_room_puzzle_index} == 2:
-		The dog seems to make a clicking noise...
-		[signal arg="test_room_dog_click"]
+	\dog: *Happy Dog Noises*
+	The dog seems to make a clicking noise...
+	[signal arg="test_room_dog_click"]
 	[end_timeline]
 - Leave
 	[end_timeline]

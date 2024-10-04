@@ -1,9 +1,9 @@
 The grapes are moldy... how long have they been here?
-if {test_room_puzzle_index} == 3:
-	- Poke
-		Ew... one of the grapes was hardened... it made a clicking noise...
+- Poke
+	Ew... one of the grapes was hardened... it made a clicking noise...
+	if {test_room_puzzle_index} == 3:
 		Wait... the gate over there seemed to click, too.
-		[signal arg="test_room_grapes_click"]
-		[end_timeline]
-	- Leave
-		[end_timeline]
+	[signal arg="test_room_grapes_click"]
+	[end_timeline]
+- Leave
+	[end_timeline]
