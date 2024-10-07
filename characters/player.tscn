@@ -29,7 +29,6 @@ scale = Vector2(2, 2)
 shape = SubResource("RectangleShape2D_g7ocv")
 
 [node name="Punch" parent="." instance=ExtResource("4_ud5uy")]
-mp_cost = null
 
 [node name="Zap" parent="." instance=ExtResource("3_65jju")]
 
