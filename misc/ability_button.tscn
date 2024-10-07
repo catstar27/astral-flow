@@ -3,10 +3,11 @@
 [ext_resource type="Script" path="res://misc/ability_button.gd" id="1_o8rum"]
 
 [node name="AbilityButton" type="Button"]
-offset_right = 8.0
-offset_bottom = 8.0
+offset_right = 41.0
+offset_bottom = 31.0
 focus_mode = 0
 toggle_mode = true
+text = "Test"
 script = ExtResource("1_o8rum")
 
 [connection signal="pressed" from="." to="." method="_on_pressed"]

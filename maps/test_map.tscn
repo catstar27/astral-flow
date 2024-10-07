@@ -18,9 +18,11 @@ texture_region_size = Vector2i(64, 64)
 0:0/0 = 0
 0:0/0/custom_data_0 = true
 1:0/0 = 0
+1:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-32, -32, 32, -32, 32, 32, -32, 32)
 
 [sub_resource type="TileSet" id="TileSet_xvokm"]
 tile_size = Vector2i(64, 64)
+physics_layer_0/collision_layer = 1
 custom_data_layer_0/name = "traversible"
 custom_data_layer_0/type = 1
 sources/1 = SubResource("TileSetAtlasSource_a1i6e")
@@ -43,10 +45,11 @@ dialogue = "res://dialogue/test_room_sun.dtl"
 texture = ExtResource("6_dg1xt")
 
 [node name="Couch" parent="." instance=ExtResource("4_72sth")]
-position = Vector2(160, -160)
+position = Vector2(128, -160)
 scale = Vector2(1.4, 1.4)
 dialogue = "res://dialogue/test_room_couch.dtl"
 texture = ExtResource("7_g1jef")
+dimensions = Vector2i(2, 1)
 
 [node name="Dog" parent="." instance=ExtResource("4_72sth")]
 position = Vector2(-224, -160)

@@ -8,17 +8,19 @@ var signal_index: int = 0
 enum state {locked, unlocked, open}
 var cur_state: state = state.locked
 
-func _ready() -> void:
-	_setup()
+func setup()->void:
 	sprite.texture = locked_texture
 	Dialogic.signal_event.connect(advance_unlock)
 	Dialogic.VAR.set(dialogic_var, signal_index)
+	if dialogue != "":
+		dialogue_timeline = load(dialogue)
+	_calc_occupied()
 
 func _interacted(_character: Character):
 	if cur_state == state.locked:
 		audio.play()
 		if dialogue_timeline != null:
-			Dialogic.start(dialogue_timeline)
+			GlobalRes.current_timeline = Dialogic.start(dialogue_timeline)
 		interacted.emit()
 	elif cur_state == state.unlocked:
 		sprite.texture = texture

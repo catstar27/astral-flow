@@ -52,7 +52,7 @@ func move_stop()->void:
 func interact_on_pos(pos: Vector2i)->void:
 	if selected is Ability:
 		selected.user.activate_ability(selected, pos)
-	elif hovering == null:
+	elif hovering == null || hovering is GameMap:
 		if selected is Character:
 			selected.target_position = pos
 			if selected.moving:

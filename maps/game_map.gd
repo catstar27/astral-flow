@@ -40,4 +40,9 @@ func get_nav_path(start_pos: Vector2, end_pos: Vector2)->Array[Vector2i]:
 func prep_map()->void:
 	_astar_setup()
 	for child in get_children():
-		update_occupied_tiles(local_to_map(child.position), true)
+		if child is Interactive:
+			child.setup()
+			for tile in child.occupied_tiles:
+				update_occupied_tiles(tile, true)
+		else:
+			update_occupied_tiles(local_to_map(child.position), true)
