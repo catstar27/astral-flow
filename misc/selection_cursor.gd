@@ -73,7 +73,8 @@ func select(node: Node)->void:
 	selected = node
 
 func _selection_area_entered(body: Node2D) -> void:
-	hovering = body
+	if !body is GameMap:
+		hovering = body
 
 func _selection_area_exited(body: Node2D) -> void:
 	if hovering == body:

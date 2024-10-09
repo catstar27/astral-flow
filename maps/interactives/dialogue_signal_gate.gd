@@ -9,6 +9,9 @@ enum state {locked, unlocked, open}
 var cur_state: state = state.locked
 
 func setup()->void:
+	var shape: RectangleShape2D = RectangleShape2D.new()
+	shape.size = 64*Vector2(float(dimensions.x)/scale.x, float(dimensions.y)/scale.y)
+	collision.shape = shape
 	sprite.texture = locked_texture
 	Dialogic.signal_event.connect(advance_unlock)
 	Dialogic.VAR.set(dialogic_var, signal_index)
