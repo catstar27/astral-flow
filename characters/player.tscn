@@ -33,4 +33,3 @@ shape = SubResource("RectangleShape2D_g7ocv")
 [node name="Zap" parent="." instance=ExtResource("3_65jju")]
 
 [node name="Block" parent="." instance=ExtResource("6_7aa7e")]
-mp_cost = null

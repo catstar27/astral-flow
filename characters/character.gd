@@ -14,6 +14,9 @@ var moving: bool = false
 signal move_interrupt
 
 func activate_ability(ability: Ability, destination: Vector2)->void:
+	if !ability.is_destination_valid(destination):
+		print("Invalid Target!")
+		return
 	if ability.ap_cost>cur_ap && in_combat:
 		print("Not enough ap")
 		return
