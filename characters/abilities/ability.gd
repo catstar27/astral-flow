@@ -18,3 +18,4 @@ func is_destination_valid(destination: Vector2)->bool:
 
 func activate(_destination: Vector2)->void:
 	return
+ 

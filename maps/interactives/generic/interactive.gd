@@ -4,6 +4,7 @@ class_name Interactive
 @export var dialogue: String
 @export var texture: Texture
 @export var dimensions: Vector2i = Vector2i.ONE
+@export var offset: Vector2 = Vector2.ZERO
 @onready var sprite: Sprite2D = %Sprite
 @onready var audio: AudioStreamPlayer2D = %Audio
 @onready var collision: CollisionShape2D = %Collision
@@ -15,7 +16,10 @@ func setup()->void:
 	var shape: RectangleShape2D = RectangleShape2D.new()
 	shape.size = 64*Vector2(float(dimensions.x)/scale.x, float(dimensions.y)/scale.y)
 	collision.shape = shape
-	sprite.texture = texture
+	if texture != null:
+		sprite.texture = texture
+	if offset != Vector2.ZERO:
+		sprite.offset = offset
 	if dialogue != "":
 		dialogue_timeline = load(dialogue)
 	_calc_occupied()

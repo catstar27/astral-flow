@@ -3,15 +3,26 @@ class_name SelectionCursor
 
 @onready var sprite: Sprite2D = %Sprite
 @onready var selection_area: Area2D = %SelectionArea
+@onready var selection_marker_scene: PackedScene = preload("res://misc/selection_marker.tscn")
 @export var tint: Color = Color.AQUA
 var selected: Node2D = null
 var hovering: Node2D = null
 var moving: bool = false
 var move_dir: Vector2i = Vector2i.ZERO
+var marker: Node2D = null
 
 func _ready() -> void:
 	GlobalRes.update_var(%HUD)
 	update_color()
+
+func _create_marker()->void:
+	marker = selection_marker_scene.instantiate()
+	marker.modulate = tint
+	selected.add_child(marker)
+
+func _delete_marker()->void:
+	if marker != null:
+		marker.queue_free()
 
 func reset_move_dir()->void:
 	move_dir = Vector2i.ZERO
@@ -31,8 +42,10 @@ func _unhandled_input(event: InputEvent) -> void:
 		move_dir.x = _scale_float(Input.get_axis("left", "right"))
 	if event.is_action("up") || event.is_action("down"):
 		move_dir.y = _scale_float(Input.get_axis("up", "down"))
-	if event.is_action_released("interact"):
+	if event.is_action_pressed("interact"):
 		interact_on_pos(position)
+	if event.is_action_pressed("clear"):
+		deselect()
 
 func _physics_process(_delta: float) -> void:
 	if !moving && move_dir != Vector2i.ZERO:
@@ -42,6 +55,9 @@ func move(dir: Vector2i)->void:
 	moving = true
 	var cur_map_pos: Vector2i = GlobalRes.map.local_to_map(position)
 	var new_pos: Vector2 = GlobalRes.map.map_to_local(dir+cur_map_pos)
+	if !GlobalRes.map.is_in_bounds(dir+cur_map_pos):
+		move_stop()
+		return
 	var tween: Tween = create_tween()
 	tween.tween_property(self, "position", new_pos, .2).set_ease(Tween.EASE_IN_OUT)
 	tween.tween_callback(move_stop)
@@ -71,6 +87,13 @@ func interact_on_pos(pos: Vector2i)->void:
 
 func select(node: Node)->void:
 	selected = node
+	_create_marker()
+
+func deselect()->void:
+	if selected != null:
+		selected.call_deferred("deselect")
+	selected = null
+	_delete_marker()
 
 func _selection_area_entered(body: Node2D) -> void:
 	if !body is GameMap:

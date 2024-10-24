@@ -13,6 +13,9 @@ var in_combat: bool = false
 var moving: bool = false
 signal move_interrupt
 
+func _setup()->void:
+	GlobalRes.timer.timeout.connect(refresh_safe)
+
 func activate_ability(ability: Ability, destination: Vector2)->void:
 	if !ability.is_destination_valid(destination):
 		print("Invalid Target!")
@@ -26,6 +29,11 @@ func activate_ability(ability: Ability, destination: Vector2)->void:
 	cur_ap -= ability.ap_cost
 	cur_mp -= ability.mp_cost
 	ability.activate(destination)
+
+func refresh_safe()->void:
+	if in_combat:
+		return
+	cur_ap = max_ap
 
 func _defeated()->void:
 	print("Defeated "+name)

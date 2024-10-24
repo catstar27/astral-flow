@@ -3,6 +3,8 @@ class_name GameMap
 
 @export var player_start_pos: Vector2i = Vector2i.ZERO
 @onready var astar: AStarGrid2D = AStarGrid2D.new()
+@onready var light_modulator: CanvasModulate = %LightingModulate
+var tile_bounds: Dictionary = {"x_min": 0, "x_max": 0, "y_min": 0, "y_max": 0}
 
 func update_occupied_tiles(tile: Vector2i, occupied: bool = false)->void:
 	astar.set_point_solid(tile, occupied)
@@ -37,12 +39,35 @@ func get_nav_path(start_pos: Vector2, end_pos: Vector2)->Array[Vector2i]:
 			return []
 	return []
 
+func _calc_bounds()->void:
+	var cells: Array[Vector2i] = get_used_cells()
+	for cell in cells:
+		if cell.x<tile_bounds.x_min:
+			tile_bounds.x_min = cell.x
+		if cell.x>tile_bounds.x_max:
+			tile_bounds.x_max = cell.x
+		if cell.y<tile_bounds.y_min:
+			tile_bounds.y_min = cell.y
+		if cell.y>tile_bounds.y_max:
+			tile_bounds.y_max = cell.y
+
+func is_in_bounds(pos: Vector2i)->bool:
+	if pos.x<tile_bounds.x_min || pos.x>tile_bounds.x_max:
+		return false
+	if pos.y<tile_bounds.y_min || pos.y>tile_bounds.y_max:
+		return false
+	return true
+
 func prep_map()->void:
+	light_modulator.show()
+	_calc_bounds()
 	_astar_setup()
 	for child in get_children():
 		if child is Interactive:
 			child.setup()
 			for tile in child.occupied_tiles:
 				update_occupied_tiles(tile, true)
+		elif child is CanvasModulate:
+			pass
 		else:
 			update_occupied_tiles(local_to_map(child.position), true)

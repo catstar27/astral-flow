@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://iwh84j268tml"]
 
-[ext_resource type="Script" path="res://maps/interactives/interactive.gd" id="1_to78k"]
+[ext_resource type="Script" path="res://maps/interactives/generic/interactive.gd" id="1_to78k"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_4ou26"]
 size = Vector2(40, 40)

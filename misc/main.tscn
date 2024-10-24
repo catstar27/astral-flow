@@ -7,7 +7,11 @@
 process_mode = 3
 script = ExtResource("1_518bh")
 
-[node name="SelectionCursor" parent="." instance=ExtResource("4_lfpb3")]
+[node name="ExcludeLighting" type="CanvasLayer" parent="."]
+layer = 2
+follow_viewport_enabled = true
+
+[node name="SelectionCursor" parent="ExcludeLighting" instance=ExtResource("4_lfpb3")]
 unique_name_in_owner = true
 process_mode = 1
 
