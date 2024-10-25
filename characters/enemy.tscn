@@ -1,14 +1,12 @@
-[gd_scene load_steps=12 format=3 uid="uid://dgmulq68rm1md"]
+[gd_scene load_steps=11 format=3 uid="uid://c2af6y8es466h"]
 
-[ext_resource type="Script" path="res://characters/player.gd" id="1_so47p"]
-[ext_resource type="Shader" path="res://shaders/outline.gdshader" id="2_j5ppi"]
-[ext_resource type="PackedScene" uid="uid://d3d3q8u26hymf" path="res://characters/abilities/zap.tscn" id="3_65jju"]
-[ext_resource type="Texture2D" uid="uid://dxcvjcqv1ubau" path="res://textures/test_avatar.png" id="3_axx35"]
-[ext_resource type="PackedScene" uid="uid://cwie2bybm8vto" path="res://characters/abilities/punch.tscn" id="4_ud5uy"]
-[ext_resource type="PackedScene" uid="uid://ymey58k1x83b" path="res://characters/abilities/block.tscn" id="6_7aa7e"]
+[ext_resource type="Script" path="res://characters/enemy.gd" id="1_3pgqe"]
+[ext_resource type="Shader" path="res://shaders/outline.gdshader" id="2_4x7kb"]
+[ext_resource type="Texture2D" uid="uid://dxcvjcqv1ubau" path="res://textures/test_avatar.png" id="3_joqcd"]
+[ext_resource type="PackedScene" uid="uid://cwie2bybm8vto" path="res://characters/abilities/punch.tscn" id="4_viveu"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_bfe6u"]
-shader = ExtResource("2_j5ppi")
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_xyr6f"]
+shader = ExtResource("2_4x7kb")
 shader_parameter/line_color = Color(0, 0.770704, 0.652882, 0)
 shader_parameter/line_thickness = 2.0
 
@@ -110,16 +108,20 @@ _data = {
 "melee": SubResource("Animation_kxect")
 }
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_g7ocv"]
+[sub_resource type="CircleShape2D" id="CircleShape2D_vqoxr"]
 
-[node name="Player" type="CharacterBody2D"]
-z_index = 1
-script = ExtResource("1_so47p")
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_nbbbf"]
+
+[node name="Enemy" type="CharacterBody2D"]
+script = ExtResource("1_3pgqe")
+max_ap = null
+max_mp = null
+max_hp = null
 
 [node name="Sprite" type="Sprite2D" parent="."]
 unique_name_in_owner = true
-material = SubResource("ShaderMaterial_bfe6u")
-texture = ExtResource("3_axx35")
+material = SubResource("ShaderMaterial_xyr6f")
+texture = ExtResource("3_joqcd")
 region_rect = Rect2(-2, -2, 36, 36)
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
@@ -128,12 +130,14 @@ libraries = {
 "": SubResource("AnimationLibrary_7ssjw")
 }
 
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+scale = Vector2(25, 25)
+shape = SubResource("CircleShape2D_vqoxr")
+
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 scale = Vector2(2, 2)
-shape = SubResource("RectangleShape2D_g7ocv")
+shape = SubResource("RectangleShape2D_nbbbf")
 
-[node name="Punch" parent="." instance=ExtResource("4_ud5uy")]
-
-[node name="Zap" parent="." instance=ExtResource("3_65jju")]
-
-[node name="Block" parent="." instance=ExtResource("6_7aa7e")]
+[node name="Punch" parent="." instance=ExtResource("4_viveu")]

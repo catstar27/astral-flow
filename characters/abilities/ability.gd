@@ -5,6 +5,7 @@ enum target_type_choice {target_self, target_allies, target_enemies, target_all}
 @onready var user: Character = get_parent()
 @export var ap_cost: int = 0
 @export var mp_cost: int = 0
+@export var damage: int = 0
 @export var ability_range: int = 1
 @export var target_type: target_type_choice = target_type_choice.target_all
 @export var needs_line_of_sight: bool = 1
@@ -30,6 +31,11 @@ func is_destination_valid(destination: Vector2)->bool:
 
 func get_target(destination: Vector2)->Node2D:
 	return GlobalRes.selection_cursor.get_obj_at_pos(destination)
+
+func deal_damage(target: Node2D)->void:
+	if target != null:
+		if target.has_method("damage"):
+			target.call_deferred("damage", self, damage)
 
 func activate(_destination: Vector2)->void:
 	return

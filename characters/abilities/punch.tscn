@@ -5,3 +5,4 @@
 [node name="Punch" type="Node2D"]
 script = ExtResource("1_p0hx2")
 ap_cost = 2
+damage = 2

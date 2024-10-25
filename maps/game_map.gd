@@ -37,31 +37,31 @@ func _set_astar_tiles()->void:
 		if !get_cell_tile_data(cell).get_custom_data("traversible"):
 			astar.set_point_solid(cell)
 
-func get_nav_path(start_pos: Vector2, end_pos: Vector2, allow_closest: bool = true, ignore_occupied: bool = false)->Array[Vector2i]:
-	if ignore_occupied:
+func get_nav_path(start_pos: Vector2, end_pos: Vector2, closest: bool = true, ign_occ: bool = false)->Array[Vector2i]:
+	if ign_occ:
 		start_ignore_occupied()
 	var start_cell: Vector2i = local_to_map(start_pos)
 	var end_cell: Vector2i = local_to_map(end_pos)
 	if astar.is_in_boundsv(start_cell) && astar.is_in_boundsv(end_cell):
 		if !astar.is_point_solid(end_cell):
-			var path: Array[Vector2i] = astar.get_id_path(start_cell, end_cell, allow_closest)
-			if ignore_occupied:
+			var path: Array[Vector2i] = astar.get_id_path(start_cell, end_cell, closest)
+			if ign_occ:
 				stop_ignore_occupied()
 			return path
-		elif allow_closest:
+		elif closest:
 			var dist_compare: Callable = (func(a,b): return a.distance_to(start_cell)<b.distance_to(start_cell))
 			var neighbors_sorted: Array[Vector2i] = get_surrounding_cells(end_cell)
 			neighbors_sorted.sort_custom(dist_compare)
 			for cell in neighbors_sorted:
 				if !astar.is_point_solid(cell):
 					var path: Array[Vector2i] = astar.get_id_path(start_cell, cell, true)
-					if ignore_occupied:
+					if ign_occ:
 						stop_ignore_occupied()
 					return path
-			if ignore_occupied:
+			if ign_occ:
 				stop_ignore_occupied()
 			return []
-	if ignore_occupied:
+	if ign_occ:
 		stop_ignore_occupied()
 	return []
 

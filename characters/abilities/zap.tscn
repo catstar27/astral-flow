@@ -6,4 +6,5 @@
 script = ExtResource("1_q1n8d")
 ap_cost = 2
 mp_cost = 1
+damage = 5
 ability_range = 3

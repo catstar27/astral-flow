@@ -9,7 +9,6 @@ process_mode = 3
 script = ExtResource("1_518bh")
 
 [node name="ExcludeLighting" type="CanvasLayer" parent="."]
-layer = 2
 follow_viewport_enabled = true
 
 [node name="SelectionCursor" parent="ExcludeLighting" instance=ExtResource("4_lfpb3")]

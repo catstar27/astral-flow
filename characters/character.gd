@@ -58,9 +58,10 @@ func refresh_safe()->void:
 
 func _defeated()->void:
 	print("Defeated "+name)
+	GlobalRes.map.update_occupied_tiles(GlobalRes.map.local_to_map(position), false)
 	queue_free()
 
-func _take_damage(_source: Ability, amount: int)->void:
+func damage(_source: Ability, amount: int)->void:
 	cur_hp -= amount
 	if cur_hp <= 0:
 		_defeated()
