@@ -9,8 +9,10 @@ class_name Character
 @onready var cur_hp: int = max_hp
 @onready var sprite: Sprite2D = %Sprite
 @onready var target_position: Vector2 = position
+@onready var range_indicator_scene: PackedScene = preload("res://misc/range_indicator.tscn")
 var in_combat: bool = false
 var moving: bool = false
+var range_indicators: Array[Sprite2D] = []
 signal move_interrupt
 
 func _setup()->void:
@@ -29,6 +31,18 @@ func activate_ability(ability: Ability, destination: Vector2)->void:
 	cur_ap -= ability.ap_cost
 	cur_mp -= ability.mp_cost
 	ability.activate(destination)
+
+func place_range_indicators(locations: Array[Vector2])->void:
+	for location in locations:
+		var indicator: Sprite2D = range_indicator_scene.instantiate()
+		indicator.modulate = GlobalRes.selection_cursor.tint
+		indicator.position = location-position
+		add_child(indicator)
+		range_indicators.append(indicator)
+
+func remove_range_indicators()->void:
+	while range_indicators.size()>0:
+		range_indicators.pop_front().queue_free()
 
 func refresh_safe()->void:
 	if in_combat:

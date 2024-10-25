@@ -10,4 +10,4 @@ func _on_pressed() -> void:
 	if !GlobalRes.selection_cursor.selected == ability:
 		GlobalRes.selection_cursor.select(ability)
 	else:
-		GlobalRes.selection_cursor.select(null)
+		GlobalRes.selection_cursor.deselect()

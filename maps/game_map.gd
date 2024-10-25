@@ -23,13 +23,13 @@ func _set_astar_tiles()->void:
 		if !get_cell_tile_data(cell).get_custom_data("traversible"):
 			astar.set_point_solid(cell)
 
-func get_nav_path(start_pos: Vector2, end_pos: Vector2)->Array[Vector2i]:
+func get_nav_path(start_pos: Vector2, end_pos: Vector2, allow_closest: bool = true)->Array[Vector2i]:
 	var start_cell: Vector2i = local_to_map(start_pos)
 	var end_cell: Vector2i = local_to_map(end_pos)
 	if astar.is_in_boundsv(start_cell) && astar.is_in_boundsv(end_cell):
 		if !astar.is_point_solid(end_cell):
-			return astar.get_id_path(start_cell, end_cell, true)
-		else:
+			return astar.get_id_path(start_cell, end_cell, allow_closest)
+		elif allow_closest:
 			var dist_compare: Callable = (func(a,b): return a.distance_to(start_cell)<b.distance_to(start_cell))
 			var neighbors_sorted: Array[Vector2i] = get_surrounding_cells(end_cell)
 			neighbors_sorted.sort_custom(dist_compare)

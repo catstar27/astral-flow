@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://t1lqjxny1int"]
+[gd_scene load_steps=3 format=3 uid="uid://t1lqjxny1int"]
 
 [ext_resource type="Script" path="res://misc/hud.gd" id="1_mvbgd"]
+[ext_resource type="Theme" uid="uid://crcivs73grrf7" path="res://textures/custom_theme.tres" id="1_swtcj"]
 
 [node name="HUD" type="Control"]
 layout_mode = 3
@@ -9,6 +10,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("1_swtcj")
 script = ExtResource("1_mvbgd")
 
 [node name="AbilityList" type="VBoxContainer" parent="."]

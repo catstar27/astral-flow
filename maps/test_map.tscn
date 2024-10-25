@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=4 uid="uid://qw4hbk40dyvm"]
+[gd_scene load_steps=15 format=4 uid="uid://qw4hbk40dyvm"]
 
 [ext_resource type="Texture2D" uid="uid://b4gigoborowkw" path="res://textures/test_tiles.png" id="1_0ie11"]
 [ext_resource type="Script" path="res://maps/test_map.gd" id="2_6hspn"]
@@ -13,15 +13,6 @@
 [ext_resource type="Texture2D" uid="uid://cgnsug1o0el0w" path="res://textures/gate_open.png" id="11_77ahb"]
 [ext_resource type="PackedScene" uid="uid://8hplcp22i5re" path="res://maps/interactives/lights/wall_light.tscn" id="12_kvvyy"]
 
-[sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_clyg6"]
-polygon = PackedVector2Array(-32, -32, 32, -32, 32, 32, -32, 32)
-
-[sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_yfn58"]
-polygon = PackedVector2Array(-32, -32, 32, -32, 32, 32, -32, 32)
-
-[sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_1g51j"]
-polygon = PackedVector2Array(-32, -32, 32, -32, 32, 32, -32, 32)
-
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_a1i6e"]
 texture = ExtResource("1_0ie11")
 texture_region_size = Vector2i(64, 64)
@@ -31,31 +22,26 @@ texture_region_size = Vector2i(64, 64)
 1:0/0 = 0
 1:0/0/terrain_set = 0
 1:0/0/terrain = 0
-1:0/0/occlusion_layer_0/polygon = SubResource("OccluderPolygon2D_clyg6")
 1:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-32, -32, 32, -32, 32, 32, -32, 32)
 1:0/0/terrains_peering_bit/right_side = 0
 1:0/0/terrains_peering_bit/left_side = 0
 2:0/0 = 0
 2:0/0/terrain_set = 0
 2:0/0/terrain = 0
-2:0/0/occlusion_layer_0/polygon = SubResource("OccluderPolygon2D_yfn58")
 2:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-32, -32, 32, -32, 32, 32, -32, 32)
 3:0/0 = 0
 3:0/0/terrain_set = 0
 3:0/0/terrain = 0
-3:0/0/occlusion_layer_0/polygon = SubResource("OccluderPolygon2D_1g51j")
 3:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-32, -32, 32, -32, 32, 32, -32, 32)
 3:0/0/terrains_peering_bit/left_side = 0
 4:0/0 = 0
 4:0/0/terrain_set = 0
 4:0/0/terrain = 0
-4:0/0/occlusion_layer_0/polygon = SubResource("OccluderPolygon2D_1g51j")
 4:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-32, -32, 32, -32, 32, 32, -32, 32)
 4:0/0/terrains_peering_bit/right_side = 0
 
 [sub_resource type="TileSet" id="TileSet_xvokm"]
 tile_size = Vector2i(64, 64)
-occlusion_layer_0/light_mask = 1
 physics_layer_0/collision_layer = 1
 terrain_set_0/mode = 0
 terrain_set_0/terrain_0/name = "Terrain 0"
@@ -111,33 +97,26 @@ dialogue = "res://dialogue/locked.dtl"
 texture = ExtResource("11_77ahb")
 
 [node name="WallLight" parent="." instance=ExtResource("12_kvvyy")]
-position = Vector2(-248, 96)
+position = Vector2(-288, -32)
 
 [node name="WallLight2" parent="." instance=ExtResource("12_kvvyy")]
-position = Vector2(-544, 184)
+position = Vector2(-544, 224)
 rotation = -1.5708
 
-[node name="WallLight3" parent="." instance=ExtResource("12_kvvyy")]
-position = Vector2(-248, -96)
-
 [node name="WallLight4" parent="." instance=ExtResource("12_kvvyy")]
-position = Vector2(248, -96)
+position = Vector2(416, -736)
 rotation = 3.14159
 
 [node name="WallLight5" parent="." instance=ExtResource("12_kvvyy")]
-position = Vector2(248, 96)
+position = Vector2(288, 96)
 rotation = 3.14159
 
 [node name="WallLight6" parent="." instance=ExtResource("12_kvvyy")]
-position = Vector2(-248, -288)
+position = Vector2(-288, -416)
 
 [node name="WallLight7" parent="." instance=ExtResource("12_kvvyy")]
-position = Vector2(-248, -544)
+position = Vector2(-288, -736)
 
 [node name="WallLight8" parent="." instance=ExtResource("12_kvvyy")]
-position = Vector2(376, -288)
-rotation = 3.14159
-
-[node name="WallLight9" parent="." instance=ExtResource("12_kvvyy")]
-position = Vector2(376, -544)
+position = Vector2(416, -416)
 rotation = 3.14159

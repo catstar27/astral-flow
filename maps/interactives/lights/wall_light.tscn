@@ -13,6 +13,7 @@ script = ExtResource("1_niad6")
 [node name="Sprite" type="Sprite2D" parent="."]
 unique_name_in_owner = true
 texture = ExtResource("2_tggvp")
+offset = Vector2(40, 0)
 
 [node name="Audio" type="AudioStreamPlayer2D" parent="."]
 unique_name_in_owner = true
@@ -23,8 +24,13 @@ shape = SubResource("RectangleShape2D_pa78a")
 
 [node name="Light" type="PointLight2D" parent="."]
 unique_name_in_owner = true
+position = Vector2(40, 0)
 color = Color(0.996078, 1, 0.788235, 1)
-energy = 2.0
+energy = 1.5
 blend_mode = 2
+shadow_enabled = true
+shadow_filter = 2
+shadow_filter_smooth = 1.0
 texture = ExtResource("3_y2d7t")
 texture_scale = 3.0
+height = 64.0

@@ -86,12 +86,19 @@ func interact_on_pos(pos: Vector2i)->void:
 			selected.call_deferred("select")
 
 func select(node: Node)->void:
+	if selected != null:
+		deselect()
 	selected = node
-	_create_marker()
+	if selected is Ability:
+		selected.user.place_range_indicators(selected.get_valid_destinations())
+	if selected != null:
+		_create_marker()
 
 func deselect()->void:
-	if selected != null:
+	if selected != null && selected.has_method("deselect"):
 		selected.call_deferred("deselect")
+	if selected is Ability:
+		selected.user.remove_range_indicators()
 	selected = null
 	_delete_marker()
 
