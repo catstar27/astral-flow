@@ -4,10 +4,24 @@ class_name GameMap
 @export var player_start_pos: Vector2i = Vector2i.ZERO
 @onready var astar: AStarGrid2D = AStarGrid2D.new()
 @onready var light_modulator: CanvasModulate = %LightingModulate
+var occupied_tiles: Array[Vector2i]
 var tile_bounds: Dictionary = {"x_min": 0, "x_max": 0, "y_min": 0, "y_max": 0}
 
 func update_occupied_tiles(tile: Vector2i, occupied: bool = false)->void:
+	if occupied && tile not in occupied_tiles:
+		occupied_tiles.append(tile)
+	elif !occupied && tile in occupied_tiles:
+		occupied_tiles.remove_at(occupied_tiles.find(tile))
 	astar.set_point_solid(tile, occupied)
+
+func start_ignore_occupied()->void:
+	for tile in occupied_tiles:
+		if get_cell_tile_data(tile).get_custom_data("traversible"):
+			astar.set_point_solid(tile, false)
+
+func stop_ignore_occupied()->void:
+	for tile in occupied_tiles:
+		astar.set_point_solid(tile, true)
 
 func _astar_setup()->void:
 	astar.region = get_used_rect()
@@ -23,20 +37,32 @@ func _set_astar_tiles()->void:
 		if !get_cell_tile_data(cell).get_custom_data("traversible"):
 			astar.set_point_solid(cell)
 
-func get_nav_path(start_pos: Vector2, end_pos: Vector2, allow_closest: bool = true)->Array[Vector2i]:
+func get_nav_path(start_pos: Vector2, end_pos: Vector2, allow_closest: bool = true, ignore_occupied: bool = false)->Array[Vector2i]:
+	if ignore_occupied:
+		start_ignore_occupied()
 	var start_cell: Vector2i = local_to_map(start_pos)
 	var end_cell: Vector2i = local_to_map(end_pos)
 	if astar.is_in_boundsv(start_cell) && astar.is_in_boundsv(end_cell):
 		if !astar.is_point_solid(end_cell):
-			return astar.get_id_path(start_cell, end_cell, allow_closest)
+			var path: Array[Vector2i] = astar.get_id_path(start_cell, end_cell, allow_closest)
+			if ignore_occupied:
+				stop_ignore_occupied()
+			return path
 		elif allow_closest:
 			var dist_compare: Callable = (func(a,b): return a.distance_to(start_cell)<b.distance_to(start_cell))
 			var neighbors_sorted: Array[Vector2i] = get_surrounding_cells(end_cell)
 			neighbors_sorted.sort_custom(dist_compare)
 			for cell in neighbors_sorted:
 				if !astar.is_point_solid(cell):
-					return astar.get_id_path(start_cell, cell, true)
+					var path: Array[Vector2i] = astar.get_id_path(start_cell, cell, true)
+					if ignore_occupied:
+						stop_ignore_occupied()
+					return path
+			if ignore_occupied:
+				stop_ignore_occupied()
 			return []
+	if ignore_occupied:
+		stop_ignore_occupied()
 	return []
 
 func _calc_bounds()->void:

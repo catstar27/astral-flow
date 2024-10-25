@@ -8,12 +8,14 @@ class_name Character
 @onready var cur_mp: int = max_mp
 @onready var cur_hp: int = max_hp
 @onready var sprite: Sprite2D = %Sprite
+@onready var anim_player: AnimationPlayer = %AnimationPlayer
 @onready var target_position: Vector2 = position
 @onready var range_indicator_scene: PackedScene = preload("res://misc/range_indicator.tscn")
 var in_combat: bool = false
 var moving: bool = false
 var range_indicators: Array[Sprite2D] = []
 signal move_interrupt
+signal anim_activate_ability
 
 func _setup()->void:
 	GlobalRes.timer.timeout.connect(refresh_safe)
@@ -30,7 +32,12 @@ func activate_ability(ability: Ability, destination: Vector2)->void:
 		return
 	cur_ap -= ability.ap_cost
 	cur_mp -= ability.mp_cost
+	anim_player.play("melee")
+	await anim_activate_ability
 	ability.activate(destination)
+
+func anim_activate()->void:
+	anim_activate_ability.emit()
 
 func place_range_indicators(locations: Array[Vector2])->void:
 	for location in locations:

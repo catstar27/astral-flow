@@ -1,4 +1,4 @@
 extends Ability
 
 func activate(destination: Vector2)->void:
-	print("Punch!")
+	print(get_target(destination))

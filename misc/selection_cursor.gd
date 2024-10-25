@@ -102,6 +102,15 @@ func deselect()->void:
 	selected = null
 	_delete_marker()
 
+func get_obj_at_pos(pos: Vector2)->Node2D:
+	moving = true
+	var old_pos: Vector2 = position
+	position = pos
+	var obj: Node2D = hovering
+	position = old_pos
+	moving = false
+	return obj
+
 func _selection_area_entered(body: Node2D) -> void:
 	if !body is GameMap:
 		hovering = body
