@@ -114,9 +114,6 @@ _data = {
 
 [node name="Enemy" type="CharacterBody2D"]
 script = ExtResource("1_3pgqe")
-max_ap = null
-max_mp = null
-max_hp = null
 
 [node name="Sprite" type="Sprite2D" parent="."]
 unique_name_in_owner = true
@@ -130,9 +127,10 @@ libraries = {
 "": SubResource("AnimationLibrary_7ssjw")
 }
 
-[node name="Area2D" type="Area2D" parent="."]
+[node name="CombatTrigger" type="Area2D" parent="."]
+unique_name_in_owner = true
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CombatTrigger"]
 scale = Vector2(25, 25)
 shape = SubResource("CircleShape2D_vqoxr")
 
@@ -141,3 +139,5 @@ scale = Vector2(2, 2)
 shape = SubResource("RectangleShape2D_nbbbf")
 
 [node name="Punch" parent="." instance=ExtResource("4_viveu")]
+
+[connection signal="body_entered" from="CombatTrigger" to="." method="_combat_trigger_entered"]

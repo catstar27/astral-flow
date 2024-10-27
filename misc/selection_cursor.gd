@@ -71,16 +71,11 @@ func interact_on_pos(pos: Vector2i)->void:
 	elif hovering == null || hovering is GameMap:
 		if selected is Character:
 			selected.target_position = pos
-			if selected.moving:
-				await selected.move_interrupt
-			selected.call_deferred("move")
+			selected.emit_signal("move_order")
 	else:
 		if selected is Character && hovering is Interactive:
-			var hovering_select: Interactive = hovering
 			selected.target_position = pos
-			if selected.moving:
-				await selected.move_interrupt
-			selected.call_deferred("interact", hovering_select)
+			selected.emit_signal("interact_order", hovering)
 		if hovering is Character && selected == null:
 			select(hovering)
 			selected.call_deferred("select")

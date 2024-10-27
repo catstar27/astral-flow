@@ -1,5 +1,6 @@
 extends Node
 
+var main: Node2D
 var player: Player
 var selection_cursor: SelectionCursor
 var map: GameMap

@@ -1,6 +1,9 @@
 extends Node2D
 
+@onready var combat_manager: CombatManager = %CombatManager
+
 func _ready() -> void:
+	GlobalRes.main = self
 	GlobalRes.update_var(%GlobalTimer)
 	GlobalRes.update_var(%SelectionCursor)
 	load_map("res://maps/test_map.tscn")
@@ -36,3 +39,9 @@ func exit_dialogue()->void:
 	Dialogic.process_mode = Node.PROCESS_MODE_PAUSABLE
 	GlobalRes.current_timeline.process_mode = Node.PROCESS_MODE_PAUSABLE
 	GlobalRes.current_timeline = null
+
+func start_combat(player: Player, enemy: Enemy)->void:
+	var participants: Array[Character] = [player, enemy]
+	participants.append_array(player.allies)
+	participants.append_array(enemy.allies)
+	combat_manager.start_combat(participants)
