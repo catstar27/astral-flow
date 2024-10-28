@@ -27,6 +27,7 @@ func load_map(map: String)->void:
 	GlobalRes.update_var(player)
 	GlobalRes.selection_cursor.position = map_to_load.map_to_local(map_to_load.player_start_pos)
 	map_to_load.prep_map()
+	GlobalRes.hud.setup()
 
 func enter_dialogue()->void:
 	GlobalRes.selection_cursor.reset_move_dir()

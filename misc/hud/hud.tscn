@@ -1,0 +1,26 @@
+[gd_scene load_steps=4 format=3 uid="uid://t1lqjxny1int"]
+
+[ext_resource type="Script" path="res://misc/hud/hud.gd" id="1_mvbgd"]
+[ext_resource type="Theme" uid="uid://crcivs73grrf7" path="res://textures/custom_theme.tres" id="1_swtcj"]
+[ext_resource type="PackedScene" uid="uid://dn3wvhbb3qaw1" path="res://misc/hud/char_info.tscn" id="3_ocorx"]
+
+[node name="HUD" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_swtcj")
+script = ExtResource("1_mvbgd")
+
+[node name="CharInfo" parent="." instance=ExtResource("3_ocorx")]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = -58.5
+offset_right = 40.0
+offset_bottom = 58.5
+grow_vertical = 2

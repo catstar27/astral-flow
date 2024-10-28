@@ -19,6 +19,7 @@ process_mode = 1
 [node name="GlobalTimer" type="Timer" parent="."]
 unique_name_in_owner = true
 process_mode = 1
+autostart = true
 
 [node name="Background" type="Sprite2D" parent="."]
 z_index = -5

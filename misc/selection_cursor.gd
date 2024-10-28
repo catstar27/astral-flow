@@ -10,6 +10,7 @@ var hovering: Node2D = null
 var moving: bool = false
 var move_dir: Vector2i = Vector2i.ZERO
 var marker: Node2D = null
+signal selection_changed(selected)
 
 func _ready() -> void:
 	GlobalRes.update_var(%HUD)
@@ -76,9 +77,8 @@ func interact_on_pos(pos: Vector2i)->void:
 		if selected is Character && hovering is Interactive:
 			selected.target_position = pos
 			selected.emit_signal("interact_order", hovering)
-		if hovering is Character && selected == null:
+		if hovering is Player && selected == null:
 			select(hovering)
-			selected.call_deferred("select")
 
 func select(node: Node)->void:
 	if selected != null:
@@ -88,14 +88,20 @@ func select(node: Node)->void:
 		selected.user.place_range_indicators(selected.get_valid_destinations())
 	if selected != null:
 		_create_marker()
+		if selected.has_method("select"):
+			selected.call_deferred("select")
+	selection_changed.emit(selected)
 
 func deselect()->void:
+	_delete_marker()
 	if selected != null && selected.has_method("deselect"):
 		selected.call_deferred("deselect")
 	if selected is Ability:
 		selected.user.remove_range_indicators()
+		call_deferred("select", selected.user)
+		return
 	selected = null
-	_delete_marker()
+	selection_changed.emit(selected)
 
 func get_obj_at_pos(pos: Vector2)->Node2D:
 	moving = true

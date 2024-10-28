@@ -30,6 +30,7 @@ signal move_order
 signal interact_order(object: Interactive)
 signal anim_activate_ability
 signal end_turn
+signal stats_changed
 
 func _setup()->void:
 	GlobalRes.timer.timeout.connect(refresh)
@@ -48,6 +49,7 @@ func activate_ability(ability: Ability, destination: Vector2)->void:
 		return
 	cur_ap -= ability.ap_cost
 	cur_mp -= ability.mp_cost
+	stats_changed.emit()
 	anim_player.play("melee")
 	await anim_activate_ability
 	ability.activate(destination)
@@ -72,6 +74,7 @@ func remove_range_indicators()->void:
 
 func refresh()->void:
 	cur_ap = base_stats.max_ap
+	stats_changed.emit()
 
 func _defeated()->void:
 	print("Defeated "+name)
@@ -80,6 +83,7 @@ func _defeated()->void:
 
 func damage(_source: Ability, amount: int)->void:
 	cur_hp -= amount
+	stats_changed.emit()
 	if cur_hp <= 0:
 		_defeated()
 
@@ -96,31 +100,42 @@ func deselect()->void:
 	var line_color: Color = sprite.material.get_shader_parameter("line_color")
 	sprite.material.set_shader_parameter("line_color", Color(line_color, 0))
 
+func get_abilities()->Array[Ability]:
+	var arr: Array[Ability] = []
+	for child in get_children():
+		if child is Ability:
+			arr.append(child)
+	return arr
+
 func move():
 	if moving:
 		return
 	if in_combat && cur_ap == 0:
 		return
 	moving = true
-	GlobalRes.map.update_occupied_tiles(GlobalRes.map.local_to_map(position), false)
 	var cur_target: Vector2 = target_position
 	var path: Array[Vector2i] = GlobalRes.map.get_nav_path(position, target_position)
+	path.pop_front()
 	for cell in path:
+		if cur_ap == 0:
+				print("No ap for movement!")
+				moving = false
+				return
 		if stop_move:
 			target_position = position
 			stop_move = false
 			moving = false
 			return
+		var prev_cell: Vector2i = GlobalRes.map.local_to_map(position)
+		GlobalRes.map.update_occupied_tiles(cell, true)
 		await create_tween().tween_property(self, "position", GlobalRes.map.map_to_local(cell), .2).finished
+		GlobalRes.map.update_occupied_tiles(prev_cell, false)
 		if in_combat:
 			cur_ap -= 1
-			if cur_ap == 0:
-				print("No ap for movement!")
-				return
+			stats_changed.emit()
 		if cur_target != target_position:
 			moving = false
 			move_order.emit()
 			return
-	GlobalRes.map.update_occupied_tiles(GlobalRes.map.local_to_map(position), true)
 	moving = false
 	return
