@@ -8,3 +8,4 @@ ap_cost = 2
 mp_cost = 1
 damage = 5
 ability_range = 3
+damage_type = 1

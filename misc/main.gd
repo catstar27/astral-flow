@@ -1,7 +1,6 @@
 extends Node2D
 
 @onready var combat_manager: CombatManager = %CombatManager
-signal test_room_combat_gate(sig_name)
 
 func _ready() -> void:
 	get_window().min_size = Vector2(960, 540)

@@ -2,12 +2,14 @@ extends Node2D
 class_name Ability
 
 enum target_type_choice {target_self, target_allies, target_enemies, target_all}
+enum damage_type_choice {blunt, electric}
 @onready var user: Character = get_parent()
 @export var ap_cost: int = 0
 @export var mp_cost: int = 0
 @export var damage: int = 0
 @export var ability_range: int = 1
 @export var target_type: target_type_choice = target_type_choice.target_all
+@export var damage_type: damage_type_choice = damage_type_choice.blunt
 signal activated
 
 func get_valid_destinations()->Array[Vector2]:

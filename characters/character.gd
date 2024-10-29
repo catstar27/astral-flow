@@ -67,6 +67,12 @@ func activate_ability(ability: Ability, destination: Vector2)->void:
 	using_ability = false
 	ability_used.emit()
 
+func add_ability(ability_scene: PackedScene)->void:
+	add_child(ability_scene.instantiate())
+	if GlobalRes.selection_cursor.selected == self:
+		GlobalRes.selection_cursor.call_deferred("select", self)
+	print(get_children())
+
 func roll_sequence()->void:
 	sequence = (base_stats.agility-10)+(base_stats.passion-10)+randi_range(1,10)
 

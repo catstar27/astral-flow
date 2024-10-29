@@ -111,6 +111,7 @@ _data = {
 
 [node name="TestRoomNPC" type="CharacterBody2D"]
 script = ExtResource("1_q7ey0")
+dialogue = "res://dialogue/test_room_npc.dtl"
 
 [node name="Sprite" type="Sprite2D" parent="."]
 unique_name_in_owner = true

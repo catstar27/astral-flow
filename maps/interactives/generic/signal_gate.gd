@@ -13,8 +13,6 @@ func setup()->void:
 	shape.size = 64*Vector2(float(dimensions.x)/scale.x, float(dimensions.y)/scale.y)
 	collision.shape = shape
 	sprite.texture = locked_texture
-	for sig in signals_needed:
-		GlobalRes.main.connect(sig, advance_unlock)
 	if dialogue != "":
 		dialogue_timeline = load(dialogue)
 	_calc_occupied()

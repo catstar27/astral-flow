@@ -1,0 +1,20 @@
+[gd_scene load_steps=3 format=3 uid="uid://v2x25sfrymso"]
+
+[ext_resource type="Script" path="res://maps/interactives/generic/damage_activation_interactive.gd" id="1_22vp7"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_4ou26"]
+size = Vector2(40, 40)
+
+[node name="DamageActivationInteractive" type="StaticBody2D"]
+script = ExtResource("1_22vp7")
+
+[node name="Sprite" type="Sprite2D" parent="."]
+unique_name_in_owner = true
+hframes = 2
+
+[node name="Audio" type="AudioStreamPlayer2D" parent="."]
+unique_name_in_owner = true
+
+[node name="Collision" type="CollisionShape2D" parent="."]
+unique_name_in_owner = true
+shape = SubResource("RectangleShape2D_4ou26")

@@ -93,6 +93,9 @@ func is_in_bounds(pos: Vector2i)->bool:
 func _extra_setup()->void:
 	return
 
+func sig_connect(sig: String, fn: Callable)->void:
+	connect(sig, fn)
+
 func prep_map()->void:
 	light_modulator.show()
 	_calc_bounds()

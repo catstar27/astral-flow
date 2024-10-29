@@ -1,6 +1,7 @@
 extends GameMap
 
 @onready var test_room_npc_scene: PackedScene = preload("res://characters/presets/test_room_npc.tscn")
+@warning_ignore("unused_signal") signal test_room_combat_gate(sig_name)
 
 func _extra_setup()->void:
 	for child in get_children():
