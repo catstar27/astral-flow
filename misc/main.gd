@@ -3,7 +3,9 @@ extends Node2D
 @onready var combat_manager: CombatManager = %CombatManager
 
 func _ready() -> void:
+	get_window().min_size = Vector2(960, 540)
 	GlobalRes.main = self
+	GlobalRes.combat_manager = combat_manager
 	GlobalRes.update_var(%GlobalTimer)
 	GlobalRes.update_var(%SelectionCursor)
 	load_map("res://maps/test_map.tscn")

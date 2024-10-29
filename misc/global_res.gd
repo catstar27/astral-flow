@@ -3,6 +3,7 @@ extends Node
 var main: Node2D
 var player: Player
 var selection_cursor: SelectionCursor
+var combat_manager: CombatManager
 var map: GameMap
 var hud: HUD
 var timer: Timer
@@ -24,3 +25,6 @@ func update_var(new_value)->void:
 		timer = new_value
 	if player != null && selection_cursor != null && map != null && hud != null && timer != null:
 		globals_initialized.emit()
+
+func print_log(data)->void:
+	hud.call_deferred("print_log", data)

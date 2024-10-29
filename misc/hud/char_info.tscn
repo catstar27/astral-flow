@@ -7,30 +7,24 @@ offset_right = 960.0
 offset_bottom = 81.0
 script = ExtResource("1_bnuoq")
 
-[node name="StatInfo" type="VBoxContainer" parent="."]
+[node name="StatInfoPanel" type="PanelContainer" parent="."]
 layout_mode = 2
 
-[node name="PanelHP" type="PanelContainer" parent="StatInfo"]
+[node name="StatInfo" type="VBoxContainer" parent="StatInfoPanel"]
 layout_mode = 2
 
-[node name="HP" type="Label" parent="StatInfo/PanelHP"]
+[node name="HP" type="Label" parent="StatInfoPanel/StatInfo"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 0
 text = "HP"
 
-[node name="PanelAP" type="PanelContainer" parent="StatInfo"]
-layout_mode = 2
-
-[node name="AP" type="Label" parent="StatInfo/PanelAP"]
+[node name="AP" type="Label" parent="StatInfoPanel/StatInfo"]
 unique_name_in_owner = true
 layout_mode = 2
 text = "AP"
 
-[node name="PanelMP" type="PanelContainer" parent="StatInfo"]
-layout_mode = 2
-
-[node name="MP" type="Label" parent="StatInfo/PanelMP"]
+[node name="MP" type="Label" parent="StatInfoPanel/StatInfo"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 8
@@ -39,3 +33,8 @@ text = "MP"
 [node name="AbilityList" type="VBoxContainer" parent="."]
 unique_name_in_owner = true
 layout_mode = 2
+
+[node name="EndTurn" type="Button" parent="."]
+unique_name_in_owner = true
+layout_mode = 2
+text = "End Turn"

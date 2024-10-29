@@ -74,33 +74,41 @@ func interact_on_pos(pos: Vector2i)->void:
 			selected.target_position = pos
 			selected.emit_signal("move_order")
 	else:
-		if selected is Character && hovering is Interactive:
+		if selected is Character && (hovering is Interactive || hovering is NPC):
 			selected.target_position = pos
 			selected.emit_signal("interact_order", hovering)
 		if hovering is Player && selected == null:
 			select(hovering)
 
 func select(node: Node)->void:
+	if node is Character && node.in_combat && !node.taking_turn:
+		return
 	if selected != null:
 		deselect()
 	selected = node
 	if selected is Ability:
 		selected.user.place_range_indicators(selected.get_valid_destinations())
+		selected.user.ended_turn.connect(deselect)
+	if selected is Character:
+		selected.call_deferred("select")
+		selected.ended_turn.connect(deselect)
 	if selected != null:
 		_create_marker()
-		if selected.has_method("select"):
-			selected.call_deferred("select")
 	selection_changed.emit(selected)
 
 func deselect()->void:
 	_delete_marker()
-	if selected != null && selected.has_method("deselect"):
-		selected.call_deferred("deselect")
-	if selected is Ability:
-		selected.user.remove_range_indicators()
-		call_deferred("select", selected.user)
+	if selected == null:
 		return
+	var prev_select: Node2D = selected
 	selected = null
+	if prev_select is Character:
+		prev_select.call_deferred("deselect")
+		prev_select.ended_turn.disconnect(deselect)
+	elif prev_select is Ability:
+		prev_select.user.remove_range_indicators()
+		prev_select.user.ended_turn.disconnect(deselect)
+		select(prev_select.user)
 	selection_changed.emit(selected)
 
 func get_obj_at_pos(pos: Vector2)->Node2D:

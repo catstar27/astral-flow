@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://cy2jrxj781wh3"]
+
+[ext_resource type="Script" path="res://misc/hud/sequence_display.gd" id="1_m1igy"]
+
+[node name="SequenceDisplay" type="VBoxContainer"]
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("1_m1igy")

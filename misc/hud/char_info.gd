@@ -6,6 +6,7 @@ class_name CharInfo
 @onready var hp_label: Label = %HP
 @onready var ap_label: Label = %AP
 @onready var mp_label: Label = %MP
+@onready var end_turn_button: Button = %EndTurn
 var character: Character = null
 
 func add_ability(ability: Ability)->void:
@@ -16,9 +17,12 @@ func add_ability(ability: Ability)->void:
 func set_character(new_char: Character)->void:
 	if new_char == character:
 		return
+	elif character != null:
+		end_turn_button.pressed.disconnect(character.end_self_turn)
 	character = new_char
 	character.stats_changed.connect(update_labels)
 	update_labels()
+	end_turn_button.pressed.connect(character.end_turn)
 	for ability in character.get_abilities():
 		add_ability(ability)
 

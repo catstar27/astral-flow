@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://bhm8d338r0fhu"]
 
-[ext_resource type="Script" path="res://interactive_light.gd" id="1_n2xyu"]
-[ext_resource type="Texture2D" uid="uid://bhhygp0qptsgv" path="res://textures/neutral_point_light.webp" id="2_xt807"]
+[ext_resource type="Script" path="res://maps/interactives/generic/interactive_light.gd" id="1_n2xyu"]
+[ext_resource type="Texture2D" path="res://textures/neutral_point_light.webp" id="2_xt807"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_pa78a"]
 size = Vector2(40, 40)

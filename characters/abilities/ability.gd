@@ -8,7 +8,7 @@ enum target_type_choice {target_self, target_allies, target_enemies, target_all}
 @export var damage: int = 0
 @export var ability_range: int = 1
 @export var target_type: target_type_choice = target_type_choice.target_all
-@export var needs_line_of_sight: bool = 1
+signal activated
 
 func get_valid_destinations()->Array[Vector2]:
 	if target_type == target_type_choice.target_self:
@@ -38,5 +38,4 @@ func deal_damage(target: Node2D)->void:
 			target.call_deferred("damage", self, damage)
 
 func activate(_destination: Vector2)->void:
-	return
- 
+	activated.emit()
