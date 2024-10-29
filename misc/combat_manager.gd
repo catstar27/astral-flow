@@ -19,6 +19,7 @@ func char_defeated(character: Character)->void:
 		enemy_team.remove_at(enemy_team.find(character))
 	battle_queue.remove_at(battle_queue.find(character))
 	character.defeated.disconnect(char_defeated)
+	print(str(character)+" dead")
 
 func start_combat(participants: Array[Character])->void:
 	GlobalRes.timer.stop()
@@ -46,6 +47,7 @@ func start_round()->void:
 	battle_queue.sort_custom(func(a,b): return a.sequence<b.sequence)
 	round_start.emit(battle_queue)
 	for character in battle_queue:
+		print(str(character)+" start")
 		character.taking_turn = true
 		if character.has_method("take_turn"):
 			character.call_deferred("take_turn")
@@ -53,6 +55,10 @@ func start_round()->void:
 		turn_ended.emit()
 		character.taking_turn = false
 		character.refresh()
+		print(str(character)+" end")
+		if enemy_team.size() == 0 || player_team.size() == 0:
+			end_combat()
+			return
 	run_round.emit()
 
 func end_combat()->void:

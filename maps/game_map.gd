@@ -7,6 +7,12 @@ class_name GameMap
 var occupied_tiles: Array[Vector2i]
 var tile_bounds: Dictionary = {"x_min": 0, "x_max": 0, "y_min": 0, "y_max": 0}
 
+func get_obj_at_pos(pos: Vector2)->Node2D:
+	for child in get_children():
+		if local_to_map(child.position) == local_to_map(pos):
+			return child
+	return null
+
 func update_occupied_tiles(tile: Vector2i, occupied: bool = false)->void:
 	if occupied && tile not in occupied_tiles:
 		occupied_tiles.append(tile)
@@ -84,6 +90,9 @@ func is_in_bounds(pos: Vector2i)->bool:
 		return false
 	return true
 
+func _extra_setup()->void:
+	return
+
 func prep_map()->void:
 	light_modulator.show()
 	_calc_bounds()
@@ -97,3 +106,4 @@ func prep_map()->void:
 			pass
 		else:
 			update_occupied_tiles(local_to_map(child.position), true)
+	_extra_setup()

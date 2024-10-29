@@ -92,8 +92,10 @@ func refresh()->void:
 func _defeated()->void:
 	GlobalRes.print_log("Defeated "+display_name)
 	GlobalRes.map.update_occupied_tiles(GlobalRes.map.local_to_map(position), false)
+	if taking_turn:
+		ended_turn.emit()
 	defeated.emit(self)
-	hide()
+	queue_free()
 
 func damage(_source: Ability, amount: int)->void:
 	cur_hp -= amount

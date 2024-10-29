@@ -30,7 +30,7 @@ func is_destination_valid(destination: Vector2)->bool:
 	return false
 
 func get_target(destination: Vector2)->Node2D:
-	return GlobalRes.selection_cursor.get_obj_at_pos(destination)
+	return GlobalRes.map.get_obj_at_pos(destination)
 
 func deal_damage(target: Node2D)->void:
 	if target != null:

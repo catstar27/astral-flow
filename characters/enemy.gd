@@ -4,6 +4,7 @@ class_name Enemy
 enum ai_types {melee_aggressive, melee_safe}
 @onready var combat_trigger: Area2D = %CombatTrigger
 @export var ai_type: ai_types
+@export var defeat_signal: String
 var abilities: Array[Ability] = []
 
 func _ready() -> void:
@@ -26,6 +27,8 @@ func melee_aggressive()->void:
 	if abilities[0].is_destination_valid(GlobalRes.player.position):
 		while cur_ap>=abilities[0].ap_cost:
 			await activate_ability(abilities[0], GlobalRes.player.position)
+			if cur_hp <= 0:
+				return
 	end_turn()
 
 func melee_safe()->void:

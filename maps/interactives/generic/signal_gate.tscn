@@ -1,11 +1,11 @@
-[gd_scene load_steps=3 format=3 uid="uid://ddmpp54vc5377"]
+[gd_scene load_steps=3 format=3 uid="uid://b5mdx6baygoum"]
 
-[ext_resource type="Script" path="res://maps/interactives/generic/dialogue_signal_gate.gd" id="1_vfxxp"]
+[ext_resource type="Script" path="res://maps/interactives/generic/signal_gate.gd" id="1_uruk8"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_4ou26"]
 
-[node name="DialogueSignalGate" type="StaticBody2D"]
-script = ExtResource("1_vfxxp")
+[node name="SignalGate" type="StaticBody2D"]
+script = ExtResource("1_uruk8")
 
 [node name="Sprite" type="Sprite2D" parent="."]
 unique_name_in_owner = true

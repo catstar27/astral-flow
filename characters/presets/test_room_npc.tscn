@@ -116,6 +116,8 @@ script = ExtResource("1_q7ey0")
 unique_name_in_owner = true
 material = SubResource("ShaderMaterial_w6is8")
 texture = ExtResource("3_etj6u")
+hframes = 3
+frame = 2
 region_rect = Rect2(-2, -2, 36, 36)
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]

@@ -29,6 +29,7 @@ directories/dtl_directory={
 "locked": "res://dialogue/locked.dtl",
 "test_room_couch": "res://dialogue/test_room_couch.dtl",
 "test_room_dog": "res://dialogue/test_room_dog.dtl",
+"test_room_enemy_defeat": "res://dialogue/test_room_enemy_defeat.dtl",
 "test_room_grapes": "res://dialogue/test_room_grapes.dtl",
 "test_room_sign1": "res://dialogue/test_room_sign1.dtl",
 "test_room_sun": "res://dialogue/test_room_sun.dtl"

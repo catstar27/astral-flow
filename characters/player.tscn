@@ -120,6 +120,7 @@ display_name = "Player"
 unique_name_in_owner = true
 material = SubResource("ShaderMaterial_bfe6u")
 texture = ExtResource("3_axx35")
+hframes = 3
 region_rect = Rect2(-2, -2, 36, 36)
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
