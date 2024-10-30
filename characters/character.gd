@@ -178,4 +178,4 @@ func move()->bool:
 			return false
 	moving = false
 	move_finished.emit()
-	return true
+	return position == cur_target

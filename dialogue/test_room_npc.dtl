@@ -13,7 +13,7 @@ set {learned_zap} = true
 	generic_npc: You should go find the exit!
 	[end_timeline]
 - ok idc
-	generic_npc: why are here
+	generic_npc: why are you here
 	[end_timeline]
 - (Leave)
 	generic_npc: Uh, goodbye then?
