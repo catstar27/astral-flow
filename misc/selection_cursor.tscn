@@ -32,6 +32,7 @@ offset_bottom = 264.0
 
 [node name="SelectionArea" type="Area2D" parent="."]
 unique_name_in_owner = true
+scale = Vector2(3, 3)
 
 [node name="CollisionShape" type="CollisionShape2D" parent="SelectionArea"]
 shape = SubResource("RectangleShape2D_6ag3p")

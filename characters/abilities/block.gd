@@ -1,5 +1,5 @@
 extends Ability
 
-func activate(destination: Vector2)->void:
-	print(get_target(destination))
+func activate(_destination: Vector2)->void:
+	user.damage_reduction = 1
 	activated.emit()

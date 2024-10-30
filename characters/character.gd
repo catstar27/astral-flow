@@ -22,6 +22,7 @@ class_name Character
 @onready var anim_player: AnimationPlayer = %AnimationPlayer
 @onready var target_position: Vector2 = position
 @onready var range_indicator_scene: PackedScene = preload("res://misc/range_indicator.tscn")
+var damage_reduction: int = 0
 var sequence: int
 var in_combat: bool = false
 var taking_turn: bool = false
@@ -34,7 +35,7 @@ signal move_finished
 signal interact_order(object: Interactive)
 signal anim_activate_ability
 signal ability_used
-signal ended_turn
+signal ended_turn(character)
 signal stats_changed
 signal defeated(character)
 
@@ -55,23 +56,28 @@ func activate_ability(ability: Ability, destination: Vector2)->void:
 	if ability.mp_cost>cur_mp:
 		GlobalRes.print_log("Not enough mp")
 		return
+	remove_range_indicators()
 	using_ability = true
 	cur_ap -= ability.ap_cost
 	cur_mp -= ability.mp_cost
 	stats_changed.emit()
-	GlobalRes.print_log(ability)
 	anim_player.play("melee")
 	await anim_activate_ability
 	ability.call_deferred("activate", destination)
 	await anim_player.animation_finished
 	using_ability = false
 	ability_used.emit()
+	after_ability()
+
+func after_ability()->void:
+	return
 
 func add_ability(ability_scene: PackedScene)->void:
-	add_child(ability_scene.instantiate())
+	var ability: Ability = ability_scene.instantiate()
+	ability.position = Vector2.ZERO
+	add_child(ability)
 	if GlobalRes.selection_cursor.selected == self:
 		GlobalRes.selection_cursor.call_deferred("select", self)
-	print(get_children())
 
 func roll_sequence()->void:
 	sequence = (base_stats.agility-10)+(base_stats.passion-10)+randi_range(1,10)
@@ -99,12 +105,12 @@ func _defeated()->void:
 	GlobalRes.print_log("Defeated "+display_name)
 	GlobalRes.map.update_occupied_tiles(GlobalRes.map.local_to_map(position), false)
 	if taking_turn:
-		ended_turn.emit()
+		ended_turn.emit(self)
 	defeated.emit(self)
 	queue_free()
 
 func damage(_source: Ability, amount: int)->void:
-	cur_hp -= amount
+	cur_hp -= clampi(amount-damage_reduction, 0, 999999999)
 	stats_changed.emit()
 	if cur_hp <= 0:
 		_defeated()
@@ -119,7 +125,7 @@ func end_turn()->void:
 		await ability_used
 	if moving:
 		await move_finished
-	ended_turn.emit()
+	ended_turn.emit(self)
 
 func select()->void:
 	var line_color: Color = sprite.material.get_shader_parameter("line_color")
@@ -128,6 +134,8 @@ func select()->void:
 func deselect()->void:
 	var line_color: Color = sprite.material.get_shader_parameter("line_color")
 	sprite.material.set_shader_parameter("line_color", Color(line_color, 0))
+	if has_method("deselect_ability"):
+		call("deselect_ability")
 
 func get_abilities()->Array[Ability]:
 	var arr: Array[Ability] = []

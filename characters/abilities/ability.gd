@@ -26,8 +26,11 @@ func get_valid_destinations()->Array[Vector2]:
 	return destinations
 
 func is_destination_valid(destination: Vector2)->bool:
+	if target_type == target_type_choice.target_self:
+		return true
 	var dest_path: Array[Vector2i] = GlobalRes.map.get_nav_path(user.position, destination, false, true)
-	if dest_path.size()<=ability_range+1 && dest_path.size()>0:
+	dest_path.pop_front()
+	if dest_path.size()<=ability_range && dest_path.size()>0:
 		return true
 	return false
 

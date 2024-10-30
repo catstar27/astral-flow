@@ -5,7 +5,7 @@ class_name SelectionCursor
 @onready var selection_area: Area2D = %SelectionArea
 @onready var selection_marker_scene: PackedScene = preload("res://misc/selection_marker.tscn")
 @export var tint: Color = Color.AQUA
-var selected: Node2D = null
+var selected: Character = null
 var hovering: Node2D = null
 var moving: bool = false
 var move_dir: Vector2i = Vector2i.ZERO
@@ -67,28 +67,25 @@ func move_stop()->void:
 	moving = false
 
 func interact_on_pos(pos: Vector2i)->void:
-	if selected is Ability:
-		selected.user.activate_ability(selected, pos)
+	if selected is Player && selected.selected_ability != null:
+		selected.activate_ability(selected.selected_ability, pos)
 	elif hovering == null || hovering is GameMap:
-		if selected is Character:
+		if selected != null && (selected is not Player || selected.selected_ability == null):
 			selected.target_position = pos
 			selected.emit_signal("move_order")
 	else:
-		if selected is Character && (hovering is Interactive || hovering is NPC):
+		if hovering is Interactive || hovering is NPC:
 			selected.target_position = pos
 			selected.emit_signal("interact_order", hovering)
 		if hovering is Player && selected == null:
 			select(hovering)
 
-func select(node: Node)->void:
+func select(node: Character)->void:
 	if node is Character && node.in_combat && !node.taking_turn:
 		return
 	if selected != null:
 		deselect()
 	selected = node
-	if selected is Ability:
-		selected.user.place_range_indicators(selected.get_valid_destinations())
-		selected.user.ended_turn.connect(deselect)
 	if selected is Character:
 		selected.call_deferred("select")
 		selected.ended_turn.connect(deselect)
@@ -96,19 +93,15 @@ func select(node: Node)->void:
 		_create_marker()
 	selection_changed.emit(selected)
 
-func deselect()->void:
+func deselect(_node: Character = null)->void:
 	_delete_marker()
 	if selected == null:
 		return
-	var prev_select: Node2D = selected
+	var prev_select: Character = selected
 	selected = null
 	if prev_select is Character:
 		prev_select.call_deferred("deselect")
 		prev_select.ended_turn.disconnect(deselect)
-	elif prev_select is Ability:
-		prev_select.user.remove_range_indicators()
-		prev_select.user.ended_turn.disconnect(deselect)
-		select(prev_select.user)
 	selection_changed.emit(selected)
 
 func _selection_area_entered(body: Node2D) -> void:

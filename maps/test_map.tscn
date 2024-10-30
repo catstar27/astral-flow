@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=4 uid="uid://qw4hbk40dyvm"]
+[gd_scene load_steps=20 format=4 uid="uid://qw4hbk40dyvm"]
 
 [ext_resource type="Texture2D" uid="uid://b4gigoborowkw" path="res://textures/test_tiles.png" id="1_0ie11"]
 [ext_resource type="Script" path="res://maps/test_map.gd" id="2_ywrl6"]
@@ -9,6 +9,7 @@
 [ext_resource type="Texture2D" uid="uid://binxw1c1e5vyc" path="res://textures/dog.png" id="7_vnn2i"]
 [ext_resource type="Texture2D" uid="uid://dei0ir8jap6a" path="res://textures/grapes.png" id="8_1rt1a"]
 [ext_resource type="PackedScene" uid="uid://ddmpp54vc5377" path="res://maps/interactives/generic/dialogue_signal_gate.tscn" id="9_amhi4"]
+[ext_resource type="Texture2D" uid="uid://dpnsq7nn8m0l2" path="res://textures/stairs.png" id="9_sk700"]
 [ext_resource type="Texture2D" uid="uid://qvcieo8d77lb" path="res://textures/gate_closed.png" id="10_2o7ph"]
 [ext_resource type="Texture2D" uid="uid://cgnsug1o0el0w" path="res://textures/gate_open.png" id="11_77ahb"]
 [ext_resource type="PackedScene" uid="uid://8hplcp22i5re" path="res://maps/interactives/lights/wall_light.tscn" id="12_kvvyy"]
@@ -90,6 +91,12 @@ texture = ExtResource("7_vnn2i")
 position = Vector2(288, 32)
 dialogue = "res://dialogue/test_room_grapes.dtl"
 texture = ExtResource("8_1rt1a")
+
+[node name="ExitStairs" parent="." instance=ExtResource("4_72sth")]
+position = Vector2(32, -928)
+rotation = 1.5708
+dialogue = "res://dialogue/test_room_completion.dtl"
+texture = ExtResource("9_sk700")
 
 [node name="InteractPuzzleGate" parent="." instance=ExtResource("9_amhi4")]
 position = Vector2(32, -224)
