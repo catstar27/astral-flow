@@ -12,7 +12,6 @@ func setup()->void:
 	GlobalRes.combat_manager.round_start.connect(sequence_display.update_display)
 	GlobalRes.combat_manager.turn_ended.connect(sequence_display.hide_top)
 	GlobalRes.combat_manager.battle_end.connect(sequence_display.hide)
-	GlobalRes.selection_cursor.selection_changed.connect(set_char_info)
 
 func set_char_info(selected: Node2D)->void:
 	if selected is not Character && selected is not Ability || selected == null:

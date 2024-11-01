@@ -9,6 +9,7 @@
 [node name="SelectionCursor" type="Node2D"]
 z_index = 2
 script = ExtResource("1_rchw3")
+tint = null
 
 [node name="Sprite" type="Sprite2D" parent="."]
 unique_name_in_owner = true

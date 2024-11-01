@@ -9,13 +9,6 @@
 process_mode = 3
 script = ExtResource("1_518bh")
 
-[node name="ExcludeLighting" type="CanvasLayer" parent="."]
-follow_viewport_enabled = true
-
-[node name="SelectionCursor" parent="ExcludeLighting" instance=ExtResource("4_lfpb3")]
-unique_name_in_owner = true
-process_mode = 1
-
 [node name="GlobalTimer" type="Timer" parent="."]
 unique_name_in_owner = true
 process_mode = 1
@@ -31,3 +24,11 @@ texture = ExtResource("3_tsd85")
 [node name="CombatManager" type="Node2D" parent="."]
 unique_name_in_owner = true
 script = ExtResource("4_lk56o")
+
+[node name="ExcludeLighting" type="CanvasLayer" parent="."]
+follow_viewport_enabled = true
+
+[node name="SelectionCursor" parent="ExcludeLighting" instance=ExtResource("4_lfpb3")]
+unique_name_in_owner = true
+process_mode = 1
+tint = null

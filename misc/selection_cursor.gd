@@ -1,6 +1,7 @@
 extends Node2D
 class_name SelectionCursor
 
+@onready var hud: HUD = %HUD
 @onready var sprite: Sprite2D = %Sprite
 @onready var selection_area: Area2D = %SelectionArea
 @onready var selection_marker_scene: PackedScene = preload("res://misc/selection_marker.tscn")
@@ -10,7 +11,6 @@ var hovering: Node2D = null
 var moving: bool = false
 var move_dir: Vector2i = Vector2i.ZERO
 var marker: Node2D = null
-signal selection_changed(selected)
 
 func _ready() -> void:
 	GlobalRes.update_var(%HUD)
@@ -74,11 +74,13 @@ func interact_on_pos(pos: Vector2i)->void:
 			selected.target_position = pos
 			selected.emit_signal("move_order")
 	else:
-		if hovering is Interactive || hovering is NPC:
-			selected.target_position = pos
-			selected.emit_signal("interact_order", hovering)
 		if hovering is Player && selected == null:
 			select(hovering)
+		elif selected == null:
+			return
+		elif hovering is Interactive || hovering is NPC:
+			selected.target_position = pos
+			selected.emit_signal("interact_order", hovering)
 
 func select(node: Character)->void:
 	if node is Character && node.in_combat && !node.taking_turn:
@@ -91,7 +93,8 @@ func select(node: Character)->void:
 		selected.ended_turn.connect(deselect)
 	if selected != null:
 		_create_marker()
-	selection_changed.emit(selected)
+	hud.set_char_info(selected)
+	EventBus.broadcast(EventBus.Event.new("SELECTION_CHANGED",selected))
 
 func deselect(_node: Character = null)->void:
 	_delete_marker()
@@ -102,7 +105,8 @@ func deselect(_node: Character = null)->void:
 	if prev_select is Character:
 		prev_select.call_deferred("deselect")
 		prev_select.ended_turn.disconnect(deselect)
-	selection_changed.emit(selected)
+	hud.set_char_info(selected)
+	EventBus.broadcast(EventBus.Event.new("SELECTION_CHANGED",selected))
 
 func _selection_area_entered(body: Node2D) -> void:
 	if !body is GameMap:
