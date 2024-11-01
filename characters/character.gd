@@ -117,6 +117,7 @@ func damage(_source: Ability, amount: int)->void:
 
 func interact(interact_target)->void:
 	var reached: bool = await move()
+	print(reached)
 	if reached:
 		interact_target.call_deferred("_interacted", self)
 
@@ -178,4 +179,4 @@ func move()->bool:
 			return false
 	moving = false
 	move_finished.emit()
-	return position == cur_target
+	return true
