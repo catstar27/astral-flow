@@ -25,9 +25,6 @@ texture = ExtResource("3_tsd85")
 unique_name_in_owner = true
 script = ExtResource("4_lk56o")
 
-[node name="ExcludeLighting" type="CanvasLayer" parent="."]
-follow_viewport_enabled = true
-
-[node name="SelectionCursor" parent="ExcludeLighting" instance=ExtResource("4_lfpb3")]
+[node name="SelectionCursor" parent="." instance=ExtResource("4_lfpb3")]
 unique_name_in_owner = true
 process_mode = 1

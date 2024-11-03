@@ -1,24 +1,23 @@
 extends Node2D
 class_name SelectionCursor
 
-@onready var hud: HUD = %HUD
 @onready var sprite: Sprite2D = %Sprite
 @onready var selection_area: Area2D = %SelectionArea
 @onready var selection_marker_scene: PackedScene = preload("res://misc/selection_marker.tscn")
-@export var tint: Color = Color.AQUA
 var selected: Character = null
 var hovering: Node2D = null
 var moving: bool = false
-var move_dir: Vector2i = Vector2i.ZERO
+var move_dir: Vector2 = Vector2i.ZERO
 var marker: Node2D = null
 
 func _ready() -> void:
-	GlobalRes.update_var(%HUD)
 	update_color()
+	EventBus.subscribe("COMBAT_STARTED", self, "deselect")
+	EventBus.subscribe("ABILITY_BUTTON_PRESSED", self, "select_ability")
 
 func _create_marker()->void:
 	marker = selection_marker_scene.instantiate()
-	marker.modulate = tint
+	marker.modulate = Settings.selection_tint
 	selected.add_child(marker)
 
 func _delete_marker()->void:
@@ -26,10 +25,10 @@ func _delete_marker()->void:
 		marker.queue_free()
 
 func reset_move_dir()->void:
-	move_dir = Vector2i.ZERO
+	move_dir = Vector2.ZERO
 
 func update_color()->void:
-	sprite.modulate = tint
+	sprite.modulate = Settings.selection_tint
 
 func _scale_float(num: float)->int:
 	if num > 0:
@@ -49,16 +48,15 @@ func _unhandled_input(event: InputEvent) -> void:
 		deselect()
 
 func _physics_process(_delta: float) -> void:
-	if !moving && move_dir != Vector2i.ZERO:
+	if !moving && move_dir != Vector2.ZERO:
 		move(move_dir)
 
-func move(dir: Vector2i)->void:
+func move(dir: Vector2)->void:
 	moving = true
-	var cur_map_pos: Vector2i = GlobalRes.map.local_to_map(position)
-	var new_pos: Vector2 = GlobalRes.map.map_to_local(dir+cur_map_pos)
-	if !GlobalRes.map.is_in_bounds(dir+cur_map_pos):
-		move_stop()
-		return
+	var new_pos: Vector2 = Settings.tile_size*dir+position
+	#if !GlobalRes.map.is_in_bounds(dir+cur_map_pos):
+	#	move_stop()
+	#	return
 	var tween: Tween = create_tween()
 	tween.tween_property(self, "position", new_pos, .2).set_ease(Tween.EASE_IN_OUT)
 	tween.tween_callback(move_stop)
@@ -67,23 +65,26 @@ func move_stop()->void:
 	moving = false
 
 func interact_on_pos(pos: Vector2i)->void:
-	if selected is Player && selected.selected_ability != null:
+	if hovering is Player && selected == null:
+		select(hovering)
+	elif selected == null:
+		return
+	elif selected.selected_ability != null:
 		selected.activate_ability(selected.selected_ability, pos)
 	elif hovering == null || hovering is GameMap:
-		if selected != null && (selected is not Player || selected.selected_ability == null):
-			selected.target_position = pos
-			selected.emit_signal("move_order")
-	else:
-		if hovering is Player && selected == null:
-			select(hovering)
-		elif selected == null:
-			return
-		elif hovering is Interactive || hovering is NPC:
-			selected.target_position = pos
-			selected.emit_signal("interact_order", hovering)
+		selected.target_position = pos
+		selected.emit_signal("move_order")
+	elif hovering is Interactive || hovering is NPC:
+		selected.target_position = pos
+		selected.emit_signal("interact_order", hovering)
+
+func select_ability(ability: Ability)->void:
+	select(ability.user)
 
 func select(node: Character)->void:
 	if node is Character && node.in_combat && !node.taking_turn:
+		return
+	if node != null && selected == node:
 		return
 	if selected != null:
 		deselect()
@@ -93,7 +94,6 @@ func select(node: Character)->void:
 		selected.ended_turn.connect(deselect)
 	if selected != null:
 		_create_marker()
-	hud.set_char_info(selected)
 	EventBus.broadcast(EventBus.Event.new("SELECTION_CHANGED",selected))
 
 func deselect(_node: Character = null)->void:
@@ -105,7 +105,6 @@ func deselect(_node: Character = null)->void:
 	if prev_select is Character:
 		prev_select.call_deferred("deselect")
 		prev_select.ended_turn.disconnect(deselect)
-	hud.set_char_info(selected)
 	EventBus.broadcast(EventBus.Event.new("SELECTION_CHANGED",selected))
 
 func _selection_area_entered(body: Node2D) -> void:

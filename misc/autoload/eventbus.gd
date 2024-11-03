@@ -27,22 +27,21 @@ func subscribe(id: String, node: Node, fn: String)->void:
 		if sub_info.node == node && sub_info.fn == fn:
 			return
 	events[id].append(SubscribeInfo.new(node, fn))
-	print(events)
 
 func remove_subscriber(node: Node)->void:
 	for event in events:
 		for sub_info in event:
 			if sub_info.node == node:
 				event.erase(sub_info)
-	print(events)
 
 func broadcast(event: Event)->void:
-	print(event)
 	if event.id not in events:
 		return
 	for sub_info in events[event.id]:
 		if !is_instance_valid(sub_info.node):
 			remove_subscriber(sub_info.node)
 		elif sub_info.node.has_method(sub_info.fn):
-			sub_info.node.call(sub_info.fn, event.data)
-	print(events)
+			if event.data is String && event.data == "NULLDATA":
+				sub_info.node.call(sub_info.fn)
+			else:
+				sub_info.node.call(sub_info.fn, event.data)

@@ -6,12 +6,11 @@ class_name HUD
 @onready var log_timer: Timer = %LogTimer
 @onready var sequence_display: SequenceDisplay = %SequenceDisplay
 
-func setup()->void:
+func _ready()->void:
+	EventBus.subscribe("PRINT_LOG", self, "print_log")
+	EventBus.subscribe("SELECTION_CHANGED", self, "set_char_info")
 	char_info.hide()
 	log_timer.timeout.connect(game_log.get_parent().hide)
-	GlobalRes.combat_manager.round_start.connect(sequence_display.update_display)
-	GlobalRes.combat_manager.turn_ended.connect(sequence_display.hide_top)
-	GlobalRes.combat_manager.battle_end.connect(sequence_display.hide)
 
 func set_char_info(selected: Node2D)->void:
 	if selected is not Character && selected is not Ability || selected == null:

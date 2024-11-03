@@ -30,6 +30,7 @@ var moving: bool = false
 var stop_move: bool = false
 var using_ability: bool = false
 var range_indicators: Array[Sprite2D] = []
+var selected_ability: Ability = null
 signal move_order
 signal move_finished
 signal interact_order(object: Interactive)
@@ -37,24 +38,33 @@ signal anim_activate_ability
 signal ability_used
 signal ended_turn(character)
 signal stats_changed
+signal abilities_changed
 signal defeated(character)
 
 func _setup()->void:
-	GlobalRes.timer.timeout.connect(refresh)
+	EventBus.subscribe("GLOBAL_TIMER_TIMEOUT", self, "refresh")
 	move_order.connect(move)
 	interact_order.connect(interact)
+
+func select_ability(ability: Ability)->void:
+	selected_ability = ability
+	place_range_indicators(ability.get_valid_destinations(), ability.target_type)
+
+func deselect_ability()->void:
+	selected_ability = null
+	remove_range_indicators()
 
 func activate_ability(ability: Ability, destination: Vector2)->void:
 	if using_ability:
 		return
 	if !ability.is_destination_valid(destination):
-		GlobalRes.print_log("Invalid Target!")
+		EventBus.broadcast(EventBus.Event.new("PRINT_LOG","Invalid Target!"))
 		return
 	if ability.ap_cost>cur_ap:
-		GlobalRes.print_log("Not enough ap")
+		EventBus.broadcast(EventBus.Event.new("PRINT_LOG","Not enough ap"))
 		return
 	if ability.mp_cost>cur_mp:
-		GlobalRes.print_log("Not enough mp")
+		EventBus.broadcast(EventBus.Event.new("PRINT_LOG","Not enough mp"))
 		return
 	remove_range_indicators()
 	using_ability = true
@@ -76,8 +86,7 @@ func add_ability(ability_scene: PackedScene)->void:
 	var ability: Ability = ability_scene.instantiate()
 	ability.position = Vector2.ZERO
 	add_child(ability)
-	if GlobalRes.selection_cursor.selected == self:
-		GlobalRes.selection_cursor.call_deferred("select", self)
+	abilities_changed.emit()
 
 func roll_sequence()->void:
 	sequence = (base_stats.agility-10)+(base_stats.passion-10)+randi_range(1,10)
@@ -85,10 +94,17 @@ func roll_sequence()->void:
 func anim_activate()->void:
 	anim_activate_ability.emit()
 
-func place_range_indicators(locations: Array[Vector2])->void:
+func place_range_indicators(locations: Array[Vector2], target_type: Ability.target_type_choice)->void:
 	for location in locations:
 		var indicator: Sprite2D = range_indicator_scene.instantiate()
-		indicator.modulate = GlobalRes.selection_cursor.tint
+		if target_type == Ability.target_type_choice.target_self:
+			indicator.modulate = Settings.support_indicator_tint
+		elif target_type == Ability.target_type_choice.target_allies:
+			indicator.modulate = Settings.support_indicator_tint
+		elif target_type == Ability.target_type_choice.target_enemies:
+			indicator.modulate = Settings.attack_indicator_tint
+		else:
+			indicator.modulate = Settings.attack_indicator_tint
 		indicator.position = location-position
 		add_child(indicator)
 		range_indicators.append(indicator)
@@ -102,8 +118,8 @@ func refresh()->void:
 	stats_changed.emit()
 
 func _defeated()->void:
-	GlobalRes.print_log("Defeated "+display_name)
-	GlobalRes.map.update_occupied_tiles(GlobalRes.map.local_to_map(position), false)
+	EventBus.broadcast(EventBus.Event.new("PRINT_LOG","Defeated "+display_name))
+	EventBus.broadcast(EventBus.Event.new("TILE_UNOCCUPIED", position))
 	if taking_turn:
 		ended_turn.emit(self)
 	defeated.emit(self)
@@ -117,7 +133,6 @@ func damage(_source: Ability, amount: int)->void:
 
 func interact(interact_target)->void:
 	var reached: bool = await move()
-	print(reached)
 	if reached:
 		interact_target.call_deferred("_interacted", self)
 
@@ -152,11 +167,12 @@ func move()->bool:
 		return false
 	moving = true
 	var cur_target: Vector2 = target_position
-	var path: Array[Vector2i] = GlobalRes.map.get_nav_path(position, target_position)
-	path.pop_front()
-	for cell in path:
+	var path: Array[Vector2] = GlobalRes.map.get_nav_path(position, target_position)
+	if path.pop_front() != position:
+		return false
+	for pos in path:
 		if cur_ap == 0:
-				GlobalRes.print_log("No ap for movement!")
+				EventBus.broadcast(EventBus.Event.new("PRINT_LOG","No ap for movement!"))
 				moving = false
 				move_finished.emit()
 				return false
@@ -166,10 +182,10 @@ func move()->bool:
 			moving = false
 			move_finished.emit()
 			return false
-		var prev_cell: Vector2i = GlobalRes.map.local_to_map(position)
-		GlobalRes.map.update_occupied_tiles(cell, true)
-		await create_tween().tween_property(self, "position", GlobalRes.map.map_to_local(cell), .2).finished
-		GlobalRes.map.update_occupied_tiles(prev_cell, false)
+		var prev_pos: Vector2 = position
+		EventBus.broadcast(EventBus.Event.new("TILE_OCCUPIED", pos))
+		await create_tween().tween_property(self, "position", pos, .2).finished
+		EventBus.broadcast(EventBus.Event.new("TILE_UNOCCUPIED", prev_pos))
 		if in_combat:
 			cur_ap -= 1
 			stats_changed.emit()

@@ -4,7 +4,7 @@ var lightning_scn: PackedScene = preload("res://textures/lightning.tscn")
 
 func activate(destination: Vector2)->void:
 	var lightning: Polygon2D = lightning_scn.instantiate()
-	var final_scale: Vector2 = Vector2(lightning.scale.x, user.position.distance_to(destination)/GlobalRes.map.tile_set.tile_size.x)
+	var final_scale: Vector2 = Vector2(lightning.scale.x, user.position.distance_to(destination)/Settings.tile_size)
 	lightning.rotation = get_angle_to(destination)+PI/2
 	lightning.scale = Vector2(1,.01)
 	lightning.texture_scale = Vector2(1,.01)

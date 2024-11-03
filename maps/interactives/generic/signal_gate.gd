@@ -21,13 +21,13 @@ func _interacted(_character: Character):
 	if cur_state == state.locked:
 		audio.play()
 		if dialogue_timeline != null:
-			GlobalRes.current_timeline = Dialogic.start(dialogue_timeline)
+			EventBus.broadcast(EventBus.Event.new("ENTER_DIALOGUE", dialogue_timeline))
 		interacted.emit()
 	elif cur_state == state.unlocked:
 		sprite.texture = texture
 		audio.play()
 		collision.disabled = true
-		GlobalRes.map.update_occupied_tiles(GlobalRes.map.local_to_map(position))
+		EventBus.broadcast(EventBus.Event.new("TILE_UNOCCUPIED", position))
 		interacted.emit()
 
 func advance_unlock(signal_event: String)->void:
@@ -42,5 +42,5 @@ func advance_unlock(signal_event: String)->void:
 					sprite.texture = texture
 					audio.play()
 					collision.disabled = true
-					GlobalRes.map.update_occupied_tiles(GlobalRes.map.local_to_map(position))
+					EventBus.broadcast(EventBus.Event.new("TILE_UNOCCUPIED", position))
 					interacted.emit()

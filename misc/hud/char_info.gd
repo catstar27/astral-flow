@@ -15,6 +15,10 @@ func add_ability(ability: Ability)->void:
 	new_button.ability = ability
 	ability_list.add_child(new_button)
 
+func clear_abilities()->void:
+	for child in ability_list.get_children():
+		child.queue_free()
+
 func set_character(new_char: Character)->void:
 	if new_char == character:
 		for ability in character.get_abilities():
@@ -29,11 +33,16 @@ func set_character(new_char: Character)->void:
 	character.stats_changed.connect(update_labels)
 	update_labels()
 	end_turn_button.pressed.connect(character.end_turn)
-	for ability in character.get_abilities():
-		add_ability(ability)
-		abilities.append(ability)
+	character.abilities_changed.connect(update_abilities)
+	update_abilities()
 
 func update_labels()->void:
 	hp_label.text = "HP: "+str(character.cur_hp)
 	ap_label.text = "AP: "+str(character.cur_ap)
 	mp_label.text = "MP: "+str(character.cur_mp)
+
+func update_abilities()->void:
+	clear_abilities()
+	for ability in character.get_abilities():
+		add_ability(ability)
+		abilities.append(ability)

@@ -8,7 +8,7 @@ class_name Interactive
 @onready var sprite: Sprite2D = %Sprite
 @onready var audio: AudioStreamPlayer2D = %Audio
 @onready var collision: CollisionShape2D = %Collision
-var occupied_tiles: Array[Vector2i]
+var occupied_positions: Array[Vector2]
 var dialogue_timeline: DialogicTimeline = null
 signal interacted
 
@@ -27,10 +27,12 @@ func setup()->void:
 func _calc_occupied()->void:
 	for x in range(0, dimensions.x):
 		for y in range(0, dimensions.y):
-			occupied_tiles.append(GlobalRes.map.local_to_map(position)+Vector2i(-x, y))
+			var x_scaled: int = x*Settings.tile_size
+			var y_scaled: int = y*Settings.tile_size
+			occupied_positions.append(position+Vector2(-x_scaled, y_scaled))
 
 func _interacted(_character: Character)->void:
 	audio.play()
 	if dialogue_timeline != null:
-		GlobalRes.current_timeline = Dialogic.start(dialogue_timeline)
+		EventBus.broadcast(EventBus.Event.new("ENTER_DIALOGUE", dialogue_timeline))
 	interacted.emit()

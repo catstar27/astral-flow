@@ -7,18 +7,27 @@ class_name GameMap
 var occupied_tiles: Array[Vector2i]
 var tile_bounds: Dictionary = {"x_min": 0, "x_max": 0, "y_min": 0, "y_max": 0}
 
+func _ready()->void:
+	EventBus.subscribe("TILE_OCCUPIED", self, "set_pos_occupied")
+	EventBus.subscribe("TILE_UNOCCUPIED", self, "set_pos_unoccupied")
+
 func get_obj_at_pos(pos: Vector2)->Node2D:
 	for child in get_children():
 		if local_to_map(child.position) == local_to_map(pos):
 			return child
 	return null
 
-func update_occupied_tiles(tile: Vector2i, occupied: bool = false)->void:
-	if occupied && tile not in occupied_tiles:
+func set_pos_occupied(pos: Vector2)->void:
+	var tile: Vector2i = local_to_map(pos)
+	if tile not in occupied_tiles:
 		occupied_tiles.append(tile)
-	elif !occupied && tile in occupied_tiles:
+	astar.set_point_solid(tile, true)
+
+func set_pos_unoccupied(pos: Vector2)->void:
+	var tile: Vector2i = local_to_map(pos)
+	if tile in occupied_tiles:
 		occupied_tiles.remove_at(occupied_tiles.find(tile))
-	astar.set_point_solid(tile, occupied)
+	astar.set_point_solid(tile, false)
 
 func start_ignore_occupied()->void:
 	for tile in occupied_tiles:
@@ -43,7 +52,7 @@ func _set_astar_tiles()->void:
 		if !get_cell_tile_data(cell).get_custom_data("traversible"):
 			astar.set_point_solid(cell)
 
-func get_nav_path(start_pos: Vector2, end_pos: Vector2, closest: bool = true, ign_occ: bool = false)->Array[Vector2i]:
+func get_nav_path(start_pos: Vector2, end_pos: Vector2, closest: bool = true, ign_occ: bool = false)->Array[Vector2]:
 	if ign_occ:
 		start_ignore_occupied()
 	var start_cell: Vector2i = local_to_map(start_pos)
@@ -51,9 +60,12 @@ func get_nav_path(start_pos: Vector2, end_pos: Vector2, closest: bool = true, ig
 	if astar.is_in_boundsv(start_cell) && astar.is_in_boundsv(end_cell):
 		if !astar.is_point_solid(end_cell):
 			var path: Array[Vector2i] = astar.get_id_path(start_cell, end_cell, closest)
+			var path_localized: Array[Vector2] = []
+			for tile in path:
+				path_localized.append(map_to_local(tile))
 			if ign_occ:
 				stop_ignore_occupied()
-			return path
+			return path_localized
 		elif closest:
 			var dist_compare: Callable = (func(a,b): return a.distance_to(start_cell)<b.distance_to(start_cell))
 			var neighbors_sorted: Array[Vector2i] = get_surrounding_cells(end_cell)
@@ -61,9 +73,12 @@ func get_nav_path(start_pos: Vector2, end_pos: Vector2, closest: bool = true, ig
 			for cell in neighbors_sorted:
 				if !astar.is_point_solid(cell):
 					var path: Array[Vector2i] = astar.get_id_path(start_cell, cell, true)
+					var path_localized: Array[Vector2] = []
+					for tile in path:
+						path_localized.append(map_to_local(tile))
 					if ign_occ:
 						stop_ignore_occupied()
-					return path
+					return path_localized
 			if ign_occ:
 				stop_ignore_occupied()
 			return []
@@ -103,10 +118,10 @@ func prep_map()->void:
 	for child in get_children():
 		if child is Interactive:
 			child.setup()
-			for tile in child.occupied_tiles:
-				update_occupied_tiles(tile, true)
+			for pos in child.occupied_positions:
+				set_pos_occupied(pos)
 		elif child is CanvasModulate:
 			pass
 		else:
-			update_occupied_tiles(local_to_map(child.position), true)
+			set_pos_occupied(child.position)
 	_extra_setup()

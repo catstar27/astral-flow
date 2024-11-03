@@ -7,4 +7,5 @@ texture_repeat = 3
 offset = Vector2(0, -32)
 texture = ExtResource("1_jarl7")
 texture_offset = Vector2(224, 32)
+texture_scale = Vector2(1, 0.975)
 polygon = PackedVector2Array(-32, -32, -0.570007, -32, 32, -32, 32, 32, -32, 32)

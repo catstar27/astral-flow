@@ -1,6 +1,11 @@
 extends VBoxContainer
 class_name SequenceDisplay
 
+func _ready()->void:
+	EventBus.subscribe("ROUND_STARTED", self, "update_display")
+	EventBus.subscribe("TURN_ENDED", self, "hide_top")
+	EventBus.subscribe("COMBAT_ENDED", self, "hide")
+
 func update_display(order: Array[Character])->void:
 	for child in get_children():
 		child.queue_free()

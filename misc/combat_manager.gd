@@ -5,14 +5,15 @@ var battle_queue: Array[Character] = []
 var player_team: Array[Character] = []
 var enemy_team: Array[Character] = []
 var round_num: int = 1
-signal round_start(battle_queue)
-signal battle_end
 signal run_round
-signal turn_ended
 signal continue_round(yes: bool)
 
 func _ready()->void:
 	run_round.connect(start_round)
+	EventBus.subscribe("START_COMBAT", self, "start_combat")
+
+func new_combat_event(id: String)->EventBus.Event:
+	return EventBus.Event.new(id, battle_queue)
 
 func char_defeated(character: Character)->void:
 	if character is Player:
@@ -26,9 +27,10 @@ func char_defeated(character: Character)->void:
 		continue_round.emit(false)
 
 func start_combat(participants: Array[Character])->void:
-	GlobalRes.timer.stop()
+	participants.append_array(participants[0].allies)
+	participants.append_array(participants[1].allies)
+	EventBus.broadcast(EventBus.Event.new("COMBAT_STARTED", "NULLDATA"))
 	battle_queue = participants
-	GlobalRes.selection_cursor.deselect()
 	for character in participants:
 		character.in_combat = true
 		character.taking_turn = false
@@ -46,12 +48,12 @@ func start_round()->void:
 	if enemy_team.size() == 0 || player_team.size() == 0:
 		end_combat()
 		return
-	GlobalRes.print_log("Round "+str(round_num))
+	EventBus.broadcast(EventBus.Event.new("PRINT_LOG","Round "+str(round_num)))
 	round_num += 1
 	for character in battle_queue:
 		character.roll_sequence()
 	battle_queue.sort_custom(func(a,b): return a.sequence<b.sequence)
-	round_start.emit(battle_queue)
+	EventBus.broadcast(EventBus.Event.new("ROUND_STARTED", battle_queue))
 	for character in battle_queue:
 		character.taking_turn = true
 		character.damage_reduction = 0
@@ -63,7 +65,7 @@ func start_round()->void:
 	run_round.emit()
 
 func end_turn(character: Character)->void:
-	turn_ended.emit()
+	EventBus.broadcast(EventBus.Event.new("TURN_ENDED", "NULLDATA"))
 	character.ended_turn.disconnect(end_turn)
 	character.taking_turn = false
 	character.refresh()
@@ -75,10 +77,9 @@ func end_turn(character: Character)->void:
 
 func end_combat()->void:
 	round_num = 1
-	GlobalRes.timer.start()
 	for character in battle_queue:
 		character.defeated.disconnect(char_defeated)
 		character.in_combat = false
 		character.taking_turn = false
 	battle_queue = []
-	battle_end.emit()
+	EventBus.broadcast(EventBus.Event.new("COMBAT_ENDED", "NULLDATA"))
