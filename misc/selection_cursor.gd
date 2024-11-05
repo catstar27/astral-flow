@@ -54,9 +54,9 @@ func _physics_process(_delta: float) -> void:
 func move(dir: Vector2)->void:
 	moving = true
 	var new_pos: Vector2 = Settings.tile_size*dir+position
-	#if !GlobalRes.map.is_in_bounds(dir+cur_map_pos):
-	#	move_stop()
-	#	return
+	if !NavMaster.is_in_bounds(new_pos):
+		move_stop()
+		return
 	var tween: Tween = create_tween()
 	tween.tween_property(self, "position", new_pos, .2).set_ease(Tween.EASE_IN_OUT)
 	tween.tween_callback(move_stop)

@@ -167,7 +167,7 @@ func move()->bool:
 		return false
 	moving = true
 	var cur_target: Vector2 = target_position
-	var path: Array[Vector2] = GlobalRes.map.get_nav_path(position, target_position)
+	var path: Array[Vector2] = NavMaster.request_nav_path(position, cur_target)
 	if path.pop_front() != position:
 		return false
 	for pos in path:

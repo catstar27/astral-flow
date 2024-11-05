@@ -164,6 +164,8 @@ texture = ExtResource("15_ghxts")
 
 [node name="Enemy" parent="." instance=ExtResource("13_augbp")]
 position = Vector2(32, -544)
+ai_type = null
+defeat_signal = null
 
 [connection signal="test_room_combat_gate" from="." to="CombatGate" method="advance_unlock"]
 [connection signal="unlocked" from="TeslaCoil" to="TeslaGate" method="advance_unlock"]

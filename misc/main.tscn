@@ -28,3 +28,5 @@ script = ExtResource("4_lk56o")
 [node name="SelectionCursor" parent="." instance=ExtResource("4_lfpb3")]
 unique_name_in_owner = true
 process_mode = 1
+
+[connection signal="timeout" from="GlobalTimer" to="." method="global_timer_timeout"]

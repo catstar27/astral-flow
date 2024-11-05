@@ -29,15 +29,6 @@ func set_pos_unoccupied(pos: Vector2)->void:
 		occupied_tiles.remove_at(occupied_tiles.find(tile))
 	astar.set_point_solid(tile, false)
 
-func start_ignore_occupied()->void:
-	for tile in occupied_tiles:
-		if get_cell_tile_data(tile).get_custom_data("traversible"):
-			astar.set_point_solid(tile, false)
-
-func stop_ignore_occupied()->void:
-	for tile in occupied_tiles:
-		astar.set_point_solid(tile, true)
-
 func _astar_setup()->void:
 	astar.region = get_used_rect()
 	astar.cell_size = tile_set.tile_size
@@ -52,21 +43,17 @@ func _set_astar_tiles()->void:
 		if !get_cell_tile_data(cell).get_custom_data("traversible"):
 			astar.set_point_solid(cell)
 
-func get_nav_path(start_pos: Vector2, end_pos: Vector2, closest: bool = true, ign_occ: bool = false)->Array[Vector2]:
-	if ign_occ:
-		start_ignore_occupied()
+func get_nav_path(start_pos: Vector2, end_pos: Vector2, allow_closest: bool = true)->Array[Vector2]:
 	var start_cell: Vector2i = local_to_map(start_pos)
 	var end_cell: Vector2i = local_to_map(end_pos)
 	if astar.is_in_boundsv(start_cell) && astar.is_in_boundsv(end_cell):
 		if !astar.is_point_solid(end_cell):
-			var path: Array[Vector2i] = astar.get_id_path(start_cell, end_cell, closest)
+			var path: Array[Vector2i] = astar.get_id_path(start_cell, end_cell, allow_closest)
 			var path_localized: Array[Vector2] = []
 			for tile in path:
 				path_localized.append(map_to_local(tile))
-			if ign_occ:
-				stop_ignore_occupied()
 			return path_localized
-		elif closest:
+		elif allow_closest:
 			var dist_compare: Callable = (func(a,b): return a.distance_to(start_cell)<b.distance_to(start_cell))
 			var neighbors_sorted: Array[Vector2i] = get_surrounding_cells(end_cell)
 			neighbors_sorted.sort_custom(dist_compare)
@@ -76,14 +63,8 @@ func get_nav_path(start_pos: Vector2, end_pos: Vector2, closest: bool = true, ig
 					var path_localized: Array[Vector2] = []
 					for tile in path:
 						path_localized.append(map_to_local(tile))
-					if ign_occ:
-						stop_ignore_occupied()
 					return path_localized
-			if ign_occ:
-				stop_ignore_occupied()
 			return []
-	if ign_occ:
-		stop_ignore_occupied()
 	return []
 
 func _calc_bounds()->void:
@@ -98,10 +79,11 @@ func _calc_bounds()->void:
 		if cell.y>tile_bounds.y_max:
 			tile_bounds.y_max = cell.y
 
-func is_in_bounds(pos: Vector2i)->bool:
-	if pos.x<tile_bounds.x_min || pos.x>tile_bounds.x_max:
+func is_in_bounds(pos: Vector2)->bool:
+	var tile: Vector2i = local_to_map(pos)
+	if tile.x<tile_bounds.x_min || tile.x>tile_bounds.x_max:
 		return false
-	if pos.y<tile_bounds.y_min || pos.y>tile_bounds.y_max:
+	if tile.y<tile_bounds.y_min || tile.y>tile_bounds.y_max:
 		return false
 	return true
 
@@ -122,6 +104,6 @@ func prep_map()->void:
 				set_pos_occupied(pos)
 		elif child is CanvasModulate:
 			pass
-		else:
+		elif child is Character:
 			set_pos_occupied(child.position)
 	_extra_setup()

@@ -17,10 +17,10 @@ config/icon="res://textures/icon.svg"
 
 [autoload]
 
-GlobalRes="*res://misc/autoload/global_res.gd"
 Dialogic="*res://addons/dialogic/Core/DialogicGameHandler.gd"
 EventBus="*res://misc/autoload/eventbus.gd"
 Settings="*res://misc/autoload/settings.gd"
+NavMaster="*res://misc/autoload/navmaster.gd"
 
 [dialogic]
 

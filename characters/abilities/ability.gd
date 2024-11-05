@@ -20,22 +20,18 @@ func get_valid_destinations()->Array[Vector2]:
 	for x in range(user.position.x-ability_range*scale_factor, user.position.x+ability_range*scale_factor+1, scale_factor):
 		for y in range(user.position.y-ability_range*scale_factor, user.position.y+ability_range*scale_factor+1, scale_factor):
 			if Vector2(x,y) != user.position:
-				var path_length: int = GlobalRes.map.get_nav_path(user.position, Vector2(x,y), false, true).size()
-				if path_length<=ability_range+1 && path_length>0:
+				if is_destination_valid(Vector2(x, y)):
 					destinations.append(Vector2(x, y))
 	return destinations
 
 func is_destination_valid(destination: Vector2)->bool:
-	if target_type == target_type_choice.target_self:
-		return true
-	var dest_path: Array[Vector2] = GlobalRes.map.get_nav_path(user.position, destination, false, true)
-	dest_path.pop_front()
-	if dest_path.size()<=ability_range && dest_path.size()>0:
-		return true
-	return false
+	var x_dist: float = abs(global_position.x-destination.x)
+	var y_dist: float = abs(global_position.y-destination.y)
+	var range_factor: float = (x_dist+y_dist)/Settings.tile_size
+	return range_factor<=ability_range
 
 func get_target(destination: Vector2)->Node2D:
-	return GlobalRes.map.get_obj_at_pos(destination)
+	return NavMaster.get_obj_at_pos(destination)
 
 func deal_damage(target: Node2D)->void:
 	if target != null:

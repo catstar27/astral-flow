@@ -114,6 +114,7 @@ _data = {
 [node name="Player" type="CharacterBody2D"]
 z_index = 1
 script = ExtResource("1_so47p")
+base_stats = null
 display_name = "Player"
 
 [node name="Sprite" type="Sprite2D" parent="."]
