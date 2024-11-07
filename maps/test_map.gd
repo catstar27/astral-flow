@@ -13,8 +13,8 @@ func spawn_test_room_npc(enemy: Enemy)->void:
 	var npc: NPC = test_room_npc_scene.instantiate()
 	npc.position = map_to_local(pos)
 	set_pos_occupied(map_to_local(pos))
-	add_child(npc)
 	npc.combat_gate_open.connect(emit_combat_gate)
+	add_child(npc)
 
 func emit_combat_gate()->void:
 	test_room_combat_gate.emit("test_room_combat_gate")

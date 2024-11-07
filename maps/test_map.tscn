@@ -14,7 +14,7 @@
 [ext_resource type="Texture2D" uid="uid://cgnsug1o0el0w" path="res://textures/gate_open.png" id="11_77ahb"]
 [ext_resource type="PackedScene" uid="uid://8hplcp22i5re" path="res://maps/interactives/lights/wall_light.tscn" id="12_kvvyy"]
 [ext_resource type="PackedScene" uid="uid://b5mdx6baygoum" path="res://maps/interactives/generic/signal_gate.tscn" id="12_xfvy2"]
-[ext_resource type="PackedScene" uid="uid://c2af6y8es466h" path="res://characters/enemy.tscn" id="13_augbp"]
+[ext_resource type="PackedScene" uid="uid://c2af6y8es466h" path="res://characters/generic/enemy.tscn" id="13_augbp"]
 [ext_resource type="PackedScene" uid="uid://v2x25sfrymso" path="res://maps/interactives/generic/damage_activation_interactive.tscn" id="14_luyw1"]
 [ext_resource type="Texture2D" uid="uid://cojmn67i5ba6g" path="res://textures/tesla_coil.png" id="15_ghxts"]
 
@@ -76,7 +76,7 @@ dialogue = "res://dialogue/test_room_sun.dtl"
 texture = ExtResource("6_dg1xt")
 
 [node name="Couch" parent="." instance=ExtResource("4_72sth")]
-position = Vector2(128, -160)
+position = Vector2(96, -160)
 dialogue = "res://dialogue/test_room_couch.dtl"
 texture = ExtResource("7_g1jef")
 dimensions = Vector2i(2, 1)
@@ -110,7 +110,6 @@ texture = ExtResource("11_77ahb")
 position = Vector2(32, -608)
 locked_texture = ExtResource("10_2o7ph")
 signals_needed = Array[String](["test_room_combat_gate"])
-auto_open = true
 texture = ExtResource("11_77ahb")
 
 [node name="TeslaGate" parent="." instance=ExtResource("12_xfvy2")]
@@ -164,8 +163,6 @@ texture = ExtResource("15_ghxts")
 
 [node name="Enemy" parent="." instance=ExtResource("13_augbp")]
 position = Vector2(32, -544)
-ai_type = null
-defeat_signal = null
 
 [connection signal="test_room_combat_gate" from="." to="CombatGate" method="advance_unlock"]
 [connection signal="unlocked" from="TeslaCoil" to="TeslaGate" method="advance_unlock"]

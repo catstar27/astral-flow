@@ -34,14 +34,14 @@ func start_combat(participants: Array[Character])->void:
 	for character in participants:
 		character.in_combat = true
 		character.taking_turn = false
-		if character.moving:
-			character.stop_move = true
+		character.stop_move_order.emit()
 		character.refresh()
 		character.defeated.connect(char_defeated)
 		if character is Player:
 			player_team.append(character)
 		if character is Enemy:
 			enemy_team.append(character)
+	await get_tree().create_timer(.2).timeout
 	run_round.emit()
 
 func start_round()->void:

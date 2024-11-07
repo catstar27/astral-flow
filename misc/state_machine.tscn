@@ -4,3 +4,4 @@
 
 [node name="StateMachine" type="Node"]
 script = ExtResource("1_0tpau")
+start_state_id = "IDLE"

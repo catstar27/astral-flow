@@ -28,11 +28,11 @@ func subscribe(id: String, node: Node, fn: String)->void:
 			return
 	events[id].append(SubscribeInfo.new(node, fn))
 
-func remove_subscriber(node: Node)->void:
+func remove_subscriber(node)->void:
 	for event in events:
-		for sub_info in event:
+		for sub_info in events[event]:
 			if sub_info.node == node:
-				event.erase(sub_info)
+				events[event].erase(sub_info)
 
 func broadcast(event: Event)->void:
 	if event.id not in events:
