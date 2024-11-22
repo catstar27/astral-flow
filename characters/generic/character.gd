@@ -35,7 +35,7 @@ var selected_ability: Ability = null
 var interact_target: Node2D = null
 signal move_order(pos: Vector2)
 signal move_processed
-signal move_finished
+@warning_ignore("unused_signal") signal move_finished
 signal stop_move_order
 signal interact_order(object: Node2D)
 signal interact_processed
@@ -150,10 +150,6 @@ func stop_move_now()->void:
 		stop_move = true
 
 func end_turn()->void:
-	if using_ability:
-		await ability_used
-	if state_machine.current_state.state_id == "MOVE":
-		await move_finished
 	ended_turn.emit(self)
 
 func select()->void:
