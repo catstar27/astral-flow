@@ -158,14 +158,17 @@ func _defeated()->void:
 	defeated.emit(self)
 	queue_free()
 
-func damage(_source: Ability, amount: int)->void:
-	if amount >= base_stats.greater_dt+stat_mods.greater_dt:
-		cur_hp -= amount
-	else:
-		cur_hp -= maxi(amount-base_stats.lesser_dt-stat_mods.lesser_dt, 0)
-	stats_changed.emit()
-	if cur_hp <= 0:
-		_defeated()
+func damage(_source: Ability, accuracy: int, amount: int)->void:
+	print(accuracy)
+	print(base_stats.avoidance+stat_mods.avoidance)
+	if accuracy>=(base_stats.avoidance+stat_mods.avoidance):
+		if amount >= base_stats.greater_dt+stat_mods.greater_dt:
+			cur_hp -= amount
+		else:
+			cur_hp -= maxi(amount-base_stats.lesser_dt-stat_mods.lesser_dt, 0)
+		stats_changed.emit()
+		if cur_hp <= 0:
+			_defeated()
 
 func process_interact(target)->void:
 	interact_target = target

@@ -3,13 +3,18 @@ class_name Ability
 
 enum target_type_choice {target_self, target_allies, target_enemies, target_all}
 enum damage_type_choice {blunt, electric}
+enum skill_used_choice {intelligence, agility, strength, endurance, resolve, charisma, passion}
 @onready var user: Character = get_parent()
+@export_subgroup("Costs")
 @export var ap_cost: int = 0
 @export var mp_cost: int = 0
-@export var damage: int = 0
+@export_subgroup("Targeting")
 @export var ability_range: int = 1
 @export var target_type: target_type_choice = target_type_choice.target_all
+@export_subgroup("Damage")
+@export var base_damage: int = 0
 @export var damage_type: damage_type_choice = damage_type_choice.blunt
+@export var skill_used: skill_used_choice = skill_used_choice.strength
 signal activated
 
 func get_valid_destinations()->Array[Vector2]:
@@ -36,7 +41,8 @@ func get_target(destination: Vector2)->Node2D:
 func deal_damage(target: Node2D)->void:
 	if target != null:
 		if target.has_method("damage"):
-			target.call_deferred("damage", self, damage)
+			var accuracy: int = randi_range(1, 100) + user.star_stats[skill_used_choice.keys()[skill_used]]
+			target.call_deferred("damage", self, accuracy, base_damage)
 
 func activate(_destination: Vector2)->void:
 	activated.emit()
