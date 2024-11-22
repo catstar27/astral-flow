@@ -1,30 +1,46 @@
 extends CharacterBody2D
 class_name Character
 
-@export var base_stats: Dictionary = {
-	"max_ap": 5,
-	"max_mp": 5,
-	"max_hp": 10,
+@export var star_stats: Dictionary = {
 	"intelligence": 10,
 	"agility": 10,
 	"strength": 10,
-	"constitution": 10,
+	"endurance": 10,
 	"charisma": 10,
-	"perception": 10,
+	"resolve": 10,
 	"passion": 10
+}
+var base_stats: Dictionary = {
+	"max_ap": 0,
+	"max_mp": 0,
+	"max_hp": 0,
+	"avoidance": 0,
+	"crit_range": 1,
+	"lesser_dt": 0,
+	"greater_dt": 10,
+	"sequence": 0
+}
+var stat_mods: Dictionary = {
+	"max_ap": 0,
+	"max_mp": 0,
+	"max_hp": 0,
+	"avoidance": 0,
+	"crit_range": 0,
+	"lesser_dt": 0,
+	"greater_dt": 0,
+	"sequence": 0
 }
 @export var allies: Array[Character] = []
 @export var display_name: String = "Name Here"
-@onready var cur_ap: int = base_stats.max_ap
-@onready var cur_mp: int = base_stats.max_mp
-@onready var cur_hp: int = base_stats.max_hp
+@onready var cur_ap: int
+@onready var cur_mp: int
+@onready var cur_hp: int
 @onready var sprite: Sprite2D = %Sprite
 @onready var anim_player: AnimationPlayer = %AnimationPlayer
 @onready var state_machine: StateMachine = %StateMachine
 @onready var target_position: Vector2 = position
 @onready var range_indicator_scene: PackedScene = preload("res://misc/range_indicator.tscn")
 var state: State = null
-var damage_reduction: int = 0
 var sequence: int
 var in_combat: bool = false
 var taking_turn: bool = false
@@ -51,6 +67,17 @@ func _setup()->void:
 	interact_order.connect(process_interact)
 	move_order.connect(process_move)
 	stop_move_order.connect(stop_move_now)
+	calc_base_stats()
+	cur_hp = base_stats.max_hp+stat_mods.max_hp
+	cur_ap = base_stats.max_ap+stat_mods.max_ap
+	cur_mp = base_stats.max_mp+stat_mods.max_mp
+
+func calc_base_stats()->void:
+	base_stats.max_hp = maxi(5+(star_stats.endurance-10)*2+(star_stats.strength-10), 5)
+	base_stats.max_ap = maxi(5+(star_stats.agility-10)+(star_stats.resolve-10), 5)
+	base_stats.max_mp = maxi(5+(star_stats.intelligence-10)+(star_stats.passion-10), 5)
+	base_stats.avoidance = maxi(20+(star_stats.agility-10)*2+(star_stats.charisma-10), 0)
+	base_stats.sequence = (star_stats.passion-10)+(star_stats.agility-10)
 
 func select_ability(ability: Ability)->void:
 	selected_ability = ability
@@ -95,7 +122,7 @@ func add_ability(ability_scene: PackedScene)->void:
 	abilities_changed.emit()
 
 func roll_sequence()->void:
-	sequence = (base_stats.agility-10)+(base_stats.passion-10)+randi_range(1,10)
+	sequence = base_stats.sequence+stat_mods.sequence+randi_range(1,10)
 
 func anim_activate()->void:
 	anim_activate_ability.emit()
@@ -120,7 +147,7 @@ func remove_range_indicators()->void:
 		range_indicators.pop_front().queue_free()
 
 func refresh()->void:
-	cur_ap = base_stats.max_ap
+	cur_ap = base_stats.max_ap+stat_mods.max_ap
 	stats_changed.emit()
 
 func _defeated()->void:
@@ -132,7 +159,10 @@ func _defeated()->void:
 	queue_free()
 
 func damage(_source: Ability, amount: int)->void:
-	cur_hp -= clampi(amount-damage_reduction, 0, 999999999)
+	if amount >= base_stats.greater_dt+stat_mods.greater_dt:
+		cur_hp -= amount
+	else:
+		cur_hp -= maxi(amount-base_stats.lesser_dt-stat_mods.lesser_dt, 0)
 	stats_changed.emit()
 	if cur_hp <= 0:
 		_defeated()

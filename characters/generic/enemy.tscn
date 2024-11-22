@@ -118,17 +118,14 @@ _data = {
 
 [node name="Enemy" type="CharacterBody2D"]
 script = ExtResource("1_3pgqe")
-base_stats = {
-"agility": 10,
-"charisma": 10,
-"constitution": 10,
-"intelligence": 10,
-"max_ap": 5,
-"max_hp": 5,
-"max_mp": 5,
-"passion": 10,
-"perception": 10,
-"strength": 10
+star_stats = {
+"agility": 8,
+"charisma": 8,
+"endurance": 8,
+"intelligence": 8,
+"passion": 8,
+"resolve": 8,
+"strength": 8
 }
 display_name = "Enemy"
 

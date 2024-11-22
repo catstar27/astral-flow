@@ -118,6 +118,15 @@ _data = {
 [node name="Player" type="CharacterBody2D"]
 z_index = 1
 script = ExtResource("1_so47p")
+star_stats = {
+"agility": 12,
+"charisma": 10,
+"endurance": 12,
+"intelligence": 10,
+"passion": 10,
+"resolve": 12,
+"strength": 10
+}
 display_name = "Player"
 
 [node name="Sprite" type="Sprite2D" parent="."]

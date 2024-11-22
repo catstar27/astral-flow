@@ -56,7 +56,7 @@ func start_round()->void:
 	EventBus.broadcast(EventBus.Event.new("ROUND_STARTED", battle_queue))
 	for character in battle_queue:
 		character.taking_turn = true
-		character.damage_reduction = 0
+		character.stat_mods.lesser_dt = 0
 		if character.has_method("take_turn"):
 			character.call_deferred("take_turn")
 		character.ended_turn.connect(end_turn)
