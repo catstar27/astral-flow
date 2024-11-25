@@ -16,8 +16,8 @@ var base_stats: Dictionary = {
 	"max_hp": 0,
 	"avoidance": 0,
 	"crit_range": 1,
-	"lesser_dt": 0,
-	"greater_dt": 10,
+	"defense": 0,
+	"damage_threshold": 10,
 	"sequence": 0
 }
 var stat_mods: Dictionary = {
@@ -26,8 +26,8 @@ var stat_mods: Dictionary = {
 	"max_hp": 0,
 	"avoidance": 0,
 	"crit_range": 0,
-	"lesser_dt": 0,
-	"greater_dt": 0,
+	"defense": 0,
+	"damage_threshold": 0,
 	"sequence": 0
 }
 @export var allies: Array[Character] = []
@@ -162,10 +162,10 @@ func damage(_source: Ability, accuracy: int, amount: int)->void:
 	print(accuracy)
 	print(base_stats.avoidance+stat_mods.avoidance)
 	if accuracy>=(base_stats.avoidance+stat_mods.avoidance):
-		if amount >= base_stats.greater_dt+stat_mods.greater_dt:
+		if amount >= base_stats.damage_threshold+stat_mods.damage_threshold:
 			cur_hp -= amount
 		else:
-			cur_hp -= maxi(amount-base_stats.lesser_dt-stat_mods.lesser_dt, 0)
+			cur_hp -= maxi(amount-base_stats.defense-stat_mods.defense, 0)
 		stats_changed.emit()
 		if cur_hp <= 0:
 			_defeated()
