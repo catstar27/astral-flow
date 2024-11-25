@@ -1,5 +1,5 @@
 extends Ability
 
 func activate(_destination: Vector2)->void:
-	user.stat_mods.lesser_dt += 1
+	user.stat_mods.defense += 2
 	activated.emit()

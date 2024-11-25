@@ -7,12 +7,14 @@ var map: GameMap = null
 var current_timeline: Node = null
 var selection_cursor_scene: PackedScene = preload("res://misc/selection_cursor.tscn")
 var player_scene: PackedScene = preload("res://characters/player.tscn")
+var text_indicator_scene: PackedScene = preload("res://misc/hud/text_indicator.tscn")
 
 func _ready() -> void:
 	get_window().min_size = Vector2(960, 540)
 	EventBus.subscribe("ENTER_DIALOGUE", self, "enter_dialogue")
 	EventBus.subscribe("COMBAT_STARTED", global_timer, "stop")
 	EventBus.subscribe("COMBAT_ENDED", global_timer, "start")
+	EventBus.subscribe("MAKE_TEXT_INDICATOR", self, "create_text_indicator")
 	Dialogic.timeline_ended.connect(exit_dialogue)
 	load_map("res://maps/test_map.tscn")
 
@@ -49,3 +51,9 @@ func exit_dialogue()->void:
 	Dialogic.process_mode = Node.PROCESS_MODE_PAUSABLE
 	current_timeline.process_mode = Node.PROCESS_MODE_PAUSABLE
 	current_timeline = null
+
+func create_text_indicator(info: Array)->void:
+	var ind: TextIndicator = text_indicator_scene.instantiate()
+	ind.text = info[0]
+	ind.position = info[1]
+	add_child(ind)

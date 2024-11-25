@@ -32,6 +32,7 @@ var stat_mods: Dictionary = {
 }
 @export var allies: Array[Character] = []
 @export var display_name: String = "Name Here"
+@export var text_indicator_shift: Vector2 = Vector2.UP*32
 @onready var cur_ap: int
 @onready var cur_mp: int
 @onready var cur_hp: int
@@ -159,16 +160,23 @@ func _defeated()->void:
 	queue_free()
 
 func damage(_source: Ability, accuracy: int, amount: int)->void:
-	print(accuracy)
-	print(base_stats.avoidance+stat_mods.avoidance)
+	var text_ind_pos: Vector2 = text_indicator_shift+global_position
 	if accuracy>=(base_stats.avoidance+stat_mods.avoidance):
 		if amount >= base_stats.damage_threshold+stat_mods.damage_threshold:
 			cur_hp -= amount
+			EventBus.broadcast(EventBus.Event.new("MAKE_TEXT_INDICATOR", [str(-amount), text_ind_pos]))
 		else:
-			cur_hp -= maxi(amount-base_stats.defense-stat_mods.defense, 0)
+			var damage_reduced: int = maxi(amount-base_stats.defense-stat_mods.defense, 0)
+			cur_hp -= damage_reduced
+			if damage_reduced > 0:
+				EventBus.broadcast(EventBus.Event.new("MAKE_TEXT_INDICATOR", [str(-damage_reduced), text_ind_pos]))
+			else:
+				EventBus.broadcast(EventBus.Event.new("MAKE_TEXT_INDICATOR", ["Blocked!", text_ind_pos]))
 		stats_changed.emit()
 		if cur_hp <= 0:
 			_defeated()
+	else:
+		EventBus.broadcast(EventBus.Event.new("MAKE_TEXT_INDICATOR", ["Miss!", text_ind_pos]))
 
 func process_interact(target)->void:
 	interact_target = target

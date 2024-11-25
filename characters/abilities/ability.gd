@@ -41,7 +41,7 @@ func get_target(destination: Vector2)->Node2D:
 func deal_damage(target: Node2D)->void:
 	if target != null:
 		if target.has_method("damage"):
-			var accuracy: int = randi_range(1, 100) + user.star_stats[skill_used_choice.keys()[skill_used]]
+			var accuracy: int = randi_range(1, 20) + user.star_stats[skill_used_choice.keys()[skill_used]]
 			target.call_deferred("damage", self, accuracy, base_damage)
 
 func activate(_destination: Vector2)->void:
