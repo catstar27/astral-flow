@@ -1,9 +1,10 @@
-[gd_scene load_steps=15 format=3 uid="uid://dgmulq68rm1md"]
+[gd_scene load_steps=16 format=3 uid="uid://dgmulq68rm1md"]
 
 [ext_resource type="Script" path="res://characters/player.gd" id="1_so47p"]
 [ext_resource type="Shader" path="res://shaders/outline.gdshader" id="2_j5ppi"]
 [ext_resource type="Texture2D" uid="uid://dxcvjcqv1ubau" path="res://textures/test_avatar.png" id="3_axx35"]
 [ext_resource type="PackedScene" uid="uid://cwie2bybm8vto" path="res://characters/abilities/punch.tscn" id="4_ud5uy"]
+[ext_resource type="PackedScene" uid="uid://b7psjacfk2o1y" path="res://misc/status_manager.tscn" id="6_5iydw"]
 [ext_resource type="PackedScene" uid="uid://ymey58k1x83b" path="res://characters/abilities/block.tscn" id="6_7aa7e"]
 [ext_resource type="PackedScene" uid="uid://dj1dbu04os5rj" path="res://misc/state_machine.tscn" id="6_g6tfj"]
 [ext_resource type="PackedScene" uid="uid://co558pdmpfij5" path="res://characters/states/move.tscn" id="7_uo70b"]
@@ -149,6 +150,9 @@ shape = SubResource("RectangleShape2D_g7ocv")
 [node name="Punch" parent="." instance=ExtResource("4_ud5uy")]
 
 [node name="Block" parent="." instance=ExtResource("6_7aa7e")]
+
+[node name="StatusManager" parent="." instance=ExtResource("6_5iydw")]
+unique_name_in_owner = true
 
 [node name="StateMachine" parent="." node_paths=PackedStringArray("user") instance=ExtResource("6_g6tfj")]
 unique_name_in_owner = true

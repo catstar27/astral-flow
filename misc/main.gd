@@ -56,4 +56,6 @@ func create_text_indicator(info: Array)->void:
 	var ind: TextIndicator = text_indicator_scene.instantiate()
 	ind.text = info[0]
 	ind.position = info[1]
+	if info.size() == 3:
+		ind.color = info[2]
 	add_child(ind)

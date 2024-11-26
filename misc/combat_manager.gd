@@ -35,7 +35,6 @@ func start_combat(participants: Array[Character])->void:
 		character.in_combat = true
 		character.taking_turn = false
 		character.stop_move_order.emit()
-		character.refresh()
 		character.defeated.connect(char_defeated)
 		if character is Player:
 			player_team.append(character)
@@ -56,6 +55,7 @@ func start_round()->void:
 	EventBus.broadcast(EventBus.Event.new("ROUND_STARTED", battle_queue))
 	for character in battle_queue:
 		character.taking_turn = true
+		character.refresh()
 		character.stat_mods.lesser_dt = 0
 		if character.has_method("take_turn"):
 			character.call_deferred("take_turn")
@@ -68,7 +68,6 @@ func end_turn(character: Character)->void:
 	EventBus.broadcast(EventBus.Event.new("TURN_ENDED", "NULLDATA"))
 	character.ended_turn.disconnect(end_turn)
 	character.taking_turn = false
-	character.refresh()
 	if enemy_team.size() == 0 || player_team.size() == 0:
 		call_deferred("end_combat")
 		continue_round.emit(false)

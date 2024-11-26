@@ -21,6 +21,7 @@ Dialogic="*res://addons/dialogic/Core/DialogicGameHandler.gd"
 EventBus="*res://misc/autoload/eventbus.gd"
 Settings="*res://misc/autoload/settings.gd"
 NavMaster="*res://misc/autoload/navmaster.gd"
+Utility="*res://misc/autoload/utility.gd"
 
 [dialogic]
 
@@ -75,6 +76,11 @@ window/size/viewport_height=540
 window/stretch/mode="viewport"
 window/stretch/scale_mode="integer"
 window/vsync/vsync_mode=0
+
+[editor]
+
+movie_writer/movie_file="/home/catstar27/Godot Projects/metroidvania-rpg/recording.avi"
+movie_writer/disable_vsync=true
 
 [editor_plugins]
 

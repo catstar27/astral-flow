@@ -42,7 +42,11 @@ func deal_damage(target: Node2D)->void:
 	if target != null:
 		if target.has_method("damage"):
 			var accuracy: int = randi_range(1, 20) + user.star_stats[skill_used_choice.keys()[skill_used]]
-			target.call_deferred("damage", self, accuracy, base_damage)
+			target.call_deferred("attack", self, accuracy, base_damage)
+
+func inflict_status(target: Node2D, status: Utility.Status)->void:
+	if target.has_method("add_status"):
+		target.call_deferred("add_status", status)
 
 func activate(_destination: Vector2)->void:
 	activated.emit()

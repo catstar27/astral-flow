@@ -39,6 +39,7 @@ var stat_mods: Dictionary = {
 @onready var sprite: Sprite2D = %Sprite
 @onready var anim_player: AnimationPlayer = %AnimationPlayer
 @onready var state_machine: StateMachine = %StateMachine
+@onready var status_manager: StatusManager = %StatusManager
 @onready var target_position: Vector2 = position
 @onready var range_indicator_scene: PackedScene = preload("res://misc/range_indicator.tscn")
 var state: State = null
@@ -68,6 +69,8 @@ func _setup()->void:
 	interact_order.connect(process_interact)
 	move_order.connect(process_move)
 	stop_move_order.connect(stop_move_now)
+	status_manager.status_damage_ticked.connect(damage)
+	status_manager.status_stat_mod_changed.connect(update_stat_mod)
 	calc_base_stats()
 	cur_hp = base_stats.max_hp+stat_mods.max_hp
 	cur_ap = base_stats.max_ap+stat_mods.max_ap
@@ -75,10 +78,16 @@ func _setup()->void:
 
 func calc_base_stats()->void:
 	base_stats.max_hp = maxi(5+(star_stats.endurance-10)*2+(star_stats.strength-10), 5)
-	base_stats.max_ap = maxi(5+(star_stats.agility-10)+(star_stats.resolve-10), 5)
+	base_stats.max_ap = maxi(2+(star_stats.agility-10)+(star_stats.resolve-10), 5)
 	base_stats.max_mp = maxi(5+(star_stats.intelligence-10)+(star_stats.passion-10), 5)
-	base_stats.avoidance = maxi(20+(star_stats.agility-10)*2+(star_stats.charisma-10), 0)
+	base_stats.avoidance = maxi(10+(star_stats.agility-10)*2+(star_stats.charisma-10), 0)
 	base_stats.sequence = (star_stats.passion-10)+(star_stats.agility-10)
+
+func update_stat_mod(stat_mod_name: String, amount: int)->void:
+	if stat_mod_name not in stat_mods:
+		printerr("Attempted to change stat mod "+stat_mod_name+" not in stat_mods")
+	else:
+		stat_mods[stat_mod_name] += amount
 
 func select_ability(ability: Ability)->void:
 	selected_ability = ability
@@ -122,6 +131,11 @@ func add_ability(ability_scene: PackedScene)->void:
 	add_child(ability)
 	abilities_changed.emit()
 
+func add_status(status: Utility.Status)->void:
+	status_manager.add_status(status)
+	var info: Array = [status.display_name, text_indicator_shift+global_position, status.status_color]
+	EventBus.broadcast(EventBus.Event.new("MAKE_TEXT_INDICATOR", info))
+
 func roll_sequence()->void:
 	sequence = base_stats.sequence+stat_mods.sequence+randi_range(1,10)
 
@@ -150,6 +164,7 @@ func remove_range_indicators()->void:
 func refresh()->void:
 	cur_ap = base_stats.max_ap+stat_mods.max_ap
 	stats_changed.emit()
+	status_manager.tick_status()
 
 func _defeated()->void:
 	EventBus.broadcast(EventBus.Event.new("PRINT_LOG","Defeated "+display_name))
@@ -159,24 +174,28 @@ func _defeated()->void:
 	defeated.emit(self)
 	queue_free()
 
-func damage(_source: Ability, accuracy: int, amount: int)->void:
-	var text_ind_pos: Vector2 = text_indicator_shift+global_position
+func attack(_source: Ability, accuracy: int, amount: int)->void:
 	if accuracy>=(base_stats.avoidance+stat_mods.avoidance):
-		if amount >= base_stats.damage_threshold+stat_mods.damage_threshold:
-			cur_hp -= amount
-			EventBus.broadcast(EventBus.Event.new("MAKE_TEXT_INDICATOR", [str(-amount), text_ind_pos]))
-		else:
-			var damage_reduced: int = maxi(amount-base_stats.defense-stat_mods.defense, 0)
-			cur_hp -= damage_reduced
-			if damage_reduced > 0:
-				EventBus.broadcast(EventBus.Event.new("MAKE_TEXT_INDICATOR", [str(-damage_reduced), text_ind_pos]))
-			else:
-				EventBus.broadcast(EventBus.Event.new("MAKE_TEXT_INDICATOR", ["Blocked!", text_ind_pos]))
-		stats_changed.emit()
-		if cur_hp <= 0:
-			_defeated()
+		damage(amount)
 	else:
+		var text_ind_pos: Vector2 = text_indicator_shift+global_position
 		EventBus.broadcast(EventBus.Event.new("MAKE_TEXT_INDICATOR", ["Miss!", text_ind_pos]))
+
+func damage(amount: int, ignore_defense: bool = false)->void:
+	var text_ind_pos: Vector2 = text_indicator_shift+global_position
+	if amount >= base_stats.damage_threshold+stat_mods.damage_threshold || ignore_defense:
+		cur_hp -= amount
+		EventBus.broadcast(EventBus.Event.new("MAKE_TEXT_INDICATOR", [str(-amount), text_ind_pos]))
+	else:
+		var damage_reduced: int = maxi(amount-base_stats.defense-stat_mods.defense, 0)
+		cur_hp -= damage_reduced
+		if damage_reduced > 0:
+			EventBus.broadcast(EventBus.Event.new("MAKE_TEXT_INDICATOR", [str(-damage_reduced), text_ind_pos]))
+		else:
+			EventBus.broadcast(EventBus.Event.new("MAKE_TEXT_INDICATOR", ["Blocked!", text_ind_pos]))
+	stats_changed.emit()
+	if cur_hp <= 0:
+		_defeated()
 
 func process_interact(target)->void:
 	interact_target = target
