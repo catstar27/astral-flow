@@ -1,4 +1,5 @@
-join dog left [animation="Slide In Up"]
+join dog left [animation="Slide In Up" wait="true"]
+[music path="res://music/carefree_carousel.wav" fade="0.0" volume="0.0"]
 \dog: Woof!
 - Pet
 	\dog: *Happy Dog Noises*

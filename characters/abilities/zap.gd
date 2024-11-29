@@ -9,6 +9,7 @@ func activate(destination: Vector2)->void:
 	lightning.scale = Vector2(1,.01)
 	lightning.texture_scale = Vector2(1,.01)
 	add_child(lightning)
+	play_sound()
 	create_tween().tween_property(lightning, "texture_scale", final_scale, .2)
 	await create_tween().tween_property(lightning, "scale", final_scale, .2).finished
 	deal_damage(get_target(destination))

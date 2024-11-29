@@ -5,6 +5,7 @@ class_name Interactive
 @export var texture: Texture
 @export var dimensions: Vector2i = Vector2i.ONE
 @export var offset: Vector2 = Vector2.ZERO
+@export var pause_music: bool = false
 @onready var sprite: Sprite2D = %Sprite
 @onready var audio: AudioStreamPlayer2D = %Audio
 @onready var collision: CollisionShape2D = %Collision
@@ -45,5 +46,5 @@ func _calc_occupied()->void:
 func _interacted(_character: Character)->void:
 	audio.play()
 	if dialogue_timeline != null:
-		EventBus.broadcast(EventBus.Event.new("ENTER_DIALOGUE", dialogue_timeline))
+		EventBus.broadcast(EventBus.Event.new("ENTER_DIALOGUE", [dialogue_timeline, pause_music]))
 	interacted.emit()

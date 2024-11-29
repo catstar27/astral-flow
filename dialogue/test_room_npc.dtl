@@ -1,4 +1,5 @@
-join generic_npc left [animation="Bounce In"]
+join generic_npc left [animation="Bounce In" wait="true"]
+[music path="res://music/carefree_carousel.wav" fade="0.0" volume="0.0"]
 if {learned_zap} == true:
 	jump go_exit
 generic_npc: Whew! You put up a good fight!

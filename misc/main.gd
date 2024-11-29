@@ -39,9 +39,9 @@ func load_map(new_map: String)->void:
 	map_to_load.prep_map()
 	EventBus.broadcast(EventBus.Event.new("MAP_LOADED", map))
 
-func enter_dialogue(dialogue: DialogicTimeline)->void:
+func enter_dialogue(info: Array)->void:
 	selection_cursor.reset_move_dir()
-	current_timeline = Dialogic.start(dialogue)
+	current_timeline = Dialogic.start(info[0])
 	Dialogic.process_mode = Node.PROCESS_MODE_ALWAYS
 	current_timeline.process_mode = Node.PROCESS_MODE_ALWAYS
 	get_tree().paused = true

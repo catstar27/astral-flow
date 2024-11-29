@@ -16,4 +16,4 @@ func _ready()->void:
 
 func _interacted(_interactor: Character)->void:
 	if dialogue_timeline != null:
-		EventBus.broadcast(EventBus.Event.new("ENTER_DIALOGUE", dialogue_timeline))
+		EventBus.broadcast(EventBus.Event.new("ENTER_DIALOGUE", [dialogue_timeline, true]))

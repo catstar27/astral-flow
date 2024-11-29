@@ -5,6 +5,7 @@ enum target_type_choice {target_self, target_allies, target_enemies, target_all}
 enum damage_type_choice {blunt, electric}
 enum skill_used_choice {intelligence, agility, strength, endurance, resolve, charisma, passion}
 @onready var user: Character = get_parent()
+@export var sound: String
 @export_subgroup("Costs")
 @export var ap_cost: int = 0
 @export var mp_cost: int = 0
@@ -40,7 +41,7 @@ func get_target(destination: Vector2)->Node2D:
 
 func deal_damage(target: Node2D)->void:
 	if target != null:
-		if target.has_method("damage"):
+		if target.has_method("attack"):
 			var accuracy: int = randi_range(1, 20) + user.star_stats[skill_used_choice.keys()[skill_used]]
 			target.call_deferred("attack", self, accuracy, base_damage)
 
@@ -50,3 +51,9 @@ func inflict_status(target: Node2D, status: Utility.Status)->void:
 
 func activate(_destination: Vector2)->void:
 	activated.emit()
+
+func play_sound()->void:
+	if sound != "":
+		EventBus.broadcast(EventBus.Event.new("PLAY_SOUND", [sound, "positional", global_position]))
+	else:
+		printerr("Empty Sound for Ability: "+name)

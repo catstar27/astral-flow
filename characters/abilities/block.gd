@@ -10,5 +10,6 @@ func _ready() -> void:
 	status.status_color = Color.WEB_GRAY
 
 func activate(destination: Vector2)->void:
+	play_sound()
 	inflict_status(get_target(destination), status)
 	activated.emit()

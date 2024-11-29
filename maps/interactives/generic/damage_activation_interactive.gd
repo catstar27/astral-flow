@@ -7,7 +7,7 @@ enum damage_type_choice {blunt, electric, none}
 var triggered: bool = false
 signal unlocked(name: String)
 
-func damage(source: Ability, _amount: int)->void:
+func attack(source: Ability, _accuracy: int, _amount: int)->void:
 	if triggered:
 		return
 	if damage_type_required != damage_type_choice.none:

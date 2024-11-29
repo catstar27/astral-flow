@@ -2,6 +2,7 @@ extends TileMapLayer
 class_name GameMap
 
 @export var player_start_pos: Vector2i = Vector2i.ZERO
+@export var ost: String
 @onready var astar: AStarGrid2D = AStarGrid2D.new()
 @onready var light_modulator: CanvasModulate = %LightingModulate
 var occupied_tiles: Array[Vector2i]
@@ -107,3 +108,4 @@ func prep_map()->void:
 		elif child is Character:
 			set_pos_occupied(child.position)
 	_extra_setup()
+	EventBus.broadcast(EventBus.Event.new("SET_OST", ost))

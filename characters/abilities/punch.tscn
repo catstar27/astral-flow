@@ -4,5 +4,6 @@
 
 [node name="Punch" type="Node2D"]
 script = ExtResource("1_p0hx2")
+sound = "res://sfx/punch.wav"
 ap_cost = 2
 base_damage = 2
