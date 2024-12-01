@@ -35,9 +35,9 @@ extends DialogicLayoutLayer
 
 @export_group('Sounds')
 @export_range(-80, 24, 0.01) var sounds_volume: float = -10
-@export_file("*.wav", "*.ogg", "*.mp3") var sounds_pressed: String = "res://addons/dialogic/Example Assets/sound-effects/typing1.wav"
-@export_file("*.wav", "*.ogg", "*.mp3") var sounds_hover: String = "res://addons/dialogic/Example Assets/sound-effects/typing2.wav"
-@export_file("*.wav", "*.ogg", "*.mp3") var sounds_focus: String = "res://addons/dialogic/Example Assets/sound-effects/typing4.wav"
+@export_file("*.wav", "*.ogg", "*.mp3") var sounds_pressed: String = "res://addons/dialogic/ExampleAssets/sound-effects/typing1.wav"
+@export_file("*.wav", "*.ogg", "*.mp3") var sounds_hover: String = "res://addons/dialogic/ExampleAssets/sound-effects/typing2.wav"
+@export_file("*.wav", "*.ogg", "*.mp3") var sounds_focus: String = "res://addons/dialogic/ExampleAssets/sound-effects/typing4.wav"
 
 func get_choices() -> VBoxContainer:
 	return $Choices
