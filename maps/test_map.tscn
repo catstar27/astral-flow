@@ -101,7 +101,7 @@ dialogue = "res://dialogue/test_room_completion.dtl"
 texture = ExtResource("9_sk700")
 
 [node name="InteractPuzzleGate" parent="." instance=ExtResource("9_amhi4")]
-position = Vector2(-32, -224)
+position = Vector2(32, -224)
 dialogic_var = "test_room_puzzle_index"
 locked_texture = ExtResource("10_2o7ph")
 signals_needed = Array[String](["test_room_sun_click", "test_room_couch_click", "test_room_dog_click", "test_room_grapes_click"])
