@@ -50,15 +50,11 @@ var stop_move: bool = false
 var using_ability: bool = false
 var range_indicators: Array[Sprite2D] = []
 var selected_ability: Ability = null
-var interact_target: Node2D = null
-signal move_order(pos: Vector2)
-signal move_processed
-@warning_ignore("unused_signal") signal move_finished
-signal stop_move_order
-signal interact_order(object: Node2D)
-signal interact_processed
+@warning_ignore("unused_signal") signal move_order(pos: Vector2)
+@warning_ignore("unused_signal") signal stop_move_order
+@warning_ignore("unused_signal") signal interact_order(object: Node2D)
+@warning_ignore("unused_signal") signal ability_order(data: Array)
 signal anim_activate_ability
-signal ability_used
 signal ended_turn(character)
 signal stats_changed
 signal abilities_changed
@@ -66,9 +62,6 @@ signal defeated(character)
 
 func _setup()->void:
 	EventBus.subscribe("GLOBAL_TIMER_TIMEOUT", self, "refresh")
-	interact_order.connect(process_interact)
-	move_order.connect(process_move)
-	stop_move_order.connect(stop_move_now)
 	status_manager.status_damage_ticked.connect(damage)
 	status_manager.status_stat_mod_changed.connect(update_stat_mod)
 	calc_base_stats()
@@ -90,40 +83,14 @@ func update_stat_mod(stat_mod_name: String, amount: int)->void:
 		stat_mods[stat_mod_name] += amount
 
 func select_ability(ability: Ability)->void:
+	while state_machine.current_state.state_id == "MOVE":
+		await state_machine.state_changed
 	selected_ability = ability
 	place_range_indicators(ability.get_valid_destinations(), ability.target_type)
 
 func deselect_ability()->void:
 	selected_ability = null
 	remove_range_indicators()
-
-func activate_ability(ability: Ability, destination: Vector2)->void:
-	if using_ability:
-		return
-	if !ability.is_destination_valid(destination):
-		EventBus.broadcast(EventBus.Event.new("PRINT_LOG","Invalid Target!"))
-		return
-	if ability.ap_cost>cur_ap:
-		EventBus.broadcast(EventBus.Event.new("PRINT_LOG","Not enough ap"))
-		return
-	if ability.mp_cost>cur_mp:
-		EventBus.broadcast(EventBus.Event.new("PRINT_LOG","Not enough mp"))
-		return
-	remove_range_indicators()
-	using_ability = true
-	cur_ap -= ability.ap_cost
-	cur_mp -= ability.mp_cost
-	stats_changed.emit()
-	anim_player.play("melee")
-	await anim_activate_ability
-	ability.call_deferred("activate", destination)
-	await anim_player.animation_finished
-	using_ability = false
-	ability_used.emit()
-	after_ability()
-
-func after_ability()->void:
-	return
 
 func add_ability(ability_scene: PackedScene)->void:
 	var ability: Ability = ability_scene.instantiate()
@@ -166,7 +133,7 @@ func refresh()->void:
 	stats_changed.emit()
 	status_manager.tick_status()
 
-func _defeated()->void:
+func on_defeated()->void:
 	EventBus.broadcast(EventBus.Event.new("PRINT_LOG","Defeated "+display_name))
 	EventBus.broadcast(EventBus.Event.new("TILE_UNOCCUPIED", position))
 	if taking_turn:
@@ -195,21 +162,12 @@ func damage(amount: int, ignore_defense: bool = false)->void:
 			EventBus.broadcast(EventBus.Event.new("MAKE_TEXT_INDICATOR", ["Blocked!", text_ind_pos]))
 	stats_changed.emit()
 	if cur_hp <= 0:
-		_defeated()
-
-func process_interact(target)->void:
-	interact_target = target
-	interact_processed.emit()
-
-func process_move(pos: Vector2)->void:
-	target_position = pos
-	move_processed.emit()
-
-func stop_move_now()->void:
-	if state_machine.current_state.state_id == "MOVE":
-		stop_move = true
+		anim_player.play("defeat")
 
 func end_turn()->void:
+	while state_machine.current_state.state_id != "IDLE":
+		await state_machine.state_changed
+	remove_range_indicators()
 	ended_turn.emit(self)
 
 func select()->void:

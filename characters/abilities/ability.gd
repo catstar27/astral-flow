@@ -34,6 +34,8 @@ func is_destination_valid(destination: Vector2)->bool:
 	var x_dist: float = abs(global_position.x-destination.x)
 	var y_dist: float = abs(global_position.y-destination.y)
 	var range_factor: float = (x_dist+y_dist)/Settings.tile_size
+	if target_type != target_type_choice.target_self && destination == user.position:
+		return false
 	return range_factor<=ability_range
 
 func get_target(destination: Vector2)->Node2D:

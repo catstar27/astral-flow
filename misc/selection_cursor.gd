@@ -70,12 +70,16 @@ func interact_on_pos(pos: Vector2i)->void:
 	elif selected == null:
 		return
 	elif selected.selected_ability != null:
-		selected.activate_ability(selected.selected_ability, pos)
+		var ability: Ability = selected.selected_ability
+		selected.emit_signal("ability_order", [ability, pos])
 	elif hovering == null || hovering is GameMap:
 		selected.emit_signal("move_order", pos)
 	elif hovering is Interactive || hovering is NPC:
+		var cur_hover = hovering
 		selected.emit_signal("move_order", pos)
-		selected.emit_signal("interact_order", hovering)
+		while selected.state_machine.current_state.state_id != "IDLE":
+			await selected.state_machine.state_changed
+		selected.emit_signal("interact_order", cur_hover)
 
 func select_ability(ability: Ability)->void:
 	select(ability.user)

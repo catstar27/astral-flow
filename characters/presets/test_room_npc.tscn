@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://b6oqahrk8igtr"]
+[gd_scene load_steps=16 format=3 uid="uid://b6oqahrk8igtr"]
 
 [ext_resource type="Script" path="res://characters/presets/test_room_npc.gd" id="1_q7ey0"]
 [ext_resource type="Shader" path="res://shaders/outline.gdshader" id="2_glyxi"]
@@ -8,6 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://co558pdmpfij5" path="res://characters/states/move.tscn" id="5_a4106"]
 [ext_resource type="PackedScene" uid="uid://c87v4rbl0fr7" path="res://characters/states/idle.tscn" id="6_lu42i"]
 [ext_resource type="PackedScene" uid="uid://d1oj7ptthilej" path="res://characters/states/interact.tscn" id="7_1uqnj"]
+[ext_resource type="PackedScene" uid="uid://brlpvcs48fhyc" path="res://characters/states/activate_ability.tscn" id="9_3vumc"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_w6is8"]
 shader = ExtResource("2_glyxi")
@@ -51,6 +52,47 @@ tracks/2/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 0,
 "values": [0.0]
+}
+
+[sub_resource type="Animation" id="Animation_xxpkp"]
+resource_name = "defeat"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:scale")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.233333, 0.5, 1),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(0.75, 0.75), Vector2(1, 1), Vector2(1e-05, 1e-05)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.233333, 0.5, 0.733333, 1),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 0,
+"values": [0.0, 1.0472, 0.0, -1.0472, 0.0]
+}
+tracks/2/type = "method"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(1),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"on_defeated"
+}]
 }
 
 [sub_resource type="Animation" id="Animation_kxect"]
@@ -109,6 +151,7 @@ tracks/3/keys = {
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_7ssjw"]
 _data = {
 "RESET": SubResource("Animation_vf0ry"),
+"defeat": SubResource("Animation_xxpkp"),
 "melee": SubResource("Animation_kxect")
 }
 
@@ -150,4 +193,7 @@ state_machine = NodePath("..")
 state_machine = NodePath("..")
 
 [node name="Interact" parent="StateMachine" node_paths=PackedStringArray("state_machine") instance=ExtResource("7_1uqnj")]
+state_machine = NodePath("..")
+
+[node name="ActivateAbility" parent="StateMachine" node_paths=PackedStringArray("state_machine") instance=ExtResource("9_3vumc")]
 state_machine = NodePath("..")

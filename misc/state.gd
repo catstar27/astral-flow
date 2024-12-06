@@ -5,7 +5,7 @@ class_name State
 @export var state_machine: StateMachine
 @warning_ignore("unused_signal") signal change_state(state)
 
-func enter_state()->void:
+func enter_state(_data)->void:
 	return
 
 func process_state(_delta: float)->void:
