@@ -1,4 +1,6 @@
 join generic_npc center
+if {test_room_puzzle_index} < 7:
+	[music path="res://music/carefree_carousel.wav" fade="0.0" volume="0.0"]
 if {test_room_npc_blocked} == 0:
 	generic_npc: Could you please move, my good fellow? I need to unlock the door.
 elif {test_room_npc_blocked} == 1:
