@@ -1,6 +1,7 @@
 extends NPC
 
 var blocked_dialogue: String = "res://dialogue/test_room_npc_blocked.dtl"
+var damaged_dialogue: String = "res://dialogue/test_room_npc_hit.dtl"
 signal combat_gate_open
 
 func _ready()->void:
@@ -29,3 +30,7 @@ func _ready()->void:
 func _interacted(_interactor: Character)->void:
 	if dialogue_timeline != null:
 		EventBus.broadcast(EventBus.Event.new("ENTER_DIALOGUE", [dialogue_timeline, true]))
+
+func on_damaged()->void:
+	EventBus.broadcast(EventBus.Event.new("ENTER_DIALOGUE", [damaged_dialogue, true]))
+	cur_hp = base_stats.max_hp

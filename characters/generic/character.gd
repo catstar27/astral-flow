@@ -59,12 +59,14 @@ signal ended_turn(character)
 signal stats_changed
 signal abilities_changed
 signal defeated(character)
+signal damaged
 
 func _setup()->void:
 	EventBus.subscribe("GLOBAL_TIMER_TIMEOUT", self, "refresh")
 	status_manager.status_damage_ticked.connect(damage)
 	status_manager.status_stat_mod_changed.connect(update_stat_mod)
 	status_manager.status_action_occurred.connect(process_status_action)
+	damaged.connect(on_damaged)
 	calc_base_stats()
 	cur_hp = base_stats.max_hp+stat_mods.max_hp
 	cur_ap = base_stats.max_ap+stat_mods.max_ap
@@ -161,6 +163,7 @@ func damage(amount: int, ignore_defense: bool = false)->void:
 			EventBus.broadcast(EventBus.Event.new("MAKE_TEXT_INDICATOR", [str(-damage_reduced), text_ind_pos]))
 		else:
 			EventBus.broadcast(EventBus.Event.new("MAKE_TEXT_INDICATOR", ["Blocked!", text_ind_pos]))
+	damaged.emit()
 	stats_changed.emit()
 	if cur_hp <= 0:
 		anim_player.play("defeat")
@@ -191,3 +194,6 @@ func get_abilities()->Array[Ability]:
 func process_status_action(action: Callable, args: Array)->void:
 	deselect_ability()
 	await action.call(args)
+
+func on_damaged()->void:
+	return

@@ -39,6 +39,7 @@ directories/dtl_directory={
 "test_room_grapes": "res://dialogue/test_room_grapes.dtl",
 "test_room_npc": "res://dialogue/test_room_npc.dtl",
 "test_room_npc_blocked": "res://dialogue/test_room_npc_blocked.dtl",
+"test_room_npc_hit": "res://dialogue/test_room_npc_hit.dtl",
 "test_room_sign1": "res://dialogue/test_room_sign1.dtl",
 "test_room_sun": "res://dialogue/test_room_sun.dtl"
 }
