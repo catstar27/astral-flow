@@ -64,6 +64,7 @@ func _setup()->void:
 	EventBus.subscribe("GLOBAL_TIMER_TIMEOUT", self, "refresh")
 	status_manager.status_damage_ticked.connect(damage)
 	status_manager.status_stat_mod_changed.connect(update_stat_mod)
+	status_manager.status_action_occurred.connect(process_status_action)
 	calc_base_stats()
 	cur_hp = base_stats.max_hp+stat_mods.max_hp
 	cur_ap = base_stats.max_ap+stat_mods.max_ap
@@ -186,3 +187,7 @@ func get_abilities()->Array[Ability]:
 		if child is Ability:
 			arr.append(child)
 	return arr
+
+func process_status_action(action: Callable, args: Array)->void:
+	deselect_ability()
+	await action.call(args)

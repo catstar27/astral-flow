@@ -16,6 +16,7 @@ func _ready() -> void:
 	EventBus.subscribe("COMBAT_ENDED", global_timer, "start")
 	EventBus.subscribe("MAKE_TEXT_INDICATOR", self, "create_text_indicator")
 	Dialogic.timeline_ended.connect(exit_dialogue)
+	Dialogic.signal_event.connect(check_dialogue_signal)
 	load_map("res://maps/test_map.tscn")
 
 func global_timer_timeout()->void:
@@ -59,3 +60,7 @@ func create_text_indicator(info: Array)->void:
 	if info.size() == 3:
 		ind.color = info[2]
 	add_child(ind)
+
+func check_dialogue_signal(data)->void:
+	if data == "crash_game":
+		queue_free()

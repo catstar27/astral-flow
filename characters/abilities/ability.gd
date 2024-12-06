@@ -48,7 +48,7 @@ func deal_damage(target: Node2D)->void:
 			target.call_deferred("attack", self, accuracy, base_damage)
 
 func inflict_status(target: Node2D, status: Utility.Status)->void:
-	if target.has_method("add_status"):
+	if target != null && target.has_method("add_status"):
 		target.call_deferred("add_status", status)
 
 func activate(_destination: Vector2)->void:

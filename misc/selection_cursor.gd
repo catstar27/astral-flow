@@ -58,7 +58,10 @@ func move(dir: Vector2)->void:
 		move_stop()
 		return
 	var tween: Tween = create_tween()
-	tween.tween_property(self, "position", new_pos, .2).set_ease(Tween.EASE_IN_OUT)
+	var time: float = .2
+	if Input.is_action_pressed("shift"):
+		time = .1
+	tween.tween_property(self, "position", new_pos, time).set_ease(Tween.EASE_IN_OUT)
 	tween.tween_callback(move_stop)
 
 func move_stop()->void:

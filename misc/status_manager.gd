@@ -15,9 +15,12 @@ var status_list: Dictionary
 var damage: int = 0
 signal status_damage_ticked(amount: int)
 signal status_stat_mod_changed(stat_mod: String, amount: int)
+signal status_action_occurred(action: Callable, args: Array)
 
 func add_status(status: Utility.Status)->void:
-	if status in status_list:
+	if status.time_choice == status.time_options.instant:
+		status_action_occurred.emit(status.action, status.action_args)
+	elif status in status_list:
 		if status.stacking:
 			status_list[status] += status.stacks
 			for stat in status.stat_mods:

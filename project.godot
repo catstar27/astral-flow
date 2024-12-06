@@ -38,16 +38,18 @@ directories/dtl_directory={
 "test_room_dog": "res://dialogue/test_room_dog.dtl",
 "test_room_grapes": "res://dialogue/test_room_grapes.dtl",
 "test_room_npc": "res://dialogue/test_room_npc.dtl",
+"test_room_npc_blocked": "res://dialogue/test_room_npc_blocked.dtl",
 "test_room_sign1": "res://dialogue/test_room_sign1.dtl",
 "test_room_sun": "res://dialogue/test_room_sun.dtl"
 }
 glossary/default_case_sensitive=true
 variables={
 "learned_zap": false,
+"test_room_npc_blocked": 0,
 "test_room_puzzle_index": 0
 }
-layout/style_list=[]
-layout/default_style=""
+layout/style_list=["res://dialogue/dialogue_style.tres"]
+layout/default_style="res://dialogue/dialogue_style.tres"
 extensions_folder="res://addons/dialogic_additions"
 text/letter_speed=0.01
 text/initial_text_reveal_skippable=true
@@ -163,6 +165,11 @@ dialogic_default_action={
 clear={
 "deadzone": 0.5,
 "events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":88,"key_label":0,"unicode":120,"location":0,"echo":false,"script":null)
+]
+}
+shift={
+"deadzone": 0.5,
+"events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":4194325,"key_label":0,"unicode":0,"location":0,"echo":false,"script":null)
 ]
 }
 

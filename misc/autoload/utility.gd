@@ -12,11 +12,13 @@ class Status:
 		"sequence": 0
 	}
 	var damage: int = 0
-	enum time_options {constant, timed}
+	enum time_options {constant, timed, instant}
 	var time_choice: time_options = time_options.timed
 	var duration: int = 1
 	var stacking: bool = false
 	var stacks: int = 1
+	var action: Callable
+	var action_args: Array
 	var status_color: Color = Color.WHITE
 	var id: String = "EMPTY_STATUS"
 	var display_name: String = "Empty Status"
