@@ -4,7 +4,7 @@
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_4ou26"]
 
-[node name="DialogueSignalGate" type="StaticBody2D"]
+[node name="DialogueSignalGate" type="StaticBody2D" groups=["Persist"]]
 script = ExtResource("1_vfxxp")
 
 [node name="Sprite" type="Sprite2D" parent="."]

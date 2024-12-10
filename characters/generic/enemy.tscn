@@ -1,9 +1,8 @@
-[gd_scene load_steps=18 format=3 uid="uid://c2af6y8es466h"]
+[gd_scene load_steps=17 format=3 uid="uid://c2af6y8es466h"]
 
 [ext_resource type="Script" path="res://characters/generic/enemy.gd" id="1_3pgqe"]
 [ext_resource type="Shader" path="res://shaders/outline.gdshader" id="2_4x7kb"]
 [ext_resource type="Texture2D" uid="uid://dxcvjcqv1ubau" path="res://textures/test_avatar.png" id="3_joqcd"]
-[ext_resource type="PackedScene" uid="uid://cwie2bybm8vto" path="res://characters/abilities/punch.tscn" id="4_viveu"]
 [ext_resource type="PackedScene" uid="uid://dj1dbu04os5rj" path="res://misc/state_machine.tscn" id="5_2njyl"]
 [ext_resource type="PackedScene" uid="uid://d1oj7ptthilej" path="res://characters/states/interact.tscn" id="5_b0u4w"]
 [ext_resource type="PackedScene" uid="uid://b7psjacfk2o1y" path="res://misc/status_manager.tscn" id="5_fuqcr"]
@@ -195,6 +194,7 @@ star_stats = {
 "resolve": 8,
 "strength": 8
 }
+ability_scenes = Array[String](["res://characters/abilities/punch.tscn"])
 display_name = "Enemy"
 
 [node name="Sprite" type="Sprite2D" parent="."]
@@ -221,8 +221,6 @@ shape = SubResource("CircleShape2D_vqoxr")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 scale = Vector2(2, 2)
 shape = SubResource("RectangleShape2D_nbbbf")
-
-[node name="Punch" parent="." instance=ExtResource("4_viveu")]
 
 [node name="StatusManager" parent="." instance=ExtResource("5_fuqcr")]
 unique_name_in_owner = true

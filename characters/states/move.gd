@@ -31,6 +31,7 @@ func move(cur_target: Vector2)->bool:
 		EventBus.broadcast(EventBus.Event.new("TILE_OCCUPIED", pos))
 		await create_tween().tween_property(state_machine.user, "position", pos, .2).finished
 		EventBus.broadcast(EventBus.Event.new("TILE_UNOCCUPIED", prev_pos))
+		state_machine.user.pos_changed.emit(state_machine.user)
 		if state_machine.user.in_combat:
 			state_machine.user.cur_ap -= 1
 			state_machine.user.stats_changed.emit()

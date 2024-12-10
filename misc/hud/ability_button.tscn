@@ -3,6 +3,7 @@
 [ext_resource type="Script" path="res://misc/hud/ability_button.gd" id="1_o8rum"]
 
 [node name="AbilityButton" type="Button"]
+use_parent_material = true
 offset_right = 41.0
 offset_bottom = 31.0
 focus_mode = 0

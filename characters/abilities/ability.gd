@@ -5,6 +5,7 @@ enum target_type_choice {target_self, target_allies, target_enemies, target_all}
 enum damage_type_choice {blunt, electric}
 enum skill_used_choice {intelligence, agility, strength, endurance, resolve, charisma, passion}
 @onready var user: Character = get_parent()
+@export var display_name: String = "NameHere"
 @export var sound: String
 @export_subgroup("Costs")
 @export var ap_cost: int = 0

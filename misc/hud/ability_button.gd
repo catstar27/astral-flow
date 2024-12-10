@@ -4,7 +4,7 @@ class_name AbilityButton
 @export var ability: Ability
 
 func _ready() -> void:
-	text = ability.name
+	text = ability.display_name
 
 func _on_pressed() -> void:
 	EventBus.broadcast(EventBus.Event.new("ABILITY_BUTTON_PRESSED", ability))

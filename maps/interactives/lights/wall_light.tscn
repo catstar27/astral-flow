@@ -8,7 +8,7 @@
 size = Vector2(40, 40)
 
 [node name="WallLight" type="StaticBody2D"]
-z_index = 1
+z_index = 2
 script = ExtResource("1_niad6")
 
 [node name="Sprite" type="Sprite2D" parent="."]

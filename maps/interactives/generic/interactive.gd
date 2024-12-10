@@ -9,6 +9,7 @@ class_name Interactive
 @onready var sprite: Sprite2D = %Sprite
 @onready var audio: AudioStreamPlayer2D = %Audio
 @onready var collision: CollisionShape2D = %Collision
+var collision_active: bool = true
 var occupied_positions: Array[Vector2]
 var dialogue_timeline: DialogicTimeline = null
 signal interacted
@@ -25,6 +26,10 @@ func setup()->void:
 		sprite.offset = offset
 	if dialogue != "":
 		dialogue_timeline = load(dialogue)
+	setup_extra()
+
+func setup_extra()->void:
+	return
 
 func get_middle(positions: Array[Vector2])->Vector2:
 	var sum: Vector2 = Vector2.ZERO

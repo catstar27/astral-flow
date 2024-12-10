@@ -1,13 +1,11 @@
 extends Node2D
 class_name SoundManager
 
-var ost: AudioStreamPlayer = null
+@onready var ost: AudioStreamPlayer = %OST
 var ost_volume: float = 0.75
 
 func _ready() -> void:
-	ost = AudioStreamPlayer.new()
 	ost.volume_db = linear_to_db(ost_volume)
-	add_child(ost)
 	EventBus.subscribe("PLAY_SOUND", self, "new_sound")
 	EventBus.subscribe("SET_OST", self, "new_ost")
 	EventBus.subscribe("ENTER_DIALOGUE", self, "enter_dialogue")

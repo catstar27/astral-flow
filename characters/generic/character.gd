@@ -31,6 +31,7 @@ var stat_mods: Dictionary = {
 	"sequence": 0
 }
 @export var allies: Array[Character] = []
+@export var ability_scenes: Array[String] = []
 @export var display_name: String = "Name Here"
 @export var text_indicator_shift: Vector2 = Vector2.UP*32
 @onready var cur_ap: int
@@ -42,18 +43,16 @@ var stat_mods: Dictionary = {
 @onready var status_manager: StatusManager = %StatusManager
 @onready var target_position: Vector2 = position
 @onready var range_indicator_scene: PackedScene = preload("res://misc/range_indicator.tscn")
-var state: State = null
 var sequence: int
 var in_combat: bool = false
 var taking_turn: bool = false
-var stop_move: bool = false
-var using_ability: bool = false
 var range_indicators: Array[Sprite2D] = []
 var selected_ability: Ability = null
 @warning_ignore("unused_signal") signal move_order(pos: Vector2)
 @warning_ignore("unused_signal") signal stop_move_order
 @warning_ignore("unused_signal") signal interact_order(object: Node2D)
 @warning_ignore("unused_signal") signal ability_order(data: Array)
+signal pos_changed
 signal anim_activate_ability
 signal ended_turn(character)
 signal stats_changed
@@ -67,6 +66,7 @@ func _setup()->void:
 	status_manager.status_stat_mod_changed.connect(update_stat_mod)
 	status_manager.status_action_occurred.connect(process_status_action)
 	damaged.connect(on_damaged)
+	load_abilities()
 	calc_base_stats()
 	cur_hp = base_stats.max_hp+stat_mods.max_hp
 	cur_ap = base_stats.max_ap+stat_mods.max_ap
@@ -95,10 +95,26 @@ func deselect_ability()->void:
 	selected_ability = null
 	remove_range_indicators()
 
+func get_abilities()->Array[Ability]:
+	ability_scenes = []
+	var arr: Array[Ability] = []
+	for child in get_children():
+		if child is Ability:
+			arr.append(child)
+			ability_scenes.append(child.scene_file_path)
+	return arr
+
+func load_abilities()->void:
+	for child in get_children():
+		if child is Ability:
+			child.queue_free()
+	for scn in ability_scenes:
+		add_child(load(scn).instantiate())
+
 func add_ability(ability_scene: PackedScene)->void:
 	var ability: Ability = ability_scene.instantiate()
-	ability.position = Vector2.ZERO
 	add_child(ability)
+	ability_scenes.append(ability.scene_file_path)
 	abilities_changed.emit()
 
 func add_status(status: Utility.Status)->void:
@@ -175,25 +191,42 @@ func end_turn()->void:
 	ended_turn.emit(self)
 
 func select()->void:
-	var line_color: Color = sprite.material.get_shader_parameter("line_color")
-	sprite.material.set_shader_parameter("line_color", Color(line_color, 180.0/255.0))
+	sprite.material.set_shader_parameter("line_color", Color(Settings.selection_tint, 180.0/255.0))
 
 func deselect()->void:
-	var line_color: Color = sprite.material.get_shader_parameter("line_color")
-	sprite.material.set_shader_parameter("line_color", Color(line_color, 0))
+	sprite.material.set_shader_parameter("line_color", Color(Settings.selection_tint, 0))
 	if has_method("deselect_ability"):
 		call("deselect_ability")
 
-func get_abilities()->Array[Ability]:
-	var arr: Array[Ability] = []
-	for child in get_children():
-		if child is Ability:
-			arr.append(child)
-	return arr
-
 func process_status_action(action: Callable, args: Array)->void:
 	deselect_ability()
+	var prev_pos: Vector2 = position
 	await action.call(args)
+	if position != prev_pos:
+		pos_changed.emit()
 
 func on_damaged()->void:
 	return
+
+func activate()->void:
+	return
+
+func save_data(file: FileAccess)->void:
+	file.store_var(position)
+	file.store_var(star_stats)
+	file.store_var(base_stats)
+	file.store_var(ability_scenes)
+	file.store_var(cur_hp)
+	file.store_var(cur_ap)
+	file.store_var(cur_mp)
+
+func load_data(file: FileAccess)->void:
+	deselect()
+	position = file.get_var()
+	star_stats = file.get_var()
+	base_stats = file.get_var()
+	ability_scenes = file.get_var()
+	cur_hp = file.get_var()
+	cur_ap = file.get_var()
+	cur_mp = file.get_var()
+	load_abilities()

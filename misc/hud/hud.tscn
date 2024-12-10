@@ -1,34 +1,33 @@
-[gd_scene load_steps=5 format=3 uid="uid://t1lqjxny1int"]
+[gd_scene load_steps=6 format=3 uid="uid://t1lqjxny1int"]
 
 [ext_resource type="Script" path="res://misc/hud/hud.gd" id="1_mvbgd"]
+[ext_resource type="Material" uid="uid://dcq7n5qyt3hj0" path="res://materials/immaterial.tres" id="1_ng8x8"]
 [ext_resource type="Theme" uid="uid://crcivs73grrf7" path="res://textures/custom_theme.tres" id="1_swtcj"]
 [ext_resource type="PackedScene" uid="uid://dn3wvhbb3qaw1" path="res://misc/hud/char_info.tscn" id="3_ocorx"]
 [ext_resource type="PackedScene" uid="uid://cy2jrxj781wh3" path="res://misc/hud/sequence_display.tscn" id="4_teb0s"]
 
-[node name="HUD" type="CanvasLayer"]
-
-[node name="HUDManager" type="Control" parent="."]
+[node name="HUD" type="Control"]
+z_index = 4
+material = ExtResource("1_ng8x8")
 layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+anchors_preset = 0
+offset_right = 960.0
+offset_bottom = 540.0
 theme = ExtResource("1_swtcj")
 script = ExtResource("1_mvbgd")
 
-[node name="CharInfo" parent="HUDManager" instance=ExtResource("3_ocorx")]
+[node name="CharInfo" parent="." instance=ExtResource("3_ocorx")]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 4
 anchor_top = 0.5
 anchor_bottom = 0.5
-offset_top = -58.5
-offset_right = 40.0
-offset_bottom = 58.5
+offset_top = -66.0
+offset_right = 82.0
+offset_bottom = 66.0
 grow_vertical = 2
 
-[node name="SequenceDisplay" parent="HUDManager" instance=ExtResource("4_teb0s")]
+[node name="SequenceDisplay" parent="." instance=ExtResource("4_teb0s")]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 6
@@ -43,8 +42,9 @@ offset_bottom = 20.0
 grow_horizontal = 0
 grow_vertical = 2
 
-[node name="LogPanel" type="PanelContainer" parent="HUDManager"]
+[node name="LogPanel" type="PanelContainer" parent="."]
 visible = false
+use_parent_material = true
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
@@ -57,12 +57,13 @@ offset_right = 156.0
 grow_horizontal = 2
 grow_vertical = 0
 
-[node name="Log" type="RichTextLabel" parent="HUDManager/LogPanel"]
+[node name="Log" type="RichTextLabel" parent="LogPanel"]
 unique_name_in_owner = true
+use_parent_material = true
 layout_mode = 2
 scroll_following = true
 
-[node name="LogTimer" type="Timer" parent="HUDManager"]
+[node name="LogTimer" type="Timer" parent="."]
 unique_name_in_owner = true
 wait_time = 3.0
 one_shot = true

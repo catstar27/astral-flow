@@ -15,9 +15,17 @@ func _ready() -> void:
 	EventBus.subscribe("COMBAT_STARTED", global_timer, "stop")
 	EventBus.subscribe("COMBAT_ENDED", global_timer, "start")
 	EventBus.subscribe("MAKE_TEXT_INDICATOR", self, "create_text_indicator")
+	EventBus.subscribe("DELOAD", self, "queue_free")
 	Dialogic.timeline_ended.connect(exit_dialogue)
 	Dialogic.signal_event.connect(check_dialogue_signal)
+	await get_tree().create_timer(.01).timeout
 	load_map("res://maps/test_map.tscn")
+
+func _unhandled_input(event: InputEvent)->void:
+	if event.is_action_pressed("quicksave"):
+		SaveLoad.save_data()
+	if event.is_action_pressed("quickload"):
+		SaveLoad.load_data()
 
 func global_timer_timeout()->void:
 	EventBus.broadcast(EventBus.Event.new("GLOBAL_TIMER_TIMEOUT", "NULLDATA"))
@@ -56,7 +64,7 @@ func exit_dialogue()->void:
 func create_text_indicator(info: Array)->void:
 	var ind: TextIndicator = text_indicator_scene.instantiate()
 	ind.text = info[0]
-	ind.position = info[1]
+	ind.global_position = info[1]
 	if info.size() == 3:
 		ind.color = info[2]
 	add_child(ind)

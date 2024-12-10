@@ -5,17 +5,21 @@ class_name GameMap
 @export var ost: String
 @onready var astar: AStarGrid2D = AStarGrid2D.new()
 @onready var light_modulator: CanvasModulate = %LightingModulate
+var spawned: Dictionary = {}
+var dead: Dictionary = {}
 var occupied_tiles: Array[Vector2i]
 var tile_bounds: Dictionary = {"x_min": 0, "x_max": 0, "y_min": 0, "y_max": 0}
 
 func _ready()->void:
 	EventBus.subscribe("TILE_OCCUPIED", self, "set_pos_occupied")
 	EventBus.subscribe("TILE_UNOCCUPIED", self, "set_pos_unoccupied")
+	EventBus.subscribe("LOADED", self, "prep_map")
 
 func get_obj_at_pos(pos: Vector2)->Node2D:
 	for child in get_children():
-		if local_to_map(child.position) == local_to_map(pos):
-			return child
+		if child is Interactive || child is Character:
+			if local_to_map(child.position) == local_to_map(pos):
+				return child
 	return null
 
 func set_pos_occupied(pos: Vector2)->void:
@@ -59,12 +63,13 @@ func get_nav_path(start_pos: Vector2, end_pos: Vector2, allow_closest: bool = tr
 			var neighbors_sorted: Array[Vector2i] = get_surrounding_cells(end_cell)
 			neighbors_sorted.sort_custom(dist_compare)
 			for cell in neighbors_sorted:
-				if !astar.is_point_solid(cell):
-					var path: Array[Vector2i] = astar.get_id_path(start_cell, cell, true)
-					var path_localized: Array[Vector2] = []
-					for tile in path:
-						path_localized.append(map_to_local(tile))
-					return path_localized
+				if get_cell_tile_data(cell) != null:
+					if !astar.is_point_solid(cell):
+						var path: Array[Vector2i] = astar.get_id_path(start_cell, cell, true)
+						var path_localized: Array[Vector2] = []
+						for tile in path:
+							path_localized.append(map_to_local(tile))
+						return path_localized
 			return []
 	return []
 
@@ -82,9 +87,7 @@ func _calc_bounds()->void:
 
 func is_in_bounds(pos: Vector2)->bool:
 	var tile: Vector2i = local_to_map(pos)
-	if tile.x<tile_bounds.x_min || tile.x>tile_bounds.x_max:
-		return false
-	if tile.y<tile_bounds.y_min || tile.y>tile_bounds.y_max:
+	if get_cell_tile_data(tile) == null:
 		return false
 	return true
 
@@ -95,17 +98,42 @@ func sig_connect(sig: String, fn: Callable)->void:
 	connect(sig, fn)
 
 func prep_map()->void:
+	occupied_tiles = []
 	light_modulator.show()
 	_calc_bounds()
 	_astar_setup()
 	for child in get_children():
 		if child is Interactive:
 			child.setup()
-			for pos in child.occupied_positions:
-				set_pos_occupied(pos)
-		elif child is CanvasModulate:
-			pass
+			if child.collision_active:
+				for pos in child.occupied_positions:
+					set_pos_occupied(pos)
 		elif child is Character:
 			set_pos_occupied(child.position)
+			if !child.defeated.is_connected(character_defeated):
+				child.defeated.connect(character_defeated)
 	_extra_setup()
 	EventBus.broadcast(EventBus.Event.new("SET_OST", ost))
+	for child in get_children():
+		if child is Character:
+			child.activate()
+
+func character_defeated(character: Character)->void:
+	character.defeated.disconnect(character_defeated)
+	dead[character.name] = 1
+
+func save_data(file: FileAccess)->void:
+	file.store_var(dead)
+	file.store_var(spawned)
+
+func load_data(file: FileAccess)->void:
+	dead = file.get_var()
+	spawned = file.get_var()
+	for child in get_children():
+		if child is Character:
+			if child.name in dead:
+				set_pos_unoccupied(child.position)
+				child.queue_free()
+				remove_child(child)
+	for child in spawned:
+		add_child(load(spawned[child]).instantiate())
