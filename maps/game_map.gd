@@ -127,6 +127,7 @@ func save_data(file: FileAccess)->void:
 	file.store_var(spawned)
 
 func load_data(file: FileAccess)->void:
+	set_pos_unoccupied(player_start_pos)
 	dead = file.get_var()
 	spawned = file.get_var()
 	for child in get_children():
