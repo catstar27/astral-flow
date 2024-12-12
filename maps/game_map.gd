@@ -3,12 +3,15 @@ class_name GameMap
 
 @export var player_start_pos: Vector2i = Vector2i.ZERO
 @export var ost: String
-@onready var astar: AStarGrid2D = AStarGrid2D.new()
+@export var map_name: String
+@onready var astar: AStarGrid2D
 @onready var light_modulator: CanvasModulate = %LightingModulate
 var spawned: Dictionary = {}
 var dead: Dictionary = {}
 var occupied_tiles: Array[Vector2i]
 var tile_bounds: Dictionary = {"x_min": 0, "x_max": 0, "y_min": 0, "y_max": 0}
+signal map_saved
+signal map_loaded
 
 func _ready()->void:
 	EventBus.subscribe("TILE_OCCUPIED", self, "set_pos_occupied")
@@ -35,6 +38,7 @@ func set_pos_unoccupied(pos: Vector2)->void:
 	astar.set_point_solid(tile, false)
 
 func _astar_setup()->void:
+	astar = AStarGrid2D.new()
 	astar.region = get_used_rect()
 	astar.cell_size = tile_set.tile_size
 	astar.default_compute_heuristic = AStarGrid2D.HEURISTIC_MANHATTAN
@@ -117,10 +121,47 @@ func prep_map()->void:
 	for child in get_children():
 		if child is Character:
 			child.activate()
+	EventBus.broadcast(EventBus.Event.new("MAP_LOADED", self))
 
 func character_defeated(character: Character)->void:
 	character.defeated.disconnect(character_defeated)
 	dead[character.name] = 1
+
+func unload()->void:
+	queue_free()
+
+func save_map(filepath: String)->void:
+	var file: FileAccess = FileAccess.open(filepath+map_name, FileAccess.WRITE)
+	file.store_var("MAP_DATA_START\n")
+	save_data(file)
+	file.store_var("\nOBJECT_DATA_START")
+	for node in get_children():
+		if node.is_in_group("LevelSave"):
+			if !node.has_method("save_data"):
+				printerr("Persistent node"+node.name+"missing save data function")
+			file.store_var("\n@SAVE_MARKER@"+node.name)
+			await node.save_data(file)
+	file.store_var("END_OF_SAVE_DATA")
+	file.close()
+	map_saved.emit()
+
+func load_map(filepath: String)->void:
+	var file: FileAccess = FileAccess.open(filepath+map_name, FileAccess.READ)
+	var target: String = file.get_var()
+	load_data(file)
+	target = file.get_var()
+	target = file.get_var()
+	while target != null && target != "END_OF_SAVE_DATA":
+		target = SaveLoad.parse_name(target)
+		for node in get_children():
+			if node.name == target:
+				if node.is_in_group("LevelSave"):
+					if !node.has_method("load_data"):
+						printerr("Persistent node"+node.name+"missing load data function")
+					await node.load_data(file)
+		target = file.get_var()
+	file.close()
+	map_loaded.emit()
 
 func save_data(file: FileAccess)->void:
 	file.store_var(dead)
@@ -130,10 +171,11 @@ func load_data(file: FileAccess)->void:
 	set_pos_unoccupied(player_start_pos)
 	dead = file.get_var()
 	spawned = file.get_var()
+	for tile in occupied_tiles:
+		set_pos_unoccupied(tile)
 	for child in get_children():
 		if child is Character:
 			if child.name in dead:
-				set_pos_unoccupied(child.position)
 				child.queue_free()
 				remove_child(child)
 	for child in spawned:

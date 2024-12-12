@@ -5,7 +5,7 @@
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_4ou26"]
 size = Vector2(40, 40)
 
-[node name="DamageActivationInteractive" type="StaticBody2D" groups=["Persist"]]
+[node name="DamageActivationInteractive" type="StaticBody2D" groups=["LevelSave"]]
 script = ExtResource("1_22vp7")
 
 [node name="Sprite" type="Sprite2D" parent="."]

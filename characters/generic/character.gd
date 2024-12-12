@@ -191,10 +191,10 @@ func end_turn()->void:
 	ended_turn.emit(self)
 
 func select()->void:
-	sprite.material.set_shader_parameter("line_color", Color(Settings.selection_tint, 180.0/255.0))
+	sprite.material.set_shader_parameter("outline_color", Color(Settings.selection_tint, 180.0/255.0))
 
 func deselect()->void:
-	sprite.material.set_shader_parameter("line_color", Color(Settings.selection_tint, 0))
+	sprite.material.set_shader_parameter("outline_color", Color(Settings.selection_tint, 0))
 	if has_method("deselect_ability"):
 		call("deselect_ability")
 

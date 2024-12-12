@@ -16,10 +16,17 @@ func enter_state(data: Vector2)->void:
 func move(cur_target: Vector2)->bool:
 	if cur_target == state_machine.user.position:
 		return true
+	if abs(cur_target - state_machine.user.position) < Vector2.ONE*Settings.tile_size:
+		if NavMaster.is_pos_occupied(cur_target):
+			return true
 	var path: Array[Vector2] = NavMaster.request_nav_path(state_machine.user.position, cur_target)
 	if path.pop_front() != state_machine.user.position:
 		path = []
 	for pos in path:
+		if NavMaster.is_pos_occupied(pos):
+			path = NavMaster.request_nav_path(state_machine.user.position, cur_target)
+			path.pop_front()
+			continue
 		if state_machine.user.cur_ap == 0:
 			EventBus.broadcast(EventBus.Event.new("PRINT_LOG","No ap for movement!"))
 			return true

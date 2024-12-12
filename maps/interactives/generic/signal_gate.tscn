@@ -4,7 +4,7 @@
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_4ou26"]
 
-[node name="SignalGate" type="StaticBody2D" groups=["Persist"]]
+[node name="SignalGate" type="StaticBody2D" groups=["LevelSave"]]
 script = ExtResource("1_uruk8")
 
 [node name="Sprite" type="Sprite2D" parent="."]

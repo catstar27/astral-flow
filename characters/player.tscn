@@ -12,8 +12,10 @@
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_bfe6u"]
 shader = ExtResource("2_j5ppi")
-shader_parameter/line_color = Color(0, 0.770704, 0.652882, 0)
-shader_parameter/line_thickness = 2.0
+shader_parameter/width = null
+shader_parameter/outline_color = null
+shader_parameter/flickering_speed = null
+shader_parameter/minimal_flickering_alpha = null
 
 [sub_resource type="Animation" id="Animation_vf0ry"]
 length = 0.001

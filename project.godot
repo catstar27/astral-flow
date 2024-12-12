@@ -98,6 +98,7 @@ enabled=PackedStringArray("res://addons/dialogic/plugin.cfg")
 [global_group]
 
 Persist="This node has data to save"
+LevelSave="This Node is to be Saved as Part of a Level"
 
 [input]
 

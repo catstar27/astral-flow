@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://bhm8d338r0fhu"]
 
 [ext_resource type="Script" path="res://maps/interactives/generic/interactive_light.gd" id="1_n2xyu"]
-[ext_resource type="Texture2D" path="res://textures/neutral_point_light.webp" id="2_xt807"]
+[ext_resource type="Texture2D" uid="uid://bh47q77bkny1l" path="res://textures/light.png" id="2_46k2l"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_pa78a"]
 size = Vector2(40, 40)
@@ -21,4 +21,4 @@ shape = SubResource("RectangleShape2D_pa78a")
 
 [node name="Light" type="PointLight2D" parent="."]
 unique_name_in_owner = true
-texture = ExtResource("2_xt807")
+texture = ExtResource("2_46k2l")

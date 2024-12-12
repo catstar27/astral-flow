@@ -16,7 +16,7 @@ func request_nav_path(start: Vector2, end: Vector2, allow_closest: bool = true)-
 func is_pos_occupied(pos: Vector2)->bool:
 	if _map == null || !is_instance_valid(_map):
 		return false
-	return _map.local_to_map(pos) in _map.occupied_tiles
+	return _map.astar.is_point_solid(_map.local_to_map(pos))
 
 func get_obj_at_pos(pos: Vector2)->Node2D:
 	if _map == null || !is_instance_valid(_map):

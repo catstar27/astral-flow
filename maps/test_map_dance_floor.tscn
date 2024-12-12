@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://dyy0oxkboq8t1"]
+
+[ext_resource type="Script" path="res://maps/test_map_dance_floor.gd" id="1_imbpt"]
+
+[node name="TestMapDanceFloor" type="TileMapLayer"]
+script = ExtResource("1_imbpt")
+map_name = "TestMap"

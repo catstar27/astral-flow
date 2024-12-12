@@ -3,6 +3,7 @@ extends Node2D
 @onready var global_timer: Timer = %GlobalTimer
 @onready var combat_manager: CombatManager = %CombatManager
 @onready var selection_cursor: SelectionCursor = %SelectionCursor
+var player: Player = null
 var map: GameMap = null
 var current_timeline: Node = null
 var selection_cursor_scene: PackedScene = preload("res://misc/selection_cursor.tscn")
@@ -15,6 +16,7 @@ func _ready() -> void:
 	EventBus.subscribe("COMBAT_STARTED", global_timer, "stop")
 	EventBus.subscribe("COMBAT_ENDED", global_timer, "start")
 	EventBus.subscribe("MAKE_TEXT_INDICATOR", self, "create_text_indicator")
+	EventBus.subscribe("LOAD_MAP", self, "load_map")
 	EventBus.subscribe("DELOAD", self, "queue_free")
 	Dialogic.timeline_ended.connect(exit_dialogue)
 	Dialogic.signal_event.connect(check_dialogue_signal)
@@ -32,21 +34,27 @@ func global_timer_timeout()->void:
 
 func unload_map()->void:
 	if map != null:
-		map.queue_free()
+		if player != null:
+			map.remove_child(player)
+			add_child(player)
+		map.unload()
 		map = null
 
 func load_map(new_map: String)->void:
 	unload_map()
+	await get_tree().create_timer(.01).timeout
 	var map_to_load: GameMap = load(new_map).instantiate()
 	map_to_load.position = position
 	add_child(map_to_load)
 	map = map_to_load
-	var player: Player = player_scene.instantiate()
-	player.position = map_to_load.map_to_local(map_to_load.player_start_pos)
+	if player == null:
+		player = player_scene.instantiate()
+	else:
+		remove_child(player)
 	map_to_load.add_child(player)
+	player.position = map_to_load.map_to_local(map_to_load.player_start_pos)
 	selection_cursor.position = map_to_load.map_to_local(map_to_load.player_start_pos)
 	map_to_load.prep_map()
-	EventBus.broadcast(EventBus.Event.new("MAP_LOADED", map))
 
 func enter_dialogue(info: Array)->void:
 	selection_cursor.reset_move_dir()
