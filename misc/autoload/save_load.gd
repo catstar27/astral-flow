@@ -5,6 +5,7 @@ var save_file_folder: String = "user://saves/"
 var main_scene: PackedScene = preload("res://misc/main.tscn")
 var loading: bool = false
 var saving: bool = false
+var in_combat: bool = false
 signal load_ready_now
 
 class SaveData:
@@ -20,16 +21,30 @@ class SaveMarker:
 
 func _ready() -> void:
 	EventBus.subscribe("MAP_LOADED", self, "load_ready")
+	EventBus.subscribe("START_COMBAT", self, "started_combat")
+	EventBus.subscribe("COMBAT_ENDED", self, "ended_combat")
+
+func started_combat(_data: Array[Character])->void:
+	in_combat = true
+
+func ended_combat()->void:
+	in_combat = false
 
 func save_data()->void:
 	if saving:
+		return
+	if in_combat:
+		EventBus.broadcast(EventBus.Event.new("PRINT_LOG", "Cannot Save When in Danger!"))
+		return
+	if NavMaster._map.map_name == "Global":
+		printerr("Map Name Collides with Global Saves")
 		return
 	saving = true
 	if !DirAccess.dir_exists_absolute(save_file_folder):
 		DirAccess.make_dir_absolute(save_file_folder)
 	if !DirAccess.dir_exists_absolute(save_file_folder+slot):
 		DirAccess.make_dir_absolute(save_file_folder+slot)
-	var file: FileAccess = FileAccess.open(save_file_folder+slot+"/global_persist", FileAccess.WRITE)
+	var file: FileAccess = FileAccess.open(save_file_folder+slot+"/Global", FileAccess.WRITE)
 	NavMaster._map.save_map(save_file_folder+slot+'/')
 	file.store_var("CURRENT_MAP="+NavMaster._map.scene_file_path)
 	for node in get_tree().get_nodes_in_group("Persist"):
@@ -49,13 +64,13 @@ func load_data()->void:
 	if !DirAccess.dir_exists_absolute(save_file_folder+slot):
 		printerr("Save Folder Not Found")
 		return
-	if !FileAccess.file_exists(save_file_folder+slot+"/global_persist"):
+	if !FileAccess.file_exists(save_file_folder+slot+"/Global"):
 		printerr("Save File Not Found in Folder")
 		return
 	if loading:
 		return
 	loading = true
-	var file: FileAccess = FileAccess.open(save_file_folder+slot+"/global_persist", FileAccess.READ)
+	var file: FileAccess = FileAccess.open(save_file_folder+slot+"/Global", FileAccess.READ)
 	var cur_map: String = file.get_var().split('=', true, 1)[1]
 	EventBus.broadcast(EventBus.Event.new("DELOAD", "NULLDATA"))
 	await get_tree().create_timer(.01).timeout

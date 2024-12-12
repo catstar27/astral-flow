@@ -52,7 +52,7 @@ var selected_ability: Ability = null
 @warning_ignore("unused_signal") signal stop_move_order
 @warning_ignore("unused_signal") signal interact_order(object: Node2D)
 @warning_ignore("unused_signal") signal ability_order(data: Array)
-signal pos_changed
+signal pos_changed(character)
 signal anim_activate_ability
 signal ended_turn(character)
 signal stats_changed
@@ -71,6 +71,7 @@ func _setup()->void:
 	cur_hp = base_stats.max_hp+stat_mods.max_hp
 	cur_ap = base_stats.max_ap+stat_mods.max_ap
 	cur_mp = base_stats.max_mp+stat_mods.max_mp
+	set_outline_color(Settings.selection_tint)
 
 func calc_base_stats()->void:
 	base_stats.max_hp = maxi(5+(star_stats.endurance-10)*2+(star_stats.strength-10), 5)
@@ -190,11 +191,14 @@ func end_turn()->void:
 	remove_range_indicators()
 	ended_turn.emit(self)
 
+func set_outline_color(color: Color)->void:
+	sprite.material.set_shader_parameter("outline_color", Color(color, 180.0/255.0))
+
 func select()->void:
-	sprite.material.set_shader_parameter("outline_color", Color(Settings.selection_tint, 180.0/255.0))
+	sprite.material.set_shader_parameter("width", 1)
 
 func deselect()->void:
-	sprite.material.set_shader_parameter("outline_color", Color(Settings.selection_tint, 0))
+	sprite.material.set_shader_parameter("width", 0)
 	if has_method("deselect_ability"):
 		call("deselect_ability")
 
@@ -203,7 +207,7 @@ func process_status_action(action: Callable, args: Array)->void:
 	var prev_pos: Vector2 = position
 	await action.call(args)
 	if position != prev_pos:
-		pos_changed.emit()
+		pos_changed.emit(self)
 
 func on_damaged()->void:
 	return
@@ -212,6 +216,9 @@ func activate()->void:
 	return
 
 func save_data(file: FileAccess)->void:
+	stop_move_order.emit()
+	while state_machine.current_state.state_id != "IDLE":
+		await state_machine.state_changed
 	file.store_var(position)
 	file.store_var(star_stats)
 	file.store_var(base_stats)

@@ -1,0 +1,10 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://gcx5n0wnotu5"]
+
+[ext_resource type="Shader" path="res://shaders/outline.gdshader" id="1_61vil"]
+
+[resource]
+shader = ExtResource("1_61vil")
+shader_parameter/width = 0
+shader_parameter/outline_color = null
+shader_parameter/flickering_speed = null
+shader_parameter/minimal_flickering_alpha = null
