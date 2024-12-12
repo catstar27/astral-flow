@@ -36,7 +36,7 @@ func save_data()->void:
 	if in_combat:
 		EventBus.broadcast(EventBus.Event.new("PRINT_LOG", "Cannot Save When in Danger!"))
 		return
-	if NavMaster._map.map_name == "Global":
+	if NavMaster._map.map_name != "Global":
 		printerr("Map Name Collides with Global Saves")
 		return
 	saving = true
