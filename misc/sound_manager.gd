@@ -9,6 +9,7 @@ func _ready() -> void:
 	EventBus.subscribe("PLAY_SOUND", self, "new_sound")
 	EventBus.subscribe("SET_OST", self, "new_ost")
 	EventBus.subscribe("ENTER_DIALOGUE", self, "enter_dialogue")
+	EventBus.subscribe("FADE_MUSIC", self, "fade_music")
 	Dialogic.timeline_ended.connect(exit_dialogue)
 
 func new_sound(info: Array)->void:
@@ -37,10 +38,13 @@ func new_ost(song: String)->void:
 	ost.stream = load(song)
 	ost.play()
 
+func fade_music(time: float)->void:
+	await create_tween().tween_property(ost, "volume_db", -10, time).finished
+	ost.stream_paused = true
+
 func enter_dialogue(info: Array)->void:
 	if info[1]:
-		await create_tween().tween_property(ost, "volume_db", -10, .5).finished
-		ost.stream_paused = true
+		fade_music(.5)
 	else:
 		create_tween().tween_property(ost, "volume_db", linear_to_db(ost_volume/4), .5)
 

@@ -25,12 +25,14 @@ func melee_aggressive()->void:
 	abilities.sort_custom(func(x,y): return x.damage>y.damage)
 	if !abilities[0].is_destination_valid(target.position):
 		move_order.emit(target.position)
+		await get_tree().create_timer(.01).timeout
 		while state_machine.current_state.state_id != "IDLE":
 			await state_machine.state_changed
 	if abilities[0].is_destination_valid(target.position):
 		while cur_ap>=abilities[0].ap_cost:
 			ability_order.emit([abilities[0], target.position])
-			await state_machine.state_changed
+			while state_machine.current_state.state_id != "IDLE":
+				await state_machine.state_changed
 			if cur_hp <= 0:
 				return
 	end_turn()

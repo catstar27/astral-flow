@@ -12,6 +12,7 @@ var moving: bool = false
 var move_dir: Vector2 = Vector2i.ZERO
 var marker: Node2D = null
 var move_arrows: Array[Sprite2D] = []
+var active: bool = true
 
 func _ready() -> void:
 	update_color()
@@ -41,6 +42,8 @@ func _scale_float(num: float)->int:
 	return 0
 
 func _unhandled_input(event: InputEvent) -> void:
+	if !active:
+		return
 	if event.is_action("left") || event.is_action("right"):
 		move_dir.x = _scale_float(Input.get_axis("left", "right"))
 	if event.is_action("up") || event.is_action("down"):

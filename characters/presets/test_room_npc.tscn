@@ -12,8 +12,10 @@
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_w6is8"]
 shader = ExtResource("2_glyxi")
-shader_parameter/line_color = Color(0, 0.770704, 0.652882, 0)
-shader_parameter/line_thickness = 2.0
+shader_parameter/width = null
+shader_parameter/outline_color = null
+shader_parameter/flickering_speed = null
+shader_parameter/minimal_flickering_alpha = null
 
 [sub_resource type="Animation" id="Animation_vf0ry"]
 length = 0.001
@@ -157,7 +159,7 @@ _data = {
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_jx1q6"]
 
-[node name="TestRoomNPC" type="CharacterBody2D" groups=["Persist"]]
+[node name="TestRoomNPC" type="CharacterBody2D" groups=["LevelSave"]]
 script = ExtResource("1_q7ey0")
 dialogue = "res://dialogue/test_room_npc.dtl"
 ability_scenes = Array[String](["res://characters/abilities/push.tscn"])

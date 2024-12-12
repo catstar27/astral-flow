@@ -28,7 +28,11 @@ func activate()->void:
 		while state_machine.current_state.state_id != "IDLE":
 			await state_machine.state_changed
 	await get_tree().create_timer(.1).timeout
-	move_order.emit(Vector2(288, -736))
+	while position != Vector2(288, -736):
+		move_order.emit(Vector2(288, -736))
+		while state_machine.current_state.state_id != "IDLE":
+			await state_machine.state_changed
+		await get_tree().create_timer(.1).timeout
 
 func _interacted(_interactor: Character)->void:
 	if dialogue_timeline != null:

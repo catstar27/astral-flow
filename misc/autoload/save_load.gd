@@ -44,7 +44,7 @@ func save_data()->void:
 		DirAccess.make_dir_absolute(save_file_folder)
 	if !DirAccess.dir_exists_absolute(save_file_folder+slot):
 		DirAccess.make_dir_absolute(save_file_folder+slot)
-	var file: FileAccess = FileAccess.open(save_file_folder+slot+"/Global", FileAccess.WRITE)
+	var file: FileAccess = FileAccess.open(save_file_folder+slot+"/Global.dat", FileAccess.WRITE)
 	NavMaster._map.save_map(save_file_folder+slot+'/')
 	file.store_var("CURRENT_MAP="+NavMaster._map.scene_file_path)
 	for node in get_tree().get_nodes_in_group("Persist"):
@@ -64,13 +64,13 @@ func load_data()->void:
 	if !DirAccess.dir_exists_absolute(save_file_folder+slot):
 		printerr("Save Folder Not Found")
 		return
-	if !FileAccess.file_exists(save_file_folder+slot+"/Global"):
+	if !FileAccess.file_exists(save_file_folder+slot+"/Global.dat"):
 		printerr("Save File Not Found in Folder")
 		return
 	if loading:
 		return
 	loading = true
-	var file: FileAccess = FileAccess.open(save_file_folder+slot+"/Global", FileAccess.READ)
+	var file: FileAccess = FileAccess.open(save_file_folder+slot+"/Global.dat", FileAccess.READ)
 	var cur_map: String = file.get_var().split('=', true, 1)[1]
 	EventBus.broadcast(EventBus.Event.new("DELOAD", "NULLDATA"))
 	await get_tree().create_timer(.01).timeout

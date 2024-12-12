@@ -16,9 +16,11 @@ func enter_state(data: Vector2)->void:
 func move(cur_target: Vector2)->bool:
 	if cur_target == state_machine.user.position:
 		return true
-	if abs(cur_target - state_machine.user.position) < Vector2.ONE*Settings.tile_size:
-		if NavMaster.is_pos_occupied(cur_target):
-			return true
+	if abs(cur_target - state_machine.user.position).x <= (Vector2.ONE*Settings.tile_size).x:
+		if abs(cur_target - state_machine.user.position).y <= (Vector2.ONE*Settings.tile_size).y:
+			if abs(cur_target - state_machine.user.position) != Vector2.ONE*Settings.tile_size:
+				if NavMaster.is_pos_occupied(cur_target):
+					return true
 	var path: Array[Vector2] = NavMaster.request_nav_path(state_machine.user.position, cur_target)
 	if path.pop_front() != state_machine.user.position:
 		path = []

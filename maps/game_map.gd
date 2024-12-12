@@ -131,7 +131,7 @@ func unload()->void:
 	queue_free()
 
 func save_map(filepath: String)->void:
-	var file: FileAccess = FileAccess.open(filepath+map_name, FileAccess.WRITE)
+	var file: FileAccess = FileAccess.open(filepath+map_name+".dat", FileAccess.WRITE)
 	file.store_var("MAP_DATA_START\n")
 	save_data(file)
 	file.store_var("\nOBJECT_DATA_START")
@@ -146,7 +146,7 @@ func save_map(filepath: String)->void:
 	map_saved.emit()
 
 func load_map(filepath: String)->void:
-	var file: FileAccess = FileAccess.open(filepath+map_name, FileAccess.READ)
+	var file: FileAccess = FileAccess.open(filepath+map_name+".dat", FileAccess.READ)
 	var target: String = file.get_var()
 	load_data(file)
 	target = file.get_var()

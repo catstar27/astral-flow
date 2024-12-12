@@ -3,6 +3,7 @@ extends Node2D
 @onready var global_timer: Timer = %GlobalTimer
 @onready var combat_manager: CombatManager = %CombatManager
 @onready var selection_cursor: SelectionCursor = %SelectionCursor
+@onready var foreground: Sprite2D = %Foreground
 var player: Player = null
 var map: GameMap = null
 var current_timeline: Node = null
@@ -28,6 +29,13 @@ func _unhandled_input(event: InputEvent)->void:
 		SaveLoad.save_data()
 	if event.is_action_pressed("quickload"):
 		SaveLoad.load_data()
+
+func activate_selection_cursor()->void:
+	selection_cursor.active = true
+
+func deactivate_selection_cursor()->void:
+	selection_cursor.active = false
+	selection_cursor.deselect()
 
 func global_timer_timeout()->void:
 	EventBus.broadcast(EventBus.Event.new("GLOBAL_TIMER_TIMEOUT", "NULLDATA"))
@@ -80,3 +88,18 @@ func create_text_indicator(info: Array)->void:
 func check_dialogue_signal(data)->void:
 	if data == "crash_game":
 		queue_free()
+	if data == "fade_out_exit":
+		fade_out_exit()
+
+func fade_out_exit()->void:
+	deactivate_selection_cursor()
+	await create_tween().tween_property(foreground, "modulate", Color.BLACK, .5).set_ease(Tween.EASE_IN).finished
+	await create_tween().tween_property(foreground, "modulate", Color(0,0,0,0), .5).set_ease(Tween.EASE_IN).finished
+	await get_tree().create_timer(.5).timeout
+	await create_tween().tween_property(foreground, "modulate", Color.BLACK, .5).set_ease(Tween.EASE_IN).finished
+	await create_tween().tween_property(foreground, "modulate", Color(0,0,0,0), .5).set_ease(Tween.EASE_IN).finished
+	await get_tree().create_timer(.5).timeout
+	EventBus.broadcast(EventBus.Event.new("FADE_MUSIC", 2))
+	await create_tween().tween_property(foreground, "modulate", Color.BLACK, 1).set_ease(Tween.EASE_IN).finished
+	await get_tree().create_timer(1).timeout
+	get_tree().quit()
