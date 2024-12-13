@@ -84,6 +84,7 @@ script = ExtResource("1_j12yn")
 
 [node name="TextIndicatorLabel" type="RichTextLabel" parent="."]
 unique_name_in_owner = true
+process_mode = 1
 use_parent_material = true
 anchors_preset = 5
 anchor_left = 0.5

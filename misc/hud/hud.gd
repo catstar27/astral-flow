@@ -5,6 +5,7 @@ class_name HUD
 @onready var game_log: RichTextLabel = %Log
 @onready var log_timer: Timer = %LogTimer
 @onready var sequence_display: SequenceDisplay = %SequenceDisplay
+@onready var pause_menu: PauseMenu = %PauseMenu
 
 func _ready()->void:
 	EventBus.subscribe("PRINT_LOG", self, "print_log")

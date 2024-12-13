@@ -36,7 +36,7 @@ func save_data()->void:
 	if in_combat:
 		EventBus.broadcast(EventBus.Event.new("PRINT_LOG", "Cannot Save When in Danger!"))
 		return
-	if NavMaster._map.map_name != "Global":
+	if NavMaster._map.map_name == "Global":
 		printerr("Map Name Collides with Global Saves")
 		return
 	saving = true
@@ -76,7 +76,7 @@ func load_data()->void:
 	await get_tree().create_timer(.01).timeout
 	get_tree().root.add_child(main_scene.instantiate())
 	await load_ready_now
-	if NavMaster._map.scene_file_path == cur_map:
+	if NavMaster._map.scene_file_path != cur_map:
 		EventBus.broadcast(EventBus.Event.new("LOAD_MAP", cur_map))
 		await load_ready_now
 	await NavMaster._map.load_map(save_file_folder+slot+'/')

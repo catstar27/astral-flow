@@ -19,6 +19,8 @@ func _ready() -> void:
 	EventBus.subscribe("MAKE_TEXT_INDICATOR", self, "create_text_indicator")
 	EventBus.subscribe("LOAD_MAP", self, "load_map")
 	EventBus.subscribe("DELOAD", self, "queue_free")
+	EventBus.subscribe("PAUSE", self, "pause")
+	EventBus.subscribe("UNPAUSE", self, "unpause")
 	Dialogic.timeline_ended.connect(exit_dialogue)
 	Dialogic.signal_event.connect(check_dialogue_signal)
 	await get_tree().create_timer(.01).timeout
@@ -64,15 +66,21 @@ func load_map(new_map: String)->void:
 	selection_cursor.position = map_to_load.map_to_local(map_to_load.player_start_pos)
 	map_to_load.prep_map()
 
-func enter_dialogue(info: Array)->void:
+func pause()->void:
 	selection_cursor.reset_move_dir()
+	get_tree().paused = true
+
+func unpause()->void:
+	get_tree().paused = false
+
+func enter_dialogue(info: Array)->void:
 	current_timeline = Dialogic.start(info[0])
 	Dialogic.process_mode = Node.PROCESS_MODE_ALWAYS
 	current_timeline.process_mode = Node.PROCESS_MODE_ALWAYS
-	get_tree().paused = true
+	pause()
 
 func exit_dialogue()->void:
-	get_tree().paused = false
+	unpause()
 	Dialogic.process_mode = Node.PROCESS_MODE_PAUSABLE
 	current_timeline.process_mode = Node.PROCESS_MODE_PAUSABLE
 	current_timeline = null

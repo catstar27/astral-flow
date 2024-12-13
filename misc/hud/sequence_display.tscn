@@ -4,6 +4,7 @@
 [ext_resource type="Script" path="res://misc/hud/sequence_display.gd" id="1_m1igy"]
 
 [node name="SequenceDisplay" type="VBoxContainer"]
+process_mode = 1
 material = ExtResource("1_bobkv")
 use_parent_material = true
 offset_right = 40.0
