@@ -80,6 +80,7 @@ func select_gameplay()->void:
 	menus[menu_index].deselect()
 	menu_index = 0
 	menus[menu_index].select()
+	buttons[menu_index].button_pressed = true
 
 func select_video()->void:
 	if menu_index == 1:
@@ -89,6 +90,7 @@ func select_video()->void:
 	menus[menu_index].deselect()
 	menu_index = 1
 	menus[menu_index].select()
+	buttons[menu_index].button_pressed = true
 
 func select_audio()->void:
 	if menu_index == 2:
@@ -98,6 +100,7 @@ func select_audio()->void:
 	menus[menu_index].deselect()
 	menu_index = 2
 	menus[menu_index].select()
+	buttons[menu_index].button_pressed = true
 
 func select_controls()->void:
 	if menu_index == 3:
@@ -107,3 +110,4 @@ func select_controls()->void:
 	menus[menu_index].deselect()
 	menu_index = 3
 	menus[menu_index].select()
+	buttons[menu_index].button_pressed = true

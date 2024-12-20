@@ -32,7 +32,7 @@ func activate()->void:
 			await state_machine.state_changed
 		await get_tree().create_timer(.1).timeout
 
-func _interact(_interactor: Character)->void:
+func _interacted(_interactor: Character)->void:
 	if dialogue != null:
 		EventBus.broadcast(EventBus.Event.new("ENTER_DIALOGUE", [dialogue, true]))
 
