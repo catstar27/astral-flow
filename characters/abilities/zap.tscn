@@ -1,11 +1,12 @@
-[gd_scene load_steps=2 format=3 uid="uid://d3d3q8u26hymf"]
+[gd_scene load_steps=3 format=3 uid="uid://d3d3q8u26hymf"]
 
 [ext_resource type="Script" path="res://characters/abilities/zap.gd" id="1_q1n8d"]
+[ext_resource type="AudioStream" uid="uid://ph4sryxod7aw" path="res://sfx/zap.wav" id="2_vkohv"]
 
 [node name="Zap" type="Node2D"]
 script = ExtResource("1_q1n8d")
 display_name = "Zap"
-sound = "res://sfx/zap.wav"
+sound = ExtResource("2_vkohv")
 ap_cost = 2
 mp_cost = 1
 ability_range = 3

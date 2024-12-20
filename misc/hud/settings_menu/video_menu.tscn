@@ -1,0 +1,38 @@
+[gd_scene load_steps=3 format=3 uid="uid://b7cxdla4214kn"]
+
+[ext_resource type="Theme" uid="uid://crcivs73grrf7" path="res://textures/custom_theme.tres" id="1_6ts4i"]
+[ext_resource type="Script" path="res://misc/hud/settings_menu/video_menu.gd" id="2_k5xkk"]
+
+[node name="VideoMenu" type="PanelContainer" node_paths=PackedStringArray("first_selection")]
+custom_minimum_size = Vector2(380, 300)
+offset_right = 380.0
+offset_bottom = 300.0
+theme = ExtResource("1_6ts4i")
+script = ExtResource("2_k5xkk")
+first_selection = NodePath("SettingsContainer/Buttons/FullscreenButton")
+
+[node name="SettingsContainer" type="HBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="Buttons" type="VBoxContainer" parent="SettingsContainer"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+
+[node name="FullscreenButton" type="CheckButton" parent="SettingsContainer/Buttons"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+flat = true
+
+[node name="Labels" type="VBoxContainer" parent="SettingsContainer"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+
+[node name="FullscreenLabel" type="Label" parent="SettingsContainer/Labels"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+text = "Fullscreen"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[connection signal="toggled" from="SettingsContainer/Buttons/FullscreenButton" to="." method="fullscreen_button_toggled"]

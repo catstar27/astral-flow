@@ -1,11 +1,13 @@
-[gd_scene load_steps=3 format=3 uid="uid://b5mdx6baygoum"]
+[gd_scene load_steps=4 format=3 uid="uid://b5mdx6baygoum"]
 
 [ext_resource type="Script" path="res://maps/interactives/generic/signal_gate.gd" id="1_uruk8"]
+[ext_resource type="AudioStream" uid="uid://b8ebt3ntvbdjl" path="res://sfx/door.wav" id="2_v36mo"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_4ou26"]
 
 [node name="SignalGate" type="StaticBody2D" groups=["LevelSave"]]
 script = ExtResource("1_uruk8")
+open_sound = ExtResource("2_v36mo")
 
 [node name="Sprite" type="Sprite2D" parent="."]
 unique_name_in_owner = true

@@ -1,6 +1,7 @@
 extends Node
 
 var _map: GameMap = null
+var tile_size: int = 64
 
 func _ready() -> void:
 	EventBus.subscribe("MAP_LOADED", self, "_set_map")

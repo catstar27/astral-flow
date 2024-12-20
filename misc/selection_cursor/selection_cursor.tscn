@@ -1,0 +1,49 @@
+[gd_scene load_steps=7 format=3 uid="uid://b85mlpg1agp8h"]
+
+[ext_resource type="Script" path="res://misc/selection_cursor/selection_cursor.gd" id="1_rchw3"]
+[ext_resource type="Texture2D" uid="uid://bbo5njqqnookt" path="res://textures/arrow.png" id="2_4oduv"]
+[ext_resource type="PackedScene" uid="uid://t1lqjxny1int" path="res://misc/hud/hud.tscn" id="2_mx35m"]
+[ext_resource type="Texture2D" uid="uid://divirgkfj3hbk" path="res://textures/selection_cursor.png" id="2_yiq7u"]
+[ext_resource type="Material" uid="uid://dcq7n5qyt3hj0" path="res://materials/immaterial.tres" id="3_xq438"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_6ag3p"]
+
+[node name="SelectionCursor" type="Node2D" groups=["Persist"]]
+z_index = 3
+script = ExtResource("1_rchw3")
+move_arrow_tex = ExtResource("2_4oduv")
+move_arrow_mat = ExtResource("3_xq438")
+
+[node name="Sprite" type="Sprite2D" parent="."]
+unique_name_in_owner = true
+use_parent_material = true
+texture = ExtResource("2_yiq7u")
+offset = Vector2(0, -32)
+hframes = 2
+
+[node name="HUD" parent="." instance=ExtResource("2_mx35m")]
+unique_name_in_owner = true
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -480.0
+offset_top = -270.0
+offset_right = 480.0
+offset_bottom = 270.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Camera" type="Camera2D" parent="."]
+
+[node name="SelectionArea" type="Area2D" parent="."]
+unique_name_in_owner = true
+use_parent_material = true
+scale = Vector2(3, 3)
+
+[node name="CollisionShape" type="CollisionShape2D" parent="SelectionArea"]
+shape = SubResource("RectangleShape2D_6ag3p")
+
+[connection signal="body_entered" from="SelectionArea" to="." method="_selection_area_entered"]
+[connection signal="body_exited" from="SelectionArea" to="." method="_selection_area_exited"]

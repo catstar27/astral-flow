@@ -4,6 +4,7 @@ class_name SignalGate
 @export var locked_texture: Texture
 @export var signals_needed: Array[String] = []
 @export var auto_open: bool = false
+@export var open_sound: AudioStreamWAV
 var signal_index: int = 0
 enum state {locked, unlocked, open}
 var cur_state: state = state.locked
@@ -28,8 +29,8 @@ func _interacted(_character: Character)->void:
 func open()->void:
 	cur_state = state.open
 	sprite.texture = texture
-	audio.play()
 	collision.disabled = true
+	EventBus.broadcast(EventBus.Event.new("PLAY_SOUND", [open_sound, "positional", global_position]))
 	EventBus.broadcast(EventBus.Event.new("TILE_UNOCCUPIED", position))
 	interacted.emit()
 	collision_active = false

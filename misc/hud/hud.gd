@@ -6,12 +6,25 @@ class_name HUD
 @onready var log_timer: Timer = %LogTimer
 @onready var sequence_display: SequenceDisplay = %SequenceDisplay
 @onready var pause_menu: PauseMenu = %PauseMenu
+@onready var settings_menu: SettingsMenu = %SettingsMenu
 
 func _ready()->void:
 	EventBus.subscribe("PRINT_LOG", self, "print_log")
 	EventBus.subscribe("SELECTION_CHANGED", self, "set_char_info")
 	char_info.hide()
 	log_timer.timeout.connect(game_log.get_parent().hide)
+
+func submenu_opened()->void:
+	char_info.hide()
+	game_log.get_parent().hide()
+	sequence_display.hide()
+
+func submenu_closed()->void:
+	if char_info.character != null:
+		char_info.show()
+	if log_timer.time_left > 0:
+		game_log.get_parent().show()
+	sequence_display.show()
 
 func set_char_info(selected: Node2D)->void:
 	if selected is not Character && selected is not Ability || selected == null:

@@ -1,22 +1,32 @@
-[gd_scene load_steps=20 format=4 uid="uid://qw4hbk40dyvm"]
+[gd_scene load_steps=30 format=4 uid="uid://qw4hbk40dyvm"]
 
 [ext_resource type="Texture2D" uid="uid://b4gigoborowkw" path="res://textures/test_tiles.png" id="1_0ie11"]
 [ext_resource type="Script" path="res://maps/test_map.gd" id="2_ywrl6"]
+[ext_resource type="Resource" path="res://dialogue/test_room_sign1.dtl" id="4_6q77p"]
 [ext_resource type="PackedScene" uid="uid://iwh84j268tml" path="res://maps/interactives/generic/interactive.tscn" id="4_72sth"]
 [ext_resource type="Texture2D" uid="uid://cjklr64xiys0a" path="res://textures/sign.png" id="5_5jmsy"]
 [ext_resource type="Texture2D" uid="uid://be0foyybi4008" path="res://textures/sun.png" id="6_dg1xt"]
+[ext_resource type="Resource" path="res://dialogue/test_room_sun.dtl" id="6_lwn61"]
 [ext_resource type="Texture2D" uid="uid://dp8dy1cpk5km0" path="res://textures/couch.png" id="7_g1jef"]
 [ext_resource type="Texture2D" uid="uid://binxw1c1e5vyc" path="res://textures/dog.png" id="7_vnn2i"]
 [ext_resource type="Texture2D" uid="uid://dei0ir8jap6a" path="res://textures/grapes.png" id="8_1rt1a"]
+[ext_resource type="Resource" path="res://dialogue/test_room_couch.dtl" id="8_elwwl"]
 [ext_resource type="PackedScene" uid="uid://ddmpp54vc5377" path="res://maps/interactives/generic/dialogue_signal_gate.tscn" id="9_amhi4"]
 [ext_resource type="Texture2D" uid="uid://dpnsq7nn8m0l2" path="res://textures/stairs.png" id="9_sk700"]
 [ext_resource type="Texture2D" uid="uid://qvcieo8d77lb" path="res://textures/gate_closed.png" id="10_2o7ph"]
+[ext_resource type="Resource" path="res://dialogue/test_room_completion.dtl" id="10_luljy"]
+[ext_resource type="Resource" path="res://dialogue/test_room_dog.dtl" id="10_u1hjs"]
 [ext_resource type="Texture2D" uid="uid://cgnsug1o0el0w" path="res://textures/gate_open.png" id="11_77ahb"]
 [ext_resource type="PackedScene" uid="uid://8hplcp22i5re" path="res://maps/interactives/lights/wall_light.tscn" id="12_kvvyy"]
+[ext_resource type="Resource" path="res://dialogue/test_room_grapes.dtl" id="12_shqtc"]
 [ext_resource type="PackedScene" uid="uid://b5mdx6baygoum" path="res://maps/interactives/generic/signal_gate.tscn" id="12_xfvy2"]
 [ext_resource type="PackedScene" uid="uid://c2af6y8es466h" path="res://characters/generic/enemy.tscn" id="13_augbp"]
+[ext_resource type="Resource" path="res://dialogue/locked.dtl" id="13_ymmi3"]
 [ext_resource type="PackedScene" uid="uid://v2x25sfrymso" path="res://maps/interactives/generic/damage_activation_interactive.tscn" id="14_luyw1"]
 [ext_resource type="Texture2D" uid="uid://cojmn67i5ba6g" path="res://textures/tesla_coil.png" id="15_ghxts"]
+[ext_resource type="Resource" path="res://dialogue/tesla_coil_active.dtl" id="17_7sy0y"]
+[ext_resource type="Resource" path="res://dialogue/tesla_coil_inactive.dtl" id="17_er6pd"]
+[ext_resource type="Resource" path="res://dialogue/test_room_sign2.dtl" id="20_mlbwn"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_garr0"]
 texture = ExtResource("1_0ie11")
@@ -69,36 +79,36 @@ color = Color(0, 0, 0, 1)
 [node name="Sign" parent="." instance=ExtResource("4_72sth")]
 position = Vector2(-608, 160)
 rotation = -1.5708
-dialogue = "res://dialogue/test_room_sign1.dtl"
+dialogue = ExtResource("4_6q77p")
 texture = ExtResource("5_5jmsy")
 
 [node name="Sun" parent="." instance=ExtResource("4_72sth")]
 position = Vector2(160, 160)
-dialogue = "res://dialogue/test_room_sun.dtl"
+dialogue = ExtResource("6_lwn61")
 texture = ExtResource("6_dg1xt")
 
 [node name="Couch" parent="." instance=ExtResource("4_72sth")]
 position = Vector2(96, -160)
-dialogue = "res://dialogue/test_room_couch.dtl"
+dialogue = ExtResource("8_elwwl")
 texture = ExtResource("7_g1jef")
 dimensions = Vector2i(2, 1)
 offset = Vector2(0, -12)
 
 [node name="Dog" parent="." instance=ExtResource("4_72sth")]
 position = Vector2(-224, -160)
-dialogue = "res://dialogue/test_room_dog.dtl"
+dialogue = ExtResource("10_u1hjs")
 texture = ExtResource("7_vnn2i")
 pause_music = true
 
 [node name="Grapes" parent="." instance=ExtResource("4_72sth")]
 position = Vector2(288, 32)
-dialogue = "res://dialogue/test_room_grapes.dtl"
+dialogue = ExtResource("12_shqtc")
 texture = ExtResource("8_1rt1a")
 
 [node name="ExitStairs" parent="." instance=ExtResource("4_72sth")]
 position = Vector2(32, -928)
 rotation = 1.5708
-dialogue = "res://dialogue/test_room_completion.dtl"
+dialogue = ExtResource("10_luljy")
 texture = ExtResource("9_sk700")
 
 [node name="InteractPuzzleGate" parent="." instance=ExtResource("9_amhi4")]
@@ -106,13 +116,14 @@ position = Vector2(32, -224)
 dialogic_var = "test_room_puzzle_index"
 locked_texture = ExtResource("10_2o7ph")
 signals_needed = Array[String](["test_room_sun_click", "test_room_couch_click", "test_room_dog_click", "test_room_grapes_click"])
-dialogue = "res://dialogue/locked.dtl"
+dialogue = ExtResource("13_ymmi3")
 texture = ExtResource("11_77ahb")
 
 [node name="CombatGate" parent="." instance=ExtResource("12_xfvy2")]
 position = Vector2(32, -608)
 locked_texture = ExtResource("10_2o7ph")
 signals_needed = Array[String](["test_room_combat_gate"])
+dialogue = ExtResource("13_ymmi3")
 texture = ExtResource("11_77ahb")
 
 [node name="TeslaGate" parent="." instance=ExtResource("12_xfvy2")]
@@ -120,6 +131,7 @@ position = Vector2(32, -864)
 locked_texture = ExtResource("10_2o7ph")
 signals_needed = Array[String](["unlocked", "unlocked"])
 auto_open = true
+dialogue = ExtResource("13_ymmi3")
 texture = ExtResource("11_77ahb")
 
 [node name="WallLight" parent="." instance=ExtResource("12_kvvyy")]
@@ -154,14 +166,15 @@ rotation = 3.14159
 [node name="TeslaCoil" parent="." instance=ExtResource("14_luyw1")]
 position = Vector2(-160, -800)
 damage_type_required = 1
-dialogue_unlocked = "res://dialogue/tesla_coil_active.dtl"
-dialogue = "res://dialogue/tesla_coil_inactive.dtl"
+dialogue_unlocked = ExtResource("17_7sy0y")
+dialogue = ExtResource("17_er6pd")
 texture = ExtResource("15_ghxts")
 
 [node name="TeslaCoil2" parent="." instance=ExtResource("14_luyw1")]
 position = Vector2(288, -800)
-dialogue_unlocked = "res://dialogue/tesla_coil_active.dtl"
-dialogue = "res://dialogue/tesla_coil_inactive.dtl"
+damage_type_required = 1
+dialogue_unlocked = ExtResource("17_7sy0y")
+dialogue = ExtResource("17_er6pd")
 texture = ExtResource("15_ghxts")
 
 [node name="Enemy" parent="." instance=ExtResource("13_augbp")]
@@ -170,7 +183,7 @@ position = Vector2(32, -544)
 [node name="Sign2" parent="." instance=ExtResource("4_72sth")]
 position = Vector2(-288, -608)
 rotation = 1.57034
-dialogue = "res://dialogue/test_room_sign2.dtl"
+dialogue = ExtResource("20_mlbwn")
 texture = ExtResource("5_5jmsy")
 
 [connection signal="test_room_combat_gate" from="." to="CombatGate" method="advance_unlock"]

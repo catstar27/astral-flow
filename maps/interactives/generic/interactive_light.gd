@@ -4,7 +4,7 @@ class_name InteractivePointLight
 @onready var light: PointLight2D = %Light
 var light_visible: bool = true
 
-func _interacted(_character: Character)->void:
+func _interact_extra(_character: Character)->void:
 	if light_visible:
 		disable_light()
 	else:

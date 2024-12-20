@@ -4,7 +4,7 @@
 [ext_resource type="Shader" path="res://shaders/outline.gdshader" id="2_glyxi"]
 [ext_resource type="Texture2D" uid="uid://dxcvjcqv1ubau" path="res://textures/test_avatar.png" id="3_etj6u"]
 [ext_resource type="PackedScene" uid="uid://dj1dbu04os5rj" path="res://misc/state_machine.tscn" id="4_c71b7"]
-[ext_resource type="PackedScene" uid="uid://b7psjacfk2o1y" path="res://misc/status_manager.tscn" id="4_miiac"]
+[ext_resource type="PackedScene" uid="uid://b7psjacfk2o1y" path="res://misc/gameplay_managers/status_manager.tscn" id="4_miiac"]
 [ext_resource type="PackedScene" uid="uid://co558pdmpfij5" path="res://characters/states/move.tscn" id="5_a4106"]
 [ext_resource type="PackedScene" uid="uid://c87v4rbl0fr7" path="res://characters/states/idle.tscn" id="6_lu42i"]
 [ext_resource type="PackedScene" uid="uid://d1oj7ptthilej" path="res://characters/states/interact.tscn" id="7_1uqnj"]
@@ -161,7 +161,6 @@ _data = {
 
 [node name="TestRoomNPC" type="CharacterBody2D" groups=["LevelSave"]]
 script = ExtResource("1_q7ey0")
-dialogue = "res://dialogue/test_room_npc.dtl"
 ability_scenes = Array[String](["res://characters/abilities/push.tscn"])
 
 [node name="Sprite" type="Sprite2D" parent="."]

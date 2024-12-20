@@ -1,7 +1,9 @@
-[gd_scene load_steps=2 format=3 uid="uid://brlpvcs48fhyc"]
+[gd_scene load_steps=3 format=3 uid="uid://brlpvcs48fhyc"]
 
 [ext_resource type="Script" path="res://characters/states/activate_ability.gd" id="1_qucsy"]
+[ext_resource type="AudioStream" uid="uid://x255oicxfylo" path="res://sfx/incorrect.wav" id="2_3xiqt"]
 
 [node name="ActivateAbility" type="Node"]
 script = ExtResource("1_qucsy")
+sound = ExtResource("2_3xiqt")
 state_id = "ACTIVATE_ABILITY"

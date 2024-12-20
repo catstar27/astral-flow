@@ -6,7 +6,7 @@ enum damage_type_choice {blunt, electric}
 enum skill_used_choice {intelligence, agility, strength, endurance, resolve, charisma, passion}
 @onready var user: Character = get_parent()
 @export var display_name: String = "NameHere"
-@export var sound: String
+@export var sound: AudioStreamWAV
 @export_subgroup("Costs")
 @export var ap_cost: int = 0
 @export var mp_cost: int = 0
@@ -23,7 +23,7 @@ func get_valid_destinations()->Array[Vector2]:
 	if target_type == target_type_choice.target_self:
 		return [user.position]
 	var destinations: Array[Vector2] = []
-	var scale_factor: int = Settings.tile_size
+	var scale_factor: int = NavMaster.tile_size
 	for x in range(user.position.x-ability_range*scale_factor, user.position.x+ability_range*scale_factor+1, scale_factor):
 		for y in range(user.position.y-ability_range*scale_factor, user.position.y+ability_range*scale_factor+1, scale_factor):
 			if Vector2(x,y) != user.position:
@@ -34,7 +34,7 @@ func get_valid_destinations()->Array[Vector2]:
 func is_destination_valid(destination: Vector2)->bool:
 	var x_dist: float = abs(global_position.x-destination.x)
 	var y_dist: float = abs(global_position.y-destination.y)
-	var range_factor: float = (x_dist+y_dist)/Settings.tile_size
+	var range_factor: float = (x_dist+y_dist)/NavMaster.tile_size
 	if target_type != target_type_choice.target_self && destination == user.position:
 		return false
 	return range_factor<=ability_range
@@ -56,7 +56,7 @@ func activate(_destination: Vector2)->void:
 	activated.emit()
 
 func play_sound()->void:
-	if sound != "":
+	if sound != null:
 		EventBus.broadcast(EventBus.Event.new("PLAY_SOUND", [sound, "positional", global_position]))
 	else:
 		printerr("Empty Sound for Ability: "+name)

@@ -1,0 +1,75 @@
+[gd_scene load_steps=3 format=3 uid="uid://dveymygjdbsyw"]
+
+[ext_resource type="Theme" uid="uid://crcivs73grrf7" path="res://textures/custom_theme.tres" id="1_0b34x"]
+[ext_resource type="Script" path="res://misc/hud/settings_menu/gameplay_menu.gd" id="2_0e030"]
+
+[node name="GameplayMenu" type="PanelContainer" node_paths=PackedStringArray("first_selection")]
+custom_minimum_size = Vector2(380, 300)
+offset_right = 380.0
+offset_bottom = 300.0
+theme = ExtResource("1_0b34x")
+script = ExtResource("2_0e030")
+first_selection = NodePath("SettingsContainer/Buttons/SelectionColor")
+
+[node name="SettingsContainer" type="HBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="Buttons" type="VBoxContainer" parent="SettingsContainer"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+
+[node name="SelectionColor" type="ColorPickerButton" parent="SettingsContainer/Buttons"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+focus_neighbor_top = NodePath("../SupportColor")
+focus_neighbor_bottom = NodePath("../AttackColor")
+focus_next = NodePath("../AttackColor")
+focus_previous = NodePath("../SupportColor")
+
+[node name="AttackColor" type="ColorPickerButton" parent="SettingsContainer/Buttons"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+focus_neighbor_top = NodePath("../SelectionColor")
+focus_neighbor_bottom = NodePath("../SupportColor")
+focus_next = NodePath("../SupportColor")
+focus_previous = NodePath("../SelectionColor")
+
+[node name="SupportColor" type="ColorPickerButton" parent="SettingsContainer/Buttons"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+focus_neighbor_top = NodePath("../AttackColor")
+focus_neighbor_bottom = NodePath("../SelectionColor")
+focus_next = NodePath("../SelectionColor")
+focus_previous = NodePath("../AttackColor")
+
+[node name="Labels" type="VBoxContainer" parent="SettingsContainer"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+
+[node name="SelectionColorLabel" type="Label" parent="SettingsContainer/Labels"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+text = "Selection Indicator Color"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="AttackColorLabel" type="Label" parent="SettingsContainer/Labels"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+text = "Attack Indicator Color"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="SupportColorLabel" type="Label" parent="SettingsContainer/Labels"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+text = "Support Indicator Color"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[connection signal="color_changed" from="SettingsContainer/Buttons/SelectionColor" to="." method="selection_color_changed"]
+[connection signal="color_changed" from="SettingsContainer/Buttons/AttackColor" to="." method="attack_color_changed"]
+[connection signal="color_changed" from="SettingsContainer/Buttons/SupportColor" to="." method="support_color_changed"]

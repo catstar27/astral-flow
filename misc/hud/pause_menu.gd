@@ -7,6 +7,9 @@ class_name PauseMenu
 @onready var settings_button: Button = %Settings
 @onready var quit_button: Button = %Quit
 var menu_open: bool = false
+signal open_settings
+signal pause_opened
+signal pause_closed
 
 func _ready() -> void:
 	EventBus.subscribe("START_COMBAT", self, "started_combat")
@@ -20,6 +23,7 @@ func ended_combat()->void:
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_released("menu"):
+		get_viewport().set_input_as_handled()
 		if !menu_open and !get_tree().paused:
 			open_pause_menu()
 		elif menu_open:
@@ -30,11 +34,13 @@ func open_pause_menu()->void:
 	menu_open = true
 	EventBus.broadcast(EventBus.Event.new("PAUSE", "NULLDATA"))
 	show()
+	pause_opened.emit()
 
 func close_pause_menu()->void:
 	menu_open = false
 	EventBus.broadcast(EventBus.Event.new("UNPAUSE", "NULLDATA"))
 	hide()
+	pause_closed.emit()
 
 func save_pressed()->void:
 	pass
@@ -43,7 +49,8 @@ func load_pressed()->void:
 	pass
 
 func settings_pressed()->void:
-	pass
+	close_pause_menu()
+	open_settings.emit()
 
 func quit_pressed()->void:
 	get_tree().quit()

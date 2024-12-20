@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://t1lqjxny1int"]
+[gd_scene load_steps=8 format=3 uid="uid://t1lqjxny1int"]
 
 [ext_resource type="Script" path="res://misc/hud/hud.gd" id="1_mvbgd"]
 [ext_resource type="Material" uid="uid://dcq7n5qyt3hj0" path="res://materials/immaterial.tres" id="1_ng8x8"]
@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://dn3wvhbb3qaw1" path="res://misc/hud/char_info.tscn" id="3_ocorx"]
 [ext_resource type="PackedScene" uid="uid://ddv2qool36rfh" path="res://misc/hud/pause_menu.tscn" id="4_4c60g"]
 [ext_resource type="PackedScene" uid="uid://cy2jrxj781wh3" path="res://misc/hud/sequence_display.tscn" id="4_teb0s"]
+[ext_resource type="PackedScene" uid="uid://djhm61nx72b66" path="res://misc/hud/settings_menu/settings_menu.tscn" id="5_y84cb"]
 
 [node name="HUD" type="Control"]
 process_mode = 3
@@ -34,6 +35,11 @@ offset_right = 37.0
 offset_bottom = 0.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="SettingsMenu" parent="." instance=ExtResource("5_y84cb")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
 
 [node name="CharInfo" parent="." instance=ExtResource("3_ocorx")]
 unique_name_in_owner = true
@@ -88,4 +94,10 @@ unique_name_in_owner = true
 process_mode = 1
 wait_time = 3.0
 one_shot = true
-autostart = true
+
+[connection signal="open_settings" from="PauseMenu" to="SettingsMenu" method="open_settings_menu"]
+[connection signal="pause_closed" from="PauseMenu" to="." method="submenu_closed"]
+[connection signal="pause_opened" from="PauseMenu" to="." method="submenu_opened"]
+[connection signal="settings_closed" from="SettingsMenu" to="." method="submenu_closed"]
+[connection signal="settings_closed" from="SettingsMenu" to="PauseMenu" method="open_pause_menu"]
+[connection signal="settings_opened" from="SettingsMenu" to="." method="submenu_opened"]

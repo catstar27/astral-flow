@@ -3,7 +3,7 @@ class_name DamageActivationInteractive
 
 enum damage_type_choice {blunt, electric, none}
 @export var damage_type_required: damage_type_choice = damage_type_choice.none
-@export var dialogue_unlocked: String
+@export var dialogue_unlocked: DialogicTimeline
 var triggered: bool = false
 signal unlocked(name: String)
 
@@ -21,7 +21,7 @@ func attack(source: Ability, _accuracy: int, _amount: int)->void:
 
 func unlock()->void:
 	triggered = true
-	dialogue_timeline = load(dialogue_unlocked)
+	dialogue_timeline = dialogue_unlocked
 	unlocked.emit("unlocked")
 	sprite.frame = 1
 

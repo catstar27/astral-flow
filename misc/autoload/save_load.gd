@@ -2,7 +2,7 @@ extends Node
 
 var slot: String = "save1"
 var save_file_folder: String = "user://saves/"
-var main_scene: PackedScene = preload("res://misc/main.tscn")
+var main_scene: PackedScene = preload("res://misc/gameplay_managers/main.tscn")
 var loading: bool = false
 var saving: bool = false
 var in_combat: bool = false

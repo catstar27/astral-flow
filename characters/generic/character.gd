@@ -42,7 +42,7 @@ var stat_mods: Dictionary = {
 @onready var state_machine: StateMachine = %StateMachine
 @onready var status_manager: StatusManager = %StatusManager
 @onready var target_position: Vector2 = position
-@onready var range_indicator_scene: PackedScene = preload("res://misc/range_indicator.tscn")
+@onready var range_indicator_scene: PackedScene = preload("res://misc/selection_cursor/range_indicator.tscn")
 var sequence: int
 var in_combat: bool = false
 var taking_turn: bool = false
@@ -71,7 +71,8 @@ func _setup()->void:
 	cur_hp = base_stats.max_hp+stat_mods.max_hp
 	cur_ap = base_stats.max_ap+stat_mods.max_ap
 	cur_mp = base_stats.max_mp+stat_mods.max_mp
-	set_outline_color(Settings.selection_tint)
+	set_outline_color()
+	EventBus.subscribe("GAMEPLAY_SETTINGS_CHANGED", self, "set_outline_color")
 
 func calc_base_stats()->void:
 	base_stats.max_hp = maxi(5+(star_stats.endurance-10)*2+(star_stats.strength-10), 5)
@@ -133,13 +134,13 @@ func place_range_indicators(locations: Array[Vector2], target_type: Ability.targ
 	for location in locations:
 		var indicator: Sprite2D = range_indicator_scene.instantiate()
 		if target_type == Ability.target_type_choice.target_self:
-			indicator.modulate = Settings.support_indicator_tint
+			indicator.modulate = Settings.gameplay.support_indicator_tint
 		elif target_type == Ability.target_type_choice.target_allies:
-			indicator.modulate = Settings.support_indicator_tint
+			indicator.modulate = Settings.gameplay.support_indicator_tint
 		elif target_type == Ability.target_type_choice.target_enemies:
-			indicator.modulate = Settings.attack_indicator_tint
+			indicator.modulate = Settings.gameplay.attack_indicator_tint
 		else:
-			indicator.modulate = Settings.attack_indicator_tint
+			indicator.modulate = Settings.gameplay.attack_indicator_tint
 		indicator.position = location-position
 		add_child(indicator)
 		range_indicators.append(indicator)
@@ -191,8 +192,8 @@ func end_turn()->void:
 	remove_range_indicators()
 	ended_turn.emit(self)
 
-func set_outline_color(color: Color)->void:
-	sprite.material.set_shader_parameter("outline_color", Color(color, 180.0/255.0))
+func set_outline_color()->void:
+	sprite.material.set_shader_parameter("outline_color", Color(Settings.gameplay.selection_tint, 180.0/255.0))
 
 func select()->void:
 	sprite.material.set_shader_parameter("width", 1)

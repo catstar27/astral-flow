@@ -6,8 +6,6 @@ signal combat_gate_open
 
 func _ready()->void:
 	_setup()
-	if dialogue != "":
-		dialogue_timeline = load(dialogue)
 
 func activate()->void:
 	if NavMaster.is_pos_occupied(Vector2(32, -608)):
@@ -34,9 +32,9 @@ func activate()->void:
 			await state_machine.state_changed
 		await get_tree().create_timer(.1).timeout
 
-func _interacted(_interactor: Character)->void:
-	if dialogue_timeline != null:
-		EventBus.broadcast(EventBus.Event.new("ENTER_DIALOGUE", [dialogue_timeline, true]))
+func _interact(_interactor: Character)->void:
+	if dialogue != null:
+		EventBus.broadcast(EventBus.Event.new("ENTER_DIALOGUE", [dialogue, true]))
 
 func on_damaged()->void:
 	EventBus.broadcast(EventBus.Event.new("ENTER_DIALOGUE", [damaged_dialogue, true]))

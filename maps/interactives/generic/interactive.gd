@@ -1,11 +1,12 @@
 extends StaticBody2D
 class_name Interactive
 
-@export var dialogue: String
+@export var dialogue: DialogicTimeline
 @export var texture: Texture
 @export var dimensions: Vector2i = Vector2i.ONE
 @export var offset: Vector2 = Vector2.ZERO
 @export var pause_music: bool = false
+@export var interact_sfx: AudioStreamWAV
 @onready var sprite: Sprite2D = %Sprite
 @onready var audio: AudioStreamPlayer2D = %Audio
 @onready var collision: CollisionShape2D = %Collision
@@ -24,8 +25,8 @@ func setup()->void:
 		sprite.texture = texture
 	if offset != Vector2.ZERO:
 		sprite.offset = offset
-	if dialogue != "":
-		dialogue_timeline = load(dialogue)
+	if dialogue != null:
+		dialogue_timeline = dialogue
 	setup_extra()
 
 func setup_extra()->void:
@@ -44,12 +45,17 @@ func _calc_occupied()->void:
 		return
 	for x in range(0, dimensions.x):
 		for y in range(0, dimensions.y):
-			var x_scaled: int = x*Settings.tile_size
-			var y_scaled: int = y*Settings.tile_size
+			var x_scaled: int = x*NavMaster.tile_size
+			var y_scaled: int = y*NavMaster.tile_size
 			occupied_positions.append(position+Vector2(x_scaled, y_scaled))
 
 func _interacted(_character: Character)->void:
-	audio.play()
+	if interact_sfx != null:
+		EventBus.broadcast(EventBus.Event.new("PLAY_SOUND", [interact_sfx, "positional", global_position]))
 	if dialogue_timeline != null:
 		EventBus.broadcast(EventBus.Event.new("ENTER_DIALOGUE", [dialogue_timeline, pause_music]))
+	_interact_extra(_character)
 	interacted.emit()
+
+func _interact_extra(_character: Character)->void:
+	return

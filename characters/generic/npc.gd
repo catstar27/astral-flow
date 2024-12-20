@@ -1,8 +1,7 @@
 extends Character
 class_name NPC
 
-@export var dialogue: String
-var dialogue_timeline: DialogicTimeline = null
+@export var dialogue: DialogicTimeline
 
 func _ready()->void:
 	_setup()

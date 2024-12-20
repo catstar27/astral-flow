@@ -1,6 +1,6 @@
 extends State
 
-@export var sound: String = "res://sfx/incorrect.wav"
+@export var sound: AudioStreamWAV
 
 func enter_state(data: Array)->void:
 	var ability: Ability = data[0]
