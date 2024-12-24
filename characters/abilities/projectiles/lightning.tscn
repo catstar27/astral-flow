@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=3 uid="uid://cybrghxvkmk7w"]
+
+[ext_resource type="Texture2D" uid="uid://d0no71q1v0jd0" path="res://textures/ability/lightning.png" id="1_jarl7"]
+
+[node name="Lightning" type="Polygon2D"]
+texture_repeat = 3
+offset = Vector2(0, -32)
+texture = ExtResource("1_jarl7")
+texture_offset = Vector2(224, 32)
+texture_scale = Vector2(1, 0.975)
+polygon = PackedVector2Array(-32, -32, -0.570007, -32, 32, -32, 32, 32, -32, 32)

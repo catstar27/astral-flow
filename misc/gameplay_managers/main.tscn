@@ -1,8 +1,8 @@
 [gd_scene load_steps=8 format=3 uid="uid://c6tflifn824fs"]
 
 [ext_resource type="Script" path="res://misc/gameplay_managers/main.gd" id="1_518bh"]
-[ext_resource type="Texture2D" uid="uid://ceeo5gnqb2rcr" path="res://textures/foreground.png" id="3_khi6w"]
-[ext_resource type="Texture2D" uid="uid://c86rddiynhvpb" path="res://textures/backgrounds.png" id="3_tsd85"]
+[ext_resource type="Texture2D" uid="uid://ceeo5gnqb2rcr" path="res://textures/hud/foreground.png" id="3_khi6w"]
+[ext_resource type="Texture2D" uid="uid://c86rddiynhvpb" path="res://textures/hud/backgrounds.png" id="3_tsd85"]
 [ext_resource type="PackedScene" uid="uid://b85mlpg1agp8h" path="res://misc/selection_cursor/selection_cursor.tscn" id="4_lfpb3"]
 [ext_resource type="Script" path="res://misc/gameplay_managers/combat_manager.gd" id="4_lk56o"]
 [ext_resource type="PackedScene" uid="uid://covhvnd4w4mkl" path="res://misc/gameplay_managers/sound_manager.tscn" id="5_icnsw"]

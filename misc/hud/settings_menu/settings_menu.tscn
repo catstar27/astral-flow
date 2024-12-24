@@ -1,11 +1,12 @@
-[gd_scene load_steps=10 format=3 uid="uid://djhm61nx72b66"]
+[gd_scene load_steps=11 format=3 uid="uid://djhm61nx72b66"]
 
-[ext_resource type="Theme" uid="uid://crcivs73grrf7" path="res://textures/custom_theme.tres" id="1_bfybv"]
+[ext_resource type="Theme" uid="uid://crcivs73grrf7" path="res://textures/hud/custom_theme.tres" id="1_bfybv"]
 [ext_resource type="Material" uid="uid://dcq7n5qyt3hj0" path="res://materials/immaterial.tres" id="1_tvvdr"]
 [ext_resource type="Script" path="res://misc/hud/settings_menu/settings_menu.gd" id="2_tpe0x"]
 [ext_resource type="Material" uid="uid://dessed1x8jslv" path="res://materials/blur_material.tres" id="3_xurln"]
-[ext_resource type="Texture2D" uid="uid://ceeo5gnqb2rcr" path="res://textures/foreground.png" id="4_50f23"]
+[ext_resource type="Texture2D" uid="uid://ceeo5gnqb2rcr" path="res://textures/hud/foreground.png" id="4_50f23"]
 [ext_resource type="PackedScene" uid="uid://dveymygjdbsyw" path="res://misc/hud/settings_menu/gameplay_menu.tscn" id="5_7oobf"]
+[ext_resource type="PackedScene" uid="uid://dleye7m8gjxs0" path="res://misc/hud/control_display_button.tscn" id="6_bo706"]
 [ext_resource type="PackedScene" uid="uid://b7cxdla4214kn" path="res://misc/hud/settings_menu/video_menu.tscn" id="6_oj3kl"]
 [ext_resource type="PackedScene" uid="uid://cw61jejhmqw73" path="res://misc/hud/settings_menu/audio_menu.tscn" id="7_bady6"]
 [ext_resource type="PackedScene" uid="uid://bcso2ambvbnge" path="res://misc/hud/settings_menu/controls_menu.tscn" id="8_go2v4"]
@@ -48,6 +49,10 @@ grow_vertical = 2
 use_parent_material = true
 layout_mode = 2
 
+[node name="ControlDisplayButton" parent="SettingsContainer/CategoryContainer" instance=ExtResource("6_bo706")]
+layout_mode = 2
+input_action_name = "menu_left"
+
 [node name="GameplayCategory" type="Button" parent="SettingsContainer/CategoryContainer"]
 unique_name_in_owner = true
 use_parent_material = true
@@ -85,6 +90,10 @@ focus_mode = 0
 toggle_mode = true
 text = "Controls"
 
+[node name="ControlDisplayButton2" parent="SettingsContainer/CategoryContainer" instance=ExtResource("6_bo706")]
+layout_mode = 2
+input_action_name = "menu_right"
+
 [node name="GameplayMenu" parent="SettingsContainer" instance=ExtResource("5_7oobf")]
 unique_name_in_owner = true
 visible = false
@@ -114,31 +123,29 @@ use_parent_material = true
 layout_mode = 2
 alignment = 1
 
-[node name="ConfirmButton" type="Button" parent="SettingsContainer/ConfirmButtons"]
-use_parent_material = true
-custom_minimum_size = Vector2(92, 0)
+[node name="ConfirmButton2" parent="SettingsContainer/ConfirmButtons" instance=ExtResource("6_bo706")]
+custom_minimum_size = Vector2(92, 44)
 layout_mode = 2
-focus_mode = 0
 text = "Confirm"
+input_action_name = "menu_confirm"
 
-[node name="DefaultButton" type="Button" parent="SettingsContainer/ConfirmButtons"]
-use_parent_material = true
-custom_minimum_size = Vector2(92, 0)
+[node name="DefaultButton2" parent="SettingsContainer/ConfirmButtons" instance=ExtResource("6_bo706")]
+custom_minimum_size = Vector2(92, 44)
 layout_mode = 2
-focus_mode = 0
 text = "Default"
+input_action_name = "default"
 
-[node name="CancelButton" type="Button" parent="SettingsContainer/ConfirmButtons"]
-use_parent_material = true
-custom_minimum_size = Vector2(92, 0)
+[node name="CancelButton2" parent="SettingsContainer/ConfirmButtons" instance=ExtResource("6_bo706")]
+custom_minimum_size = Vector2(92, 44)
 layout_mode = 2
-focus_mode = 0
 text = "Cancel"
 
+[connection signal="pressed" from="SettingsContainer/CategoryContainer/ControlDisplayButton" to="." method="select_prev"]
 [connection signal="pressed" from="SettingsContainer/CategoryContainer/GameplayCategory" to="." method="select_gameplay"]
 [connection signal="pressed" from="SettingsContainer/CategoryContainer/VideoCategory" to="." method="select_video"]
 [connection signal="pressed" from="SettingsContainer/CategoryContainer/AudioCategory" to="." method="select_audio"]
 [connection signal="pressed" from="SettingsContainer/CategoryContainer/ControlsCategory" to="." method="select_controls"]
-[connection signal="pressed" from="SettingsContainer/ConfirmButtons/ConfirmButton" to="." method="close_settings_menu"]
-[connection signal="pressed" from="SettingsContainer/ConfirmButtons/DefaultButton" to="." method="default_settings"]
-[connection signal="pressed" from="SettingsContainer/ConfirmButtons/CancelButton" to="." method="cancel_settings"]
+[connection signal="pressed" from="SettingsContainer/CategoryContainer/ControlDisplayButton2" to="." method="select_next"]
+[connection signal="pressed" from="SettingsContainer/ConfirmButtons/ConfirmButton2" to="." method="close_settings_menu"]
+[connection signal="pressed" from="SettingsContainer/ConfirmButtons/DefaultButton2" to="." method="default_settings"]
+[connection signal="pressed" from="SettingsContainer/ConfirmButtons/CancelButton2" to="." method="cancel_settings"]

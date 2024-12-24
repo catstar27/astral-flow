@@ -1,6 +1,6 @@
 extends Ability
 
-var lightning_scn: PackedScene = preload("res://textures/lightning.tscn")
+var lightning_scn: PackedScene = preload("res://characters/abilities/projectiles/lightning.tscn")
 
 func activate(destination: Vector2)->void:
 	var lightning: Polygon2D = lightning_scn.instantiate()

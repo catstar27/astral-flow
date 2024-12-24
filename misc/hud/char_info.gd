@@ -20,6 +20,13 @@ func clear_abilities()->void:
 		child.queue_free()
 
 func set_character(new_char: Character)->void:
+	if new_char == null:
+		if character != null:
+			character.stats_changed.disconnect(update_labels)
+			end_turn_button.pressed.disconnect(character.end_turn)
+			character.abilities_changed.disconnect(update_abilities)
+			character = null
+		return
 	if new_char == character:
 		for ability in character.get_abilities():
 			if ability not in abilities:

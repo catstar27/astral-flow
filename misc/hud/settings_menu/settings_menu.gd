@@ -48,13 +48,7 @@ func default_settings()->void:
 func _unhandled_input(event: InputEvent) -> void:
 	if !menu_open:
 		return
-	if event.is_action_released("menu_left"):
-		get_viewport().set_input_as_handled()
-		select_prev()
-	if event.is_action_released("menu_right"):
-		get_viewport().set_input_as_handled()
-		select_next()
-	if event.is_action_released("menu"):
+	if event.is_action_released("menu_back") || event.is_action_released("menu"):
 		get_viewport().set_input_as_handled()
 		close_settings_menu()
 

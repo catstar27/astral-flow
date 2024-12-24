@@ -28,6 +28,7 @@ func submenu_closed()->void:
 
 func set_char_info(selected: Node2D)->void:
 	if selected is not Character && selected is not Ability || selected == null:
+		char_info.set_character(null)
 		char_info.hide()
 	elif selected is Character:
 		char_info.set_character(selected)

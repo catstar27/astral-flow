@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://cw61jejhmqw73"]
 
-[ext_resource type="Theme" uid="uid://crcivs73grrf7" path="res://textures/custom_theme.tres" id="1_yrt7q"]
+[ext_resource type="Theme" uid="uid://crcivs73grrf7" path="res://textures/hud/custom_theme.tres" id="1_yrt7q"]
 [ext_resource type="Script" path="res://misc/hud/settings_menu/audio_menu.gd" id="2_wj8r0"]
 
 [node name="AudioMenu" type="PanelContainer" node_paths=PackedStringArray("first_selection")]

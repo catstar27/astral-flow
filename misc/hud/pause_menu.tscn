@@ -1,9 +1,9 @@
 [gd_scene load_steps=6 format=3 uid="uid://ddv2qool36rfh"]
 
-[ext_resource type="Theme" uid="uid://crcivs73grrf7" path="res://textures/custom_theme.tres" id="1_6e4nb"]
+[ext_resource type="Theme" uid="uid://crcivs73grrf7" path="res://textures/hud/custom_theme.tres" id="1_6e4nb"]
 [ext_resource type="Material" uid="uid://dcq7n5qyt3hj0" path="res://materials/immaterial.tres" id="1_f4y02"]
 [ext_resource type="Script" path="res://misc/hud/pause_menu.gd" id="1_i7qcp"]
-[ext_resource type="Texture2D" uid="uid://ceeo5gnqb2rcr" path="res://textures/foreground.png" id="2_5gsa7"]
+[ext_resource type="Texture2D" uid="uid://ceeo5gnqb2rcr" path="res://textures/hud/foreground.png" id="2_5gsa7"]
 [ext_resource type="Material" uid="uid://dessed1x8jslv" path="res://materials/blur_material.tres" id="2_yt8ud"]
 
 [node name="PauseMenu" type="Control"]

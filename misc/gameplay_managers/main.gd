@@ -4,6 +4,7 @@ extends Node2D
 @onready var combat_manager: CombatManager = %CombatManager
 @onready var selection_cursor: SelectionCursor = %SelectionCursor
 @onready var foreground: Sprite2D = %Foreground
+var in_dialogue: bool = false
 var player: Player = null
 var map: GameMap = null
 var current_timeline: Node = null
@@ -82,12 +83,16 @@ func unpause()->void:
 	get_tree().paused = false
 
 func enter_dialogue(info: Array)->void:
+	if in_dialogue:
+		return
+	in_dialogue = true
 	current_timeline = Dialogic.start(info[0])
 	Dialogic.process_mode = Node.PROCESS_MODE_ALWAYS
 	current_timeline.process_mode = Node.PROCESS_MODE_ALWAYS
 	pause()
 
 func exit_dialogue()->void:
+	in_dialogue = false
 	unpause()
 	Dialogic.process_mode = Node.PROCESS_MODE_PAUSABLE
 	current_timeline.process_mode = Node.PROCESS_MODE_PAUSABLE
