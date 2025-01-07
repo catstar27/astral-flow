@@ -1,9 +1,9 @@
 [gd_resource type="StyleBoxTexture" load_steps=2 format=3 uid="uid://1rkgwmboa2it"]
 
-[ext_resource type="Texture2D" uid="uid://c020lnr00hvnj" path="res://textures/hud/stylebox.png" id="1_hwgd8"]
+[ext_resource type="Texture2D" uid="uid://c020lnr00hvnj" path="res://textures/hud/stylebox.png" id="1_vy6v4"]
 
 [resource]
-texture = ExtResource("1_hwgd8")
+texture = ExtResource("1_vy6v4")
 texture_margin_left = 6.0
 texture_margin_top = 6.0
 texture_margin_right = 6.0

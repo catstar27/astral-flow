@@ -7,8 +7,6 @@ process_mode = 1
 use_parent_material = true
 offset_right = 41.0
 offset_bottom = 31.0
-focus_mode = 0
-text = "Test"
 script = ExtResource("1_o8rum")
 
 [connection signal="pressed" from="." to="." method="_on_pressed"]

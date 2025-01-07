@@ -32,7 +32,7 @@ func start_combat(participants: Array[Character])->void:
 	EventBus.broadcast(EventBus.Event.new("COMBAT_STARTED", "NULLDATA"))
 	battle_queue = participants
 	for character in participants:
-		character.in_combat = true
+		character.combat_entered.emit()
 		character.taking_turn = false
 		character.stop_move_order.emit()
 		character.defeated.connect(char_defeated)
@@ -78,7 +78,7 @@ func end_combat()->void:
 	round_num = 1
 	for character in battle_queue:
 		character.defeated.disconnect(char_defeated)
-		character.in_combat = false
+		character.combat_exited.emit()
 		character.taking_turn = false
 	battle_queue = []
 	EventBus.broadcast(EventBus.Event.new("COMBAT_ENDED", "NULLDATA"))

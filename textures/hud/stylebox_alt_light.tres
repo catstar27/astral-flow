@@ -1,0 +1,13 @@
+[gd_resource type="StyleBoxTexture" load_steps=2 format=3 uid="uid://cjmnb0geysi5"]
+
+[ext_resource type="Texture2D" uid="uid://4oqpd1aauiu1" path="res://textures/hud/stylebox_alt.png" id="1_wp3pj"]
+
+[resource]
+texture = ExtResource("1_wp3pj")
+texture_margin_left = 6.0
+texture_margin_top = 6.0
+texture_margin_right = 6.0
+texture_margin_bottom = 6.0
+axis_stretch_horizontal = 1
+axis_stretch_vertical = 1
+region_rect = Rect2(128, 0, 64, 64)

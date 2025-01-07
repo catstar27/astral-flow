@@ -11,7 +11,6 @@ class_name HUD
 func _ready()->void:
 	EventBus.subscribe("PRINT_LOG", self, "print_log")
 	EventBus.subscribe("SELECTION_CHANGED", self, "set_char_info")
-	char_info.hide()
 	log_timer.timeout.connect(game_log.get_parent().hide)
 
 func submenu_opened()->void:
@@ -29,13 +28,13 @@ func submenu_closed()->void:
 func set_char_info(selected: Node2D)->void:
 	if selected is not Character && selected is not Ability || selected == null:
 		char_info.set_character(null)
-		char_info.hide()
+		char_info.close_menu()
 	elif selected is Character:
 		char_info.set_character(selected)
-		char_info.show()
+		char_info.open_menu()
 	else:
 		char_info.set_character(selected.user)
-		char_info.show()
+		char_info.open_menu()
 
 func print_log(data)->void:
 	game_log.get_parent().show()

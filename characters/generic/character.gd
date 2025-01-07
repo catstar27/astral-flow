@@ -59,6 +59,8 @@ signal stats_changed
 signal abilities_changed
 signal defeated(character)
 signal damaged
+signal combat_entered
+signal combat_exited
 
 func _setup()->void:
 	EventBus.subscribe("GLOBAL_TIMER_TIMEOUT", self, "refresh")
@@ -66,6 +68,8 @@ func _setup()->void:
 	status_manager.status_stat_mod_changed.connect(update_stat_mod)
 	status_manager.status_action_occurred.connect(process_status_action)
 	damaged.connect(on_damaged)
+	combat_entered.connect(enter_combat)
+	combat_exited.connect(exit_combat)
 	load_abilities()
 	calc_base_stats()
 	cur_hp = base_stats.max_hp+stat_mods.max_hp
@@ -73,6 +77,12 @@ func _setup()->void:
 	cur_mp = base_stats.max_mp+stat_mods.max_mp
 	set_outline_color()
 	EventBus.subscribe("GAMEPLAY_SETTINGS_CHANGED", self, "set_outline_color")
+
+func enter_combat()->void:
+	in_combat = true
+
+func exit_combat()->void:
+	in_combat = false
 
 func calc_base_stats()->void:
 	base_stats.max_hp = maxi(5+(star_stats.endurance-10)*2+(star_stats.strength-10), 5)

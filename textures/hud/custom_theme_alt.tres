@@ -1,0 +1,16 @@
+[gd_resource type="Theme" load_steps=6 format=3 uid="uid://cxq4wi2s4byf1"]
+
+[ext_resource type="StyleBox" uid="uid://b6ajk3fdkaxwq" path="res://textures/hud/stylebox_alt_disabled.tres" id="1_jtr1k"]
+[ext_resource type="StyleBox" uid="uid://clvm44tlgfpmk" path="res://textures/hud/stylebox_alt_selected_border.tres" id="2_oknvh"]
+[ext_resource type="StyleBox" uid="uid://cjmnb0geysi5" path="res://textures/hud/stylebox_alt_light.tres" id="3_mbv5n"]
+[ext_resource type="StyleBox" uid="uid://bi771bqd7ueq7" path="res://textures/hud/stylebox_alt_base.tres" id="4_n6qgv"]
+[ext_resource type="StyleBox" uid="uid://bd3yydgoxjdrp" path="res://textures/hud/stylebox_alt_dark.tres" id="5_243ni"]
+
+[resource]
+Button/styles/disabled = ExtResource("1_jtr1k")
+Button/styles/focus = ExtResource("2_oknvh")
+Button/styles/hover = ExtResource("3_mbv5n")
+Button/styles/normal = ExtResource("4_n6qgv")
+Button/styles/pressed = ExtResource("5_243ni")
+Panel/styles/panel = ExtResource("4_n6qgv")
+PanelContainer/styles/panel = ExtResource("4_n6qgv")
