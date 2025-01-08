@@ -46,6 +46,8 @@ func close_menu()->void:
 	if state == states.closed || changing_state:
 		return
 	changing_state = true
+	if character.selected_ability != null:
+		character.call_deferred("deselect_ability")
 	for button in ability_buttons:
 		button.disabled = true
 	var activate_selection: bool = true
