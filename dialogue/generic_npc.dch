@@ -17,7 +17,7 @@
 "portraits": {
 "happy": {
 "export_overrides": {
-"image": "\"res://textures/test_npc.png\""
+"image": "\"res://textures/character/test_npc.png\""
 },
 "ignore_char_scale": false,
 "mirror": false,
