@@ -18,7 +18,7 @@ func enter_state(data: Array)->void:
 		state_machine.change_state_to("IDLE")
 		return
 	var prev_ability: Ability = state_machine.user.selected_ability
-	state_machine.user.call_deferred("deselect_ability")
+	state_machine.user.call_deferred("deselect_ability", true)
 	state_machine.user.cur_ap -= ability.ap_cost
 	state_machine.user.cur_mp -= ability.mp_cost
 	state_machine.user.stats_changed.emit()

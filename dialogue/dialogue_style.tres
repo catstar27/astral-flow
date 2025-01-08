@@ -55,7 +55,7 @@ script = ExtResource("1_smwcc")
 scene = ExtResource("7_1bp3n")
 overrides = {
 "boxes_stylebox_disabled": "\"res://textures/hud/stylebox_disabled.tres\"",
-"boxes_stylebox_focused": "\"res://textures/hud/stylebox_alt_border.tres\"",
+"boxes_stylebox_focused": "\"res://textures/hud/stylebox_selected_border.tres\"",
 "boxes_stylebox_hovered": "\"res://textures/hud/stylebox_light.tres\"",
 "boxes_stylebox_normal": "\"res://textures/hud/stylebox_base.tres\"",
 "boxes_stylebox_pressed": "\"res://textures/hud/stylebox_dark.tres\""
@@ -88,4 +88,4 @@ layer_info = {
 }
 base_overrides = {}
 layers = Array[ExtResource("1_smwcc")]([])
-metadata/_latest_layer = "10"
+metadata/_latest_layer = "15"

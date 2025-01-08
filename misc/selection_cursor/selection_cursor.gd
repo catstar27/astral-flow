@@ -12,7 +12,7 @@ var moving: bool = false
 var move_dir: Vector2 = Vector2i.ZERO
 var marker: Node2D = null
 var move_arrows: Array[Sprite2D] = []
-var active: bool = true
+var deactivate_requests: int = 0
 
 func _ready() -> void:
 	update_color()
@@ -24,11 +24,14 @@ func _ready() -> void:
 
 func activate()->void:
 	reset_move_dir()
-	active = true
+	if deactivate_requests == 0:
+		printerr("Attempted to activate selection cursor that was active")
+		return
+	deactivate_requests -= 1
 
 func deactivate()->void:
 	reset_move_dir()
-	active = false
+	deactivate_requests += 1
 
 func _create_marker()->void:
 	marker = selection_marker_scene.instantiate()
@@ -53,7 +56,7 @@ func _scale_float(num: float)->int:
 	return 0
 
 func _unhandled_input(event: InputEvent) -> void:
-	if !active:
+	if deactivate_requests > 0:
 		return
 	if event.is_action("left") || event.is_action("right"):
 		move_dir.x = _scale_float(Input.get_axis("left", "right"))
@@ -62,8 +65,9 @@ func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("interact"):
 		interact_on_pos(position)
 	if event.is_action_pressed("clear"):
-		deselect()
-	if event.is_action_pressed("info") && selected is Character:
+		if selected.selected_ability == null:
+			deselect()
+	if event.is_action_pressed("info"):
 		update_move_arrows(selected)
 	if event.is_action_released("info"):
 		clear_move_arrows()
@@ -170,10 +174,9 @@ func deselect(_node: Character = null)->void:
 		return
 	var prev_select: Character = selected
 	selected = null
-	if prev_select is Character:
-		prev_select.call_deferred("deselect")
-		prev_select.ended_turn.disconnect(deselect)
-		prev_select.pos_changed.disconnect(update_move_arrows)
+	prev_select.call_deferred("deselect")
+	prev_select.ended_turn.disconnect(deselect)
+	prev_select.pos_changed.disconnect(update_move_arrows)
 	EventBus.broadcast(EventBus.Event.new("SELECTION_CHANGED",selected))
 
 func _selection_area_entered(body: Node2D) -> void:

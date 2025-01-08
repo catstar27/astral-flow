@@ -42,10 +42,10 @@ func set_video_settings()->void:
 		get_window().set_mode(Window.MODE_WINDOWED)
 
 func activate_selection_cursor()->void:
-	selection_cursor.active = true
+	EventBus.broadcast(EventBus.Event.new("ACTIVATE_SELECTION", "NULLDATA"))
 
 func deactivate_selection_cursor()->void:
-	selection_cursor.active = false
+	EventBus.broadcast(EventBus.Event.new("DEACTIVATE_SELECTION", "NULLDATA"))
 	selection_cursor.deselect()
 
 func global_timer_timeout()->void:

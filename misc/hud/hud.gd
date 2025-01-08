@@ -31,10 +31,8 @@ func set_char_info(selected: Node2D)->void:
 		char_info.close_menu()
 	elif selected is Character:
 		char_info.set_character(selected)
-		char_info.open_menu()
 	else:
 		char_info.set_character(selected.user)
-		char_info.open_menu()
 
 func print_log(data)->void:
 	game_log.get_parent().show()

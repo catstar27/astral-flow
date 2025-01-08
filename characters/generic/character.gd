@@ -61,6 +61,7 @@ signal defeated(character)
 signal damaged
 signal combat_entered
 signal combat_exited
+signal ability_deselected
 
 func _setup()->void:
 	EventBus.subscribe("GLOBAL_TIMER_TIMEOUT", self, "refresh")
@@ -103,9 +104,11 @@ func select_ability(ability: Ability)->void:
 	selected_ability = ability
 	place_range_indicators(ability.get_valid_destinations(), ability.target_type)
 
-func deselect_ability()->void:
+func deselect_ability(will_reselect: bool = false)->void:
 	selected_ability = null
 	remove_range_indicators()
+	if !will_reselect:
+		ability_deselected.emit()
 
 func get_abilities()->Array[Ability]:
 	ability_scenes = []
