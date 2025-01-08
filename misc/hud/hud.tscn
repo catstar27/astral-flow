@@ -43,12 +43,8 @@ layout_mode = 1
 
 [node name="CharInfo" parent="." instance=ExtResource("3_ocorx")]
 unique_name_in_owner = true
-visible = false
-layout_mode = 0
-offset_left = -100.0
-offset_top = 27.5
-offset_right = -18.0
-offset_bottom = 512.5
+layout_mode = 1
+offset_right = 127.0
 
 [node name="SequenceDisplay" parent="." instance=ExtResource("4_teb0s")]
 unique_name_in_owner = true

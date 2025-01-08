@@ -16,9 +16,19 @@ var active: bool = true
 
 func _ready() -> void:
 	update_color()
+	EventBus.subscribe("DEACTIVATE_SELECTION", self, "deactivate")
+	EventBus.subscribe("ACTIVATE_SELECTION", self, "activate")
 	EventBus.subscribe("COMBAT_STARTED", self, "deselect")
 	EventBus.subscribe("ABILITY_BUTTON_PRESSED", self, "select_ability")
 	EventBus.subscribe("GAMEPLAY_SETTINGS_CHANGED", self, "update_color")
+
+func activate()->void:
+	reset_move_dir()
+	active = true
+
+func deactivate()->void:
+	reset_move_dir()
+	active = false
 
 func _create_marker()->void:
 	marker = selection_marker_scene.instantiate()

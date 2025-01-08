@@ -1,31 +1,57 @@
-[gd_scene load_steps=4 format=3 uid="uid://dn3wvhbb3qaw1"]
+[gd_scene load_steps=6 format=3 uid="uid://dn3wvhbb3qaw1"]
 
 [ext_resource type="Theme" uid="uid://cxq4wi2s4byf1" path="res://textures/hud/custom_theme_alt.tres" id="1_1jw8j"]
+[ext_resource type="Material" uid="uid://dcq7n5qyt3hj0" path="res://materials/immaterial.tres" id="1_7kibo"]
 [ext_resource type="Script" path="res://misc/hud/char_info.gd" id="1_bnuoq"]
 [ext_resource type="PackedScene" uid="uid://bl1ksh3itp2fl" path="res://misc/hud/ability_button.tscn" id="3_8cx65"]
+[ext_resource type="PackedScene" uid="uid://dleye7m8gjxs0" path="res://misc/hud/control_display_button.tscn" id="4_mqul6"]
 
-[node name="CharInfo" type="VBoxContainer" node_paths=PackedStringArray("ability_buttons")]
-process_mode = 1
-use_parent_material = true
+[node name="CharInfo" type="Control" node_paths=PackedStringArray("ability_buttons")]
+material = ExtResource("1_7kibo")
+layout_mode = 3
+anchors_preset = 0
 offset_right = 960.0
-offset_bottom = 485.0
+offset_bottom = 530.0
+script = ExtResource("1_bnuoq")
+ability_buttons = [NodePath("Info/AbilityList/AbilityButton"), NodePath("Info/AbilityList/AbilityButton2"), NodePath("Info/AbilityList/AbilityButton3"), NodePath("Info/AbilityList/AbilityButton4"), NodePath("Info/AbilityList/AbilityButton5"), NodePath("Info/AbilityList/AbilityButton6"), NodePath("Info/AbilityList/AbilityButton7"), NodePath("Info/AbilityList/AbilityButton8"), NodePath("Info/AbilityList/AbilityButton9"), NodePath("Info/AbilityList/AbilityButton10")]
+
+[node name="MenuButton" parent="." instance=ExtResource("4_mqul6")]
+unique_name_in_owner = true
+modulate = Color(1, 1, 1, 0.498039)
+layout_mode = 1
+offset_right = 44.0
+offset_bottom = 44.0
+size_flags_horizontal = 8
+size_flags_vertical = 0
+theme = ExtResource("1_1jw8j")
+text = "→"
+input_action_name = "menu_left"
+
+[node name="Info" type="VBoxContainer" parent="."]
+unique_name_in_owner = true
+process_mode = 1
+visible = false
+use_parent_material = true
+layout_mode = 2
+offset_left = -90.0
+offset_top = 45.0
+offset_right = -8.0
+offset_bottom = 530.0
 theme = ExtResource("1_1jw8j")
 theme_override_constants/separation = 1
-script = ExtResource("1_bnuoq")
-ability_buttons = [NodePath("AbilityList/AbilityButton"), NodePath("AbilityList/AbilityButton2"), NodePath("AbilityList/AbilityButton3"), NodePath("AbilityList/AbilityButton4"), NodePath("AbilityList/AbilityButton5"), NodePath("AbilityList/AbilityButton6"), NodePath("AbilityList/AbilityButton7"), NodePath("AbilityList/AbilityButton8"), NodePath("AbilityList/AbilityButton9"), NodePath("AbilityList/AbilityButton10")]
 
-[node name="StatInfoPanel" type="PanelContainer" parent="."]
+[node name="StatInfoPanel" type="PanelContainer" parent="Info"]
 unique_name_in_owner = true
 process_mode = 1
 use_parent_material = true
 layout_mode = 2
 
-[node name="StatInfo" type="VBoxContainer" parent="StatInfoPanel"]
+[node name="StatInfo" type="VBoxContainer" parent="Info/StatInfoPanel"]
 process_mode = 1
 use_parent_material = true
 layout_mode = 2
 
-[node name="HP" type="Label" parent="StatInfoPanel/StatInfo"]
+[node name="HP" type="Label" parent="Info/StatInfoPanel/StatInfo"]
 unique_name_in_owner = true
 process_mode = 1
 use_parent_material = true
@@ -33,14 +59,14 @@ layout_mode = 2
 size_flags_vertical = 0
 text = "HP"
 
-[node name="AP" type="Label" parent="StatInfoPanel/StatInfo"]
+[node name="AP" type="Label" parent="Info/StatInfoPanel/StatInfo"]
 unique_name_in_owner = true
 process_mode = 1
 use_parent_material = true
 layout_mode = 2
 text = "AP"
 
-[node name="MP" type="Label" parent="StatInfoPanel/StatInfo"]
+[node name="MP" type="Label" parent="Info/StatInfoPanel/StatInfo"]
 unique_name_in_owner = true
 process_mode = 1
 use_parent_material = true
@@ -48,57 +74,59 @@ layout_mode = 2
 size_flags_vertical = 8
 text = "MP"
 
-[node name="AbilityList" type="VBoxContainer" parent="."]
+[node name="AbilityList" type="VBoxContainer" parent="Info"]
 unique_name_in_owner = true
 process_mode = 1
 use_parent_material = true
 layout_mode = 2
 theme_override_constants/separation = 1
 
-[node name="AbilityButton" parent="AbilityList" instance=ExtResource("3_8cx65")]
+[node name="AbilityButton" parent="Info/AbilityList" instance=ExtResource("3_8cx65")]
 custom_minimum_size = Vector2(0, 35)
 layout_mode = 2
 
-[node name="AbilityButton2" parent="AbilityList" instance=ExtResource("3_8cx65")]
+[node name="AbilityButton2" parent="Info/AbilityList" instance=ExtResource("3_8cx65")]
 custom_minimum_size = Vector2(0, 35)
 layout_mode = 2
 
-[node name="AbilityButton3" parent="AbilityList" instance=ExtResource("3_8cx65")]
+[node name="AbilityButton3" parent="Info/AbilityList" instance=ExtResource("3_8cx65")]
 custom_minimum_size = Vector2(0, 35)
 layout_mode = 2
 
-[node name="AbilityButton4" parent="AbilityList" instance=ExtResource("3_8cx65")]
+[node name="AbilityButton4" parent="Info/AbilityList" instance=ExtResource("3_8cx65")]
 custom_minimum_size = Vector2(0, 35)
 layout_mode = 2
 
-[node name="AbilityButton5" parent="AbilityList" instance=ExtResource("3_8cx65")]
+[node name="AbilityButton5" parent="Info/AbilityList" instance=ExtResource("3_8cx65")]
 custom_minimum_size = Vector2(0, 35)
 layout_mode = 2
 
-[node name="AbilityButton6" parent="AbilityList" instance=ExtResource("3_8cx65")]
+[node name="AbilityButton6" parent="Info/AbilityList" instance=ExtResource("3_8cx65")]
 custom_minimum_size = Vector2(0, 35)
 layout_mode = 2
 
-[node name="AbilityButton7" parent="AbilityList" instance=ExtResource("3_8cx65")]
+[node name="AbilityButton7" parent="Info/AbilityList" instance=ExtResource("3_8cx65")]
 custom_minimum_size = Vector2(0, 35)
 layout_mode = 2
 
-[node name="AbilityButton8" parent="AbilityList" instance=ExtResource("3_8cx65")]
+[node name="AbilityButton8" parent="Info/AbilityList" instance=ExtResource("3_8cx65")]
 custom_minimum_size = Vector2(0, 35)
 layout_mode = 2
 
-[node name="AbilityButton9" parent="AbilityList" instance=ExtResource("3_8cx65")]
+[node name="AbilityButton9" parent="Info/AbilityList" instance=ExtResource("3_8cx65")]
 custom_minimum_size = Vector2(0, 35)
 layout_mode = 2
 
-[node name="AbilityButton10" parent="AbilityList" instance=ExtResource("3_8cx65")]
+[node name="AbilityButton10" parent="Info/AbilityList" instance=ExtResource("3_8cx65")]
 custom_minimum_size = Vector2(0, 35)
 layout_mode = 2
 
-[node name="EndTurn" type="Button" parent="."]
+[node name="EndTurn" type="Button" parent="Info"]
 unique_name_in_owner = true
 process_mode = 1
 use_parent_material = true
 layout_mode = 2
 focus_next = NodePath("../StatInfoPanel")
 text = "End Turn"
+
+[connection signal="pressed" from="MenuButton" to="." method="toggle_menu"]

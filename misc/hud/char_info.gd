@@ -1,4 +1,4 @@
-extends VBoxContainer
+extends Control
 class_name CharInfo
 
 @onready var ability_list: VBoxContainer = %AbilityList
@@ -6,17 +6,30 @@ class_name CharInfo
 @onready var ap_label: Label = %AP
 @onready var mp_label: Label = %MP
 @onready var end_turn_button: Button = %EndTurn
+@onready var info_container: VBoxContainer = %Info
+@onready var menu_button: ControlDisplayButton = %MenuButton
 @export var ability_buttons: Array[AbilityButton]
 var character: Character = null
 var abilities: Array[Ability] = []
 var open: bool = false
 
+func _ready() -> void:
+	menu_button.disabled = true
+
+func toggle_menu()->void:
+	if open:
+		close_menu()
+	else:
+		open_menu()
+
 func open_menu()->void:
 	if open:
 		return
 	open = true
-	show()
-	await create_tween().tween_property(self, "position", Vector2(0, position.y), .5).finished
+	menu_button.text = "←"
+	info_container.show()
+	await create_tween().tween_property(info_container, "position", Vector2(0, info_container.position.y), .5).finished
+	EventBus.broadcast(EventBus.Event.new("DEACTIVATE_SELECTION", "NULLDATA"))
 	if ability_buttons[0].ability != null:
 		ability_buttons[0].grab_focus()
 
@@ -24,8 +37,10 @@ func close_menu()->void:
 	if !open:
 		return
 	open = false
-	await create_tween().tween_property(self, "position", Vector2(-100, position.y), .5).finished
-	hide()
+	menu_button.text = "→"
+	await create_tween().tween_property(info_container, "position", Vector2(-90, info_container.position.y), .5).finished
+	info_container.hide()
+	EventBus.broadcast(EventBus.Event.new("ACTIVATE_SELECTION", "NULLDATA"))
 
 func enable_end_turn()->void:
 	end_turn_button.disabled = false
@@ -77,11 +92,15 @@ func set_character(new_char: Character)->void:
 			character.combat_entered.disconnect(enable_end_turn)
 			character.combat_exited.disconnect(disable_end_turn)
 			character = null
+			menu_button.disabled = true
+			create_tween().tween_property(menu_button, "modulate", Color(1,1,1,.5), .1)
 		return
 	if new_char == character:
 		return
 	elif character != null:
 		end_turn_button.pressed.disconnect(character.end_self_turn)
+	menu_button.disabled = false
+	create_tween().tween_property(menu_button, "modulate", Color(1,1,1,1), .1)
 	disable_end_turn()
 	character = new_char
 	abilities = []
