@@ -12,8 +12,16 @@ var recent_control_type: control_types = control_types.keyboard
 var prev_control_type: control_types = control_types.keyboard
 var last_device_name: String = ""
 enum control_types {keyboard, xbox, playstation, nintendo}
+signal display_updated
 
 func _ready() -> void:
+	match icon_alignment:
+		HORIZONTAL_ALIGNMENT_LEFT:
+			key_label.set_anchors_preset(Control.PRESET_CENTER_LEFT)
+		HORIZONTAL_ALIGNMENT_CENTER:
+			key_label.set_anchors_preset(Control.PRESET_CENTER)
+		HORIZONTAL_ALIGNMENT_RIGHT:
+			key_label.set_anchors_preset(Control.PRESET_CENTER_RIGHT)
 	controller_tex.region.size = Vector2.ONE*32
 	shortcut = Shortcut.new()
 	shortcut.events = InputMap.action_get_events(input_action_name)
@@ -21,6 +29,7 @@ func _ready() -> void:
 		printerr("Invalid Input Action "+input_action_name+" on Button "+name)
 	else:
 		update_display(recent_control_type)
+		display_updated.emit()
 
 func _input(event: InputEvent) -> void:
 	if visible:
@@ -46,6 +55,7 @@ func _input(event: InputEvent) -> void:
 			prev_control_type = recent_control_type
 		if recent_control_type != prev_control_type:
 			update_display(recent_control_type)
+			display_updated.emit()
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_released(input_action_name):

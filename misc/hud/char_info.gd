@@ -10,9 +10,9 @@ class_name CharInfo
 @onready var menu_button: ControlDisplayButton = %MenuButton
 @export var ability_buttons: Array[AbilityButton]
 var buttons_used: Array[bool] = [false, false, false, false, false, false, false, false, false, false]
-enum states{closed, open, suspended}
 var character: Character = null
 var abilities: Array[Ability] = []
+enum states{closed, open, suspended}
 var state: states = states.closed
 var changing_state: bool = false
 
@@ -100,7 +100,6 @@ func set_first_last_buttons()->void:
 		ability_buttons[0].focus_neighbor_top = ability_buttons[abilities.size()-1].get_path()
 		ability_buttons[abilities.size()-1].focus_next = ability_buttons[0].get_path()
 		ability_buttons[abilities.size()-1].focus_neighbor_bottom = ability_buttons[0].get_path()
-		print(abilities.size()-1)
 	else:
 		ability_buttons[0].focus_previous = end_turn_button.get_path()
 		ability_buttons[0].focus_neighbor_top = end_turn_button.get_path()

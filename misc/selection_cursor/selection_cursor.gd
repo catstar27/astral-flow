@@ -65,9 +65,10 @@ func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("interact"):
 		interact_on_pos(position)
 	if event.is_action_pressed("clear"):
-		if selected.selected_ability == null:
-			deselect()
-	if event.is_action_pressed("info"):
+		if selected != null:
+			if selected.selected_ability == null:
+				deselect()
+	if event.is_action_pressed("info") && selected != null:
 		update_move_arrows(selected)
 	if event.is_action_released("info"):
 		clear_move_arrows()
