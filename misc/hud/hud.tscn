@@ -5,7 +5,7 @@
 [ext_resource type="Theme" uid="uid://crcivs73grrf7" path="res://textures/hud/custom_theme.tres" id="1_swtcj"]
 [ext_resource type="PackedScene" uid="uid://dn3wvhbb3qaw1" path="res://misc/hud/char_info.tscn" id="3_ocorx"]
 [ext_resource type="PackedScene" uid="uid://ddv2qool36rfh" path="res://misc/hud/pause_menu.tscn" id="4_4c60g"]
-[ext_resource type="PackedScene" uid="uid://cy2jrxj781wh3" path="res://misc/hud/sequence_display.tscn" id="4_teb0s"]
+[ext_resource type="PackedScene" uid="uid://dysmxh061ic7i" path="res://misc/hud/sequence_display.tscn" id="4_teb0s"]
 [ext_resource type="PackedScene" uid="uid://djhm61nx72b66" path="res://misc/hud/settings_menu/settings_menu.tscn" id="5_y84cb"]
 [ext_resource type="PackedScene" uid="uid://cejp7bpbfmkw" path="res://misc/hud/utility_menu.tscn" id="7_i7gmw"]
 
@@ -60,17 +60,9 @@ grow_vertical = 1
 [node name="SequenceDisplay" parent="." instance=ExtResource("4_teb0s")]
 unique_name_in_owner = true
 layout_mode = 1
-anchors_preset = 6
-anchor_left = 1.0
-anchor_top = 0.5
-anchor_right = 1.0
-anchor_bottom = 0.5
-offset_left = -40.0
-offset_top = -20.0
-offset_right = 0.0
-offset_bottom = 20.0
-grow_horizontal = 0
-grow_vertical = 2
+offset_left = -20.0
+offset_right = 20.0
+offset_bottom = 40.0
 
 [node name="LogPanel" type="PanelContainer" parent="."]
 process_mode = 1

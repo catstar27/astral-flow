@@ -1,12 +1,65 @@
-[gd_scene load_steps=3 format=3 uid="uid://cy2jrxj781wh3"]
+[gd_scene load_steps=4 format=3 uid="uid://dysmxh061ic7i"]
 
-[ext_resource type="Material" uid="uid://dcq7n5qyt3hj0" path="res://materials/immaterial.tres" id="1_bobkv"]
+[ext_resource type="Theme" uid="uid://crcivs73grrf7" path="res://textures/hud/custom_theme.tres" id="1_dovtc"]
 [ext_resource type="Script" path="res://misc/hud/sequence_display.gd" id="1_m1igy"]
+[ext_resource type="Texture2D" uid="uid://oawro5n38l87" path="res://index.icon.png" id="1_q67uh"]
 
-[node name="SequenceDisplay" type="VBoxContainer"]
-process_mode = 1
-material = ExtResource("1_bobkv")
-use_parent_material = true
+[node name="SequenceDisplay" type="Control"]
+layout_mode = 3
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+grow_horizontal = 2
+theme = ExtResource("1_dovtc")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_q67uh")
+
+[node name="PanelContainer" type="PanelContainer" parent="."]
+layout_mode = 0
+offset_left = -40.0
+offset_top = 80.0
 offset_right = 40.0
-offset_bottom = 40.0
+offset_bottom = 120.0
+
+[node name="Label1" type="Label" parent="PanelContainer"]
+layout_mode = 2
+
+[node name="PanelContainer2" type="PanelContainer" parent="."]
+offset_left = -160.0
+offset_top = 20.0
+offset_right = -80.0
+offset_bottom = 60.0
+
+[node name="Label2" type="Label" parent="PanelContainer2"]
+layout_mode = 2
+
+[node name="PanelContainer3" type="PanelContainer" parent="."]
+offset_left = 80.0
+offset_top = 20.0
+offset_right = 160.0
+offset_bottom = 60.0
+
+[node name="Label3" type="Label" parent="PanelContainer3"]
+layout_mode = 2
+
+[node name="PanelContainer4" type="PanelContainer" parent="."]
+offset_left = -160.0
+offset_top = -60.0
+offset_right = -80.0
+offset_bottom = -20.0
+
+[node name="Label4" type="Label" parent="PanelContainer4"]
+layout_mode = 2
+
+[node name="PanelContainer5" type="PanelContainer" parent="."]
+offset_left = 80.0
+offset_top = -60.0
+offset_right = 160.0
+offset_bottom = -20.0
+
+[node name="Label5" type="Label" parent="PanelContainer5"]
+layout_mode = 2
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 script = ExtResource("1_m1igy")
