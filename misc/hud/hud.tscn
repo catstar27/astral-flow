@@ -49,6 +49,7 @@ layout_mode = 1
 offset_right = 127.0
 
 [node name="UtilityMenu" parent="." instance=ExtResource("7_i7gmw")]
+unique_name_in_owner = true
 process_mode = 1
 layout_mode = 1
 anchors_preset = 1

@@ -2,6 +2,7 @@ extends Control
 class_name HUD
 
 @onready var char_info: CharInfo = %CharInfo
+@onready var utility_menu: UtilityMenu = %UtilityMenu
 @onready var game_log: RichTextLabel = %Log
 @onready var log_timer: Timer = %LogTimer
 @onready var sequence_display: SequenceDisplay = %SequenceDisplay
@@ -15,12 +16,13 @@ func _ready()->void:
 
 func submenu_opened()->void:
 	char_info.hide()
+	utility_menu.hide()
 	game_log.get_parent().hide()
 	sequence_display.hide()
 
 func submenu_closed()->void:
-	if char_info.character != null:
-		char_info.show()
+	char_info.show()
+	utility_menu.show()
 	if log_timer.time_left > 0:
 		game_log.get_parent().show()
 	sequence_display.show()

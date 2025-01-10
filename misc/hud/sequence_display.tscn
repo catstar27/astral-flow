@@ -11,6 +11,7 @@ anchor_left = 0.5
 anchor_right = 0.5
 grow_horizontal = 2
 theme = ExtResource("1_dovtc")
+script = ExtResource("1_m1igy")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture = ExtResource("1_q67uh")
@@ -26,6 +27,7 @@ offset_bottom = 120.0
 layout_mode = 2
 
 [node name="PanelContainer2" type="PanelContainer" parent="."]
+layout_mode = 0
 offset_left = -160.0
 offset_top = 20.0
 offset_right = -80.0
@@ -35,6 +37,7 @@ offset_bottom = 60.0
 layout_mode = 2
 
 [node name="PanelContainer3" type="PanelContainer" parent="."]
+layout_mode = 0
 offset_left = 80.0
 offset_top = 20.0
 offset_right = 160.0
@@ -44,6 +47,7 @@ offset_bottom = 60.0
 layout_mode = 2
 
 [node name="PanelContainer4" type="PanelContainer" parent="."]
+layout_mode = 0
 offset_left = -160.0
 offset_top = -60.0
 offset_right = -80.0
@@ -53,6 +57,7 @@ offset_bottom = -20.0
 layout_mode = 2
 
 [node name="PanelContainer5" type="PanelContainer" parent="."]
+layout_mode = 0
 offset_left = 80.0
 offset_top = -60.0
 offset_right = 160.0
@@ -62,4 +67,3 @@ offset_bottom = -20.0
 layout_mode = 2
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-script = ExtResource("1_m1igy")
