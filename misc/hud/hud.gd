@@ -8,6 +8,7 @@ class_name HUD
 @onready var sequence_display: SequenceDisplay = %SequenceDisplay
 @onready var pause_menu: PauseMenu = %PauseMenu
 @onready var settings_menu: SettingsMenu = %SettingsMenu
+var sequence_display_visible: bool = false
 
 func _ready()->void:
 	EventBus.subscribe("PRINT_LOG", self, "print_log")
@@ -18,6 +19,7 @@ func submenu_opened()->void:
 	char_info.hide()
 	utility_menu.hide()
 	game_log.get_parent().hide()
+	sequence_display_visible = sequence_display.visible
 	sequence_display.hide()
 
 func submenu_closed()->void:
@@ -25,7 +27,8 @@ func submenu_closed()->void:
 	utility_menu.show()
 	if log_timer.time_left > 0:
 		game_log.get_parent().show()
-	sequence_display.show()
+	if sequence_display_visible:
+		sequence_display.show()
 
 func set_char_info(selected: Node2D)->void:
 	if selected is not Character && selected is not Ability || selected == null:

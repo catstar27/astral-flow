@@ -7,10 +7,12 @@ var enemy_team: Array[Character] = []
 var round_num: int = 1
 signal run_round
 signal continue_round(yes: bool)
+signal display_cycled
 
 func _ready()->void:
 	run_round.connect(start_round)
 	EventBus.subscribe("START_COMBAT", self, "start_combat")
+	EventBus.subscribe("SEQUENCE_DISPLAY_CYCLED", self, "sequence_display_wait")
 
 func new_combat_event(id: String)->EventBus.Event:
 	return EventBus.Event.new(id, battle_queue)
@@ -72,6 +74,7 @@ func end_turn(character: Character)->void:
 		call_deferred("end_combat")
 		continue_round.emit(false)
 	else:
+		await display_cycled
 		continue_round.emit(true)
 
 func end_combat()->void:
@@ -82,3 +85,6 @@ func end_combat()->void:
 		character.taking_turn = false
 	battle_queue = []
 	EventBus.broadcast(EventBus.Event.new("COMBAT_ENDED", "NULLDATA"))
+
+func sequence_display_wait()->void:
+	display_cycled.emit()
