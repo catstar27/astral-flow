@@ -10,7 +10,7 @@
 [sub_resource type="Resource" id="Resource_ut36o"]
 metadata/__load_path__ = "res://textures/arrow.png"
 
-[node name="Main" type="Node2D"]
+[node name="Main" type="Node2D" groups=["Persist"]]
 process_mode = 3
 script = ExtResource("1_518bh")
 

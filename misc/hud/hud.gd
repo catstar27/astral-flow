@@ -8,11 +8,13 @@ class_name HUD
 @onready var sequence_display: SequenceDisplay = %SequenceDisplay
 @onready var pause_menu: PauseMenu = %PauseMenu
 @onready var settings_menu: SettingsMenu = %SettingsMenu
+@onready var time_label: Label = %TimeLabel
 var sequence_display_visible: bool = false
 
 func _ready()->void:
 	EventBus.subscribe("PRINT_LOG", self, "print_log")
 	EventBus.subscribe("SELECTION_CHANGED", self, "set_char_info")
+	EventBus.subscribe("TIME_CHANGED", self, "set_time_label")
 	log_timer.timeout.connect(game_log.get_parent().hide)
 
 func submenu_opened()->void:
@@ -43,3 +45,15 @@ func print_log(data)->void:
 	game_log.get_parent().show()
 	game_log.text += str(data)+"\n"
 	log_timer.start()
+
+func set_time_label(time: Array)->void:
+	if time[0] is not int || time[1] is not int:
+		printerr("Attempted to Update Time Display with Invalid Time")
+		return
+	time_label.text = ''
+	if time[1] < 10:
+		time_label.text += '0'
+	time_label.text += str(time[1])+':'
+	if time[0] < 10:
+		time_label.text += '0'
+	time_label.text += str(time[0])

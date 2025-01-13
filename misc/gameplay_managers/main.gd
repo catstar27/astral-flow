@@ -11,6 +11,8 @@ var current_timeline: Node = null
 var selection_cursor_scene: PackedScene = preload("res://misc/selection_cursor/selection_cursor.tscn")
 var player_scene: PackedScene = preload("res://characters/player.tscn")
 var text_indicator_scene: PackedScene = preload("res://misc/hud/text_indicator.tscn")
+var hour: int = 0
+var minute: int = 0
 
 func _ready() -> void:
 	get_window().min_size = Vector2(960, 540)
@@ -50,6 +52,10 @@ func deactivate_selection_cursor()->void:
 
 func global_timer_timeout()->void:
 	EventBus.broadcast(EventBus.Event.new("GLOBAL_TIMER_TIMEOUT", "NULLDATA"))
+	minute = (1+minute)%60
+	if minute == 0:
+		hour = (1+hour)%24
+	EventBus.broadcast(EventBus.Event.new("TIME_CHANGED", [minute, hour]))
 
 func unload_map()->void:
 	if map != null:
@@ -124,3 +130,12 @@ func fade_out_exit()->void:
 	await create_tween().tween_property(foreground, "modulate", Color.BLACK, 1).set_ease(Tween.EASE_IN).finished
 	await get_tree().create_timer(1).timeout
 	get_tree().quit()
+
+func save_data(file: FileAccess)->void:
+	file.store_var(hour)
+	file.store_var(minute)
+
+func load_data(file: FileAccess)->void:
+	hour = file.get_var()
+	minute = file.get_var()
+	EventBus.broadcast(EventBus.Event.new("TIME_CHANGED", [minute, hour]))
