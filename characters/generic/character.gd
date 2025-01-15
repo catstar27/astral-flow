@@ -65,6 +65,7 @@ signal ability_deselected
 
 func _setup()->void:
 	EventBus.subscribe("GLOBAL_TIMER_TIMEOUT", self, "refresh")
+	EventBus.subscribe("REST", self, "rest")
 	status_manager.status_damage_ticked.connect(damage)
 	status_manager.status_stat_mod_changed.connect(update_stat_mod)
 	status_manager.status_action_occurred.connect(process_status_action)
@@ -166,6 +167,11 @@ func refresh()->void:
 	cur_ap = base_stats.max_ap+stat_mods.max_ap
 	stats_changed.emit()
 	status_manager.tick_status()
+
+func rest()->void:
+	cur_ap = base_stats.max_ap+stat_mods.max_ap
+	cur_hp = base_stats.max_hp+stat_mods.max_hp
+	cur_mp = base_stats.max_mp+stat_mods.max_mp
 
 func on_defeated()->void:
 	EventBus.broadcast(EventBus.Event.new("PRINT_LOG","Defeated "+display_name))

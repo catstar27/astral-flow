@@ -34,6 +34,7 @@ func _execute() -> void:
 		dialogic.Text.hide_textbox()
 
 	_tween = dialogic.get_tree().create_tween()
+	_tween.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
 	if DialogicUtil.is_physics_timer():
 		_tween.set_process_mode(Tween.TWEEN_PROCESS_PHYSICS)
 	_tween.tween_callback(_on_finish).set_delay(final_wait_time)

@@ -6,7 +6,7 @@ The couch looks oddly pristine, but smells like potato chips...
 - Nap
 	You decide to take a rest...
 	[signal arg="rest"]
-	[wait time="5.0"]
+	[wait time="5.5"]
 	You feel rested!
 	[end_timeline]
 - Leave

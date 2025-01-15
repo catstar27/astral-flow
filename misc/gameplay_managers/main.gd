@@ -122,6 +122,8 @@ func check_dialogue_signal(data)->void:
 		get_tree().quit()
 	elif data == "rest":
 		await fade_out()
+		EventBus.broadcast(EventBus.Event.new("REST", "NULLDATA"))
+		await get_tree().create_timer(.5).timeout
 		EventBus.broadcast(EventBus.Event.new("FADE_IN_MUSIC", 1))
 		await fade_in()
 
