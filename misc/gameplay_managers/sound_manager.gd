@@ -55,18 +55,21 @@ func new_sound(info: Array)->void:
 	else:
 		printerr("Unrecognized Audio Position")
 
-func new_ost(song: String)->void:
+func new_ost(song: AudioStreamWAV)->void:
 	if ost.playing:
-		fade_out_music(.5)
-	ost.stream = load(song)
+		await fade_out_music(.5)
+	ost.stream = song
+	ost.stream_paused = false
 	ost.play()
 
 func ost_reset()->void:
 	ost.play()
 
 func fade_out_music(time: float)->void:
+	var start_volume: float = music_volume
 	await create_tween().tween_method(change_music_volume, linear_to_db(music_volume), -10, time).finished
 	ost.stream_paused = true
+	change_music_volume(start_volume)
 
 func fade_in_music(time: float)->void:
 	ost.stream_paused = false
@@ -79,9 +82,9 @@ func enter_dialogue(info: Array)->void:
 	if info[1]:
 		fade_out_music(.5)
 	else:
-		create_tween().tween_method(change_music_volume, linear_to_db(music_volume), linear_to_db(music_volume/4), .5)
+		await create_tween().tween_method(change_music_volume, linear_to_db(music_volume), linear_to_db(music_volume/4), .5).finished
 
 func exit_dialogue()->void:
 	if ost.stream_paused:
 		ost.stream_paused = false
-	create_tween().tween_method(change_music_volume, linear_to_db(music_volume/4), linear_to_db(music_volume), .5)
+	await create_tween().tween_method(change_music_volume, linear_to_db(music_volume/4), linear_to_db(music_volume), .5).finished

@@ -2,7 +2,8 @@ extends TileMapLayer
 class_name GameMap
 
 @export var player_start_pos: Vector2i = Vector2i.ZERO
-@export var ost: String
+@export var ost: AudioStreamWAV
+@export var battle_theme: AudioStreamWAV
 @export var map_name: String
 @onready var astar: AStarGrid2D
 @onready var light_modulator: CanvasModulate = %LightingModulate
@@ -16,7 +17,15 @@ signal map_loaded
 func _ready()->void:
 	EventBus.subscribe("TILE_OCCUPIED", self, "set_pos_occupied")
 	EventBus.subscribe("TILE_UNOCCUPIED", self, "set_pos_unoccupied")
+	EventBus.subscribe("COMBAT_STARTED", self, "start_combat")
+	EventBus.subscribe("COMBAT_ENDED", self, "end_combat")
 	EventBus.subscribe("LOADED", self, "prep_map")
+
+func start_combat()->void:
+	EventBus.broadcast(EventBus.Event.new("SET_OST", battle_theme))
+
+func end_combat()->void:
+	EventBus.broadcast(EventBus.Event.new("SET_OST", ost))
 
 func get_obj_at_pos(pos: Vector2)->Node2D:
 	for child in get_children():

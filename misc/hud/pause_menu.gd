@@ -43,10 +43,11 @@ func close_pause_menu()->void:
 	pause_closed.emit()
 
 func save_pressed()->void:
-	pass
+	SaveLoad.save_data()
 
 func load_pressed()->void:
-	pass
+	close_pause_menu()
+	SaveLoad.load_data()
 
 func settings_pressed()->void:
 	close_pause_menu()
