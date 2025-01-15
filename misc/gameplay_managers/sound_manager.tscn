@@ -7,3 +7,5 @@ script = ExtResource("1_wpm7b")
 
 [node name="OST" type="AudioStreamPlayer" parent="."]
 unique_name_in_owner = true
+
+[connection signal="finished" from="OST" to="." method="ost_reset"]

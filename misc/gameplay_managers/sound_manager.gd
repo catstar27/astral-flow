@@ -15,7 +15,8 @@ func _ready() -> void:
 	EventBus.subscribe("PLAY_SOUND", self, "new_sound")
 	EventBus.subscribe("SET_OST", self, "new_ost")
 	EventBus.subscribe("ENTER_DIALOGUE", self, "enter_dialogue")
-	EventBus.subscribe("FADE_MUSIC", self, "fade_music")
+	EventBus.subscribe("FADE_OUT_MUSIC", self, "fade_out_music")
+	EventBus.subscribe("FADE_IN_MUSIC", self, "fade_in_music")
 	EventBus.subscribe("AUDIO_SETTINGS_CHANGED", self, "change_volume")
 	Dialogic.timeline_ended.connect(exit_dialogue)
 
@@ -55,20 +56,32 @@ func new_sound(info: Array)->void:
 		printerr("Unrecognized Audio Position")
 
 func new_ost(song: String)->void:
+	if ost.playing:
+		fade_out_music(.5)
 	ost.stream = load(song)
 	ost.play()
 
-func fade_music(time: float)->void:
-	await create_tween().tween_property(ost, "volume_db", -10, time).finished
+func ost_reset()->void:
+	ost.play()
+
+func fade_out_music(time: float)->void:
+	await create_tween().tween_method(change_music_volume, linear_to_db(music_volume), -10, time).finished
 	ost.stream_paused = true
+
+func fade_in_music(time: float)->void:
+	ost.stream_paused = false
+	await create_tween().tween_method(change_music_volume, -10, linear_to_db(music_volume), time).finished
+
+func change_music_volume(volume: float)->void:
+	AudioServer.set_bus_volume_db(1, volume)
 
 func enter_dialogue(info: Array)->void:
 	if info[1]:
-		fade_music(.5)
+		fade_out_music(.5)
 	else:
-		create_tween().tween_property(ost, "volume_db", linear_to_db(music_volume/4), .5)
+		create_tween().tween_method(change_music_volume, linear_to_db(music_volume), linear_to_db(music_volume/4), .5)
 
 func exit_dialogue()->void:
 	if ost.stream_paused:
 		ost.stream_paused = false
-	create_tween().tween_property(ost, "volume_db", linear_to_db(music_volume), .5)
+	create_tween().tween_method(change_music_volume, linear_to_db(music_volume/4), linear_to_db(music_volume), .5)

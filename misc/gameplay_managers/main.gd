@@ -115,21 +115,28 @@ func create_text_indicator(info: Array)->void:
 func check_dialogue_signal(data)->void:
 	if data == "crash_game":
 		queue_free()
-	if data == "fade_out_exit":
-		fade_out_exit()
+	elif data == "fade_out_exit":
+		deactivate_selection_cursor()
+		await fade_out()
+		await get_tree().create_timer(.5).timeout
+		get_tree().quit()
+	elif data == "rest":
+		await fade_out()
+		EventBus.broadcast(EventBus.Event.new("FADE_IN_MUSIC", 1))
+		await fade_in()
 
-func fade_out_exit()->void:
-	deactivate_selection_cursor()
+func fade_out()->void:
 	await create_tween().tween_property(foreground, "modulate", Color.BLACK, .5).set_ease(Tween.EASE_IN).finished
 	await create_tween().tween_property(foreground, "modulate", Color(0,0,0,0), .5).set_ease(Tween.EASE_IN).finished
 	await get_tree().create_timer(.5).timeout
 	await create_tween().tween_property(foreground, "modulate", Color.BLACK, .5).set_ease(Tween.EASE_IN).finished
 	await create_tween().tween_property(foreground, "modulate", Color(0,0,0,0), .5).set_ease(Tween.EASE_IN).finished
 	await get_tree().create_timer(.5).timeout
-	EventBus.broadcast(EventBus.Event.new("FADE_MUSIC", 2))
+	EventBus.broadcast(EventBus.Event.new("FADE_OUT_MUSIC", 1))
 	await create_tween().tween_property(foreground, "modulate", Color.BLACK, 1).set_ease(Tween.EASE_IN).finished
-	await get_tree().create_timer(1).timeout
-	get_tree().quit()
+
+func fade_in()->void:
+	await create_tween().tween_property(foreground, "modulate", Color(0,0,0,0), 1).set_ease(Tween.EASE_IN).finished
 
 func save_data(file: FileAccess)->void:
 	file.store_var(hour)
