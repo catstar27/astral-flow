@@ -22,7 +22,7 @@ func open_settings_menu()->void:
 	menu_open = true
 	select_gameplay()
 	show()
-	EventBus.broadcast(EventBus.Event.new("PAUSE", "NULLDATA"))
+	EventBus.broadcast("PAUSE", "NULLDATA")
 	for menu in menus:
 		menu.set_values()
 	settings_opened.emit()
@@ -30,7 +30,7 @@ func open_settings_menu()->void:
 func close_settings_menu()->void:
 	menu_open = false
 	hide()
-	EventBus.broadcast(EventBus.Event.new("UNPAUSE", "NULLDATA"))
+	EventBus.broadcast("UNPAUSE", "NULLDATA")
 	settings_closed.emit()
 	Settings.save_settings()
 

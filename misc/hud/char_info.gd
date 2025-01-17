@@ -37,7 +37,7 @@ func open_menu()->void:
 	modulate = Color(1,1,1,1)
 	info_container.show()
 	await create_tween().tween_property(info_container, "position", Vector2(0, info_container.position.y), .5).finished
-	EventBus.broadcast(EventBus.Event.new("DEACTIVATE_SELECTION", "NULLDATA"))
+	EventBus.broadcast("DEACTIVATE_SELECTION", "NULLDATA")
 	if ability_buttons[0].ability != null:
 		ability_buttons[0].grab_focus()
 	changing_state = false
@@ -57,7 +57,7 @@ func close_menu()->void:
 	state = states.closed
 	menu_button.text = "→"
 	if activate_selection:
-		EventBus.broadcast(EventBus.Event.new("ACTIVATE_SELECTION", "NULLDATA"))
+		EventBus.broadcast("ACTIVATE_SELECTION", "NULLDATA")
 	await create_tween().tween_property(info_container, "position", Vector2(-90, info_container.position.y), .5).finished
 	modulate = Color(1,1,1,1)
 	info_container.hide()
@@ -70,7 +70,7 @@ func suspend_menu(_ability)->void:
 	state = states.suspended
 	await create_tween().tween_property(self, "modulate", Color(1,1,1,.5), .1).finished
 	get_window().gui_release_focus()
-	EventBus.broadcast(EventBus.Event.new("ACTIVATE_SELECTION", "NULLDATA"))
+	EventBus.broadcast("ACTIVATE_SELECTION", "NULLDATA")
 	changing_state = false
 
 func unsuspend_menu()->void:
@@ -79,7 +79,7 @@ func unsuspend_menu()->void:
 	changing_state = true
 	state = states.open
 	await create_tween().tween_property(self, "modulate", Color(1,1,1,1), .1).finished
-	EventBus.broadcast(EventBus.Event.new("DEACTIVATE_SELECTION", "NULLDATA"))
+	EventBus.broadcast("DEACTIVATE_SELECTION", "NULLDATA")
 	if ability_buttons[0].ability != null:
 		ability_buttons[0].grab_focus()
 	changing_state = false

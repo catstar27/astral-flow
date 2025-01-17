@@ -6,15 +6,15 @@ func enter_state(data: Array)->void:
 	var ability: Ability = data[0]
 	var destination: Vector2 = data[1]
 	if !ability.is_destination_valid(destination):
-		EventBus.broadcast(EventBus.Event.new("PLAY_SOUND", [sound, "positional", state_machine.user.global_position]))
+		EventBus.broadcast("PLAY_SOUND", [sound, "positional", state_machine.user.global_position])
 		state_machine.change_state_to("IDLE")
 		return
 	if ability.ap_cost>state_machine.user.cur_ap:
-		EventBus.broadcast(EventBus.Event.new("PRINT_LOG","Not enough ap"))
+		EventBus.broadcast("PRINT_LOG","Not enough ap")
 		state_machine.change_state_to("IDLE")
 		return
 	if ability.mp_cost>state_machine.user.cur_mp:
-		EventBus.broadcast(EventBus.Event.new("PRINT_LOG","Not enough mp"))
+		EventBus.broadcast("PRINT_LOG","Not enough mp")
 		state_machine.change_state_to("IDLE")
 		return
 	var prev_ability: Ability = state_machine.user.selected_ability

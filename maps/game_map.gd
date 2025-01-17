@@ -22,10 +22,10 @@ func _ready()->void:
 	EventBus.subscribe("LOADED", self, "prep_map")
 
 func start_combat()->void:
-	EventBus.broadcast(EventBus.Event.new("SET_OST", battle_theme))
+	EventBus.broadcast("SET_OST", battle_theme)
 
 func end_combat()->void:
-	EventBus.broadcast(EventBus.Event.new("SET_OST", ost))
+	EventBus.broadcast("SET_OST", ost)
 
 func get_obj_at_pos(pos: Vector2)->Node2D:
 	for child in get_children():
@@ -126,11 +126,11 @@ func prep_map()->void:
 			if !child.defeated.is_connected(character_defeated):
 				child.defeated.connect(character_defeated)
 	_extra_setup()
-	EventBus.broadcast(EventBus.Event.new("SET_OST", ost))
+	EventBus.broadcast("SET_OST", ost)
 	for child in get_children():
 		if child is Character:
 			child.activate()
-	EventBus.broadcast(EventBus.Event.new("MAP_LOADED", self))
+	EventBus.broadcast("MAP_LOADED", self)
 
 func character_defeated(character: Character)->void:
 	character.defeated.disconnect(character_defeated)

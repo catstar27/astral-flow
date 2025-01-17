@@ -31,7 +31,7 @@ func char_defeated(character: Character)->void:
 func start_combat(participants: Array[Character])->void:
 	participants.append_array(participants[0].allies)
 	participants.append_array(participants[1].allies)
-	EventBus.broadcast(EventBus.Event.new("COMBAT_STARTED", "NULLDATA"))
+	EventBus.broadcast("COMBAT_STARTED", "NULLDATA")
 	battle_queue = participants
 	for character in participants:
 		character.combat_entered.emit()
@@ -49,12 +49,12 @@ func start_round()->void:
 	if enemy_team.size() == 0 || player_team.size() == 0:
 		end_combat()
 		return
-	EventBus.broadcast(EventBus.Event.new("PRINT_LOG","Round "+str(round_num)))
+	EventBus.broadcast("PRINT_LOG","Round "+str(round_num))
 	round_num += 1
 	for character in battle_queue:
 		character.roll_sequence()
 	battle_queue.sort_custom(func(a,b): return a.sequence<b.sequence)
-	EventBus.broadcast(EventBus.Event.new("ROUND_STARTED", battle_queue))
+	EventBus.broadcast("ROUND_STARTED", battle_queue)
 	for character in battle_queue:
 		character.taking_turn = true
 		character.refresh()
@@ -67,7 +67,7 @@ func start_round()->void:
 	run_round.emit()
 
 func end_turn(character: Character)->void:
-	EventBus.broadcast(EventBus.Event.new("TURN_ENDED", "NULLDATA"))
+	EventBus.broadcast("TURN_ENDED", "NULLDATA")
 	character.ended_turn.disconnect(end_turn)
 	character.taking_turn = false
 	if enemy_team.size() == 0 || player_team.size() == 0:
@@ -84,7 +84,7 @@ func end_combat()->void:
 		character.combat_exited.emit()
 		character.taking_turn = false
 	battle_queue = []
-	EventBus.broadcast(EventBus.Event.new("COMBAT_ENDED", "NULLDATA"))
+	EventBus.broadcast("COMBAT_ENDED", "NULLDATA")
 
 func sequence_display_wait()->void:
 	display_cycled.emit()

@@ -12,7 +12,7 @@ func clear_ability()->void:
 	text = ""
 
 func _on_pressed() -> void:
-	EventBus.broadcast(EventBus.Event.new("ABILITY_BUTTON_PRESSED", ability))
+	EventBus.broadcast("ABILITY_BUTTON_PRESSED", ability)
 	if ability.user.selected_ability == null:
 		ability.user.select_ability(ability)
 	elif ability.user.selected_ability != ability:

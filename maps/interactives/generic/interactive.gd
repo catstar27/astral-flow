@@ -51,9 +51,9 @@ func _calc_occupied()->void:
 
 func _interacted(_character: Character)->void:
 	if interact_sfx != null:
-		EventBus.broadcast(EventBus.Event.new("PLAY_SOUND", [interact_sfx, "positional", global_position]))
+		EventBus.broadcast("PLAY_SOUND", [interact_sfx, "positional", global_position])
 	if dialogue_timeline != null:
-		EventBus.broadcast(EventBus.Event.new("ENTER_DIALOGUE", [dialogue_timeline, pause_music]))
+		EventBus.broadcast("ENTER_DIALOGUE", [dialogue_timeline, pause_music])
 	_interact_extra(_character)
 	interacted.emit()
 

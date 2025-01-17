@@ -32,13 +32,13 @@ func _unhandled_input(event: InputEvent) -> void:
 func open_pause_menu()->void:
 	resume_button.grab_focus()
 	menu_open = true
-	EventBus.broadcast(EventBus.Event.new("PAUSE", "NULLDATA"))
+	EventBus.broadcast("PAUSE", "NULLDATA")
 	show()
 	pause_opened.emit()
 
 func close_pause_menu()->void:
 	menu_open = false
-	EventBus.broadcast(EventBus.Event.new("UNPAUSE", "NULLDATA"))
+	EventBus.broadcast("UNPAUSE", "NULLDATA")
 	hide()
 	pause_closed.emit()
 

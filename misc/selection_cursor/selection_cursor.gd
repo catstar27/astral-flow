@@ -166,7 +166,7 @@ func select(node: Character)->void:
 		selected.pos_changed.connect(update_move_arrows)
 	if selected != null:
 		_create_marker()
-	EventBus.broadcast(EventBus.Event.new("SELECTION_CHANGED",selected))
+	EventBus.broadcast("SELECTION_CHANGED",selected)
 
 func deselect(_node: Character = null)->void:
 	clear_move_arrows()
@@ -178,7 +178,7 @@ func deselect(_node: Character = null)->void:
 	prev_select.call_deferred("deselect")
 	prev_select.ended_turn.disconnect(deselect)
 	prev_select.pos_changed.disconnect(update_move_arrows)
-	EventBus.broadcast(EventBus.Event.new("SELECTION_CHANGED",selected))
+	EventBus.broadcast("SELECTION_CHANGED",selected)
 
 func _selection_area_entered(body: Node2D) -> void:
 	if !body is GameMap:

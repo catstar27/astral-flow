@@ -19,7 +19,7 @@ func _interacted(_character: Character):
 	if cur_state == state.locked:
 		audio.play()
 		if dialogue_timeline != null:
-			EventBus.broadcast(EventBus.Event.new("ENTER_DIALOGUE", [dialogue_timeline, false]))
+			EventBus.broadcast("ENTER_DIALOGUE", [dialogue_timeline, false])
 		interacted.emit()
 	elif cur_state == state.unlocked:
 		open()

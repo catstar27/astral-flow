@@ -44,18 +44,18 @@ func set_video_settings()->void:
 		get_window().set_mode(Window.MODE_WINDOWED)
 
 func activate_selection_cursor()->void:
-	EventBus.broadcast(EventBus.Event.new("ACTIVATE_SELECTION", "NULLDATA"))
+	EventBus.broadcast("ACTIVATE_SELECTION", "NULLDATA")
 
 func deactivate_selection_cursor()->void:
-	EventBus.broadcast(EventBus.Event.new("DEACTIVATE_SELECTION", "NULLDATA"))
+	EventBus.broadcast("DEACTIVATE_SELECTION", "NULLDATA")
 	selection_cursor.deselect()
 
 func global_timer_timeout()->void:
-	EventBus.broadcast(EventBus.Event.new("GLOBAL_TIMER_TIMEOUT", "NULLDATA"))
+	EventBus.broadcast("GLOBAL_TIMER_TIMEOUT", "NULLDATA")
 	minute = (1+minute)%60
 	if minute == 0:
 		hour = (1+hour)%24
-	EventBus.broadcast(EventBus.Event.new("TIME_CHANGED", [minute, hour]))
+	EventBus.broadcast("TIME_CHANGED", [minute, hour])
 
 func unload_map()->void:
 	if map != null:
@@ -122,9 +122,9 @@ func check_dialogue_signal(data)->void:
 		get_tree().quit()
 	elif data == "rest":
 		await fade_out()
-		EventBus.broadcast(EventBus.Event.new("REST", "NULLDATA"))
+		EventBus.broadcast("REST", "NULLDATA")
 		await get_tree().create_timer(.5).timeout
-		EventBus.broadcast(EventBus.Event.new("FADE_IN_MUSIC", 1))
+		EventBus.broadcast("FADE_IN_MUSIC", 1)
 		await fade_in()
 
 func fade_out()->void:
@@ -134,7 +134,7 @@ func fade_out()->void:
 	await create_tween().tween_property(foreground, "modulate", Color.BLACK, .5).set_ease(Tween.EASE_IN).finished
 	await create_tween().tween_property(foreground, "modulate", Color(0,0,0,0), .5).set_ease(Tween.EASE_IN).finished
 	await get_tree().create_timer(.5).timeout
-	EventBus.broadcast(EventBus.Event.new("FADE_OUT_MUSIC", 1))
+	EventBus.broadcast("FADE_OUT_MUSIC", 1)
 	await create_tween().tween_property(foreground, "modulate", Color.BLACK, 1).set_ease(Tween.EASE_IN).finished
 
 func fade_in()->void:
@@ -147,4 +147,4 @@ func save_data(file: FileAccess)->void:
 func load_data(file: FileAccess)->void:
 	hour = file.get_var()
 	minute = file.get_var()
-	EventBus.broadcast(EventBus.Event.new("TIME_CHANGED", [minute, hour]))
+	EventBus.broadcast("TIME_CHANGED", [minute, hour])

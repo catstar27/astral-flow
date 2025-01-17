@@ -21,7 +21,7 @@ func _interacted(_character: Character)->void:
 	if cur_state == state.locked:
 		audio.play()
 		if dialogue_timeline != null:
-			EventBus.broadcast(EventBus.Event.new("ENTER_DIALOGUE", dialogue_timeline))
+			EventBus.broadcast("ENTER_DIALOGUE", dialogue_timeline)
 		interacted.emit()
 	elif cur_state == state.unlocked:
 		open()
@@ -30,8 +30,8 @@ func open()->void:
 	cur_state = state.open
 	sprite.texture = texture
 	collision.disabled = true
-	EventBus.broadcast(EventBus.Event.new("PLAY_SOUND", [open_sound, "positional", global_position]))
-	EventBus.broadcast(EventBus.Event.new("TILE_UNOCCUPIED", position))
+	EventBus.broadcast("PLAY_SOUND", [open_sound, "positional", global_position])
+	EventBus.broadcast("TILE_UNOCCUPIED", position)
 	interacted.emit()
 	collision_active = false
 

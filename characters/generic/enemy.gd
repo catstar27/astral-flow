@@ -16,7 +16,7 @@ func _combat_trigger_entered(body: Node2D) -> void:
 	if body is Player && !in_combat:
 		target = body
 		var participants: Array[Character] = [body, self]
-		EventBus.broadcast(EventBus.Event.new("START_COMBAT", participants))
+		EventBus.broadcast("START_COMBAT", participants)
 
 func take_turn()->void:
 	call_deferred(str(ai_types.keys()[ai_type]))

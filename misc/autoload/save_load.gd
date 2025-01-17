@@ -34,7 +34,7 @@ func save_data()->void:
 	if saving:
 		return
 	if in_combat:
-		EventBus.broadcast(EventBus.Event.new("PRINT_LOG", "Cannot Save When in Danger!"))
+		EventBus.broadcast("PRINT_LOG", "Cannot Save When in Danger!")
 		return
 	if NavMaster._map.map_name == "Global":
 		printerr("Map Name Collides with Global Saves")
@@ -57,7 +57,7 @@ func save_data()->void:
 		file.store_var(Dialogic.VAR.get_variable(variable))
 	file.store_var("END_OF_SAVE_DATA")
 	file.close()
-	EventBus.broadcast(EventBus.Event.new("PRINT_LOG", "Saved!"))
+	EventBus.broadcast("PRINT_LOG", "Saved!")
 	saving = false
 
 func load_data()->void:
@@ -72,12 +72,12 @@ func load_data()->void:
 	loading = true
 	var file: FileAccess = FileAccess.open(save_file_folder+slot+"/Global.dat", FileAccess.READ)
 	var cur_map: String = file.get_var().split('=', true, 1)[1]
-	EventBus.broadcast(EventBus.Event.new("DELOAD", "NULLDATA"))
+	EventBus.broadcast("DELOAD", "NULLDATA")
 	await get_tree().create_timer(.01).timeout
 	get_tree().root.add_child(main_scene.instantiate())
 	await load_ready_now
 	if NavMaster._map.scene_file_path != cur_map:
-		EventBus.broadcast(EventBus.Event.new("LOAD_MAP", cur_map))
+		EventBus.broadcast("LOAD_MAP", cur_map)
 		await load_ready_now
 	await NavMaster._map.load_map(save_file_folder+slot+'/')
 	var target: String = file.get_var()
@@ -92,8 +92,8 @@ func load_data()->void:
 	for variable in Dialogic.VAR.variables():
 		Dialogic.VAR.set_variable(variable, file.get_var())
 	file.close()
-	EventBus.broadcast(EventBus.Event.new("LOADED", "NULLDATA"))
-	EventBus.broadcast(EventBus.Event.new("PRINT_LOG", "Loaded!"))
+	EventBus.broadcast("LOADED", "NULLDATA")
+	EventBus.broadcast("PRINT_LOG", "Loaded!")
 	loading = false
 
 func load_ready(_map: GameMap)->void:

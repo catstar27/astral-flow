@@ -30,16 +30,16 @@ func move(cur_target: Vector2)->bool:
 			path.pop_front()
 			continue
 		if state_machine.user.cur_ap == 0:
-			EventBus.broadcast(EventBus.Event.new("PRINT_LOG","No ap for movement!"))
+			EventBus.broadcast("PRINT_LOG","No ap for movement!")
 			return true
 		if stop_movement:
 			return true
 		if target != cur_target:
 			return false
 		var prev_pos: Vector2 = state_machine.user.position
-		EventBus.broadcast(EventBus.Event.new("TILE_OCCUPIED", pos))
+		EventBus.broadcast("TILE_OCCUPIED", pos)
 		await create_tween().tween_property(state_machine.user, "position", pos, .2).finished
-		EventBus.broadcast(EventBus.Event.new("TILE_UNOCCUPIED", prev_pos))
+		EventBus.broadcast("TILE_UNOCCUPIED", prev_pos)
 		state_machine.user.pos_changed.emit(state_machine.user)
 		if state_machine.user.in_combat:
 			state_machine.user.cur_ap -= 1

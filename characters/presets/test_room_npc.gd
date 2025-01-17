@@ -12,7 +12,7 @@ func activate()->void:
 		combat_gate_open.emit()
 		while position != Vector2(32, -544):
 			if NavMaster.is_pos_occupied(Vector2(32, -544)):
-				EventBus.broadcast(EventBus.Event.new("ENTER_DIALOGUE", [blocked_dialogue, true]))
+				EventBus.broadcast("ENTER_DIALOGUE", [blocked_dialogue, true])
 				move_order.emit(Vector2(-32, -544))
 				while state_machine.current_state.state_id != "IDLE":
 					await state_machine.state_changed
@@ -34,8 +34,8 @@ func activate()->void:
 
 func _interacted(_interactor: Character)->void:
 	if dialogue != null:
-		EventBus.broadcast(EventBus.Event.new("ENTER_DIALOGUE", [dialogue, true]))
+		EventBus.broadcast("ENTER_DIALOGUE", [dialogue, true])
 
 func on_damaged()->void:
-	EventBus.broadcast(EventBus.Event.new("ENTER_DIALOGUE", [damaged_dialogue, true]))
+	EventBus.broadcast("ENTER_DIALOGUE", [damaged_dialogue, true])
 	cur_hp = base_stats.max_hp

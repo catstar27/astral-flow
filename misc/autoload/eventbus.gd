@@ -34,7 +34,8 @@ func remove_subscriber(node)->void:
 			if sub_info.node == node:
 				events[event].erase(sub_info)
 
-func broadcast(event: Event)->void:
+func broadcast(id: String, data)->void:
+	var event: Event = Event.new(id, data)
 	if event.id not in events:
 		return
 	for sub_info in events[event.id]:

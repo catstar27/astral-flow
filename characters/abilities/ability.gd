@@ -57,6 +57,6 @@ func activate(_destination: Vector2)->void:
 
 func play_sound()->void:
 	if sound != null:
-		EventBus.broadcast(EventBus.Event.new("PLAY_SOUND", [sound, "positional", global_position]))
+		EventBus.broadcast("PLAY_SOUND", [sound, "positional", global_position])
 	else:
 		printerr("Empty Sound for Ability: "+name)

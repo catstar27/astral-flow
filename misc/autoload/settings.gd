@@ -48,19 +48,19 @@ func reset_default()->void:
 
 func change_gameplay(setting: String, value)->void:
 	gameplay[setting] = value
-	EventBus.broadcast(EventBus.Event.new("GAMEPLAY_SETTINGS_CHANGED", "NULLDATA"))
+	EventBus.broadcast("GAMEPLAY_SETTINGS_CHANGED", "NULLDATA")
 
 func change_video(setting: String, value)->void:
 	video[setting] = value
-	EventBus.broadcast(EventBus.Event.new("VIDEO_SETTINGS_CHANGED", "NULLDATA"))
+	EventBus.broadcast("VIDEO_SETTINGS_CHANGED", "NULLDATA")
 
 func change_audio(setting: String, value)->void:
 	audio[setting] = value
-	EventBus.broadcast(EventBus.Event.new("AUDIO_SETTINGS_CHANGED", "NULLDATA"))
+	EventBus.broadcast("AUDIO_SETTINGS_CHANGED", "NULLDATA")
 
 func change_controls(setting: String, value)->void:
 	controls[setting] = value
-	EventBus.broadcast(EventBus.Event.new("CONTROLS_SETTINGS_CHANGED", "NULLDATA"))
+	EventBus.broadcast("CONTROLS_SETTINGS_CHANGED", "NULLDATA")
 
 func load_settings()->void:
 	var settings: Array = settings_file.get_section_keys("Gameplay")
@@ -75,10 +75,10 @@ func load_settings()->void:
 	settings = settings_file.get_section_keys("Controls")
 	for setting in settings:
 		controls[setting] = settings_file.get_value("Controls", setting)
-	EventBus.broadcast(EventBus.Event.new("GAMEPLAY_SETTINGS_CHANGED", "NULLDATA"))
-	EventBus.broadcast(EventBus.Event.new("VIDEO_SETTINGS_CHANGED", "NULLDATA"))
-	EventBus.broadcast(EventBus.Event.new("AUDIO_SETTINGS_CHANGED", "NULLDATA"))
-	EventBus.broadcast(EventBus.Event.new("CONTROLS_SETTINGS_CHANGED", "NULLDATA"))
+	EventBus.broadcast("GAMEPLAY_SETTINGS_CHANGED", "NULLDATA")
+	EventBus.broadcast("VIDEO_SETTINGS_CHANGED", "NULLDATA")
+	EventBus.broadcast("AUDIO_SETTINGS_CHANGED", "NULLDATA")
+	EventBus.broadcast("CONTROLS_SETTINGS_CHANGED", "NULLDATA")
 
 func save_settings()->void:
 	for setting in gameplay:

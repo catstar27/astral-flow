@@ -38,4 +38,4 @@ func end_cycle()->void:
 	panels[1].get_children()[0].text = panels[0].get_children()[0].text
 	panels[0].get_children()[0].text = panel4_prev_text
 	anim.play("RESET")
-	EventBus.broadcast(EventBus.Event.new("SEQUENCE_DISPLAY_CYCLED", "NULLDATA"))
+	EventBus.broadcast("SEQUENCE_DISPLAY_CYCLED", "NULLDATA")

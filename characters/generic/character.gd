@@ -136,7 +136,7 @@ func add_ability(ability_scene: PackedScene)->void:
 func add_status(status: Utility.Status)->void:
 	status_manager.add_status(status)
 	var info: Array = [status.display_name, text_indicator_shift+global_position, status.status_color]
-	EventBus.broadcast(EventBus.Event.new("MAKE_TEXT_INDICATOR", info))
+	EventBus.broadcast("MAKE_TEXT_INDICATOR", info)
 
 func roll_sequence()->void:
 	sequence = base_stats.sequence+stat_mods.sequence+randi_range(1,10)
@@ -174,8 +174,8 @@ func rest()->void:
 	cur_mp = base_stats.max_mp+stat_mods.max_mp
 
 func on_defeated()->void:
-	EventBus.broadcast(EventBus.Event.new("PRINT_LOG","Defeated "+display_name))
-	EventBus.broadcast(EventBus.Event.new("TILE_UNOCCUPIED", position))
+	EventBus.broadcast("PRINT_LOG","Defeated "+display_name)
+	EventBus.broadcast("TILE_UNOCCUPIED", position)
 	if taking_turn:
 		ended_turn.emit(self)
 	defeated.emit(self)
@@ -186,20 +186,20 @@ func attack(_source: Ability, accuracy: int, amount: int)->void:
 		damage(amount)
 	else:
 		var text_ind_pos: Vector2 = text_indicator_shift+global_position
-		EventBus.broadcast(EventBus.Event.new("MAKE_TEXT_INDICATOR", ["Miss!", text_ind_pos]))
+		EventBus.broadcast("MAKE_TEXT_INDICATOR", ["Miss!", text_ind_pos])
 
 func damage(amount: int, ignore_defense: bool = false)->void:
 	var text_ind_pos: Vector2 = text_indicator_shift+global_position
 	if amount >= base_stats.damage_threshold+stat_mods.damage_threshold || ignore_defense:
 		cur_hp -= amount
-		EventBus.broadcast(EventBus.Event.new("MAKE_TEXT_INDICATOR", [str(-amount), text_ind_pos]))
+		EventBus.broadcast("MAKE_TEXT_INDICATOR", [str(-amount), text_ind_pos])
 	else:
 		var damage_reduced: int = maxi(amount-base_stats.defense-stat_mods.defense, 0)
 		cur_hp -= damage_reduced
 		if damage_reduced > 0:
-			EventBus.broadcast(EventBus.Event.new("MAKE_TEXT_INDICATOR", [str(-damage_reduced), text_ind_pos]))
+			EventBus.broadcast("MAKE_TEXT_INDICATOR", [str(-damage_reduced), text_ind_pos])
 		else:
-			EventBus.broadcast(EventBus.Event.new("MAKE_TEXT_INDICATOR", ["Blocked!", text_ind_pos]))
+			EventBus.broadcast("MAKE_TEXT_INDICATOR", ["Blocked!", text_ind_pos])
 	damaged.emit()
 	stats_changed.emit()
 	if cur_hp <= 0:

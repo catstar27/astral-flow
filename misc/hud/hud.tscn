@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://t1lqjxny1int"]
+[gd_scene load_steps=10 format=3 uid="uid://t1lqjxny1int"]
 
 [ext_resource type="Script" path="res://misc/hud/hud.gd" id="1_mvbgd"]
 [ext_resource type="Material" uid="uid://dcq7n5qyt3hj0" path="res://materials/immaterial.tres" id="1_ng8x8"]
@@ -8,6 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://dysmxh061ic7i" path="res://misc/hud/sequence_display.tscn" id="4_teb0s"]
 [ext_resource type="PackedScene" uid="uid://djhm61nx72b66" path="res://misc/hud/settings_menu/settings_menu.tscn" id="5_y84cb"]
 [ext_resource type="PackedScene" uid="uid://cejp7bpbfmkw" path="res://misc/hud/utility_menu.tscn" id="7_i7gmw"]
+[ext_resource type="PackedScene" uid="uid://bsrym6k1vywfo" path="res://misc/hud/quest_log.tscn" id="9_fm45y"]
 
 [node name="HUD" type="Control"]
 process_mode = 3
@@ -62,6 +63,17 @@ grow_vertical = 1
 unique_name_in_owner = true
 visible = false
 layout_mode = 1
+
+[node name="QuestLog" parent="." instance=ExtResource("9_fm45y")]
+visible = false
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 0
+grow_vertical = 0
 
 [node name="TimeLabel" type="Label" parent="."]
 unique_name_in_owner = true

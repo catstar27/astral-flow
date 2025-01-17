@@ -9,9 +9,9 @@ func push(data: Array)->void:
 	var path: Array[Vector2] = NavMaster.request_nav_path(prev_pos, destination, false)
 	path.pop_front()
 	if path.size() == 1:
-		EventBus.broadcast(EventBus.Event.new("TILE_OCCUPIED", path.front()))
+		EventBus.broadcast("TILE_OCCUPIED", path.front())
 		await create_tween().tween_property(target, "position", path.front(), .1).finished
-		EventBus.broadcast(EventBus.Event.new("TILE_UNOCCUPIED", prev_pos))
+		EventBus.broadcast("TILE_UNOCCUPIED", prev_pos)
 
 func _ready() -> void:
 	status = Utility.Status.new()
