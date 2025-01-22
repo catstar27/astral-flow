@@ -13,6 +13,7 @@ var move_dir: Vector2 = Vector2i.ZERO
 var marker: Node2D = null
 var move_arrows: Array[Sprite2D] = []
 var deactivate_requests: int = 0
+signal move_stopped
 
 func _ready() -> void:
 	update_color()
@@ -131,6 +132,7 @@ func move_stop(in_bounds: bool = true)->void:
 	moving = false
 	if selected is Character && in_bounds:
 		update_move_arrows(selected)
+	move_stopped.emit()
 
 func interact_on_pos(pos: Vector2i)->void:
 	if hovering is Player && selected == null:
@@ -189,7 +191,11 @@ func _selection_area_exited(body: Node2D) -> void:
 		hovering = null
 
 func save_data(file: FileAccess)->void:
+	deactivate_requests += 1
+	while moving:
+		await move_stopped
 	file.store_var(position)
+	deactivate_requests -= 1
 
 func load_data(file: FileAccess)->void:
 	position = file.get_var()
