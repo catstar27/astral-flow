@@ -1,11 +1,12 @@
-[gd_scene load_steps=8 format=3 uid="uid://c6tflifn824fs"]
+[gd_scene load_steps=9 format=3 uid="uid://c6tflifn824fs"]
 
 [ext_resource type="Script" path="res://misc/gameplay_managers/main.gd" id="1_518bh"]
 [ext_resource type="Texture2D" uid="uid://ceeo5gnqb2rcr" path="res://textures/hud/foreground.png" id="3_khi6w"]
 [ext_resource type="Texture2D" uid="uid://c86rddiynhvpb" path="res://textures/hud/backgrounds.png" id="3_tsd85"]
 [ext_resource type="PackedScene" uid="uid://b85mlpg1agp8h" path="res://misc/selection_cursor/selection_cursor.tscn" id="4_lfpb3"]
-[ext_resource type="Script" path="res://misc/gameplay_managers/combat_manager.gd" id="4_lk56o"]
 [ext_resource type="PackedScene" uid="uid://covhvnd4w4mkl" path="res://misc/gameplay_managers/sound_manager.tscn" id="5_icnsw"]
+[ext_resource type="PackedScene" uid="uid://dwv4awarhydj0" path="res://misc/gameplay_managers/combat_manager.tscn" id="5_xm8nu"]
+[ext_resource type="PackedScene" uid="uid://cro6ucmqu51ln" path="res://misc/gameplay_managers/quest_manager.tscn" id="6_d0w8k"]
 
 [sub_resource type="Resource" id="Resource_ut36o"]
 metadata/__load_path__ = "res://textures/arrow.png"
@@ -34,16 +35,15 @@ z_index = 100
 scale = Vector2(100000, 100000)
 texture = ExtResource("3_khi6w")
 
-[node name="CombatManager" type="Node2D" parent="."]
-unique_name_in_owner = true
-process_mode = 1
-script = ExtResource("4_lk56o")
+[node name="SoundManager" parent="." instance=ExtResource("5_icnsw")]
+
+[node name="CombatManager" parent="." instance=ExtResource("5_xm8nu")]
+
+[node name="QuestManager" parent="." instance=ExtResource("6_d0w8k")]
 
 [node name="SelectionCursor" parent="." instance=ExtResource("4_lfpb3")]
 unique_name_in_owner = true
 process_mode = 1
 move_arrow_tex = SubResource("Resource_ut36o")
-
-[node name="SoundManager" parent="." instance=ExtResource("5_icnsw")]
 
 [connection signal="timeout" from="GlobalTimer" to="." method="global_timer_timeout"]

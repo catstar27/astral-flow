@@ -28,7 +28,7 @@ func open_menu()->void:
 	menu_button.text = "→"
 	modulate = Color(1,1,1,1)
 	info_container.show()
-	await create_tween().tween_property(info_container, "position", Vector2(-73, info_container.position.y), .5).finished
+	await create_tween().tween_property(info_container, "position", Vector2(-87, info_container.position.y), .5).finished
 	EventBus.broadcast("DEACTIVATE_SELECTION", "NULLDATA")
 	top_button.grab_focus()
 	changing_state = false

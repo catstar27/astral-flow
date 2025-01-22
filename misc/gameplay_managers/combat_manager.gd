@@ -1,4 +1,4 @@
-extends Node2D
+extends Node
 class_name CombatManager
 
 var battle_queue: Array[Character] = []

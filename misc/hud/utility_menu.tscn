@@ -45,27 +45,27 @@ unique_name_in_owner = true
 use_parent_material = true
 layout_mode = 2
 focus_neighbor_top = NodePath("../Inventory")
-focus_neighbor_bottom = NodePath("../Rest")
-focus_next = NodePath("../Rest")
+focus_neighbor_bottom = NodePath("../Journal")
+focus_next = NodePath("../Journal")
 focus_previous = NodePath("../Inventory")
 text = "Party"
 
-[node name="Rest" type="Button" parent="Info"]
+[node name="Journal" type="Button" parent="Info"]
 use_parent_material = true
 layout_mode = 2
 focus_neighbor_top = NodePath("../Party")
 focus_neighbor_bottom = NodePath("../Map")
 focus_next = NodePath("../Map")
 focus_previous = NodePath("../Party")
-text = "Rest"
+text = "Journal"
 
 [node name="Map" type="Button" parent="Info"]
 use_parent_material = true
 layout_mode = 2
-focus_neighbor_top = NodePath("../Rest")
+focus_neighbor_top = NodePath("../Journal")
 focus_neighbor_bottom = NodePath("../Inventory")
 focus_next = NodePath("../Inventory")
-focus_previous = NodePath("../Rest")
+focus_previous = NodePath("../Journal")
 text = "Map"
 
 [node name="Inventory" type="Button" parent="Info"]

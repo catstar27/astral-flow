@@ -1,7 +1,6 @@
 extends Node2D
 
 @onready var global_timer: Timer = %GlobalTimer
-@onready var combat_manager: CombatManager = %CombatManager
 @onready var selection_cursor: SelectionCursor = %SelectionCursor
 @onready var foreground: Sprite2D = %Foreground
 var in_dialogue: bool = false
