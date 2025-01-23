@@ -21,6 +21,5 @@ offset_top = -40.0
 [node name="Name" type="Label" parent="VBoxContainer"]
 use_parent_material = true
 layout_mode = 2
-text = "Strange Dreams"
 label_settings = SubResource("LabelSettings_j8sdj")
 horizontal_alignment = 1

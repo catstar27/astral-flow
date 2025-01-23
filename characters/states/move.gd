@@ -36,6 +36,7 @@ func move(cur_target: Vector2)->bool:
 			return true
 		if target != cur_target:
 			return false
+		state_machine.user.sprite.flip_h = pos.x-state_machine.user.position.x < 0
 		var prev_pos: Vector2 = state_machine.user.position
 		EventBus.broadcast("TILE_OCCUPIED", pos)
 		await create_tween().tween_property(state_machine.user, "position", pos, .2).finished
