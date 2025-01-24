@@ -6,9 +6,7 @@ uniform float flickering_speed:hint_range(0.0, 50.0, 1.);
 uniform float minimal_flickering_alpha:hint_range(0.0, 0.9, 0.1);
 
 void fragment() {
-	float pixel_size_x = 1.0/float(textureSize(TEXTURE,0).x);
-	float pixel_size_y = 1.0/float(textureSize(TEXTURE,0).y);
-	vec2 pixel_size = vec2(pixel_size_x, pixel_size_y);
+	vec2 pixel_size = TEXTURE_PIXEL_SIZE;
 	if (abs(texture(TEXTURE, UV).a) < 0.00000001)
 	{
 		for(int x = -width; x <= width; x++)
@@ -16,7 +14,7 @@ void fragment() {
 			for(int y = -width; y <= width; y++)
 			{
 				vec2 pixel_offset = vec2(float(x),float(y));
-				if( texture(TEXTURE, UV+(pixel_offset*pixel_size)).a > 0.)
+				if( texture(TEXTURE, UV+(pixel_offset*pixel_size)).a > 0.00000001)
 				{
 					vec4 resulting_color = outline_color;
 					float alpha_norm = (sin(TIME*flickering_speed) +1.2) *0.5;

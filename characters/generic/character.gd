@@ -203,7 +203,7 @@ func damage(amount: int, ignore_defense: bool = false)->void:
 	damaged.emit()
 	stats_changed.emit()
 	if cur_hp <= 0:
-		anim_player.play("defeat")
+		anim_player.play("Character/defeat")
 
 func end_turn()->void:
 	while state_machine.current_state.state_id != "IDLE":

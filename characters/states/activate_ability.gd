@@ -22,7 +22,7 @@ func enter_state(data: Array)->void:
 	state_machine.user.cur_ap -= ability.ap_cost
 	state_machine.user.cur_mp -= ability.mp_cost
 	state_machine.user.stats_changed.emit()
-	state_machine.user.anim_player.play("melee")
+	state_machine.user.anim_player.play("Character/melee")
 	await state_machine.user.anim_activate_ability
 	ability.call_deferred("activate", destination)
 	await state_machine.user.anim_player.animation_finished

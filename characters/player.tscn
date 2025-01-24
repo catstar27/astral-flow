@@ -1,8 +1,9 @@
-[gd_scene load_steps=16 format=3 uid="uid://dgmulq68rm1md"]
+[gd_scene load_steps=14 format=3 uid="uid://dgmulq68rm1md"]
 
 [ext_resource type="Script" path="res://characters/player.gd" id="1_so47p"]
 [ext_resource type="Material" uid="uid://gcx5n0wnotu5" path="res://materials/outline_material.tres" id="2_aa0te"]
 [ext_resource type="Texture2D" uid="uid://ccviqgc6qduy" path="res://textures/character/kalin_spritesheet.png" id="3_rhuoj"]
+[ext_resource type="AnimationLibrary" uid="uid://d2follnewo23r" path="res://animations/Character.res" id="4_b3lbu"]
 [ext_resource type="PackedScene" uid="uid://b7psjacfk2o1y" path="res://misc/gameplay_managers/status_manager.tscn" id="6_5iydw"]
 [ext_resource type="PackedScene" uid="uid://dj1dbu04os5rj" path="res://misc/state_machine.tscn" id="6_g6tfj"]
 [ext_resource type="PackedScene" uid="uid://co558pdmpfij5" path="res://characters/states/move.tscn" id="7_uo70b"]
@@ -61,121 +62,9 @@ tracks/3/keys = {
 "values": [0]
 }
 
-[sub_resource type="Animation" id="Animation_hxrog"]
-resource_name = "defeat"
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath(".:scale")
-tracks/0/interp = 2
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.233333, 0.5, 1),
-"transitions": PackedFloat32Array(1, 1, 1, 1),
-"update": 0,
-"values": [Vector2(1, 1), Vector2(0.75, 0.75), Vector2(1, 1), Vector2(1e-05, 1e-05)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath(".:rotation")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.233333, 0.5, 0.733333, 1),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
-"update": 0,
-"values": [0.0, 1.0472, 0.0, -1.0472, 0.0]
-}
-tracks/2/type = "method"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath(".")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(1),
-"transitions": PackedFloat32Array(1),
-"values": [{
-"args": [],
-"method": &"on_defeated"
-}]
-}
-
-[sub_resource type="Animation" id="Animation_kxect"]
-resource_name = "melee"
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite:position")
-tracks/0/interp = 2
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.233333, 0.5, 0.733333, 1),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
-"update": 0,
-"values": [Vector2(0, 0), Vector2(-8, 8), Vector2(8, 8), Vector2(0, -8), Vector2(0, 0)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("Sprite:rotation")
-tracks/1/interp = 2
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.233333, 0.5, 0.733333, 1),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
-"update": 0,
-"values": [0.0, -0.785398, 0.785398, 0.0, 0.0]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("Sprite:scale")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0, 0.233333, 0.5, 0.733333, 1),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
-"update": 0,
-"values": [Vector2(1, 1), Vector2(1, 1), Vector2(1, 1), Vector2(1, 1), Vector2(1, 1)]
-}
-tracks/3/type = "method"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath(".")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/keys = {
-"times": PackedFloat32Array(0.733333),
-"transitions": PackedFloat32Array(1),
-"values": [{
-"args": [],
-"method": &"anim_activate"
-}]
-}
-
-[sub_resource type="Animation" id="Animation_g2rxf"]
-resource_name = "walk"
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite:frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.233333, 0.5, 0.733333, 1),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
-"update": 1,
-"values": [0, 1, 2, 3, 0]
-}
-
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_7ssjw"]
 _data = {
-"RESET": SubResource("Animation_vf0ry"),
-"defeat": SubResource("Animation_hxrog"),
-"melee": SubResource("Animation_kxect"),
-"walk": SubResource("Animation_g2rxf")
+"RESET": SubResource("Animation_vf0ry")
 }
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_g7ocv"]
@@ -199,12 +88,15 @@ display_name = "Player"
 unique_name_in_owner = true
 material = ExtResource("2_aa0te")
 texture = ExtResource("3_rhuoj")
+hframes = 4
+vframes = 3
 region_rect = Rect2(-2, -2, 36, 36)
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 unique_name_in_owner = true
 libraries = {
-"": SubResource("AnimationLibrary_7ssjw")
+"": SubResource("AnimationLibrary_7ssjw"),
+"Character": ExtResource("4_b3lbu")
 }
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
