@@ -1,5 +1,5 @@
 extends Node
 class_name QuestManager
 
-var quests: Dictionary = {}
+@export var quests: Dictionary = {}
 var current_quest_id: String

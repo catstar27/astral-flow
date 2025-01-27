@@ -1,6 +1,6 @@
-[gd_scene load_steps=2 format=3 uid="uid://cro6ucmqu51ln"]
+[gd_scene load_steps=2 format=3 uid="uid://81w41aon23of"]
 
-[ext_resource type="Script" path="res://misc/gameplay_managers/quest_manager.gd" id="1_meeh8"]
+[ext_resource type="Script" path="res://misc/gameplay_managers/quest_manager.gd" id="1_vc13q"]
 
 [node name="QuestManager" type="Node"]
-script = ExtResource("1_meeh8")
+script = ExtResource("1_vc13q")
