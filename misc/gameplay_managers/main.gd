@@ -12,6 +12,7 @@ var player_scene: PackedScene = preload("res://characters/player.tscn")
 var text_indicator_scene: PackedScene = preload("res://misc/hud/text_indicator.tscn")
 var hour: int = 0
 var minute: int = 0
+var prepped: bool = false
 
 func _ready() -> void:
 	get_window().min_size = Vector2(960, 540)
@@ -26,9 +27,12 @@ func _ready() -> void:
 	EventBus.subscribe("VIDEO_SETTINGS_CHANGED", self, "set_video_settings")
 	Dialogic.timeline_ended.connect(exit_dialogue)
 	Dialogic.signal_event.connect(check_dialogue_signal)
-	await get_tree().create_timer(.01).timeout
-	load_map("res://maps/test_map.tscn")
 	set_video_settings()
+	SaveLoad.delete_slot("save1")
+	if SaveLoad.is_slot_blank("save1"):
+		load_map("res://maps/test_map.tscn")
+	prepped = true
+	SaveLoad.load_ready()
 
 func _unhandled_input(event: InputEvent)->void:
 	if event.is_action_pressed("quicksave"):
@@ -58,6 +62,7 @@ func global_timer_timeout()->void:
 
 func unload_map()->void:
 	if map != null:
+		await SaveLoad.save_data(true)
 		if player != null:
 			map.remove_child(player)
 			add_child(player)
@@ -65,7 +70,7 @@ func unload_map()->void:
 		map = null
 
 func load_map(new_map: String)->void:
-	unload_map()
+	await unload_map()
 	await get_tree().create_timer(.01).timeout
 	var map_to_load: GameMap = load(new_map).instantiate()
 	map_to_load.position = position
@@ -77,8 +82,11 @@ func load_map(new_map: String)->void:
 		remove_child(player)
 	map_to_load.add_child(player)
 	player.position = map_to_load.map_to_local(map_to_load.player_start_pos)
-	selection_cursor.position = map_to_load.map_to_local(map_to_load.player_start_pos)
 	map_to_load.prep_map()
+	if map_to_load.has_save_data():
+		await SaveLoad.load_map()
+	await SaveLoad.save_data(true)
+	selection_cursor.position = player.position
 
 func pause()->void:
 	selection_cursor.reset_move_dir()

@@ -7,6 +7,7 @@ class_name GameMap
 @export var map_name: String
 @onready var astar: AStarGrid2D
 @onready var light_modulator: CanvasModulate = %LightingModulate
+var player: Player = null
 var spawned: Dictionary = {}
 var dead: Dictionary = {}
 var occupied_tiles: Array[Vector2i]
@@ -125,6 +126,8 @@ func prep_map()->void:
 			set_pos_occupied(child.position)
 			if !child.defeated.is_connected(character_defeated):
 				child.defeated.connect(character_defeated)
+			if child is Player:
+				player = child
 	_extra_setup()
 	EventBus.broadcast("SET_OST", ost)
 	for child in get_children():
@@ -138,6 +141,12 @@ func character_defeated(character: Character)->void:
 
 func unload()->void:
 	queue_free()
+
+func has_save_data()->bool:
+	var filepath: String = SaveLoad.save_file_folder+SaveLoad.slot+'/'
+	if FileAccess.open(filepath+map_name+".dat", FileAccess.READ) != null:
+		return true
+	return false
 
 func save_map(filepath: String)->void:
 	var file: FileAccess = FileAccess.open(filepath+map_name+".dat", FileAccess.WRITE)
@@ -163,6 +172,8 @@ func load_map(filepath: String)->void:
 	while target != null && target != "END_OF_SAVE_DATA":
 		target = SaveLoad.parse_name(target)
 		for node in get_children():
+			if node is Player:
+				player = node
 			if node.name == target:
 				if node.is_in_group("LevelSave"):
 					if !node.has_method("load_data"):
@@ -170,16 +181,19 @@ func load_map(filepath: String)->void:
 					await node.load_data(file)
 		target = file.get_var()
 	file.close()
+	player.position = map_to_local(player_start_pos)
+	prep_map()
 	map_loaded.emit()
 
 func save_data(file: FileAccess)->void:
 	file.store_var(dead)
 	file.store_var(spawned)
+	file.store_var(local_to_map(player.position))
 
 func load_data(file: FileAccess)->void:
-	set_pos_unoccupied(player_start_pos)
 	dead = file.get_var()
 	spawned = file.get_var()
+	player_start_pos = file.get_var()
 	for tile in occupied_tiles:
 		set_pos_unoccupied(tile)
 	for child in get_children():
@@ -187,5 +201,10 @@ func load_data(file: FileAccess)->void:
 			if child.name in dead:
 				child.queue_free()
 				remove_child(child)
-	for child in spawned:
-		add_child(load(spawned[child]).instantiate())
+	for spawn in spawned:
+		var to_spawn: bool = true
+		for child in get_children():
+			if spawn == child.name:
+				to_spawn = false
+		if to_spawn:
+			add_child(load(spawned[spawn]).instantiate())

@@ -13,6 +13,7 @@ var move_dir: Vector2 = Vector2i.ZERO
 var marker: Node2D = null
 var move_arrows: Array[Sprite2D] = []
 var deactivate_requests: int = 0
+var block_deselect: bool = false
 signal move_stopped
 
 func _ready() -> void:
@@ -147,9 +148,11 @@ func interact_on_pos(pos: Vector2i)->void:
 	elif hovering is Interactive || hovering is NPC:
 		var cur_hover = hovering
 		selected.emit_signal("move_order", pos)
+		block_deselect = true
 		while selected.state_machine.current_state.state_id != "IDLE":
 			await selected.state_machine.state_changed
 		selected.emit_signal("interact_order", cur_hover)
+		block_deselect = false
 
 func select_ability(ability: Ability)->void:
 	select(ability.user)
@@ -158,6 +161,8 @@ func select(node: Character)->void:
 	if node is Character && node.in_combat && !node.taking_turn:
 		return
 	if node != null && selected == node:
+		return
+	if block_deselect:
 		return
 	if selected != null:
 		deselect()
@@ -171,6 +176,8 @@ func select(node: Character)->void:
 	EventBus.broadcast("SELECTION_CHANGED",selected)
 
 func deselect(_node: Character = null)->void:
+	if block_deselect:
+		return
 	clear_move_arrows()
 	_delete_marker()
 	if selected == null:

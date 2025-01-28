@@ -30,7 +30,21 @@ func started_combat(_data: Array[Character])->void:
 func ended_combat()->void:
 	in_combat = false
 
-func save_data()->void:
+func delete_slot(removed: String)->void:
+	if !DirAccess.dir_exists_absolute(save_file_folder+removed):
+		return
+	saving = true
+	loading = true
+	for filename in DirAccess.get_files_at(save_file_folder+removed):
+		DirAccess.remove_absolute(save_file_folder+removed+"/"+filename)
+	DirAccess.remove_absolute(save_file_folder+removed)
+	saving = false
+	loading = false
+
+func is_slot_blank(check_slot: String)->bool:
+	return !FileAccess.file_exists(save_file_folder+check_slot+"/Global.dat")
+
+func save_data(quiet_save: bool = false)->void:
 	if saving:
 		return
 	if in_combat:
@@ -57,7 +71,8 @@ func save_data()->void:
 		file.store_var(Dialogic.VAR.get_variable(variable))
 	file.store_var("END_OF_SAVE_DATA")
 	file.close()
-	EventBus.broadcast("PRINT_LOG", "Saved!")
+	if !quiet_save:
+		EventBus.broadcast("PRINT_LOG", "Saved!")
 	saving = false
 
 func load_data()->void:
@@ -74,12 +89,13 @@ func load_data()->void:
 	var cur_map: String = file.get_var().split('=', true, 1)[1]
 	EventBus.broadcast("DELOAD", "NULLDATA")
 	await get_tree().create_timer(.01).timeout
-	get_tree().root.add_child(main_scene.instantiate())
-	await load_ready_now
-	if NavMaster._map.scene_file_path != cur_map:
-		EventBus.broadcast("LOAD_MAP", cur_map)
+	var main = main_scene.instantiate()
+	get_tree().root.add_child(main)
+	while !main.prepped:
 		await load_ready_now
-	await NavMaster._map.load_map(save_file_folder+slot+'/')
+	EventBus.broadcast("LOAD_MAP", cur_map)
+	await load_ready_now
+	await load_map()
 	var target: String = file.get_var()
 	while target != null and target != "DIALOGIC_VARS":
 		target = parse_name(target)
@@ -96,7 +112,10 @@ func load_data()->void:
 	EventBus.broadcast("PRINT_LOG", "Loaded!")
 	loading = false
 
-func load_ready(_map: GameMap)->void:
+func load_map()->void:
+	await NavMaster._map.load_map(save_file_folder+slot+'/')
+
+func load_ready(_map: GameMap = null)->void:
 	load_ready_now.emit()
 
 func parse_name(line: String)->String:
