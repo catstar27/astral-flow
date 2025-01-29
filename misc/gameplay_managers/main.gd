@@ -28,8 +28,9 @@ func _ready() -> void:
 	Dialogic.timeline_ended.connect(exit_dialogue)
 	Dialogic.signal_event.connect(check_dialogue_signal)
 	set_video_settings()
-	SaveLoad.delete_slot("save1")
-	if SaveLoad.is_slot_blank("save1"):
+	if !SaveLoad.is_slot_blank("save1"):
+		SaveLoad.load_data()
+	else:
 		load_map("res://maps/test_map.tscn")
 	prepped = true
 	SaveLoad.load_ready()

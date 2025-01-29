@@ -55,3 +55,7 @@ func settings_pressed()->void:
 
 func quit_pressed()->void:
 	get_tree().quit()
+
+func reset_pressed() -> void:
+	SaveLoad.delete_slot("save1")
+	SaveLoad.reset_game()

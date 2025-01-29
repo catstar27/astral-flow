@@ -87,12 +87,7 @@ func load_data()->void:
 	loading = true
 	var file: FileAccess = FileAccess.open(save_file_folder+slot+"/Global.dat", FileAccess.READ)
 	var cur_map: String = file.get_var().split('=', true, 1)[1]
-	EventBus.broadcast("DELOAD", "NULLDATA")
-	await get_tree().create_timer(.01).timeout
-	var main = main_scene.instantiate()
-	get_tree().root.add_child(main)
-	while !main.prepped:
-		await load_ready_now
+	await reset_game()
 	EventBus.broadcast("LOAD_MAP", cur_map)
 	await load_ready_now
 	await load_map()
@@ -111,6 +106,14 @@ func load_data()->void:
 	EventBus.broadcast("LOADED", "NULLDATA")
 	EventBus.broadcast("PRINT_LOG", "Loaded!")
 	loading = false
+
+func reset_game()->void:
+	EventBus.broadcast("DELOAD", "NULLDATA")
+	await get_tree().create_timer(.01).timeout
+	var main = main_scene.instantiate()
+	get_tree().root.add_child(main)
+	while !main.prepped:
+		await load_ready_now
 
 func load_map()->void:
 	await NavMaster._map.load_map(save_file_folder+slot+'/')
