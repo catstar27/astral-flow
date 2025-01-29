@@ -5,6 +5,7 @@ enum ai_types {melee_aggressive, melee_safe}
 @onready var combat_trigger: Area2D = %CombatTrigger
 @export var ai_type: ai_types
 @export var defeat_signal: String
+var watching: Dictionary = {}
 var abilities: Array[Ability] = []
 var target: Character = null
 
@@ -12,10 +13,31 @@ func _ready() -> void:
 	_setup()
 	abilities = get_abilities()
 
+func check_ray(character: Character)->void:
+	watching[character].target_position = character.position-position
+	if watching[character].get_collider() == character:
+		try_combat(character)
+
 func _combat_trigger_entered(body: Node2D) -> void:
-	if body is Player && !in_combat:
-		target = body
-		var participants: Array[Character] = [body, self]
+	if body is Character && body != self:
+		var ray: RayCast2D = RayCast2D.new()
+		add_child(ray)
+		ray.target_position = body.position
+		watching[body] = ray
+		body.pos_changed.connect(check_ray)
+		check_ray(body)
+
+func _combat_trigger_exited(body: Node2D) -> void:
+	if body is Character && body != self:
+		body.pos_changed.disconnect(check_ray)
+		remove_child(watching[body])
+		watching[body].queue_free()
+		watching.erase(body)
+
+func try_combat(character: Character)->void:
+	if character is Player && !in_combat:
+		target = character
+		var participants: Array[Character] = [character, self]
 		EventBus.broadcast("START_COMBAT", participants)
 
 func take_turn()->void:

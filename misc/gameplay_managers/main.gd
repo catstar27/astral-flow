@@ -15,6 +15,8 @@ var minute: int = 0
 var prepped: bool = false
 
 func _ready() -> void:
+	if get_tree().paused:
+		unpause()
 	get_window().min_size = Vector2(960, 540)
 	EventBus.subscribe("ENTER_DIALOGUE", self, "enter_dialogue")
 	EventBus.subscribe("COMBAT_STARTED", global_timer, "stop")
@@ -31,7 +33,7 @@ func _ready() -> void:
 	if !SaveLoad.is_slot_blank("save1"):
 		SaveLoad.load_data()
 	else:
-		load_map("res://maps/test_map.tscn")
+		await load_map("res://maps/test_map.tscn")
 	prepped = true
 	SaveLoad.load_ready()
 

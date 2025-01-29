@@ -1,6 +1,7 @@
 extends CharacterBody2D
 class_name Character
 
+#region Stats and Exports
 @export var star_stats: Dictionary = {
 	"intelligence": 10,
 	"agility": 10,
@@ -34,20 +35,22 @@ var stat_mods: Dictionary = {
 @export var ability_scenes: Array[String] = []
 @export var display_name: String = "Name Here"
 @export var text_indicator_shift: Vector2 = Vector2.UP*32
-@onready var cur_ap: int
-@onready var cur_mp: int
-@onready var cur_hp: int
+#endregion
 @onready var sprite: Sprite2D = %Sprite
 @onready var anim_player: AnimationPlayer = %AnimationPlayer
 @onready var state_machine: StateMachine = %StateMachine
 @onready var status_manager: StatusManager = %StatusManager
-@onready var target_position: Vector2 = position
 @onready var range_indicator_scene: PackedScene = preload("res://misc/selection_cursor/range_indicator.tscn")
 var sequence: int
 var in_combat: bool = false
 var taking_turn: bool = false
 var range_indicators: Array[Sprite2D] = []
 var selected_ability: Ability = null
+var cur_ap: int
+var cur_mp: int
+var cur_hp: int
+var target_position: Vector2 = position
+#region Signals
 @warning_ignore("unused_signal") signal move_order(pos: Vector2)
 @warning_ignore("unused_signal") signal stop_move_order
 @warning_ignore("unused_signal") signal interact_order(object: Node2D)
@@ -62,6 +65,7 @@ signal damaged
 signal combat_entered
 signal combat_exited
 signal ability_deselected
+#endregion
 
 func _setup()->void:
 	EventBus.subscribe("GLOBAL_TIMER_TIMEOUT", self, "refresh")
@@ -229,12 +233,22 @@ func process_status_action(action: Callable, args: Array)->void:
 	if position != prev_pos:
 		pos_changed.emit(self)
 
+func has_line_of_sight(pos: Vector2)->bool:
+	var ray: RayCast2D = RayCast2D.new()
+	ray.target_position = pos
+	if ray.is_colliding():
+		print(ray.get_collider())
+		if ray.get_collider().position != pos:
+			return false
+	return true
+
 func on_damaged()->void:
 	return
 
 func activate()->void:
 	return
 
+#region Saving and Loading
 func save_data(file: FileAccess)->void:
 	stop_move_order.emit()
 	while state_machine.current_state.state_id != "IDLE":
@@ -257,3 +271,4 @@ func load_data(file: FileAccess)->void:
 	cur_ap = file.get_var()
 	cur_mp = file.get_var()
 	load_abilities()
+#endregion
