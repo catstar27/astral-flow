@@ -35,6 +35,9 @@ var stat_mods: Dictionary = {
 @export var ability_scenes: Array[String] = []
 @export var display_name: String = "Name Here"
 @export var text_indicator_shift: Vector2 = Vector2.UP*32
+@export_group("Schedule")
+@export var use_timed_schedule: bool
+@export var schedule: Array[NPCTask]
 #endregion
 @onready var sprite: Sprite2D = %Sprite
 @onready var anim_player: AnimationPlayer = %AnimationPlayer
@@ -50,6 +53,7 @@ var cur_ap: int
 var cur_mp: int
 var cur_hp: int
 var target_position: Vector2 = position
+var schedule_index: int = 0
 #region Signals
 @warning_ignore("unused_signal") signal move_order(pos: Vector2)
 @warning_ignore("unused_signal") signal stop_move_order
@@ -83,12 +87,31 @@ func _setup()->void:
 	cur_mp = base_stats.max_mp+stat_mods.max_mp
 	set_outline_color()
 	EventBus.subscribe("GAMEPLAY_SETTINGS_CHANGED", self, "set_outline_color")
+	init_schedule()
+	process_schedule()
+
+func process_schedule()->void:
+	if self is Player || in_combat:
+		return
+	if !use_timed_schedule:
+		schedule[schedule_index].task_completed.connect(task_done)
+		schedule[schedule_index].call_deferred("execute_task")
+
+func task_done()->void:
+	schedule[schedule_index].task_completed.disconnect(task_done)
+	schedule_index = (schedule_index+1)%schedule.size()
+	process_schedule()
+
+func init_schedule()->void:
+	for task in schedule:
+		task.user = self
 
 func enter_combat()->void:
 	in_combat = true
 
 func exit_combat()->void:
 	in_combat = false
+	process_schedule()
 
 func calc_base_stats()->void:
 	base_stats.max_hp = maxi(5+(star_stats.endurance-10)*2+(star_stats.strength-10), 5)

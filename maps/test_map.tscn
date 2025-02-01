@@ -1,4 +1,4 @@
-[gd_scene load_steps=30 format=4 uid="uid://qw4hbk40dyvm"]
+[gd_scene load_steps=34 format=4 uid="uid://qw4hbk40dyvm"]
 
 [ext_resource type="TileSet" uid="uid://dpajsxeb15k7l" path="res://maps/tilesets/dungeon.tres" id="1_bnvg4"]
 [ext_resource type="Script" path="res://maps/test_map.gd" id="2_ywrl6"]
@@ -29,6 +29,49 @@
 [ext_resource type="Resource" path="res://dialogue/tesla_coil_active.dtl" id="17_7sy0y"]
 [ext_resource type="Resource" path="res://dialogue/tesla_coil_inactive.dtl" id="17_er6pd"]
 [ext_resource type="Resource" path="res://dialogue/test_room_sign2.dtl" id="20_mlbwn"]
+[ext_resource type="Script" path="res://misc/helper_scripts/npc_task.gd" id="29_ka2xw"]
+
+[sub_resource type="Resource" id="Resource_65y3c"]
+script = ExtResource("29_ka2xw")
+type = 4
+wait_time = 0.0
+guard_location = Vector2(0, 0)
+interact_pos = Vector2(0, 0)
+wander_home = Vector2(0, 0)
+wander_max_tiles = Vector2i(0, 0)
+patrol_points = Array[Vector2]([Vector2(-224, -544), Vector2(-224, -288), Vector2(352, -288), Vector2(352, -544)])
+hour_start = 0
+hour_end = 0
+minute_start = 0
+minute_end = 0
+
+[sub_resource type="Resource" id="Resource_o6g22"]
+script = ExtResource("29_ka2xw")
+type = 1
+wait_time = 0.0
+guard_location = Vector2(32, -544)
+interact_pos = Vector2(0, 0)
+wander_home = Vector2(0, 0)
+wander_max_tiles = Vector2i(0, 0)
+patrol_points = Array[Vector2]([])
+hour_start = 0
+hour_end = 0
+minute_start = 0
+minute_end = 0
+
+[sub_resource type="Resource" id="Resource_nnvgt"]
+script = ExtResource("29_ka2xw")
+type = 0
+wait_time = 5.0
+guard_location = Vector2(0, 0)
+interact_pos = Vector2(0, 0)
+wander_home = Vector2(0, 0)
+wander_max_tiles = Vector2i(0, 0)
+patrol_points = Array[Vector2]([])
+hour_start = 0
+hour_end = 0
+minute_start = 0
+minute_end = 0
 
 [node name="TestMap" type="TileMapLayer"]
 process_mode = 1
@@ -47,6 +90,13 @@ color = Color(0, 0, 0, 1)
 position = Vector2(-608, 160)
 rotation = -1.5708
 dialogue = ExtResource("4_6q77p")
+texture = ExtResource("5_5jmsy")
+
+[node name="Sign2" parent="." instance=ExtResource("4_72sth")]
+position = Vector2(-288, -608)
+rotation = 1.57034
+scale = Vector2(1, 1)
+dialogue = ExtResource("20_mlbwn")
 texture = ExtResource("5_5jmsy")
 
 [node name="Sun" parent="." instance=ExtResource("4_72sth")]
@@ -146,12 +196,7 @@ texture = ExtResource("15_ghxts")
 
 [node name="Enemy" parent="." instance=ExtResource("13_augbp")]
 position = Vector2(32, -544)
-
-[node name="Sign2" parent="." instance=ExtResource("4_72sth")]
-position = Vector2(-288, -608)
-rotation = 1.57034
-dialogue = ExtResource("20_mlbwn")
-texture = ExtResource("5_5jmsy")
+schedule = Array[ExtResource("29_ka2xw")]([SubResource("Resource_65y3c"), SubResource("Resource_o6g22"), SubResource("Resource_nnvgt")])
 
 [connection signal="test_room_combat_gate" from="." to="CombatGate" method="advance_unlock"]
 [connection signal="unlocked" from="TeslaCoil" to="TeslaGate" method="advance_unlock"]
