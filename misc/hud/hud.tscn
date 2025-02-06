@@ -85,6 +85,7 @@ offset_left = -20.0
 offset_right = 20.0
 offset_bottom = 23.0
 grow_horizontal = 2
+theme_override_font_sizes/font_size = 16
 text = "00:00"
 
 [node name="LogPanel" type="PanelContainer" parent="."]
@@ -107,6 +108,7 @@ grow_vertical = 0
 unique_name_in_owner = true
 use_parent_material = true
 layout_mode = 2
+theme_override_font_sizes/normal_font_size = 16
 scroll_following = true
 
 [node name="LogTimer" type="Timer" parent="."]

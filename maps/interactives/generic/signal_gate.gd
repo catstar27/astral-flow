@@ -29,7 +29,7 @@ func _interacted(_character: Character)->void:
 func open()->void:
 	cur_state = state.open
 	sprite.texture = texture
-	collision.disabled = true
+	collision.set_deferred("disabled", true)
 	EventBus.broadcast("PLAY_SOUND", [open_sound, "positional", global_position])
 	EventBus.broadcast("TILE_UNOCCUPIED", position)
 	interacted.emit()

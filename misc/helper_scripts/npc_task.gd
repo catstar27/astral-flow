@@ -33,6 +33,8 @@ func check_time(time: Array[int])->bool:
 	return false
 
 func execute_task()->void:
+	if user.in_combat:
+		return
 	executing = true
 	if type == type_choice.wait:
 		await wait()
@@ -52,6 +54,8 @@ func wait()->void:
 
 func guard()->void:
 	while user.position != guard_location:
+		if user.in_combat:
+			return
 		user.move_order.emit(guard_location)
 		while user.state_machine.current_state.state_id != "IDLE":
 			await user.state_machine.state_changed
@@ -59,6 +63,8 @@ func guard()->void:
 func interact()->void:
 	var can_interact: bool = (abs(user.position - interact_pos).x+abs(user.position - interact_pos).y)/NavMaster.tile_size <= 1
 	while !can_interact:
+		if user.in_combat:
+			return
 		user.move_order.emit(interact_pos)
 		while user.state_machine.current_state.state_id != "IDLE":
 			await user.state_machine.state_changed
@@ -81,7 +87,11 @@ func wander()->void:
 
 func patrol()->void:
 	for pos in patrol_points:
+		if user.in_combat:
+			return
 		while user.position != pos:
+			if user.in_combat:
+				return
 			user.move_order.emit(pos)
 			while user.state_machine.current_state.state_id != "IDLE":
 				await user.state_machine.state_changed

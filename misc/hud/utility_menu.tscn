@@ -20,9 +20,10 @@ script = ExtResource("1_db426")
 unique_name_in_owner = true
 use_parent_material = true
 layout_mode = 0
-offset_left = -65.0
-offset_right = -21.0
-offset_bottom = 44.0
+offset_left = -80.0
+offset_top = 1.0
+offset_right = -36.0
+offset_bottom = 48.0
 size_flags_horizontal = 8
 size_flags_vertical = 0
 theme = ExtResource("3_v0p8v")
@@ -36,8 +37,8 @@ visible = false
 use_parent_material = true
 layout_mode = 0
 offset_top = 45.0
-offset_right = 72.0
-offset_bottom = 197.0
+offset_right = 84.0
+offset_bottom = 162.0
 theme_override_constants/separation = -1
 
 [node name="Party" type="Button" parent="Info"]
@@ -48,6 +49,7 @@ focus_neighbor_top = NodePath("../Inventory")
 focus_neighbor_bottom = NodePath("../Journal")
 focus_next = NodePath("../Journal")
 focus_previous = NodePath("../Inventory")
+theme_override_font_sizes/font_size = 16
 text = "Party"
 
 [node name="Journal" type="Button" parent="Info"]
@@ -57,6 +59,7 @@ focus_neighbor_top = NodePath("../Party")
 focus_neighbor_bottom = NodePath("../Map")
 focus_next = NodePath("../Map")
 focus_previous = NodePath("../Party")
+theme_override_font_sizes/font_size = 16
 text = "Journal"
 
 [node name="Map" type="Button" parent="Info"]
@@ -66,6 +69,7 @@ focus_neighbor_top = NodePath("../Journal")
 focus_neighbor_bottom = NodePath("../Inventory")
 focus_next = NodePath("../Inventory")
 focus_previous = NodePath("../Journal")
+theme_override_font_sizes/font_size = 16
 text = "Map"
 
 [node name="Inventory" type="Button" parent="Info"]
@@ -75,6 +79,7 @@ focus_neighbor_top = NodePath("../Map")
 focus_neighbor_bottom = NodePath("../Party")
 focus_next = NodePath("../Party")
 focus_previous = NodePath("../Map")
+theme_override_font_sizes/font_size = 16
 text = "Inventory"
 
 [connection signal="pressed" from="MenuButton" to="." method="toggle_menu"]

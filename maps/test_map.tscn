@@ -95,7 +95,6 @@ texture = ExtResource("5_5jmsy")
 [node name="Sign2" parent="." instance=ExtResource("4_72sth")]
 position = Vector2(-288, -608)
 rotation = 1.57034
-scale = Vector2(1, 1)
 dialogue = ExtResource("20_mlbwn")
 texture = ExtResource("5_5jmsy")
 

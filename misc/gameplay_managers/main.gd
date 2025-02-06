@@ -79,6 +79,7 @@ func load_map(new_map: String)->void:
 	map_to_load.position = position
 	add_child(map_to_load)
 	map = map_to_load
+	map.process_mode = Node.PROCESS_MODE_PAUSABLE
 	if player == null:
 		player = player_scene.instantiate()
 	else:

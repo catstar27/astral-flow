@@ -44,6 +44,8 @@ func move(cur_target: Vector2)->bool:
 			return false
 		var prev_pos: Vector2 = state_machine.user.position
 		var direction: Vector2 = pos-prev_pos
+		if direction.length() > NavMaster.tile_size:
+			continue
 		EventBus.broadcast("TILE_OCCUPIED", pos)
 		if direction == Vector2.UP*64:
 			if use_alt:

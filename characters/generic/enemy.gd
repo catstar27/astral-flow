@@ -12,6 +12,11 @@ var target: Character = null
 func _ready() -> void:
 	_setup()
 	abilities = get_abilities()
+	pos_changed.connect(check_rays)
+
+func check_rays(_character)->void:
+	for character in watching:
+		check_ray(character)
 
 func check_ray(character: Character)->void:
 	watching[character].target_position = character.position-position

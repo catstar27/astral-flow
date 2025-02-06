@@ -58,7 +58,7 @@ func close_menu()->void:
 	menu_button.text = "→"
 	if activate_selection:
 		EventBus.broadcast("ACTIVATE_SELECTION", "NULLDATA")
-	await create_tween().tween_property(info_container, "position", Vector2(-90, info_container.position.y), .5).finished
+	await create_tween().tween_property(info_container, "position", Vector2(-82, info_container.position.y), .5).finished
 	modulate = Color(1,1,1,1)
 	info_container.hide()
 	changing_state = false

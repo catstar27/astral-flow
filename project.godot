@@ -11,11 +11,13 @@ config_version=5
 [application]
 
 config/name="Metroidvania RPG"
+config/version="0.0.1"
 run/main_scene="res://misc/gameplay_managers/main.tscn"
 config/features=PackedStringArray("4.3", "Forward Plus")
-boot_splash/image="res://textures/character/test_npc.png"
+boot_splash/bg_color=Color(0.164456, 0.13555, 0.0895567, 1)
+boot_splash/image="res://textures/character/kalin_32x.png"
 boot_splash/use_filter=false
-config/icon="res://textures/interactive/icon.svg"
+config/icon="res://textures/character/kalin_32x.png"
 
 [autoload]
 
@@ -101,6 +103,11 @@ enabled=PackedStringArray("res://addons/dialogic/plugin.cfg")
 
 Persist="This node has data to save"
 LevelSave="This Node is to be Saved as Part of a Level"
+
+[gui]
+
+theme/custom="res://textures/hud/custom_theme.tres"
+theme/custom_font="res://NishikiTeki.ttf"
 
 [input]
 

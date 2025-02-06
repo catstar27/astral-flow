@@ -91,7 +91,7 @@ func _setup()->void:
 	process_schedule()
 
 func process_schedule()->void:
-	if self is Player || in_combat:
+	if schedule.size() == 0 || in_combat:
 		return
 	if !use_timed_schedule:
 		schedule[schedule_index].task_completed.connect(task_done)

@@ -13,6 +13,7 @@ func _ready() -> void:
 
 func update_menu_button()->void:
 	menu_button.position.x = -menu_button.size.x
+	print(menu_button.size.x)
 
 func toggle_menu()->void:
 	if state != states.closed:
@@ -28,7 +29,7 @@ func open_menu()->void:
 	menu_button.text = "→"
 	modulate = Color(1,1,1,1)
 	info_container.show()
-	await create_tween().tween_property(info_container, "position", Vector2(-87, info_container.position.y), .5).finished
+	await create_tween().tween_property(info_container, "position", Vector2(-84, info_container.position.y), .5).finished
 	EventBus.broadcast("DEACTIVATE_SELECTION", "NULLDATA")
 	top_button.grab_focus()
 	changing_state = false
