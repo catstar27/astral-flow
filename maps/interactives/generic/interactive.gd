@@ -50,7 +50,7 @@ func _calc_occupied()->void:
 			occupied_positions.append(position+Vector2(x_scaled, y_scaled))
 
 func _interacted(_character: Character)->void:
-	if interact_sfx != null:
+	if interact_sfx != null && !SaveLoad.loading && !NavMaster.map_loading:
 		EventBus.broadcast("PLAY_SOUND", [interact_sfx, "positional", global_position])
 	if dialogue_timeline != null:
 		EventBus.broadcast("ENTER_DIALOGUE", [dialogue_timeline, pause_music])

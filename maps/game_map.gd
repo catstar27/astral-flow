@@ -7,6 +7,7 @@ class_name GameMap
 @export var map_name: String
 @onready var astar: AStarGrid2D
 @onready var light_modulator: CanvasModulate = %LightingModulate
+var loading: bool = false
 var player: Player = null
 var spawned: Dictionary = {}
 var dead: Dictionary = {}
@@ -20,7 +21,6 @@ func _ready()->void:
 	EventBus.subscribe("TILE_UNOCCUPIED", self, "set_pos_unoccupied")
 	EventBus.subscribe("COMBAT_STARTED", self, "start_combat")
 	EventBus.subscribe("COMBAT_ENDED", self, "end_combat")
-	EventBus.subscribe("LOADED", self, "prep_map")
 
 func start_combat()->void:
 	EventBus.broadcast("SET_OST", battle_theme)
@@ -32,6 +32,9 @@ func get_obj_at_pos(pos: Vector2)->Node2D:
 	for child in get_children():
 		if child is Interactive || child is Character:
 			if local_to_map(child.position) == local_to_map(pos):
+				if child is Interactive:
+					if !child.collision_active:
+						continue
 				return child
 	return null
 
@@ -129,7 +132,6 @@ func prep_map()->void:
 			if child is Player:
 				player = child
 	_extra_setup()
-	EventBus.broadcast("SET_OST", ost)
 	for child in get_children():
 		if child is Character:
 			child.activate()
@@ -164,6 +166,8 @@ func save_map(filepath: String)->void:
 	map_saved.emit()
 
 func load_map(filepath: String)->void:
+	loading = true
+	NavMaster.map_loading = true
 	var file: FileAccess = FileAccess.open(filepath+map_name+".dat", FileAccess.READ)
 	var target: String = file.get_var()
 	load_data(file)
@@ -182,8 +186,9 @@ func load_map(filepath: String)->void:
 		target = file.get_var()
 	file.close()
 	player.position = map_to_local(player_start_pos)
-	prep_map()
 	map_loaded.emit()
+	NavMaster.map_loading = false
+	loading = false
 
 func save_data(file: FileAccess)->void:
 	file.store_var(dead)

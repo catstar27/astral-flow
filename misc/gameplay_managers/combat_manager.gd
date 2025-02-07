@@ -29,7 +29,6 @@ func char_defeated(character: Character)->void:
 		continue_round.emit(false)
 
 func start_combat(participants: Array[Character])->void:
-	print(participants)
 	participants.append_array(participants[0].allies)
 	participants.append_array(participants[1].allies)
 	EventBus.broadcast("COMBAT_STARTED", "NULLDATA")

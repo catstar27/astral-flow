@@ -12,9 +12,12 @@ var target: Character = null
 func _ready() -> void:
 	_setup()
 	abilities = get_abilities()
-	pos_changed.connect(check_rays)
+	#pos_changed.connect(check_rays)
 
-func check_rays(_character)->void:
+func _process(_delta: float) -> void:
+	check_rays()
+
+func check_rays(_character: Character = null)->void:
 	for character in watching:
 		check_ray(character)
 

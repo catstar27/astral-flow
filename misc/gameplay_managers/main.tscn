@@ -36,6 +36,7 @@ scale = Vector2(100000, 100000)
 texture = ExtResource("3_khi6w")
 
 [node name="SoundManager" parent="." instance=ExtResource("5_icnsw")]
+unique_name_in_owner = true
 
 [node name="CombatManager" parent="." instance=ExtResource("5_xm8nu")]
 

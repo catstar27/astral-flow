@@ -1,30 +1,31 @@
 extends Node
 
-var _map: GameMap = null
+var map: GameMap = null
+var map_loading: bool = false
 var tile_size: int = 64
 
 func _ready() -> void:
 	EventBus.subscribe("MAP_LOADED", self, "_set_map")
 
-func _set_map(map: GameMap)->void:
-	_map = map
+func _set_map(new_map: GameMap)->void:
+	map = new_map
 
 func request_nav_path(start: Vector2, end: Vector2, allow_closest: bool = true)->Array[Vector2]:
-	if _map == null || !is_instance_valid(_map):
+	if map == null || !is_instance_valid(map):
 		return []
-	return _map.get_nav_path(start, end, allow_closest)
+	return map.get_nav_path(start, end, allow_closest)
 
 func is_pos_occupied(pos: Vector2)->bool:
-	if _map == null || !is_instance_valid(_map):
+	if map == null || !is_instance_valid(map):
 		return false
-	return _map.astar.is_point_solid(_map.local_to_map(pos))
+	return map.astar.is_point_solid(map.local_to_map(pos))
 
 func get_obj_at_pos(pos: Vector2)->Node2D:
-	if _map == null || !is_instance_valid(_map):
+	if map == null || !is_instance_valid(map):
 		return null
-	return _map.get_obj_at_pos(pos)
+	return map.get_obj_at_pos(pos)
 
 func is_in_bounds(pos: Vector2)->bool:
-	if _map == null || !is_instance_valid(_map):
+	if map == null || !is_instance_valid(map):
 		return false
-	return _map.is_in_bounds(pos)
+	return map.is_in_bounds(pos)

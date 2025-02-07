@@ -3,6 +3,7 @@ extends Node2D
 @onready var global_timer: Timer = %GlobalTimer
 @onready var selection_cursor: SelectionCursor = %SelectionCursor
 @onready var foreground: Sprite2D = %Foreground
+@onready var sound_manager: SoundManager = %SoundManager
 var in_dialogue: bool = false
 var player: Player = null
 var map: GameMap = null
@@ -30,12 +31,10 @@ func _ready() -> void:
 	Dialogic.timeline_ended.connect(exit_dialogue)
 	Dialogic.signal_event.connect(check_dialogue_signal)
 	set_video_settings()
-	if !SaveLoad.is_slot_blank("save1"):
-		SaveLoad.load_data()
-	else:
-		await load_map("res://maps/test_map.tscn")
+	if SaveLoad.is_slot_blank("save1"):
+		SaveLoad.reset_save("save1")
+	SaveLoad.load_data()
 	prepped = true
-	SaveLoad.load_ready()
 
 func _unhandled_input(event: InputEvent)->void:
 	if event.is_action_pressed("quicksave"):
@@ -86,11 +85,16 @@ func load_map(new_map: String)->void:
 		remove_child(player)
 	map_to_load.add_child(player)
 	player.position = map_to_load.map_to_local(map_to_load.player_start_pos)
-	map_to_load.prep_map()
 	if map_to_load.has_save_data():
-		await SaveLoad.load_map()
+		map_to_load.prep_map()
+		await SaveLoad.load_map(map_to_load)
+	map_to_load.prep_map()
+	if selection_cursor.last_map_name != map.map_name:
+		selection_cursor.position = player.position
 	await SaveLoad.save_data(true)
-	selection_cursor.position = player.position
+	if sound_manager.ost.stream != map_to_load.ost:
+		EventBus.broadcast("SET_OST", map_to_load.ost)
+	EventBus.broadcast("MAP_ENTERED", map_to_load.map_name)
 
 func pause()->void:
 	selection_cursor.reset_move_dir()

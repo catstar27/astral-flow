@@ -6,7 +6,6 @@ var main_scene: PackedScene = preload("res://misc/gameplay_managers/main.tscn")
 var loading: bool = false
 var saving: bool = false
 var in_combat: bool = false
-signal load_ready_now
 
 class SaveData:
 	var data: Array
@@ -20,7 +19,6 @@ class SaveMarker:
 		return id
 
 func _ready() -> void:
-	EventBus.subscribe("MAP_LOADED", self, "load_ready")
 	EventBus.subscribe("START_COMBAT", self, "started_combat")
 	EventBus.subscribe("COMBAT_ENDED", self, "ended_combat")
 
@@ -30,14 +28,25 @@ func started_combat(_data: Array[Character])->void:
 func ended_combat()->void:
 	in_combat = false
 
-func delete_slot(removed: String)->void:
-	if !DirAccess.dir_exists_absolute(save_file_folder+removed):
+func reset_save(reset_slot: String)->void:
+	delete_slot(reset_slot)
+	saving = true
+	loading = true
+	if !DirAccess.dir_exists_absolute(save_file_folder):
+		DirAccess.make_dir_absolute(save_file_folder)
+	DirAccess.make_dir_absolute(save_file_folder+reset_slot)
+	DirAccess.copy_absolute("res://misc/autoload/DefaultGlobal.txt", save_file_folder+reset_slot+"/Global.dat")
+	saving = false
+	loading = false
+
+func delete_slot(remove_slot: String)->void:
+	if !DirAccess.dir_exists_absolute(save_file_folder+remove_slot):
 		return
 	saving = true
 	loading = true
-	for filename in DirAccess.get_files_at(save_file_folder+removed):
-		DirAccess.remove_absolute(save_file_folder+removed+"/"+filename)
-	DirAccess.remove_absolute(save_file_folder+removed)
+	for filename in DirAccess.get_files_at(save_file_folder+remove_slot):
+		DirAccess.remove_absolute(save_file_folder+remove_slot+"/"+filename)
+	DirAccess.remove_absolute(save_file_folder+remove_slot)
 	saving = false
 	loading = false
 
@@ -45,12 +54,12 @@ func is_slot_blank(check_slot: String)->bool:
 	return !FileAccess.file_exists(save_file_folder+check_slot+"/Global.dat")
 
 func save_data(quiet_save: bool = false)->void:
-	if saving:
+	if saving || loading:
 		return
 	if in_combat:
 		EventBus.broadcast("PRINT_LOG", "Cannot Save When in Danger!")
 		return
-	if NavMaster._map.map_name == "Global":
+	if NavMaster.map.map_name == "Global":
 		printerr("Map Name Collides with Global Saves")
 		return
 	saving = true
@@ -59,8 +68,8 @@ func save_data(quiet_save: bool = false)->void:
 	if !DirAccess.dir_exists_absolute(save_file_folder+slot):
 		DirAccess.make_dir_absolute(save_file_folder+slot)
 	var file: FileAccess = FileAccess.open(save_file_folder+slot+"/Global.dat", FileAccess.WRITE)
-	NavMaster._map.save_map(save_file_folder+slot+'/')
-	file.store_var("CURRENT_MAP="+NavMaster._map.scene_file_path)
+	NavMaster.map.save_map(save_file_folder+slot+'/')
+	file.store_var("CURRENT_MAP="+NavMaster.map.scene_file_path)
 	for node in get_tree().get_nodes_in_group("Persist"):
 		if !node.has_method("save_data"):
 			printerr("Persistent node"+node.name+"missing save data function")
@@ -85,12 +94,16 @@ func load_data()->void:
 	if loading:
 		return
 	loading = true
+	AudioServer.set_bus_mute(0, true)
 	var file: FileAccess = FileAccess.open(save_file_folder+slot+"/Global.dat", FileAccess.READ)
 	var cur_map: String = file.get_var().split('=', true, 1)[1]
-	await reset_game()
-	EventBus.broadcast("LOAD_MAP", cur_map)
-	await load_ready_now
-	await load_map()
+	EventBus.broadcast("DELOAD", "NULLDATA")
+	await get_tree().create_timer(.01).timeout
+	var main = main_scene.instantiate()
+	get_tree().root.add_child(main)
+	while !main.prepped:
+		await main.ready
+	await main.load_map(cur_map)
 	var target: String = file.get_var()
 	while target != null and target != "DIALOGIC_VARS":
 		target = parse_name(target)
@@ -105,21 +118,11 @@ func load_data()->void:
 	file.close()
 	EventBus.broadcast("LOADED", "NULLDATA")
 	EventBus.broadcast("PRINT_LOG", "Loaded!")
+	AudioServer.set_bus_mute(0, false)
 	loading = false
 
-func reset_game()->void:
-	EventBus.broadcast("DELOAD", "NULLDATA")
-	await get_tree().create_timer(.01).timeout
-	var main = main_scene.instantiate()
-	get_tree().root.add_child(main)
-	while !main.prepped:
-		await load_ready_now
-
-func load_map()->void:
-	await NavMaster._map.load_map(save_file_folder+slot+'/')
-
-func load_ready(_map: GameMap = null)->void:
-	load_ready_now.emit()
+func load_map(map: GameMap)->void:
+	await map.load_map(save_file_folder+slot+'/')
 
 func parse_name(line: String)->String:
 	return line.split("@SAVE_MARKER@")[1]

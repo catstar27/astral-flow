@@ -14,6 +14,7 @@ var marker: Node2D = null
 var move_arrows: Array[Sprite2D] = []
 var deactivate_requests: int = 0
 var block_deselect: bool = false
+var last_map_name: String = ""
 signal move_stopped
 
 func _ready() -> void:
@@ -23,6 +24,10 @@ func _ready() -> void:
 	EventBus.subscribe("COMBAT_STARTED", self, "deselect")
 	EventBus.subscribe("ABILITY_BUTTON_PRESSED", self, "select_ability")
 	EventBus.subscribe("GAMEPLAY_SETTINGS_CHANGED", self, "update_color")
+	EventBus.subscribe("LOAD_MAP", self, "set_map")
+
+func set_map(map_name: String)->void:
+	last_map_name = map_name
 
 func activate()->void:
 	reset_move_dir()
@@ -202,7 +207,9 @@ func save_data(file: FileAccess)->void:
 	while moving:
 		await move_stopped
 	file.store_var(position)
+	file.store_var(last_map_name)
 	deactivate_requests -= 1
 
 func load_data(file: FileAccess)->void:
 	position = file.get_var()
+	last_map_name = file.get_var()
