@@ -35,7 +35,13 @@ func reset_save(reset_slot: String)->void:
 	if !DirAccess.dir_exists_absolute(save_file_folder):
 		DirAccess.make_dir_absolute(save_file_folder)
 	DirAccess.make_dir_absolute(save_file_folder+reset_slot)
-	DirAccess.copy_absolute("res://misc/autoload/DefaultGlobal.txt", save_file_folder+reset_slot+"/Global.dat")
+	print(FileAccess.file_exists("res://misc/autoload/DefaultGlobal.dat"))
+	var default_file: FileAccess = FileAccess.open("res://misc/autoload/DefaultGlobal.dat", FileAccess.READ)
+	var new_save: FileAccess = FileAccess.open(save_file_folder+reset_slot+"/Global.dat", FileAccess.WRITE)
+	new_save.store_buffer(default_file.get_buffer(default_file.get_length()))
+	new_save.flush()
+	default_file.close()
+	new_save.close()
 	saving = false
 	loading = false
 
