@@ -126,15 +126,13 @@ func prep_map()->void:
 				for pos in child.occupied_positions:
 					set_pos_occupied(pos)
 		elif child is Character:
-			set_pos_occupied(child.position)
-			if !child.defeated.is_connected(character_defeated):
-				child.defeated.connect(character_defeated)
-			if child is Player:
-				player = child
+			if child.active:
+				set_pos_occupied(child.position)
+				if !child.defeated.is_connected(character_defeated):
+					child.defeated.connect(character_defeated)
+				if child is Player:
+					player = child
 	_extra_setup()
-	for child in get_children():
-		if child is Character:
-			child.activate()
 	EventBus.broadcast("MAP_LOADED", self)
 
 func character_defeated(character: Character)->void:

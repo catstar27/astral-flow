@@ -122,11 +122,13 @@ func exit_dialogue()->void:
 
 func create_text_indicator(info: Array)->void:
 	var ind: TextIndicator = text_indicator_scene.instantiate()
+	ind.hide()
 	ind.text = info[0]
 	ind.global_position = info[1]
 	if info.size() == 3:
 		ind.color = info[2]
 	add_child(ind)
+	ind.show()
 
 func check_dialogue_signal(data)->void:
 	if data == "crash_game":

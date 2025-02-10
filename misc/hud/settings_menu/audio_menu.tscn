@@ -9,19 +9,18 @@ offset_right = 380.0
 offset_bottom = 300.0
 theme = ExtResource("1_yrt7q")
 script = ExtResource("2_wj8r0")
-first_selection = NodePath("SettingsContainer/Buttons/MasterSlider")
+first_selection = NodePath("GridContainer/MasterSlider")
 
-[node name="SettingsContainer" type="HBoxContainer" parent="."]
+[node name="GridContainer" type="GridContainer" parent="."]
 layout_mode = 2
+columns = 2
 
-[node name="Buttons" type="VBoxContainer" parent="SettingsContainer"]
-custom_minimum_size = Vector2(32, 32)
-layout_mode = 2
-
-[node name="MasterSlider" type="HSlider" parent="SettingsContainer/Buttons"]
+[node name="MasterSlider" type="HSlider" parent="GridContainer"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(64, 32)
 layout_mode = 2
+size_flags_horizontal = 5
+size_flags_vertical = 4
 focus_neighbor_top = NodePath("../DialogueSlider")
 focus_neighbor_bottom = NodePath("../MusicSlider")
 focus_next = NodePath("../MusicSlider")
@@ -30,10 +29,21 @@ max_value = 1.0
 step = 0.01
 value = 0.5
 
-[node name="MusicSlider" type="HSlider" parent="SettingsContainer/Buttons"]
+[node name="MasterLabel" type="Label" parent="GridContainer"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 5
+text = "Master Volume"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MusicSlider" type="HSlider" parent="GridContainer"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(64, 32)
 layout_mode = 2
+size_flags_horizontal = 5
+size_flags_vertical = 4
 focus_neighbor_top = NodePath("../MasterSlider")
 focus_neighbor_bottom = NodePath("../SFXSlider")
 focus_next = NodePath("../SFXSlider")
@@ -42,10 +52,21 @@ max_value = 1.0
 step = 0.01
 value = 1.0
 
-[node name="SFXSlider" type="HSlider" parent="SettingsContainer/Buttons"]
+[node name="MusicLabel" type="Label" parent="GridContainer"]
+custom_minimum_size = Vector2(64, 32)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 5
+text = "Music Volume"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="SFXSlider" type="HSlider" parent="GridContainer"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(64, 32)
 layout_mode = 2
+size_flags_horizontal = 5
+size_flags_vertical = 4
 focus_neighbor_top = NodePath("../MusicSlider")
 focus_neighbor_bottom = NodePath("../DialogueSlider")
 focus_next = NodePath("../DialogueSlider")
@@ -54,10 +75,21 @@ max_value = 1.0
 step = 0.01
 value = 0.5
 
-[node name="DialogueSlider" type="HSlider" parent="SettingsContainer/Buttons"]
+[node name="SFXLabel" type="Label" parent="GridContainer"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 5
+text = "SFX Volume"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="DialogueSlider" type="HSlider" parent="GridContainer"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(64, 32)
 layout_mode = 2
+size_flags_horizontal = 5
+size_flags_vertical = 4
 focus_neighbor_top = NodePath("../SFXSlider")
 focus_neighbor_bottom = NodePath("../MasterSlider")
 focus_next = NodePath("../MasterSlider")
@@ -66,39 +98,16 @@ max_value = 1.0
 step = 0.01
 value = 1.0
 
-[node name="Labels" type="VBoxContainer" parent="SettingsContainer"]
-custom_minimum_size = Vector2(32, 32)
-layout_mode = 2
-
-[node name="MasterLabel" type="Label" parent="SettingsContainer/Labels"]
-custom_minimum_size = Vector2(32, 32)
-layout_mode = 2
-text = "Master Volume"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="MusicLabel" type="Label" parent="SettingsContainer/Labels"]
+[node name="DialogueLabel" type="Label" parent="GridContainer"]
 custom_minimum_size = Vector2(64, 32)
 layout_mode = 2
-text = "Music Volume"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="SFXLabel" type="Label" parent="SettingsContainer/Labels"]
-custom_minimum_size = Vector2(32, 32)
-layout_mode = 2
-text = "SFX Volume"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="DialogueLabel" type="Label" parent="SettingsContainer/Labels"]
-custom_minimum_size = Vector2(64, 32)
-layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 5
 text = "Dialogue Volume"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[connection signal="value_changed" from="SettingsContainer/Buttons/MasterSlider" to="." method="master_slider_value_changed"]
-[connection signal="value_changed" from="SettingsContainer/Buttons/MusicSlider" to="." method="music_slider_value_changed"]
-[connection signal="value_changed" from="SettingsContainer/Buttons/SFXSlider" to="." method="sfx_slider_value_changed"]
-[connection signal="value_changed" from="SettingsContainer/Buttons/DialogueSlider" to="." method="voice_slider_value_changed"]
+[connection signal="value_changed" from="GridContainer/MasterSlider" to="." method="master_slider_value_changed"]
+[connection signal="value_changed" from="GridContainer/MusicSlider" to="." method="music_slider_value_changed"]
+[connection signal="value_changed" from="GridContainer/SFXSlider" to="." method="sfx_slider_value_changed"]
+[connection signal="value_changed" from="GridContainer/DialogueSlider" to="." method="voice_slider_value_changed"]

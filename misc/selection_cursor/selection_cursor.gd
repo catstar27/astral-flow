@@ -5,6 +5,7 @@ class_name SelectionCursor
 @export var move_arrow_mat: CanvasItemMaterial
 @onready var sprite: Sprite2D = %Sprite
 @onready var selection_area: Area2D = %SelectionArea
+@onready var camera: Camera2D = %Camera
 var selection_marker_scene: PackedScene = preload("res://misc/selection_cursor/selection_marker.tscn")
 var selected: Character = null
 var hovering: Node2D = null

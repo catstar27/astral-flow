@@ -21,7 +21,7 @@ func _interacted(_character: Character)->void:
 	if cur_state == state.locked:
 		audio.play()
 		if dialogue_timeline != null:
-			EventBus.broadcast("ENTER_DIALOGUE", dialogue_timeline)
+			EventBus.broadcast("ENTER_DIALOGUE", [dialogue_timeline, false])
 		interacted.emit()
 	elif cur_state == state.unlocked:
 		open()
@@ -37,6 +37,7 @@ func open()->void:
 	collision_active = false
 
 func advance_unlock(signal_event: String)->void:
+	print(signal_event)
 	if !signal_event in signals_needed:
 		return
 	if !signal_index>=signals_needed.size():

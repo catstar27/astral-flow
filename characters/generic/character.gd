@@ -1,7 +1,7 @@
 extends CharacterBody2D
 class_name Character
 
-#region Stats and Exports
+#region Stats
 @export var star_stats: Dictionary = {
 	"intelligence": 10,
 	"agility": 10,
@@ -31,6 +31,7 @@ var stat_mods: Dictionary = {
 	"damage_threshold": 0,
 	"sequence": 0
 }
+#endregion
 @export var allies: Array[Character] = []
 @export var ability_scenes: Array[String] = []
 @export var display_name: String = "Name Here"
@@ -38,7 +39,10 @@ var stat_mods: Dictionary = {
 @export_group("Schedule")
 @export var use_timed_schedule: bool
 @export var schedule: Array[NPCTask]
-#endregion
+@export var loop_schedule: bool = false
+@export var task_blocked_dialogue: DialogicTimeline
+@export_group("Activation")
+@export var active: bool = true
 @onready var sprite: Sprite2D = %Sprite
 @onready var anim_player: AnimationPlayer = %AnimationPlayer
 @onready var state_machine: StateMachine = %StateMachine
@@ -59,19 +63,24 @@ var schedule_index: int = 0
 @warning_ignore("unused_signal") signal stop_move_order
 @warning_ignore("unused_signal") signal interact_order(object: Node2D)
 @warning_ignore("unused_signal") signal ability_order(data: Array)
-signal pos_changed(character)
+signal pos_changed(character: Character)
 signal anim_activate_ability
-signal ended_turn(character)
+signal ended_turn(character: Character)
 signal stats_changed
 signal abilities_changed
-signal defeated(character)
+signal defeated(character: Character)
+signal defeated_at(pos: Vector2)
+signal defeated_named(display_name: String)
 signal damaged
 signal combat_entered
 signal combat_exited
 signal ability_deselected
 #endregion
 
+#region Prep
 func _setup()->void:
+	if !active:
+		hide()
 	EventBus.subscribe("GLOBAL_TIMER_TIMEOUT", self, "refresh")
 	EventBus.subscribe("REST", self, "rest")
 	status_manager.status_damage_ticked.connect(damage)
@@ -88,30 +97,8 @@ func _setup()->void:
 	set_outline_color()
 	EventBus.subscribe("GAMEPLAY_SETTINGS_CHANGED", self, "set_outline_color")
 	init_schedule()
-	process_schedule()
-
-func process_schedule()->void:
-	if schedule.size() == 0 || in_combat:
-		return
-	if !use_timed_schedule:
-		schedule[schedule_index].task_completed.connect(task_done)
-		schedule[schedule_index].call_deferred("execute_task")
-
-func task_done()->void:
-	schedule[schedule_index].task_completed.disconnect(task_done)
-	schedule_index = (schedule_index+1)%schedule.size()
-	process_schedule()
-
-func init_schedule()->void:
-	for task in schedule:
-		task.user = self
-
-func enter_combat()->void:
-	in_combat = true
-
-func exit_combat()->void:
-	in_combat = false
-	process_schedule()
+	if active:
+		process_schedule()
 
 func calc_base_stats()->void:
 	base_stats.max_hp = maxi(5+(star_stats.endurance-10)*2+(star_stats.strength-10), 5)
@@ -126,6 +113,90 @@ func update_stat_mod(stat_mod_name: String, amount: int)->void:
 	else:
 		stat_mods[stat_mod_name] += amount
 
+func refresh()->void:
+	cur_ap = base_stats.max_ap+stat_mods.max_ap
+	stats_changed.emit()
+	status_manager.tick_status()
+
+func rest()->void:
+	cur_ap = base_stats.max_ap+stat_mods.max_ap
+	cur_hp = base_stats.max_hp+stat_mods.max_hp
+	cur_mp = base_stats.max_mp+stat_mods.max_mp
+#endregion
+
+#region Tasks
+func init_schedule()->void:
+	for task in schedule:
+		task.user = self
+
+func process_schedule()->void:
+	if schedule.size() == 0 || in_combat:
+		return
+	if !use_timed_schedule:
+		schedule[schedule_index].task_completed.connect(task_done)
+		schedule[schedule_index].call_deferred("execute_task")
+
+func task_done()->void:
+	schedule[schedule_index].task_completed.disconnect(task_done)
+	schedule_index = (schedule_index+1)%schedule.size()
+	if schedule_index == 0 && !loop_schedule:
+		return
+	process_schedule()
+#endregion
+
+#region Combat
+func enter_combat()->void:
+	in_combat = true
+
+func exit_combat()->void:
+	in_combat = false
+	process_schedule()
+
+func roll_sequence()->void:
+	sequence = base_stats.sequence+stat_mods.sequence+randi_range(1,10)
+
+func on_defeated()->void:
+	EventBus.broadcast("PRINT_LOG","Defeated "+display_name)
+	EventBus.broadcast("TILE_UNOCCUPIED", position)
+	if taking_turn:
+		ended_turn.emit(self)
+	defeated.emit(self)
+	defeated_at.emit(position)
+	defeated_named.emit(display_name)
+	queue_free()
+
+func attack(_source: Ability, accuracy: int, amount: int)->void:
+	if accuracy>=(base_stats.avoidance+stat_mods.avoidance):
+		damage(amount)
+	else:
+		var text_ind_pos: Vector2 = text_indicator_shift+global_position
+		EventBus.broadcast("MAKE_TEXT_INDICATOR", ["Miss!", text_ind_pos])
+
+func damage(amount: int, ignore_defense: bool = false)->void:
+	var text_ind_pos: Vector2 = text_indicator_shift+global_position
+	if amount >= base_stats.damage_threshold+stat_mods.damage_threshold || ignore_defense:
+		cur_hp -= amount
+		EventBus.broadcast("MAKE_TEXT_INDICATOR", [str(-amount), text_ind_pos])
+	else:
+		var damage_reduced: int = maxi(amount-base_stats.defense-stat_mods.defense, 0)
+		cur_hp -= damage_reduced
+		if damage_reduced > 0:
+			EventBus.broadcast("MAKE_TEXT_INDICATOR", [str(-damage_reduced), text_ind_pos])
+		else:
+			EventBus.broadcast("MAKE_TEXT_INDICATOR", ["Blocked!", text_ind_pos])
+	damaged.emit()
+	stats_changed.emit()
+	if cur_hp <= 0:
+		anim_player.play("Character/defeat")
+
+func end_turn()->void:
+	while state_machine.current_state.state_id != "IDLE":
+		await state_machine.state_changed
+	remove_range_indicators()
+	ended_turn.emit(self)
+#endregion
+
+#region Abilities
 func select_ability(ability: Ability)->void:
 	while state_machine.current_state.state_id == "MOVE":
 		await state_machine.state_changed
@@ -160,14 +231,6 @@ func add_ability(ability_scene: PackedScene)->void:
 	ability_scenes.append(ability.scene_file_path)
 	abilities_changed.emit()
 
-func add_status(status: Utility.Status)->void:
-	status_manager.add_status(status)
-	var info: Array = [status.display_name, text_indicator_shift+global_position, status.status_color]
-	EventBus.broadcast("MAKE_TEXT_INDICATOR", info)
-
-func roll_sequence()->void:
-	sequence = base_stats.sequence+stat_mods.sequence+randi_range(1,10)
-
 func anim_activate()->void:
 	anim_activate_ability.emit()
 
@@ -189,55 +252,23 @@ func place_range_indicators(locations: Array[Vector2], target_type: Ability.targ
 func remove_range_indicators()->void:
 	while range_indicators.size()>0:
 		range_indicators.pop_front().queue_free()
+#endregion
 
-func refresh()->void:
-	cur_ap = base_stats.max_ap+stat_mods.max_ap
-	stats_changed.emit()
-	status_manager.tick_status()
+#region Status
+func add_status(status: Utility.Status)->void:
+	status_manager.add_status(status)
+	var info: Array = [status.display_name, text_indicator_shift+global_position, status.status_color]
+	EventBus.broadcast("MAKE_TEXT_INDICATOR", info)
 
-func rest()->void:
-	cur_ap = base_stats.max_ap+stat_mods.max_ap
-	cur_hp = base_stats.max_hp+stat_mods.max_hp
-	cur_mp = base_stats.max_mp+stat_mods.max_mp
+func process_status_action(action: Callable, args: Array)->void:
+	deselect_ability()
+	var prev_pos: Vector2 = position
+	await action.call(args)
+	if position != prev_pos:
+		pos_changed.emit(self)
+#endregion
 
-func on_defeated()->void:
-	EventBus.broadcast("PRINT_LOG","Defeated "+display_name)
-	EventBus.broadcast("TILE_UNOCCUPIED", position)
-	if taking_turn:
-		ended_turn.emit(self)
-	defeated.emit(self)
-	queue_free()
-
-func attack(_source: Ability, accuracy: int, amount: int)->void:
-	if accuracy>=(base_stats.avoidance+stat_mods.avoidance):
-		damage(amount)
-	else:
-		var text_ind_pos: Vector2 = text_indicator_shift+global_position
-		EventBus.broadcast("MAKE_TEXT_INDICATOR", ["Miss!", text_ind_pos])
-
-func damage(amount: int, ignore_defense: bool = false)->void:
-	var text_ind_pos: Vector2 = text_indicator_shift+global_position
-	if amount >= base_stats.damage_threshold+stat_mods.damage_threshold || ignore_defense:
-		cur_hp -= amount
-		EventBus.broadcast("MAKE_TEXT_INDICATOR", [str(-amount), text_ind_pos])
-	else:
-		var damage_reduced: int = maxi(amount-base_stats.defense-stat_mods.defense, 0)
-		cur_hp -= damage_reduced
-		if damage_reduced > 0:
-			EventBus.broadcast("MAKE_TEXT_INDICATOR", [str(-damage_reduced), text_ind_pos])
-		else:
-			EventBus.broadcast("MAKE_TEXT_INDICATOR", ["Blocked!", text_ind_pos])
-	damaged.emit()
-	stats_changed.emit()
-	if cur_hp <= 0:
-		anim_player.play("Character/defeat")
-
-func end_turn()->void:
-	while state_machine.current_state.state_id != "IDLE":
-		await state_machine.state_changed
-	remove_range_indicators()
-	ended_turn.emit(self)
-
+#region Misc
 func set_outline_color()->void:
 	sprite.material.set_shader_parameter("outline_color", Color(Settings.gameplay.selection_tint, 180.0/255.0))
 
@@ -249,27 +280,16 @@ func deselect()->void:
 	if has_method("deselect_ability"):
 		call("deselect_ability")
 
-func process_status_action(action: Callable, args: Array)->void:
-	deselect_ability()
-	var prev_pos: Vector2 = position
-	await action.call(args)
-	if position != prev_pos:
-		pos_changed.emit(self)
-
-func has_line_of_sight(pos: Vector2)->bool:
-	var ray: RayCast2D = RayCast2D.new()
-	ray.target_position = pos
-	if ray.is_colliding():
-		print(ray.get_collider())
-		if ray.get_collider().position != pos:
-			return false
-	return true
-
 func on_damaged()->void:
 	return
 
-func activate()->void:
-	return
+func activate(pos: Vector2)->void:
+	active = true
+	position = pos
+	EventBus.broadcast("TILE_OCCUPIED", pos)
+	show()
+	process_schedule()
+#endregion
 
 #region Saving and Loading
 func save_data(file: FileAccess)->void:

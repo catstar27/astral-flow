@@ -8,6 +8,7 @@ var xbox_buttons: Texture2D = preload("res://textures/hud/xbox_buttons.png")
 var playstation_buttons: Texture2D = preload("res://textures/hud/playstation_buttons.png")
 var nintendo_buttons: Texture2D = preload("res://textures/hud/nintendo_buttons.png")
 var keyboard_key: Texture2D = preload("res://textures/hud/keyboard_key.png")
+var large_keyboard_key: Texture2D = preload("res://textures/hud/keyboard_key_large.png")
 var recent_control_type: control_types = control_types.keyboard
 var prev_control_type: control_types = control_types.keyboard
 var last_device_name: String = ""
@@ -80,11 +81,16 @@ func update_display(type: control_types)->void:
 				controller_tex.region.position.y = 32*(event.button_index/4)
 				return
 	else:
-		icon = keyboard_key
 		for event in InputMap.action_get_events(input_action_name):
 			if event is InputEventKey:
-				key_label.show()
+				if event.as_text_physical_keycode().length() > 1:
+					key_label.size.x = 130
+					icon = large_keyboard_key
+				else:
+					key_label.size.x = 66
+					icon = keyboard_key
 				key_label.text = event.as_text_physical_keycode().to_upper()
+				key_label.show()
 				return
 			elif event is InputEventMouse:
 				return

@@ -36,10 +36,10 @@ unique_name_in_owner = true
 visible = false
 use_parent_material = true
 layout_mode = 0
-offset_top = 45.0
+offset_top = 49.0
 offset_right = 84.0
-offset_bottom = 162.0
-theme_override_constants/separation = -1
+offset_bottom = 166.0
+theme_override_constants/separation = 1
 
 [node name="Party" type="Button" parent="Info"]
 unique_name_in_owner = true

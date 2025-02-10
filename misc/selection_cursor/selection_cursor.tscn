@@ -36,6 +36,7 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="Camera" type="Camera2D" parent="."]
+unique_name_in_owner = true
 
 [node name="SelectionArea" type="Area2D" parent="."]
 unique_name_in_owner = true

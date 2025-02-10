@@ -35,10 +35,10 @@ visible = false
 use_parent_material = true
 layout_mode = 2
 offset_left = -82.0
-offset_top = 45.0
-offset_bottom = 478.0
+offset_top = 49.0
+offset_bottom = 504.0
 theme = ExtResource("1_1jw8j")
-theme_override_constants/separation = -1
+theme_override_constants/separation = 1
 
 [node name="StatInfoPanel" type="PanelContainer" parent="Info"]
 unique_name_in_owner = true
@@ -83,7 +83,7 @@ unique_name_in_owner = true
 process_mode = 1
 use_parent_material = true
 layout_mode = 2
-theme_override_constants/separation = -1
+theme_override_constants/separation = 1
 
 [node name="AbilityButton" parent="Info/AbilityList" instance=ExtResource("3_8cx65")]
 custom_minimum_size = Vector2(0, 35)

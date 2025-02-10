@@ -10,26 +10,23 @@ offset_bottom = 300.0
 theme = ExtResource("1_nuhaj")
 script = ExtResource("2_emjoq")
 
-[node name="SettingsContainer" type="HBoxContainer" parent="."]
+[node name="GridContainer" type="GridContainer" parent="."]
 layout_mode = 2
+columns = 2
 
-[node name="Buttons" type="VBoxContainer" parent="SettingsContainer"]
+[node name="PlaceholderButton" type="Button" parent="GridContainer"]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
 
-[node name="PlaceholderButton" type="Button" parent="SettingsContainer/Buttons"]
+[node name="PlaceholderLabel" type="Label" parent="GridContainer"]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
-
-[node name="Labels" type="VBoxContainer" parent="SettingsContainer"]
-custom_minimum_size = Vector2(32, 32)
-layout_mode = 2
-
-[node name="PlaceholderLabel" type="Label" parent="SettingsContainer/Labels"]
-custom_minimum_size = Vector2(32, 32)
-layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
 text = "Placeholder"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[connection signal="pressed" from="SettingsContainer/Buttons/PlaceholderButton" to="." method="placeholder_button_pressed"]
+[connection signal="pressed" from="GridContainer/PlaceholderButton" to="." method="placeholder_button_pressed"]
