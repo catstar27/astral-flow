@@ -32,8 +32,9 @@ func _ready() -> void:
 	Dialogic.signal_event.connect(check_dialogue_signal)
 	set_video_settings()
 	if SaveLoad.is_slot_blank("save1"):
-		SaveLoad.reset_save("save1")
-	SaveLoad.load_data()
+		load_map("res://maps/test_map.tscn")
+	else:
+		SaveLoad.load_data()
 	prepped = true
 
 func _unhandled_input(event: InputEvent)->void:

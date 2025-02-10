@@ -29,19 +29,13 @@ func ended_combat()->void:
 	in_combat = false
 
 func reset_save(reset_slot: String)->void:
+	if !DirAccess.dir_exists_absolute(save_file_folder+reset_slot):
+		return
 	delete_slot(reset_slot)
 	saving = true
 	loading = true
-	if !DirAccess.dir_exists_absolute(save_file_folder):
-		DirAccess.make_dir_absolute(save_file_folder)
-	DirAccess.make_dir_absolute(save_file_folder+reset_slot)
-	print(FileAccess.file_exists("res://misc/autoload/DefaultGlobal.dat"))
-	var default_file: FileAccess = FileAccess.open("res://misc/autoload/DefaultGlobal.dat", FileAccess.READ)
-	var new_save: FileAccess = FileAccess.open(save_file_folder+reset_slot+"/Global.dat", FileAccess.WRITE)
-	new_save.store_buffer(default_file.get_buffer(default_file.get_length()))
-	new_save.flush()
-	default_file.close()
-	new_save.close()
+	Dialogic.VAR.reset()
+	await reset_game()
 	saving = false
 	loading = false
 
@@ -103,12 +97,7 @@ func load_data()->void:
 	AudioServer.set_bus_mute(0, true)
 	var file: FileAccess = FileAccess.open(save_file_folder+slot+"/Global.dat", FileAccess.READ)
 	var cur_map: String = file.get_var().split('=', true, 1)[1]
-	EventBus.broadcast("DELOAD", "NULLDATA")
-	await get_tree().create_timer(.01).timeout
-	var main = main_scene.instantiate()
-	get_tree().root.add_child(main)
-	while !main.prepped:
-		await main.ready
+	var main: Node2D = await reset_game()
 	await main.load_map(cur_map)
 	var target: String = file.get_var()
 	while target != null and target != "DIALOGIC_VARS":
@@ -126,6 +115,15 @@ func load_data()->void:
 	EventBus.broadcast("PRINT_LOG", "Loaded!")
 	AudioServer.set_bus_mute(0, false)
 	loading = false
+
+func reset_game()->Node2D:
+	EventBus.broadcast("DELOAD", "NULLDATA")
+	await get_tree().create_timer(.01).timeout
+	var main = main_scene.instantiate()
+	get_tree().root.add_child(main)
+	while !main.prepped:
+		await main.ready
+	return main
 
 func load_map(map: GameMap)->void:
 	await map.load_map(save_file_folder+slot+'/')

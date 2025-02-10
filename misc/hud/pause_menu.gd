@@ -58,4 +58,3 @@ func quit_pressed()->void:
 
 func reset_pressed() -> void:
 	SaveLoad.reset_save("save1")
-	SaveLoad.load_data()
