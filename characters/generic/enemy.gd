@@ -12,7 +12,6 @@ var target: Character = null
 func _ready() -> void:
 	_setup()
 	abilities = get_abilities()
-	#pos_changed.connect(check_rays)
 
 func _process(_delta: float) -> void:
 	check_rays()
@@ -52,6 +51,7 @@ func take_turn()->void:
 	call_deferred(str(ai_types.keys()[ai_type]))
 
 func melee_aggressive()->void:
+	abilities = get_abilities()
 	abilities.sort_custom(func(x,y): return x.damage>y.damage)
 	if !abilities[0].is_destination_valid(target.position):
 		move_order.emit(target.position)

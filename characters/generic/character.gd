@@ -139,7 +139,7 @@ func process_schedule()->void:
 func task_done()->void:
 	schedule[schedule_index].task_completed.disconnect(task_done)
 	schedule_index = (schedule_index+1)%schedule.size()
-	if schedule_index == 0 && !loop_schedule:
+	if schedule_index == 0 && !loop_schedule || !active:
 		return
 	process_schedule()
 #endregion
@@ -283,6 +283,11 @@ func deselect()->void:
 func on_damaged()->void:
 	return
 
+func deactivate()->void:
+	active = false
+	EventBus.broadcast("TILE_UNOCCUPIED", position)
+	hide()
+
 func activate(pos: Vector2)->void:
 	active = true
 	position = pos
@@ -293,6 +298,8 @@ func activate(pos: Vector2)->void:
 
 #region Saving and Loading
 func save_data(file: FileAccess)->void:
+	var was_active: bool = active
+	active = false
 	stop_move_order.emit()
 	while state_machine.current_state.state_id != "IDLE":
 		await state_machine.state_changed
@@ -303,6 +310,9 @@ func save_data(file: FileAccess)->void:
 	file.store_var(cur_hp)
 	file.store_var(cur_ap)
 	file.store_var(cur_mp)
+	file.store_var(was_active)
+	if was_active:
+		activate(position)
 
 func load_data(file: FileAccess)->void:
 	deselect()
@@ -313,5 +323,8 @@ func load_data(file: FileAccess)->void:
 	cur_hp = file.get_var()
 	cur_ap = file.get_var()
 	cur_mp = file.get_var()
+	active = file.get_var()
 	load_abilities()
+	if active:
+		activate(position)
 #endregion

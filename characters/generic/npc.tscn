@@ -64,7 +64,7 @@ _data = {
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_23jct"]
 
-[node name="NPC" type="CharacterBody2D"]
+[node name="NPC" type="CharacterBody2D" groups=["LevelSave"]]
 script = ExtResource("1_tipyt")
 
 [node name="Sprite" type="Sprite2D" parent="."]

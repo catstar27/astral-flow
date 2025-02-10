@@ -90,7 +90,7 @@ _data = {
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_nbbbf"]
 
-[node name="Enemy" type="CharacterBody2D"]
+[node name="Enemy" type="CharacterBody2D" groups=["LevelSave"]]
 script = ExtResource("1_3pgqe")
 star_stats = {
 "agility": 8,

@@ -68,7 +68,7 @@ func save_data(quiet_save: bool = false)->void:
 	if !DirAccess.dir_exists_absolute(save_file_folder+slot):
 		DirAccess.make_dir_absolute(save_file_folder+slot)
 	var file: FileAccess = FileAccess.open(save_file_folder+slot+"/Global.dat", FileAccess.WRITE)
-	NavMaster.map.save_map(save_file_folder+slot+'/')
+	await NavMaster.map.save_map(save_file_folder+slot+'/')
 	file.store_var("CURRENT_MAP="+NavMaster.map.scene_file_path)
 	for node in get_tree().get_nodes_in_group("Persist"):
 		if !node.has_method("save_data"):
