@@ -37,7 +37,6 @@ func open()->void:
 	collision_active = false
 
 func advance_unlock(signal_event: String)->void:
-	print(signal_event)
 	if !signal_event in signals_needed:
 		return
 	if !signal_index>=signals_needed.size():

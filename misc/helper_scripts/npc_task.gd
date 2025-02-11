@@ -18,7 +18,20 @@ enum type_choice {wait, guard, interact, wander, patrol}
 @export_range(0,59) var minute_end: int = 0
 var user: Character
 var executing: bool = false
+var paused: bool = false
 signal task_completed
+signal pause
+signal unpause
+
+func _init() -> void:
+	pause.connect(pause_execution)
+	unpause.connect(unpause_execution)
+
+func pause_execution()->void:
+	paused = true
+
+func unpause_execution()->void:
+	paused = false
 
 func check_time(time: Array[int])->bool:
 	if !executing:
@@ -33,7 +46,7 @@ func check_time(time: Array[int])->bool:
 	return false
 
 func execute_task()->void:
-	if user.in_combat:
+	if user.in_combat || executing:
 		return
 	executing = true
 	if type == type_choice.wait:
@@ -58,6 +71,8 @@ func guard()->void:
 		if user.in_combat:
 			return
 		user.move_order.emit(guard_location)
+		while paused:
+			await unpause
 		while user.state_machine.current_state.state_id != "IDLE":
 			await user.state_machine.state_changed
 		attempts += 1
@@ -71,6 +86,8 @@ func interact()->void:
 		if user.in_combat:
 			return
 		user.move_order.emit(interact_pos)
+		while paused:
+			await unpause
 		while user.state_machine.current_state.state_id != "IDLE":
 			await user.state_machine.state_changed
 		can_interact = (abs(user.position - interact_pos).x+abs(user.position - interact_pos).y)/NavMaster.tile_size <= 1
@@ -78,6 +95,8 @@ func interact()->void:
 		if attempts > 99:
 			return
 	if can_interact:
+		while paused:
+			await unpause
 		user.interact_order.emit(NavMaster.get_obj_at_pos(interact_pos))
 		while user.state_machine.current_state.state_id != "IDLE":
 			await user.state_machine.state_changed
@@ -89,6 +108,8 @@ func wander()->void:
 	var y_min: float = wander_home.y - max_distance.y
 	var y_max: float = wander_home.y + max_distance.y
 	var wander_pos: Vector2 = Vector2(randf_range(x_min,x_max),randf_range(y_min,y_max))
+	while paused:
+		await unpause
 	user.move_order.emit(wander_pos)
 	while user.state_machine.current_state.state_id != "IDLE":
 		await user.state_machine.state_changed
@@ -101,5 +122,7 @@ func patrol()->void:
 			if user.in_combat:
 				return
 			user.move_order.emit(pos)
+			while paused:
+				await unpause
 			while user.state_machine.current_state.state_id != "IDLE":
 				await user.state_machine.state_changed

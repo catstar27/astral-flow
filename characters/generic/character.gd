@@ -58,6 +58,7 @@ var cur_mp: int
 var cur_hp: int
 var target_position: Vector2 = position
 var schedule_index: int = 0
+var schedule_executed: bool = false
 #region Signals
 @warning_ignore("unused_signal") signal move_order(pos: Vector2)
 @warning_ignore("unused_signal") signal stop_move_order
@@ -132,6 +133,8 @@ func init_schedule()->void:
 func process_schedule()->void:
 	if schedule.size() == 0 || in_combat:
 		return
+	if !loop_schedule && schedule_executed:
+		return
 	if !use_timed_schedule:
 		schedule[schedule_index].task_completed.connect(task_done)
 		schedule[schedule_index].call_deferred("execute_task")
@@ -139,7 +142,9 @@ func process_schedule()->void:
 func task_done()->void:
 	schedule[schedule_index].task_completed.disconnect(task_done)
 	schedule_index = (schedule_index+1)%schedule.size()
-	if schedule_index == 0 && !loop_schedule || !active:
+	if (schedule_index == 0 && !loop_schedule) || !active:
+		if schedule_index == 0:
+			schedule_executed = true
 		return
 	process_schedule()
 #endregion
@@ -298,9 +303,9 @@ func activate(pos: Vector2)->void:
 
 #region Saving and Loading
 func save_data(file: FileAccess)->void:
-	var was_active: bool = active
-	active = false
 	stop_move_order.emit()
+	if active && schedule != []:
+		schedule[schedule_index].pause.emit()
 	while state_machine.current_state.state_id != "IDLE":
 		await state_machine.state_changed
 	file.store_var(position)
@@ -310,9 +315,11 @@ func save_data(file: FileAccess)->void:
 	file.store_var(cur_hp)
 	file.store_var(cur_ap)
 	file.store_var(cur_mp)
-	file.store_var(was_active)
-	if was_active:
-		activate(position)
+	file.store_var(active)
+	file.store_var(schedule_executed)
+	file.store_var(schedule_index)
+	if active && schedule != []:
+		schedule[schedule_index].unpause.emit()
 
 func load_data(file: FileAccess)->void:
 	deselect()
@@ -324,6 +331,8 @@ func load_data(file: FileAccess)->void:
 	cur_ap = file.get_var()
 	cur_mp = file.get_var()
 	active = file.get_var()
+	schedule_executed = file.get_var()
+	schedule_index = file.get_var()
 	load_abilities()
 	if active:
 		activate(position)
