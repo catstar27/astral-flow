@@ -38,7 +38,8 @@ func broadcast(id: String, data)->void:
 	var event: Event = Event.new(id, data)
 	if event.id not in events:
 		return
-	for sub_info in events[event.id]:
+	var subscribers: Array = events[event.id]
+	for sub_info in subscribers:
 		if !is_instance_valid(sub_info.node):
 			remove_subscriber(sub_info.node)
 		elif sub_info.node.has_method(sub_info.fn):
