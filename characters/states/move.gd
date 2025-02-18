@@ -24,9 +24,9 @@ func move(cur_target: Vector2)->bool:
 					state_machine.user.anim_player.play("RESET")
 					return true
 	var path: Array[Vector2] = NavMaster.request_nav_path(state_machine.user.position, cur_target)
+	var prev_direction: Vector2 = Vector2.ZERO
 	if path.pop_front() != state_machine.user.position:
 		path = []
-	var use_alt: bool = false
 	for pos in path:
 		if NavMaster.is_pos_occupied(pos):
 			path = NavMaster.request_nav_path(state_machine.user.position, cur_target)
@@ -47,27 +47,16 @@ func move(cur_target: Vector2)->bool:
 		if direction.length() > NavMaster.tile_size:
 			continue
 		EventBus.broadcast("TILE_OCCUPIED", pos)
-		if direction == Vector2.UP*64:
-			if use_alt:
-				state_machine.user.anim_player.play("Character/walk_up_alt")
-			else:
+		if direction != prev_direction || !state_machine.user.anim_player.is_playing():
+			if direction == Vector2.UP*64:
 				state_machine.user.anim_player.play("Character/walk_up")
-		elif direction == Vector2.DOWN*64:
-			if use_alt:
-				state_machine.user.anim_player.play("Character/walk_down_alt")
-			else:
+			elif direction == Vector2.DOWN*64:
 				state_machine.user.anim_player.play("Character/walk_down")
-		elif direction == Vector2.RIGHT*64:
-			if use_alt:
-				state_machine.user.anim_player.play("Character/walk_right_alt")
-			else:
+			elif direction == Vector2.RIGHT*64:
 				state_machine.user.anim_player.play("Character/walk_right")
-		elif direction == Vector2.LEFT*64:
-			if use_alt:
-				state_machine.user.anim_player.play("Character/walk_left_alt")
-			else:
+			elif direction == Vector2.LEFT*64:
 				state_machine.user.anim_player.play("Character/walk_left")
-		use_alt = !use_alt
+		prev_direction = direction
 		await create_tween().tween_property(state_machine.user, "position", pos, .2).finished
 		EventBus.broadcast("TILE_UNOCCUPIED", prev_pos)
 		state_machine.user.pos_changed.emit(state_machine.user)

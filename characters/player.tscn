@@ -88,7 +88,7 @@ display_name = "Player"
 unique_name_in_owner = true
 material = ExtResource("2_aa0te")
 texture = ExtResource("3_rhuoj")
-hframes = 3
+hframes = 4
 vframes = 5
 region_rect = Rect2(-2, -2, 36, 36)
 
