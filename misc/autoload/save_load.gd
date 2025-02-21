@@ -44,11 +44,16 @@ func delete_slot(remove_slot: String)->void:
 		return
 	saving = true
 	loading = true
-	for filename in DirAccess.get_files_at(save_file_folder+remove_slot):
-		DirAccess.remove_absolute(save_file_folder+remove_slot+"/"+filename)
+	clear_dir(save_file_folder+remove_slot)
 	DirAccess.remove_absolute(save_file_folder+remove_slot)
 	saving = false
 	loading = false
+
+func clear_dir(dir: String)->void:
+	for filename in DirAccess.get_files_at(dir):
+		DirAccess.remove_absolute(dir+"/"+filename)
+	for directory in DirAccess.get_directories_at(dir):
+		clear_dir(dir+'/'+directory)
 
 func is_slot_blank(check_slot: String)->bool:
 	return !FileAccess.file_exists(save_file_folder+check_slot+"/Global.dat")
@@ -74,8 +79,8 @@ func save_data(quiet_save: bool = false)->void:
 		if !node.has_method("save_data"):
 			printerr("Persistent node"+node.name+"missing save data function")
 		await node.save_data(save_file_folder+slot+'/')
-	file.store_var("DIALOGIC_VARS")
 	for variable in Dialogic.VAR.variables():
+		file.store_var(variable)
 		file.store_var(Dialogic.VAR.get_variable(variable))
 	file.store_var("END_OF_SAVE_DATA")
 	file.close()
@@ -98,14 +103,14 @@ func load_data()->void:
 	var cur_map: String = file.get_var().split('=', true, 1)[1]
 	var main: Node2D = await reset_game()
 	await main.load_map(cur_map)
-	var target: String = file.get_var()
-	print(target)
 	for node in get_tree().get_nodes_in_group("Persist"):
 		if !node.has_method("load_data"):
 			printerr("Persistent node"+node.name+"missing load data function")
 		await node.load_data(save_file_folder+slot+'/')
-	for variable in Dialogic.VAR.variables():
+	var variable: String = file.get_var()
+	while variable != "END_OF_SAVE_DATA":
 		Dialogic.VAR.set_variable(variable, file.get_var())
+		variable = file.get_var()
 	file.close()
 	EventBus.broadcast("LOADED", "NULLDATA")
 	EventBus.broadcast("PRINT_LOG", "Loaded!")

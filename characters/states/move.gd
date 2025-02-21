@@ -57,9 +57,15 @@ func move(cur_target: Vector2)->bool:
 			elif direction == Vector2.LEFT*64:
 				state_machine.user.anim_player.play("Character/walk_left")
 		prev_direction = direction
+		while paused:
+			await state_unpaused
+		critical_entered.emit()
+		critical_operation = true
 		await create_tween().tween_property(state_machine.user, "position", pos, .2).finished
 		EventBus.broadcast("TILE_UNOCCUPIED", prev_pos)
 		state_machine.user.pos_changed.emit(state_machine.user)
+		critical_operation = false
+		critical_exited.emit()
 		if state_machine.user.in_combat:
 			state_machine.user.cur_ap -= 1
 			state_machine.user.stats_changed.emit()

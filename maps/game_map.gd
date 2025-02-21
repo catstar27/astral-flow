@@ -7,6 +7,7 @@ class_name GameMap
 @export var map_name: String
 @onready var astar: AStarGrid2D
 @onready var light_modulator: CanvasModulate = %LightingModulate
+var children_ready_count: int = 0
 var loading: bool = false
 var player: Player = null
 var spawned: Dictionary = {}
@@ -18,14 +19,45 @@ var to_save: Array[StringName] = [
 	"spawned",
 	"player_start_pos"
 ]
+#region Signals
 signal map_saved
 signal map_loaded
+signal saved
+signal loaded
+signal child_readied
+#endregion
 
+#region Prep
 func _ready()->void:
 	EventBus.subscribe("TILE_OCCUPIED", self, "set_pos_occupied")
 	EventBus.subscribe("TILE_UNOCCUPIED", self, "set_pos_unoccupied")
 	EventBus.subscribe("COMBAT_STARTED", self, "start_combat")
 	EventBus.subscribe("COMBAT_ENDED", self, "end_combat")
+
+func _extra_setup()->void:
+	return
+
+func prep_map()->void:
+	occupied_tiles = []
+	light_modulator.show()
+	_calc_bounds()
+	_astar_setup()
+	for child in get_children():
+		if child is Interactive:
+			child.setup()
+			if child.collision_active:
+				for pos in child.occupied_positions:
+					set_pos_occupied(pos)
+		elif child is Character:
+			if child.active:
+				set_pos_occupied(child.position)
+				if !child.defeated.is_connected(character_defeated):
+					child.defeated.connect(character_defeated)
+				if child is Player:
+					player = child
+	_extra_setup()
+	EventBus.broadcast("MAP_LOADED", self)
+#endregion
 
 func start_combat()->void:
 	EventBus.broadcast("SET_OST", battle_theme)
@@ -33,6 +65,7 @@ func start_combat()->void:
 func end_combat()->void:
 	EventBus.broadcast("SET_OST", ost)
 
+#region Pathfinding
 func get_obj_at_pos(pos: Vector2)->Node2D:
 	for child in get_children():
 		if child is Interactive || child is Character:
@@ -112,43 +145,22 @@ func is_in_bounds(pos: Vector2)->bool:
 	if get_cell_tile_data(tile) == null:
 		return false
 	return true
-
-func _extra_setup()->void:
-	return
-
-func sig_connect(sig: String, fn: Callable)->void:
-	connect(sig, fn)
-
-func prep_map()->void:
-	occupied_tiles = []
-	light_modulator.show()
-	_calc_bounds()
-	_astar_setup()
-	for child in get_children():
-		if child is Interactive:
-			child.setup()
-			if child.collision_active:
-				for pos in child.occupied_positions:
-					set_pos_occupied(pos)
-		elif child is Character:
-			if child.active:
-				set_pos_occupied(child.position)
-				if !child.defeated.is_connected(character_defeated):
-					child.defeated.connect(character_defeated)
-				if child is Player:
-					player = child
-	_extra_setup()
-	EventBus.broadcast("MAP_LOADED", self)
+#endregion
 
 func character_defeated(character: Character)->void:
 	character.defeated.disconnect(character_defeated)
 	dead[character.name] = 1
 
+#region Save Load
 func unload()->void:
 	queue_free()
 
+func child_ready()->void:
+	children_ready_count += 1
+	child_readied.emit()
+
 func has_save_data()->bool:
-	var filepath: String = SaveLoad.save_file_folder+SaveLoad.slot+'/'
+	var filepath: String = SaveLoad.save_file_folder+SaveLoad.slot+'/'+map_name+'/'
 	if FileAccess.open(filepath+map_name+".dat", FileAccess.READ) != null:
 		return true
 	return false
@@ -158,11 +170,17 @@ func save_map(filepath: String)->void:
 		DirAccess.make_dir_absolute(filepath+map_name)
 	filepath += map_name+'/'
 	save_data(filepath)
+	children_ready_count = 0
+	var children_to_save: int = 0
 	for node in get_children():
 		if node.is_in_group("LevelSave"):
 			if !node.has_method("save_data"):
 				printerr("Persistent node"+node.name+"missing save data function")
-			await node.save_data(filepath)
+			children_to_save += 1
+			node.saved.connect(child_ready)
+			node.save_data(filepath)
+	while children_ready_count < children_to_save:
+		await child_readied
 	map_saved.emit()
 
 func load_map(filepath: String)->void:
@@ -170,25 +188,32 @@ func load_map(filepath: String)->void:
 	NavMaster.map_loading = true
 	filepath += map_name+'/'
 	load_data(filepath)
+	children_ready_count = 0
+	var children_to_load: int = 0
 	for node in get_children():
 		if node is Player:
 			player = node
 		if node.is_in_group("LevelSave"):
 			if !node.has_method("load_data"):
 				printerr("Persistent node"+node.name+"missing load data function")
-			await node.load_data(filepath)
+			children_to_load += 1
+			node.loaded.connect(child_ready)
+			node.load_data(filepath)
+	while children_ready_count < children_to_load:
+		await child_readied
 	player.position = map_to_local(player_start_pos)
 	map_loaded.emit()
 	NavMaster.map_loading = false
 	loading = false
 
 func save_data(dir: String)->void:
-	player_start_pos = player.position
+	player_start_pos = local_to_map(player.position)
 	var file: FileAccess = FileAccess.open(dir+map_name+".dat", FileAccess.WRITE)
 	for var_name in to_save:
 		file.store_var(var_name)
 		file.store_var(get(var_name))
 	file.store_var("END")
+	saved.emit()
 
 func load_data(dir: String)->void:
 	var file: FileAccess = FileAccess.open(dir+map_name+".dat", FileAccess.READ)
@@ -211,3 +236,5 @@ func load_data(dir: String)->void:
 				to_spawn = false
 		if to_spawn:
 			add_child(load(spawned[spawn]).instantiate())
+	loaded.emit()
+#endregion

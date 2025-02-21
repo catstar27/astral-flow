@@ -18,6 +18,8 @@ var to_save: Array[StringName] = [
 	"hour",
 	"minute"
 ]
+signal saved
+signal loaded
 
 func _ready() -> void:
 	if get_tree().paused:
@@ -163,12 +165,13 @@ func fade_in()->void:
 	await create_tween().tween_property(foreground, "modulate", Color(0,0,0,0), 1).set_ease(Tween.EASE_IN).finished
 
 func save_data(dir: String)->void:
-	var file: FileAccess = FileAccess.open(dir+name, FileAccess.WRITE)
+	var file: FileAccess = FileAccess.open(dir+name+".dat", FileAccess.WRITE)
 	for var_name in to_save:
 		file.store_var(var_name)
 		file.store_var(get(var_name))
 	file.store_var("END")
 	file.close()
+	saved.emit()
 
 func load_data(dir: String)->void:
 	var file: FileAccess = FileAccess.open(dir+name+".dat", FileAccess.READ)
@@ -178,3 +181,4 @@ func load_data(dir: String)->void:
 		var_name = file.get_var()
 	file.close()
 	EventBus.broadcast("TIME_CHANGED", [minute, hour])
+	loaded.emit()

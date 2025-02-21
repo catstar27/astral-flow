@@ -92,6 +92,8 @@ signal damaged
 signal combat_entered
 signal combat_exited
 signal ability_deselected
+signal saved
+signal loaded
 #endregion
 
 #region Prep
@@ -322,8 +324,9 @@ func save_data(dir: String)->void:
 	stop_move_order.emit()
 	if active && schedule != []:
 		schedule[schedule_index].pause.emit()
-	while state_machine.current_state.state_id != "IDLE":
-		await state_machine.state_changed
+	state_machine.pause()
+	while state_machine.current_state.critical_operation:
+		await state_machine.current_state.critical_exited
 	var file: FileAccess = FileAccess.open(dir+name+".dat", FileAccess.WRITE)
 	for var_name in to_save:
 		file.store_var(var_name)
@@ -332,9 +335,12 @@ func save_data(dir: String)->void:
 	file.close()
 	if active && schedule != []:
 		schedule[schedule_index].unpause.emit()
+	state_machine.unpause()
+	saved.emit()
 
 func load_data(dir: String)->void:
 	deselect()
+	state_machine.pause()
 	var file: FileAccess = FileAccess.open(dir+name+".dat", FileAccess.READ)
 	var var_name: String = file.get_var()
 	while var_name != "END":
@@ -342,6 +348,8 @@ func load_data(dir: String)->void:
 		var_name = file.get_var()
 	file.close()
 	load_abilities()
+	state_machine.unpause()
 	if active:
 		activate(position)
+	loaded.emit()
 #endregion

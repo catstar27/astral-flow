@@ -21,6 +21,8 @@ var to_save: Array[StringName] = [
 	"last_map_name"
 ]
 signal move_stopped
+signal saved
+signal loaded
 
 func _ready() -> void:
 	update_color()
@@ -218,6 +220,7 @@ func save_data(dir: String)->void:
 	file.store_var("END")
 	deactivate_requests -= 1
 	file.close()
+	saved.emit()
 
 func load_data(dir: String)->void:
 	var file: FileAccess = FileAccess.open(dir+name+".dat", FileAccess.READ)
@@ -226,3 +229,4 @@ func load_data(dir: String)->void:
 		set(var_name, file.get_var())
 		var_name = file.get_var()
 	file.close()
+	loaded.emit()
