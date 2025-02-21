@@ -8,6 +8,9 @@ class_name SignalGate
 var signal_index: int = 0
 enum state {locked, unlocked, open}
 var cur_state: state = state.locked
+var to_save: Array[StringName] = [
+	"cur_state"
+]
 
 func setup_extra()->void:
 	var shape: RectangleShape2D = RectangleShape2D.new()
@@ -47,10 +50,19 @@ func advance_unlock(signal_event: String)->void:
 				if auto_open:
 					open()
 
-func save_data(file: FileAccess)->void:
-	file.store_var(cur_state)
+func save_data(dir: String)->void:
+	var file: FileAccess = FileAccess.open(dir+name+".dat", FileAccess.WRITE)
+	for var_name in to_save:
+		file.store_var(var_name)
+		file.store_var(get(var_name))
+	file.store_var("END")
 
-func load_data(file: FileAccess)->void:
-	cur_state = file.get_var()
+func load_data(dir: String)->void:
+	var file: FileAccess = FileAccess.open(dir+name+".dat", FileAccess.READ)
+	var var_name: String = file.get_var()
+	while var_name != "END":
+		set(var_name, file.get_var())
+		var_name = file.get_var()
+	file.close()
 	if cur_state == state.open:
 		open()

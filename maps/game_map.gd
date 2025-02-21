@@ -13,6 +13,11 @@ var spawned: Dictionary = {}
 var dead: Dictionary = {}
 var occupied_tiles: Array[Vector2i]
 var tile_bounds: Dictionary = {"x_min": 0, "x_max": 0, "y_min": 0, "y_max": 0}
+var to_save: Array[StringName] = [
+	"dead",
+	"spawned",
+	"player_start_pos"
+]
 signal map_saved
 signal map_loaded
 
@@ -149,54 +154,49 @@ func has_save_data()->bool:
 	return false
 
 func save_map(filepath: String)->void:
-	var file: FileAccess = FileAccess.open(filepath+map_name+".dat", FileAccess.WRITE)
-	file.store_var("MAP_DATA_START\n")
-	save_data(file)
-	file.store_var("\nOBJECT_DATA_START")
+	if !DirAccess.dir_exists_absolute(filepath+map_name):
+		DirAccess.make_dir_absolute(filepath+map_name)
+	filepath += map_name+'/'
+	save_data(filepath)
 	for node in get_children():
 		if node.is_in_group("LevelSave"):
 			if !node.has_method("save_data"):
 				printerr("Persistent node"+node.name+"missing save data function")
-			file.store_var("\n@SAVE_MARKER@"+node.name)
-			await node.save_data(file)
-	file.store_var("END_OF_SAVE_DATA")
-	file.close()
+			await node.save_data(filepath)
 	map_saved.emit()
 
 func load_map(filepath: String)->void:
 	loading = true
 	NavMaster.map_loading = true
-	var file: FileAccess = FileAccess.open(filepath+map_name+".dat", FileAccess.READ)
-	var target: String = file.get_var()
-	load_data(file)
-	target = file.get_var()
-	target = file.get_var()
-	while target != null && target != "END_OF_SAVE_DATA":
-		target = SaveLoad.parse_name(target)
-		for node in get_children():
-			if node is Player:
-				player = node
-			if node.name == target:
-				if node.is_in_group("LevelSave"):
-					if !node.has_method("load_data"):
-						printerr("Persistent node"+node.name+"missing load data function")
-					await node.load_data(file)
-		target = file.get_var()
-	file.close()
+	filepath += map_name+'/'
+	load_data(filepath)
+	for node in get_children():
+		if node is Player:
+			player = node
+		if node.is_in_group("LevelSave"):
+			if !node.has_method("load_data"):
+				printerr("Persistent node"+node.name+"missing load data function")
+			await node.load_data(filepath)
 	player.position = map_to_local(player_start_pos)
 	map_loaded.emit()
 	NavMaster.map_loading = false
 	loading = false
 
-func save_data(file: FileAccess)->void:
-	file.store_var(dead)
-	file.store_var(spawned)
-	file.store_var(local_to_map(player.position))
+func save_data(dir: String)->void:
+	player_start_pos = player.position
+	var file: FileAccess = FileAccess.open(dir+map_name+".dat", FileAccess.WRITE)
+	for var_name in to_save:
+		file.store_var(var_name)
+		file.store_var(get(var_name))
+	file.store_var("END")
 
-func load_data(file: FileAccess)->void:
-	dead = file.get_var()
-	spawned = file.get_var()
-	player_start_pos = file.get_var()
+func load_data(dir: String)->void:
+	var file: FileAccess = FileAccess.open(dir+map_name+".dat", FileAccess.READ)
+	var var_name: String = file.get_var()
+	while var_name != "END":
+		set(var_name, file.get_var())
+		var_name = file.get_var()
+	file.close()
 	for tile in occupied_tiles:
 		set_pos_unoccupied(tile)
 	for child in get_children():

@@ -14,6 +14,10 @@ var text_indicator_scene: PackedScene = preload("res://misc/hud/text_indicator.t
 var hour: int = 0
 var minute: int = 0
 var prepped: bool = false
+var to_save: Array[StringName] = [
+	"hour",
+	"minute"
+]
 
 func _ready() -> void:
 	if get_tree().paused:
@@ -158,11 +162,19 @@ func fade_out()->void:
 func fade_in()->void:
 	await create_tween().tween_property(foreground, "modulate", Color(0,0,0,0), 1).set_ease(Tween.EASE_IN).finished
 
-func save_data(file: FileAccess)->void:
-	file.store_var(hour)
-	file.store_var(minute)
+func save_data(dir: String)->void:
+	var file: FileAccess = FileAccess.open(dir+name, FileAccess.WRITE)
+	for var_name in to_save:
+		file.store_var(var_name)
+		file.store_var(get(var_name))
+	file.store_var("END")
+	file.close()
 
-func load_data(file: FileAccess)->void:
-	hour = file.get_var()
-	minute = file.get_var()
+func load_data(dir: String)->void:
+	var file: FileAccess = FileAccess.open(dir+name+".dat", FileAccess.READ)
+	var var_name: String = file.get_var()
+	while var_name != "END":
+		set(var_name, file.get_var())
+		var_name = file.get_var()
+	file.close()
 	EventBus.broadcast("TIME_CHANGED", [minute, hour])

@@ -16,6 +16,10 @@ var move_arrows: Array[Sprite2D] = []
 var deactivate_requests: int = 0
 var block_deselect: bool = false
 var last_map_name: String = ""
+var to_save: Array[StringName] = [
+	"position",
+	"last_map_name"
+]
 signal move_stopped
 
 func _ready() -> void:
@@ -203,14 +207,22 @@ func _selection_area_exited(body: Node2D) -> void:
 	if hovering == body:
 		hovering = null
 
-func save_data(file: FileAccess)->void:
+func save_data(dir: String)->void:
 	deactivate_requests += 1
 	while moving:
 		await move_stopped
-	file.store_var(position)
-	file.store_var(last_map_name)
+	var file: FileAccess = FileAccess.open(dir+name+".dat", FileAccess.WRITE)
+	for var_name in to_save:
+		file.store_var(var_name)
+		file.store_var(get(var_name))
+	file.store_var("END")
 	deactivate_requests -= 1
+	file.close()
 
-func load_data(file: FileAccess)->void:
-	position = file.get_var()
-	last_map_name = file.get_var()
+func load_data(dir: String)->void:
+	var file: FileAccess = FileAccess.open(dir+name+".dat", FileAccess.READ)
+	var var_name: String = file.get_var()
+	while var_name != "END":
+		set(var_name, file.get_var())
+		var_name = file.get_var()
+	file.close()

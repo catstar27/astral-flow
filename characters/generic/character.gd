@@ -32,6 +32,7 @@ var stat_mods: Dictionary = {
 	"sequence": 0
 }
 #endregion
+#region Exports
 @export var allies: Array[Character] = []
 @export var ability_scenes: Array[String] = []
 @export var display_name: String = "Name Here"
@@ -43,6 +44,7 @@ var stat_mods: Dictionary = {
 @export var task_blocked_dialogue: DialogicTimeline
 @export_group("Activation")
 @export var active: bool = true
+#endregion
 @onready var sprite: Sprite2D = %Sprite
 @onready var anim_player: AnimationPlayer = %AnimationPlayer
 @onready var state_machine: StateMachine = %StateMachine
@@ -59,6 +61,20 @@ var cur_hp: int
 var target_position: Vector2 = position
 var schedule_index: int = 0
 var schedule_executed: bool = false
+#region Save Vars Array
+var to_save: Array[StringName] = [
+	"position",
+	"star_stats",
+	"base_stats",
+	"ability_scenes",
+	"cur_hp",
+	"cur_ap",
+	"cur_mp",
+	"active",
+	"schedule_executed",
+	"schedule_index"
+]
+#endregion
 #region Signals
 @warning_ignore("unused_signal") signal move_order(pos: Vector2)
 @warning_ignore("unused_signal") signal stop_move_order
@@ -302,37 +318,29 @@ func activate(pos: Vector2)->void:
 #endregion
 
 #region Saving and Loading
-func save_data(file: FileAccess)->void:
+func save_data(dir: String)->void:
 	stop_move_order.emit()
 	if active && schedule != []:
 		schedule[schedule_index].pause.emit()
 	while state_machine.current_state.state_id != "IDLE":
 		await state_machine.state_changed
-	file.store_var(position)
-	file.store_var(star_stats)
-	file.store_var(base_stats)
-	file.store_var(ability_scenes)
-	file.store_var(cur_hp)
-	file.store_var(cur_ap)
-	file.store_var(cur_mp)
-	file.store_var(active)
-	file.store_var(schedule_executed)
-	file.store_var(schedule_index)
+	var file: FileAccess = FileAccess.open(dir+name+".dat", FileAccess.WRITE)
+	for var_name in to_save:
+		file.store_var(var_name)
+		file.store_var(get(var_name))
+	file.store_var("END")
+	file.close()
 	if active && schedule != []:
 		schedule[schedule_index].unpause.emit()
 
-func load_data(file: FileAccess)->void:
+func load_data(dir: String)->void:
 	deselect()
-	position = file.get_var()
-	star_stats = file.get_var()
-	base_stats = file.get_var()
-	ability_scenes = file.get_var()
-	cur_hp = file.get_var()
-	cur_ap = file.get_var()
-	cur_mp = file.get_var()
-	active = file.get_var()
-	schedule_executed = file.get_var()
-	schedule_index = file.get_var()
+	var file: FileAccess = FileAccess.open(dir+name+".dat", FileAccess.READ)
+	var var_name: String = file.get_var()
+	while var_name != "END":
+		set(var_name, file.get_var())
+		var_name = file.get_var()
+	file.close()
 	load_abilities()
 	if active:
 		activate(position)

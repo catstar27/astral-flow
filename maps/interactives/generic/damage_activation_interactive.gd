@@ -5,6 +5,9 @@ enum damage_type_choice {blunt, electric, none}
 @export var damage_type_required: damage_type_choice = damage_type_choice.none
 @export var dialogue_unlocked: DialogicTimeline
 var triggered: bool = false
+var to_save: Array[StringName] = [
+	"triggered"
+]
 signal unlocked(name: String)
 
 func setup_extra()->void:
@@ -25,8 +28,17 @@ func unlock()->void:
 	unlocked.emit("unlocked")
 	sprite.frame = 1
 
-func save_data(file: FileAccess)->void:
-	file.store_var(triggered)
+func save_data(dir: String)->void:
+	var file: FileAccess = FileAccess.open(dir+name+".dat", FileAccess.WRITE)
+	for var_name in to_save:
+		file.store_var(var_name)
+		file.store_var(get(var_name))
+	file.store_var("END")
 
-func load_data(file: FileAccess)->void:
-	triggered = file.get_var()
+func load_data(dir: String)->void:
+	var file: FileAccess = FileAccess.open(dir+name+".dat", FileAccess.READ)
+	var var_name: String = file.get_var()
+	while var_name != "END":
+		set(var_name, file.get_var())
+		var_name = file.get_var()
+	file.close()
