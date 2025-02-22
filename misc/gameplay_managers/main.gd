@@ -18,8 +18,8 @@ var to_save: Array[StringName] = [
 	"hour",
 	"minute"
 ]
-signal saved
-signal loaded
+signal saved(node)
+signal loaded(node)
 
 func _ready() -> void:
 	if get_tree().paused:
@@ -171,7 +171,7 @@ func save_data(dir: String)->void:
 		file.store_var(get(var_name))
 	file.store_var("END")
 	file.close()
-	saved.emit()
+	saved.emit(self)
 
 func load_data(dir: String)->void:
 	var file: FileAccess = FileAccess.open(dir+name+".dat", FileAccess.READ)
@@ -181,4 +181,4 @@ func load_data(dir: String)->void:
 		var_name = file.get_var()
 	file.close()
 	EventBus.broadcast("TIME_CHANGED", [minute, hour])
-	loaded.emit()
+	loaded.emit(self)

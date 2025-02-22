@@ -22,8 +22,8 @@ var to_save: Array[StringName] = [
 #region Signals
 signal map_saved
 signal map_loaded
-signal saved
-signal loaded
+signal saved(node)
+signal loaded(node)
 signal child_readied
 #endregion
 
@@ -155,7 +155,11 @@ func character_defeated(character: Character)->void:
 func unload()->void:
 	queue_free()
 
-func child_ready()->void:
+func child_ready(child)->void:
+	if loading:
+		child.loaded.disconnect(child_ready)
+	else:
+		child.saved.disconnect(child_ready)
 	children_ready_count += 1
 	child_readied.emit()
 
@@ -213,7 +217,7 @@ func save_data(dir: String)->void:
 		file.store_var(var_name)
 		file.store_var(get(var_name))
 	file.store_var("END")
-	saved.emit()
+	saved.emit(self)
 
 func load_data(dir: String)->void:
 	var file: FileAccess = FileAccess.open(dir+map_name+".dat", FileAccess.READ)
@@ -236,5 +240,5 @@ func load_data(dir: String)->void:
 				to_spawn = false
 		if to_spawn:
 			add_child(load(spawned[spawn]).instantiate())
-	loaded.emit()
+	loaded.emit(self)
 #endregion

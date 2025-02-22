@@ -9,8 +9,8 @@ var to_save: Array[StringName] = [
 	"triggered"
 ]
 signal unlocked(name: String)
-signal saved
-signal loaded
+signal saved(node)
+signal loaded(node)
 
 func setup_extra()->void:
 	if triggered:
@@ -36,7 +36,7 @@ func save_data(dir: String)->void:
 		file.store_var(var_name)
 		file.store_var(get(var_name))
 	file.store_var("END")
-	saved.emit()
+	saved.emit(self)
 
 func load_data(dir: String)->void:
 	var file: FileAccess = FileAccess.open(dir+name+".dat", FileAccess.READ)
@@ -45,4 +45,4 @@ func load_data(dir: String)->void:
 		set(var_name, file.get_var())
 		var_name = file.get_var()
 	file.close()
-	loaded.emit()
+	loaded.emit(self)

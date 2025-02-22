@@ -92,8 +92,8 @@ signal damaged
 signal combat_entered
 signal combat_exited
 signal ability_deselected
-signal saved
-signal loaded
+signal saved(node)
+signal loaded(node)
 #endregion
 
 #region Prep
@@ -336,7 +336,7 @@ func save_data(dir: String)->void:
 	if active && schedule != []:
 		schedule[schedule_index].unpause.emit()
 	state_machine.unpause()
-	saved.emit()
+	saved.emit(self)
 
 func load_data(dir: String)->void:
 	deselect()
@@ -351,5 +351,5 @@ func load_data(dir: String)->void:
 	state_machine.unpause()
 	if active:
 		activate(position)
-	loaded.emit()
+	loaded.emit(self)
 #endregion

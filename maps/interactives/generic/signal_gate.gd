@@ -11,8 +11,8 @@ var cur_state: state = state.locked
 var to_save: Array[StringName] = [
 	"cur_state"
 ]
-signal saved
-signal loaded
+signal saved(node)
+signal loaded(node)
 
 func setup_extra()->void:
 	var shape: RectangleShape2D = RectangleShape2D.new()
@@ -58,7 +58,7 @@ func save_data(dir: String)->void:
 		file.store_var(var_name)
 		file.store_var(get(var_name))
 	file.store_var("END")
-	saved.emit()
+	saved.emit(self)
 
 func load_data(dir: String)->void:
 	var file: FileAccess = FileAccess.open(dir+name+".dat", FileAccess.READ)
@@ -69,4 +69,4 @@ func load_data(dir: String)->void:
 	file.close()
 	if cur_state == state.open:
 		open()
-	loaded.emit()
+	loaded.emit(self)
