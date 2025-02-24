@@ -14,7 +14,8 @@ func _ready() -> void:
 	abilities = get_abilities()
 
 func _process(_delta: float) -> void:
-	check_rays()
+	if active:
+		check_rays()
 
 func check_rays(_character: Character = null)->void:
 	for character in watching:
@@ -42,6 +43,8 @@ func _combat_trigger_exited(body: Node2D) -> void:
 		watching.erase(body)
 
 func try_combat(character: Character)->void:
+	if !active:
+		return
 	if character is Player && !in_combat:
 		target = character
 		var participants: Array[Character] = [character, self]

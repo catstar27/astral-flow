@@ -93,7 +93,6 @@ func load_map(new_map: String)->void:
 	map_to_load.add_child(player)
 	player.position = map_to_load.map_to_local(map_to_load.player_start_pos)
 	if map_to_load.has_save_data():
-		map_to_load.prep_map()
 		await SaveLoad.load_map(map_to_load)
 	map_to_load.prep_map()
 	if selection_cursor.last_map_name != map.map_name:

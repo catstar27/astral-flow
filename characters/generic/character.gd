@@ -116,8 +116,6 @@ func _setup()->void:
 	set_outline_color()
 	EventBus.subscribe("GAMEPLAY_SETTINGS_CHANGED", self, "set_outline_color")
 	init_schedule()
-	if active:
-		process_schedule()
 
 func calc_base_stats()->void:
 	base_stats.max_hp = maxi(5+(star_stats.endurance-10)*2+(star_stats.strength-10), 5)
@@ -149,7 +147,7 @@ func init_schedule()->void:
 		task.user = self
 
 func process_schedule()->void:
-	if schedule.size() == 0 || in_combat:
+	if schedule.size() == 0 || in_combat || !active:
 		return
 	if !loop_schedule && schedule_executed:
 		return
@@ -186,7 +184,7 @@ func on_defeated()->void:
 	defeated.emit(self)
 	defeated_at.emit(position)
 	defeated_named.emit(display_name)
-	queue_free()
+	deactivate()
 
 func attack(_source: Ability, accuracy: int, amount: int)->void:
 	if accuracy>=(base_stats.avoidance+stat_mods.avoidance):
@@ -351,5 +349,7 @@ func load_data(dir: String)->void:
 	state_machine.unpause()
 	if active:
 		activate(position)
+	else:
+		deactivate()
 	loaded.emit(self)
 #endregion

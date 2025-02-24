@@ -10,13 +10,9 @@ class_name GameMap
 var children_ready_count: int = 0
 var loading: bool = false
 var player: Player = null
-var spawned: Dictionary = {}
-var dead: Dictionary = {}
 var occupied_tiles: Array[Vector2i]
 var tile_bounds: Dictionary = {"x_min": 0, "x_max": 0, "y_min": 0, "y_max": 0}
 var to_save: Array[StringName] = [
-	"dead",
-	"spawned",
 	"player_start_pos"
 ]
 #region Signals
@@ -51,10 +47,9 @@ func prep_map()->void:
 		elif child is Character:
 			if child.active:
 				set_pos_occupied(child.position)
-				if !child.defeated.is_connected(character_defeated):
-					child.defeated.connect(character_defeated)
 				if child is Player:
 					player = child
+				child.process_schedule()
 	_extra_setup()
 	EventBus.broadcast("MAP_LOADED", self)
 #endregion
@@ -147,10 +142,6 @@ func is_in_bounds(pos: Vector2)->bool:
 	return true
 #endregion
 
-func character_defeated(character: Character)->void:
-	character.defeated.disconnect(character_defeated)
-	dead[character.name] = 1
-
 #region Save Load
 func unload()->void:
 	queue_free()
@@ -226,19 +217,9 @@ func load_data(dir: String)->void:
 		set(var_name, file.get_var())
 		var_name = file.get_var()
 	file.close()
-	for tile in occupied_tiles:
-		set_pos_unoccupied(tile)
-	for child in get_children():
-		if child is Character:
-			if child.name in dead:
-				child.queue_free()
-				remove_child(child)
-	for spawn in spawned:
-		var to_spawn: bool = true
-		for child in get_children():
-			if spawn == child.name:
-				to_spawn = false
-		if to_spawn:
-			add_child(load(spawned[spawn]).instantiate())
+	occupied_tiles = []
+	light_modulator.show()
+	_calc_bounds()
+	_astar_setup()
 	loaded.emit(self)
 #endregion
