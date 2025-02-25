@@ -11,17 +11,16 @@ func enter_state(data: Vector2)->void:
 	var end: bool = false
 	while !end:
 		end = await move(target)
+		state_machine.user.anim_player.play("RESET")
 	state_machine.change_state_to("IDLE")
 
 func move(cur_target: Vector2)->bool:
 	if cur_target == state_machine.user.position:
-		state_machine.user.anim_player.play("RESET")
 		return true
 	if abs(cur_target - state_machine.user.position).x <= (Vector2.ONE*NavMaster.tile_size).x:
 		if abs(cur_target - state_machine.user.position).y <= (Vector2.ONE*NavMaster.tile_size).y:
 			if abs(cur_target - state_machine.user.position) != Vector2.ONE*NavMaster.tile_size:
 				if NavMaster.is_pos_occupied(cur_target):
-					state_machine.user.anim_player.play("RESET")
 					return true
 	var path: Array[Vector2] = NavMaster.request_nav_path(state_machine.user.position, cur_target)
 	var prev_direction: Vector2 = Vector2.ZERO
@@ -34,13 +33,10 @@ func move(cur_target: Vector2)->bool:
 			continue
 		if state_machine.user.cur_ap == 0:
 			EventBus.broadcast("PRINT_LOG","No ap for movement!")
-			state_machine.user.anim_player.play("RESET")
 			return true
 		if stop_movement:
-			state_machine.user.anim_player.play("RESET")
 			return true
 		if target != cur_target:
-			state_machine.user.anim_player.play("RESET")
 			return false
 		var prev_pos: Vector2 = state_machine.user.position
 		var direction: Vector2 = pos-prev_pos
@@ -61,7 +57,7 @@ func move(cur_target: Vector2)->bool:
 			await state_unpaused
 		critical_entered.emit()
 		critical_operation = true
-		await create_tween().tween_property(state_machine.user, "position", pos, .2).finished
+		await create_tween().tween_property(state_machine.user, "position", pos, .25).finished
 		EventBus.broadcast("TILE_UNOCCUPIED", prev_pos)
 		state_machine.user.pos_changed.emit(state_machine.user)
 		critical_operation = false
@@ -69,7 +65,6 @@ func move(cur_target: Vector2)->bool:
 		if state_machine.user.in_combat:
 			state_machine.user.cur_ap -= 1
 			state_machine.user.stats_changed.emit()
-	state_machine.user.anim_player.play("RESET")
 	return true
 
 func new_move_order(pos: Vector2)->void:

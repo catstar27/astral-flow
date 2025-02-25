@@ -61,6 +61,7 @@ var cur_hp: int
 var target_position: Vector2 = position
 var schedule_index: int = 0
 var schedule_executed: bool = false
+var schedule_processing: bool = false
 #region Save Vars Array
 var to_save: Array[StringName] = [
 	"position",
@@ -152,11 +153,13 @@ func process_schedule()->void:
 	if !loop_schedule && schedule_executed:
 		return
 	if !use_timed_schedule:
+		schedule_processing = true
 		schedule[schedule_index].task_completed.connect(task_done)
 		schedule[schedule_index].call_deferred("execute_task")
 
 func task_done()->void:
 	schedule[schedule_index].task_completed.disconnect(task_done)
+	schedule_processing = false
 	schedule_index = (schedule_index+1)%schedule.size()
 	if (schedule_index == 0 && !loop_schedule) || !active:
 		if schedule_index == 0:
@@ -314,7 +317,8 @@ func activate(pos: Vector2)->void:
 	position = pos
 	EventBus.broadcast("TILE_OCCUPIED", pos)
 	show()
-	process_schedule()
+	if !schedule_processing:
+		process_schedule()
 #endregion
 
 #region Saving and Loading

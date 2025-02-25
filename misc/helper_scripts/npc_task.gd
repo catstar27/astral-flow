@@ -63,6 +63,8 @@ func execute_task()->void:
 	executing = false
 
 func wait()->void:
+	while user.state_machine.current_state.state_id != "IDLE":
+		await user.state_machine.state_changed
 	await user.get_tree().create_timer(wait_time).timeout
 
 func guard()->void:

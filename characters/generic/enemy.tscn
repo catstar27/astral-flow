@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://characters/generic/enemy.gd" id="1_3pgqe"]
 [ext_resource type="Shader" path="res://shaders/outline.gdshader" id="2_4x7kb"]
-[ext_resource type="Texture2D" uid="uid://dxcvjcqv1ubau" path="res://textures/character/test_avatar.png" id="3_joqcd"]
+[ext_resource type="Texture2D" uid="uid://bxary7ep8tnbo" path="res://textures/character/nilak_spritesheet.png" id="3_p43uf"]
 [ext_resource type="AnimationLibrary" uid="uid://d2follnewo23r" path="res://animations/Character.res" id="4_05qgc"]
 [ext_resource type="PackedScene" uid="uid://dj1dbu04os5rj" path="res://misc/state_machine.tscn" id="5_2njyl"]
 [ext_resource type="PackedScene" uid="uid://d1oj7ptthilej" path="res://characters/states/interact.tscn" id="5_b0u4w"]
@@ -80,6 +80,18 @@ tracks/4/keys = {
 "update": 0,
 "values": [0.0]
 }
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Sprite:frame")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_7ssjw"]
 _data = {
@@ -107,9 +119,9 @@ display_name = "Enemy"
 [node name="Sprite" type="Sprite2D" parent="."]
 unique_name_in_owner = true
 material = SubResource("ShaderMaterial_xyr6f")
-texture = ExtResource("3_joqcd")
-hframes = 3
-frame = 1
+texture = ExtResource("3_p43uf")
+hframes = 4
+vframes = 5
 region_rect = Rect2(-2, -2, 36, 36)
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]

@@ -49,7 +49,7 @@ func prep_map()->void:
 				set_pos_occupied(child.position)
 				if child is Player:
 					player = child
-				child.process_schedule()
+				child.activate(child.position)
 	_extra_setup()
 	EventBus.broadcast("MAP_LOADED", self)
 #endregion
