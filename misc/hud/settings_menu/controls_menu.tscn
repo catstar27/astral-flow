@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://bcso2ambvbnge"]
 
 [ext_resource type="Theme" uid="uid://crcivs73grrf7" path="res://textures/hud/custom_theme.tres" id="1_nuhaj"]
-[ext_resource type="Script" path="res://misc/hud/settings_menu/controls_menu.gd" id="2_emjoq"]
+[ext_resource type="Script" uid="uid://cjo4c2nrrkuww" path="res://misc/hud/settings_menu/controls_menu.gd" id="2_emjoq"]
 
 [node name="ControlsMenu" type="PanelContainer"]
 custom_minimum_size = Vector2(380, 300)

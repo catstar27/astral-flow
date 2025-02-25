@@ -1,7 +1,7 @@
 [gd_scene load_steps=9 format=3 uid="uid://dysmxh061ic7i"]
 
 [ext_resource type="Theme" uid="uid://crcivs73grrf7" path="res://textures/hud/custom_theme.tres" id="1_dovtc"]
-[ext_resource type="Script" path="res://misc/hud/sequence_display.gd" id="1_m1igy"]
+[ext_resource type="Script" uid="uid://xmfhnt1ywc3f" path="res://misc/hud/sequence_display.gd" id="1_m1igy"]
 [ext_resource type="Material" uid="uid://dcq7n5qyt3hj0" path="res://materials/immaterial.tres" id="1_n8aor"]
 [ext_resource type="Texture2D" uid="uid://mqube77dgtf8" path="res://textures/hud/sequence_display.png" id="3_w4m73"]
 
@@ -126,8 +126,8 @@ tracks/4/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_m64st"]
 _data = {
-"RESET": SubResource("Animation_msuku"),
-"cycle": SubResource("Animation_5bd0s")
+&"RESET": SubResource("Animation_msuku"),
+&"cycle": SubResource("Animation_5bd0s")
 }
 
 [node name="SequenceDisplay" type="Control"]

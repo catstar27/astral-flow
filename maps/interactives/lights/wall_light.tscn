@@ -1,8 +1,15 @@
-[gd_scene load_steps=5 format=3 uid="uid://8hplcp22i5re"]
+[gd_scene load_steps=8 format=3 uid="uid://8hplcp22i5re"]
 
-[ext_resource type="Script" path="res://maps/interactives/generic/interactive_light.gd" id="1_niad6"]
+[ext_resource type="Script" uid="uid://uedfux5yfh4i" path="res://maps/interactives/generic/interactive_light.gd" id="1_niad6"]
 [ext_resource type="Texture2D" uid="uid://s3b2o1juksbb" path="res://textures/interactive/wall_light.png" id="2_tggvp"]
+[ext_resource type="Texture2D" uid="uid://56fxuf3wojfo" path="res://textures/interactive/wall_light_n.png" id="3_3pfwy"]
 [ext_resource type="Texture2D" uid="uid://bh47q77bkny1l" path="res://textures/interactive/light.png" id="3_y2d7t"]
+[ext_resource type="Texture2D" uid="uid://b3pnqdfqwgvtc" path="res://textures/interactive/wall_light_s.png" id="4_mkiqq"]
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_512bg"]
+diffuse_texture = ExtResource("2_tggvp")
+normal_texture = ExtResource("3_3pfwy")
+specular_texture = ExtResource("4_mkiqq")
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_pa78a"]
 size = Vector2(40, 40)
@@ -13,7 +20,7 @@ script = ExtResource("1_niad6")
 
 [node name="Sprite" type="Sprite2D" parent="."]
 unique_name_in_owner = true
-texture = ExtResource("2_tggvp")
+texture = SubResource("CanvasTexture_512bg")
 offset = Vector2(40, 0)
 
 [node name="Audio" type="AudioStreamPlayer2D" parent="."]
@@ -27,11 +34,10 @@ shape = SubResource("RectangleShape2D_pa78a")
 unique_name_in_owner = true
 position = Vector2(40, 0)
 color = Color(0.996078, 1, 0.788235, 1)
-energy = 1.5
-blend_mode = 2
 shadow_enabled = true
-shadow_filter = 2
+shadow_color = Color(0, 0, 0, 1)
+shadow_filter = 1
 shadow_filter_smooth = 1.0
 texture = ExtResource("3_y2d7t")
 texture_scale = 3.0
-height = 64.0
+height = 128.0

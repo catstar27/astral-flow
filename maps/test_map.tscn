@@ -1,38 +1,47 @@
-[gd_scene load_steps=39 format=4 uid="uid://qw4hbk40dyvm"]
+[gd_scene load_steps=42 format=4 uid="uid://qw4hbk40dyvm"]
 
 [ext_resource type="TileSet" uid="uid://dpajsxeb15k7l" path="res://maps/tilesets/dungeon.tres" id="1_bnvg4"]
-[ext_resource type="Script" path="res://maps/game_map.gd" id="2_rvbrh"]
+[ext_resource type="Script" uid="uid://b8kw4ghpy3r8t" path="res://maps/game_map.gd" id="2_rvbrh"]
 [ext_resource type="AudioStream" uid="uid://cunppy0avc0yi" path="res://music/spinning_gears.wav" id="3_j2ofq"]
-[ext_resource type="Resource" path="res://dialogue/test_room_sign1.dtl" id="4_6q77p"]
+[ext_resource type="Resource" uid="uid://c0qpu0p6pyf07" path="res://dialogue/test_room_sign1.dtl" id="4_6q77p"]
 [ext_resource type="PackedScene" uid="uid://iwh84j268tml" path="res://maps/interactives/generic/interactive.tscn" id="4_72sth"]
 [ext_resource type="AudioStream" uid="uid://duak0a258sghg" path="res://music/bounce_back.wav" id="4_5082e"]
 [ext_resource type="Texture2D" uid="uid://cjklr64xiys0a" path="res://textures/interactive/sign.png" id="5_5jmsy"]
 [ext_resource type="Texture2D" uid="uid://be0foyybi4008" path="res://textures/interactive/sun.png" id="6_dg1xt"]
-[ext_resource type="Resource" path="res://dialogue/test_room_sun.dtl" id="6_lwn61"]
+[ext_resource type="Resource" uid="uid://hh2pu7qnxwmr" path="res://dialogue/test_room_sun.dtl" id="6_lwn61"]
 [ext_resource type="Texture2D" uid="uid://dp8dy1cpk5km0" path="res://textures/interactive/couch.png" id="7_g1jef"]
 [ext_resource type="Texture2D" uid="uid://binxw1c1e5vyc" path="res://textures/interactive/dog.png" id="7_vnn2i"]
 [ext_resource type="Texture2D" uid="uid://dei0ir8jap6a" path="res://textures/interactive/grapes.png" id="8_1rt1a"]
-[ext_resource type="Resource" path="res://dialogue/test_room_couch.dtl" id="8_elwwl"]
+[ext_resource type="Resource" uid="uid://bcxwb2tooui81" path="res://dialogue/test_room_couch.dtl" id="8_elwwl"]
+[ext_resource type="Texture2D" uid="uid://c501rjowvd7ww" path="res://textures/interactive/sign_n.png" id="8_prpsj"]
 [ext_resource type="PackedScene" uid="uid://ddmpp54vc5377" path="res://maps/interactives/generic/dialogue_signal_gate.tscn" id="9_amhi4"]
 [ext_resource type="Texture2D" uid="uid://dpnsq7nn8m0l2" path="res://textures/interactive/stairs.png" id="9_sk700"]
 [ext_resource type="Texture2D" uid="uid://qvcieo8d77lb" path="res://textures/interactive/gate_closed.png" id="10_2o7ph"]
-[ext_resource type="Resource" path="res://dialogue/test_room_dog.dtl" id="10_u1hjs"]
+[ext_resource type="Resource" uid="uid://dt5ji5p7n6aqh" path="res://dialogue/test_room_dog.dtl" id="10_u1hjs"]
 [ext_resource type="Texture2D" uid="uid://cgnsug1o0el0w" path="res://textures/interactive/gate_open.png" id="11_77ahb"]
 [ext_resource type="PackedScene" uid="uid://8hplcp22i5re" path="res://maps/interactives/lights/wall_light.tscn" id="12_kvvyy"]
-[ext_resource type="Resource" path="res://dialogue/test_room_grapes.dtl" id="12_shqtc"]
+[ext_resource type="Resource" uid="uid://dqb1tww6se515" path="res://dialogue/test_room_grapes.dtl" id="12_shqtc"]
 [ext_resource type="PackedScene" uid="uid://b5mdx6baygoum" path="res://maps/interactives/generic/signal_gate.tscn" id="12_xfvy2"]
 [ext_resource type="PackedScene" uid="uid://c2af6y8es466h" path="res://characters/generic/enemy.tscn" id="13_augbp"]
-[ext_resource type="Resource" path="res://dialogue/locked.dtl" id="13_ymmi3"]
+[ext_resource type="Resource" uid="uid://c3spvp8owd4ea" path="res://dialogue/locked.dtl" id="13_ymmi3"]
 [ext_resource type="PackedScene" uid="uid://v2x25sfrymso" path="res://maps/interactives/generic/damage_activation_interactive.tscn" id="14_luyw1"]
 [ext_resource type="Texture2D" uid="uid://cojmn67i5ba6g" path="res://textures/interactive/tesla_coil.png" id="15_ghxts"]
 [ext_resource type="PackedScene" uid="uid://cexm0cxkxol76" path="res://maps/interactives/generic/travel_point.tscn" id="16_c5dte"]
-[ext_resource type="Resource" path="res://dialogue/tesla_coil_active.dtl" id="17_7sy0y"]
-[ext_resource type="Resource" path="res://dialogue/tesla_coil_inactive.dtl" id="17_er6pd"]
-[ext_resource type="Resource" path="res://dialogue/test_room_sign2.dtl" id="20_mlbwn"]
-[ext_resource type="Script" path="res://misc/helper_scripts/npc_task.gd" id="29_ka2xw"]
+[ext_resource type="Resource" uid="uid://byr6mgv4py3bh" path="res://dialogue/tesla_coil_active.dtl" id="17_7sy0y"]
+[ext_resource type="Resource" uid="uid://ckggu1n1nt8o3" path="res://dialogue/tesla_coil_inactive.dtl" id="17_er6pd"]
+[ext_resource type="Resource" uid="uid://co4tp7daojscr" path="res://dialogue/test_room_sign2.dtl" id="20_mlbwn"]
+[ext_resource type="Script" uid="uid://cuvk331ioveg" path="res://misc/helper_scripts/npc_task.gd" id="29_ka2xw"]
 [ext_resource type="PackedScene" uid="uid://bxbk83doy5d81" path="res://characters/generic/npc.tscn" id="31_w8a5m"]
-[ext_resource type="Resource" path="res://dialogue/test_room_npc.dtl" id="32_lfqa0"]
-[ext_resource type="Resource" path="res://dialogue/test_room_npc_blocked.dtl" id="33_10ei4"]
+[ext_resource type="Resource" uid="uid://dprgv3h7cyx52" path="res://dialogue/test_room_npc.dtl" id="32_lfqa0"]
+[ext_resource type="Resource" uid="uid://d270jecqm2xyx" path="res://dialogue/test_room_npc_blocked.dtl" id="33_10ei4"]
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_6k8ls"]
+diffuse_texture = ExtResource("5_5jmsy")
+normal_texture = ExtResource("8_prpsj")
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_prpsj"]
+diffuse_texture = ExtResource("5_5jmsy")
+normal_texture = ExtResource("8_prpsj")
 
 [sub_resource type="Resource" id="Resource_65y3c"]
 script = ExtResource("29_ka2xw")
@@ -121,13 +130,13 @@ color = Color(0, 0, 0, 1)
 position = Vector2(-608, 160)
 rotation = -1.5708
 dialogue = ExtResource("4_6q77p")
-texture = ExtResource("5_5jmsy")
+texture = SubResource("CanvasTexture_6k8ls")
 
 [node name="Sign2" parent="." instance=ExtResource("4_72sth")]
 position = Vector2(-288, -608)
 rotation = 1.57034
 dialogue = ExtResource("20_mlbwn")
-texture = ExtResource("5_5jmsy")
+texture = SubResource("CanvasTexture_prpsj")
 
 [node name="Sun" parent="." instance=ExtResource("4_72sth")]
 position = Vector2(160, 160)
@@ -209,6 +218,9 @@ position = Vector2(-288, -736)
 [node name="WallLight8" parent="." instance=ExtResource("12_kvvyy")]
 position = Vector2(416, -416)
 rotation = 3.14159
+
+[node name="WallLight10" parent="." instance=ExtResource("12_kvvyy")]
+position = Vector2(-544, -608)
 
 [node name="TeslaCoil" parent="." instance=ExtResource("14_luyw1")]
 position = Vector2(-160, -800)

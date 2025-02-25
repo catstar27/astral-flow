@@ -1,16 +1,16 @@
 [gd_scene load_steps=36 format=4 uid="uid://dyy0oxkboq8t1"]
 
 [ext_resource type="TileSet" uid="uid://dpajsxeb15k7l" path="res://maps/tilesets/dungeon.tres" id="1_i0d10"]
-[ext_resource type="Script" path="res://maps/game_map.gd" id="2_vpgb5"]
+[ext_resource type="Script" uid="uid://b8kw4ghpy3r8t" path="res://maps/game_map.gd" id="2_vpgb5"]
 [ext_resource type="AudioStream" uid="uid://cunppy0avc0yi" path="res://music/spinning_gears.wav" id="3_2625s"]
 [ext_resource type="PackedScene" uid="uid://8hplcp22i5re" path="res://maps/interactives/lights/wall_light.tscn" id="3_lpqw6"]
 [ext_resource type="PackedScene" uid="uid://iwh84j268tml" path="res://maps/interactives/generic/interactive.tscn" id="4_njv6h"]
 [ext_resource type="AudioStream" uid="uid://dqghmnw6mpids" path="res://music/carefree_carousel.wav" id="4_to652"]
-[ext_resource type="Resource" path="res://dialogue/test_room_completion.dtl" id="5_pmpyx"]
+[ext_resource type="Resource" uid="uid://bfqfriuuyo85e" path="res://dialogue/test_room_completion.dtl" id="5_pmpyx"]
 [ext_resource type="Texture2D" uid="uid://dpnsq7nn8m0l2" path="res://textures/interactive/stairs.png" id="6_wcq4g"]
 [ext_resource type="PackedScene" uid="uid://cexm0cxkxol76" path="res://maps/interactives/generic/travel_point.tscn" id="7_3ojlr"]
 [ext_resource type="PackedScene" uid="uid://bxbk83doy5d81" path="res://characters/generic/npc.tscn" id="10_ll2lb"]
-[ext_resource type="Script" path="res://misc/helper_scripts/npc_task.gd" id="11_om4xg"]
+[ext_resource type="Script" uid="uid://cuvk331ioveg" path="res://misc/helper_scripts/npc_task.gd" id="11_om4xg"]
 
 [sub_resource type="Resource" id="Resource_p2huu"]
 script = ExtResource("11_om4xg")

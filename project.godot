@@ -13,10 +13,10 @@ config_version=5
 config/name="Metroidvania RPG"
 config/version="0.0.1"
 run/main_scene="res://misc/gameplay_managers/main.tscn"
-config/features=PackedStringArray("4.3", "Forward Plus")
+config/features=PackedStringArray("4.4", "Forward Plus")
 boot_splash/bg_color=Color(0.164456, 0.13555, 0.0895567, 1)
-boot_splash/image="res://textures/character/kalin_32x.png"
 boot_splash/use_filter=false
+boot_splash/image="res://textures/character/kalin_32x.png"
 config/icon="res://textures/character/kalin_32x.png"
 
 [autoload]
@@ -32,7 +32,9 @@ SaveLoad="*res://misc/autoload/save_load.gd"
 
 directories/dch_directory={
 "dog": "res://dialogue/dog.dch",
-"generic_npc": "res://dialogue/generic_npc.dch"
+"generic_npc": "res://dialogue/generic_npc.dch",
+"kalin": "res://dialogue/kalin.dch",
+"nilak": "res://dialogue/nilak.dch"
 }
 directories/dtl_directory={
 "locked": "res://dialogue/locked.dtl",
@@ -52,6 +54,7 @@ directories/dtl_directory={
 glossary/default_case_sensitive=true
 variables={
 "learned_zap": false,
+"nilak_name": "???",
 "random": 0,
 "test_room_npc_blocked": 0,
 "test_room_puzzle_index": 0
@@ -260,3 +263,5 @@ textures/canvas_textures/default_texture_filter=0
 renderer/rendering_method="gl_compatibility"
 renderer/rendering_method.mobile="gl_compatibility"
 textures/vram_compression/import_etc2_astc=true
+limits/opengl/max_renderable_lights=64
+limits/opengl/max_lights_per_object=16

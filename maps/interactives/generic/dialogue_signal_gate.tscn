@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://ddmpp54vc5377"]
 
-[ext_resource type="Script" path="res://maps/interactives/generic/dialogue_signal_gate.gd" id="1_vfxxp"]
+[ext_resource type="Script" uid="uid://c2xt64mdbym6o" path="res://maps/interactives/generic/dialogue_signal_gate.gd" id="1_vfxxp"]
 [ext_resource type="AudioStream" uid="uid://b8ebt3ntvbdjl" path="res://sfx/door.wav" id="2_ycdip"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_4ou26"]

@@ -1,9 +1,16 @@
-[gd_resource type="TileSet" load_steps=3 format=3 uid="uid://dpajsxeb15k7l"]
+[gd_resource type="TileSet" load_steps=6 format=3 uid="uid://dpajsxeb15k7l"]
 
-[ext_resource type="Texture2D" uid="uid://b4gigoborowkw" path="res://textures/test_tiles.png" id="1_yg3pa"]
+[ext_resource type="Texture2D" uid="uid://b4gigoborowkw" path="res://textures/map/test_tiles.png" id="1_splk1"]
+[ext_resource type="Texture2D" uid="uid://244e627k18r1" path="res://textures/map/test_tiles_n.png" id="2_pilm7"]
+[ext_resource type="Texture2D" uid="uid://b611ov6lkuuun" path="res://textures/map/test_tiles_s.png" id="3_6fxnl"]
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_m61gy"]
+diffuse_texture = ExtResource("1_splk1")
+normal_texture = ExtResource("2_pilm7")
+specular_texture = ExtResource("3_6fxnl")
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_garr0"]
-texture = ExtResource("1_yg3pa")
+texture = SubResource("CanvasTexture_m61gy")
 texture_region_size = Vector2i(64, 64)
 0:0/0 = 0
 0:0/0/custom_data_0 = true

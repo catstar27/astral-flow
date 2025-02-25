@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://d3d3q8u26hymf"]
 
-[ext_resource type="Script" path="res://characters/abilities/zap.gd" id="1_q1n8d"]
+[ext_resource type="Script" uid="uid://beu5boaey41vr" path="res://characters/abilities/zap.gd" id="1_q1n8d"]
 [ext_resource type="AudioStream" uid="uid://ph4sryxod7aw" path="res://sfx/zap.wav" id="2_vkohv"]
 
 [node name="Zap" type="Node2D"]

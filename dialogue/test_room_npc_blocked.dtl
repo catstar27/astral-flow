@@ -1,41 +1,41 @@
-join generic_npc center
+join nilak center
 if {test_room_puzzle_index} < 7:
 	[music path="res://music/carefree_carousel.wav" fade="0.0" volume="0.0"]
 if {test_room_npc_blocked} == 0:
-	generic_npc: Could you please move, my good fellow? I need to unlock the door.
+	nilak: Could you please move, my good fellow? I need to unlock the door.
 elif {test_room_npc_blocked} == 1:
-	generic_npc: Once again, could I trouble you to move so I can access the door?
+	nilak: Once again, could I trouble you to move so I can access the door?
 elif {test_room_npc_blocked} == 2:
-	generic_npc: I am sorry, but are you not able to understand me? I said, please move.
+	nilak: I am sorry, but are you not able to understand me? I said, please move.
 elif {test_room_npc_blocked} == 3:
-	generic_npc: This is getting annoying.
+	nilak: This is getting annoying.
 elif {test_room_npc_blocked} == 4:
-	generic_npc: This is just a waste of everyone's time!
+	nilak: This is just a waste of everyone's time!
 elif {test_room_npc_blocked} == 5:
-	generic_npc: PLEASE. JUST. MOVE.
+	nilak: PLEASE. JUST. MOVE.
 elif {test_room_npc_blocked} == 6:
-	generic_npc: ARGHGHGRHGGG!!!!
+	nilak: ARGHGHGRHGGG!!!!
 elif {test_room_npc_blocked} == 7:
-	generic_npc: ...
+	nilak: ...
 elif {test_room_npc_blocked} == 8:
-	generic_npc: Could you please move, my good fellow? I need to unlock the door.
+	nilak: Could you please move, my good fellow? I need to unlock the door.
 elif {test_room_npc_blocked} == 9:
-	generic_npc: ...
-	generic_npc: Didn't fall for the old "this dialogue is just looping now" trick, huh?
+	nilak: ...
+	nilak: Didn't fall for the old "this dialogue is just looping now" trick, huh?
 elif {test_room_npc_blocked} == 10:
-	generic_npc: I guess I really should congratulate your persistence...
+	nilak: I guess I really should congratulate your persistence...
 elif {test_room_npc_blocked} == 11:
-	generic_npc: But seriously. Do you want to know what it is like when I'm REALLY mad?
+	nilak: But seriously. Do you want to know what it is like when I'm REALLY mad?
 elif {test_room_npc_blocked} == 12:
-	generic_npc: Because if you keep this up, I might just show you.
+	nilak: Because if you keep this up, I might just show you.
 elif {test_room_npc_blocked} == 13:
-	generic_npc: There are untold horrors trapped within me, and I may just release them.
+	nilak: There are untold horrors trapped within me, and I may just release them.
 elif {test_room_npc_blocked} == 14:
 	The ground starts shaking...
 elif {test_room_npc_blocked} == 15:
-	generic_npc: Feel that? That's your demise. You have one more chance.
+	nilak: Feel that? That's your demise. You have one more chance.
 else:
-	generic_npc: That's it. Goodbye. You won't see another day.
+	nilak: That's it. Goodbye. You won't see another day.
 	[signal arg="crash_game"]
 set {test_room_npc_blocked} += 1
 [end_timeline]

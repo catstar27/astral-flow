@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://covhvnd4w4mkl"]
 
-[ext_resource type="Script" path="res://misc/gameplay_managers/sound_manager.gd" id="1_wpm7b"]
+[ext_resource type="Script" uid="uid://boy8y2ikokbuf" path="res://misc/gameplay_managers/sound_manager.gd" id="1_wpm7b"]
 
 [node name="SoundManager" type="Node"]
 script = ExtResource("1_wpm7b")

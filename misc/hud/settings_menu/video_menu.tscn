@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://b7cxdla4214kn"]
 
 [ext_resource type="Theme" uid="uid://crcivs73grrf7" path="res://textures/hud/custom_theme.tres" id="1_6ts4i"]
-[ext_resource type="Script" path="res://misc/hud/settings_menu/video_menu.gd" id="2_k5xkk"]
+[ext_resource type="Script" uid="uid://d3qcuaoyqf2wy" path="res://misc/hud/settings_menu/video_menu.gd" id="2_k5xkk"]
 
 [node name="VideoMenu" type="PanelContainer" node_paths=PackedStringArray("first_selection")]
 custom_minimum_size = Vector2(380, 300)
