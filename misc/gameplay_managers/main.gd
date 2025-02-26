@@ -39,6 +39,7 @@ func _ready() -> void:
 	set_video_settings()
 	if SaveLoad.is_slot_blank("save1"):
 		load_map("res://maps/test_map.tscn")
+		EventBus.broadcast("QUEST_START", "AWAKENING")
 	else:
 		SaveLoad.load_data()
 	prepped = true

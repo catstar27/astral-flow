@@ -1,7 +1,9 @@
-[gd_scene load_steps=4 format=3 uid="uid://bsrym6k1vywfo"]
+[gd_scene load_steps=5 format=3 uid="uid://bsrym6k1vywfo"]
 
 [ext_resource type="Script" uid="uid://cvqk3cxm2c8t5" path="res://misc/hud/quest_tracker.gd" id="1_k0ovv"]
 [ext_resource type="Material" uid="uid://dcq7n5qyt3hj0" path="res://materials/immaterial.tres" id="1_mgb1m"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_nvivb"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_j8sdj"]
 font_size = 24
@@ -11,15 +13,27 @@ material = ExtResource("1_mgb1m")
 layout_mode = 3
 anchors_preset = 0
 script = ExtResource("1_k0ovv")
+objective_label_settings = SubResource("LabelSettings_nvivb")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
+[node name="QuestContainer" type="VBoxContainer" parent="."]
+unique_name_in_owner = true
 use_parent_material = true
 layout_mode = 1
 offset_left = -200.0
 offset_top = -40.0
 
-[node name="Name" type="Label" parent="VBoxContainer"]
+[node name="NameIconContainer" type="HBoxContainer" parent="QuestContainer"]
+use_parent_material = true
+layout_mode = 2
+
+[node name="Name" type="Label" parent="QuestContainer/NameIconContainer"]
+unique_name_in_owner = true
 use_parent_material = true
 layout_mode = 2
 label_settings = SubResource("LabelSettings_j8sdj")
 horizontal_alignment = 1
+
+[node name="ObjectiveContainer" type="VBoxContainer" parent="QuestContainer"]
+unique_name_in_owner = true
+use_parent_material = true
+layout_mode = 2

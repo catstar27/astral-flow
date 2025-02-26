@@ -1,14 +1,16 @@
-extends Node
+extends Resource
 class_name QuestStage
 
 @export var quest_objectives: Array[QuestObjective]
+var active: bool = false
 var objectives_needed: int
 var objectives_complete: int = 0
 var complete: bool = false
 signal stage_completed(stage: QuestStage)
 signal objective_updated(stage: QuestObjective)
 
-func _ready() -> void:
+func activate()->void:
+	active = true
 	objectives_needed = quest_objectives.size()
 	for objective in quest_objectives:
 		objective.objective_completed.connect(stage_objective_complete)

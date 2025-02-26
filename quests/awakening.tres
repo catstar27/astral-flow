@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="QuestInfo" load_steps=7 format=3 uid="uid://xf8deqj7gdws"]
+
+[ext_resource type="Texture2D" uid="uid://be0foyybi4008" path="res://textures/interactive/sun.png" id="1_s4lj2"]
+[ext_resource type="Script" uid="uid://4v676nts104o" path="res://misc/helper_scripts/quest_stage.gd" id="2_abvq1"]
+[ext_resource type="Script" uid="uid://uypovxnppjgr" path="res://misc/helper_scripts/quest_objective.gd" id="3_17eun"]
+[ext_resource type="Script" uid="uid://bnigcbtc7ky3a" path="res://misc/helper_scripts/quest_info.gd" id="4_5j7i5"]
+
+[sub_resource type="Resource" id="Resource_230df"]
+script = ExtResource("3_17eun")
+description = "Open the Door"
+event_id = "TUTORIAL_DOOR_1_OPEN"
+total_count = 0
+metadata/_custom_type_script = "uid://uypovxnppjgr"
+
+[sub_resource type="Resource" id="Resource_utbtb"]
+script = ExtResource("2_abvq1")
+quest_objectives = Array[ExtResource("3_17eun")]([SubResource("Resource_230df")])
+metadata/_custom_type_script = "uid://4v676nts104o"
+
+[resource]
+script = ExtResource("4_5j7i5")
+quest_name = "Awakening"
+quest_id = "AWAKENING"
+quest_description = "You are dreaming a strange dream. Find a way to wake up."
+quest_icon = ExtResource("1_s4lj2")
+quest_stages = Array[ExtResource("2_abvq1")]([SubResource("Resource_utbtb")])
+metadata/_custom_type_script = "uid://bnigcbtc7ky3a"
