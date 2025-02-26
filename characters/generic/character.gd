@@ -326,9 +326,6 @@ func save_data(dir: String)->void:
 	stop_move_order.emit()
 	if active && schedule != []:
 		schedule[schedule_index].pause.emit()
-	state_machine.pause()
-	while state_machine.current_state.critical_operation:
-		await state_machine.current_state.critical_exited
 	var file: FileAccess = FileAccess.open(dir+name+".dat", FileAccess.WRITE)
 	for var_name in to_save:
 		file.store_var(var_name)
@@ -337,7 +334,6 @@ func save_data(dir: String)->void:
 	file.close()
 	if active && schedule != []:
 		schedule[schedule_index].unpause.emit()
-	state_machine.unpause()
 	saved.emit(self)
 
 func load_data(dir: String)->void:
@@ -350,6 +346,7 @@ func load_data(dir: String)->void:
 		var_name = file.get_var()
 	file.close()
 	load_abilities()
+	position = NavMaster.map.map_to_local(NavMaster.map.local_to_map(position))
 	state_machine.unpause()
 	if active:
 		activate(position)

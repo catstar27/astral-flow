@@ -43,7 +43,10 @@ func close_pause_menu()->void:
 	pause_closed.emit()
 
 func save_pressed()->void:
-	SaveLoad.save_data()
+	close_pause_menu()
+	await SaveLoad.save_data()
+	open_pause_menu()
+	save_button.grab_focus()
 
 func load_pressed()->void:
 	close_pause_menu()

@@ -4,12 +4,6 @@ var map: GameMap = null
 var map_loading: bool = false
 var tile_size: int = 64
 
-func _ready() -> void:
-	EventBus.subscribe("MAP_LOADED", self, "_set_map")
-
-func _set_map(new_map: GameMap)->void:
-	map = new_map
-
 func request_nav_path(start: Vector2, end: Vector2, allow_closest: bool = true)->Array[Vector2]:
 	if map == null || !is_instance_valid(map):
 		return []

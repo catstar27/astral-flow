@@ -85,6 +85,7 @@ func load_map(new_map: String)->void:
 	var map_to_load: GameMap = load(new_map).instantiate()
 	map_to_load.position = position
 	add_child(map_to_load)
+	NavMaster.map = map_to_load
 	map = map_to_load
 	map.process_mode = Node.PROCESS_MODE_PAUSABLE
 	if player == null:

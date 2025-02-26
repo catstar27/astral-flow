@@ -64,9 +64,6 @@ func save_data(quiet_save: bool = false)->void:
 	if in_combat:
 		EventBus.broadcast("PRINT_LOG", "Cannot Save When in Danger!")
 		return
-	if NavMaster.map.map_name == "Global":
-		printerr("Map Name Collides with Global Saves")
-		return
 	saving = true
 	if !DirAccess.dir_exists_absolute(save_file_folder):
 		DirAccess.make_dir_absolute(save_file_folder)
