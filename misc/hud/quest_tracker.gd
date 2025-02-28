@@ -8,14 +8,16 @@ var tracked_quest: QuestInfo = null
 
 func _ready() -> void:
 	EventBus.subscribe("QUEST_TRACK", self, "change_quest")
-	EventBus.subscribe("QUEST_TRACK_IF_BLANK", self, "change_quest_if_blank")
+	EventBus.subscribe("QUEST_TRACK_STOP", self, "stop_tracking")
+	EventBus.subscribe("COMBAT_STARTED", self, "hide")
+	EventBus.subscribe("COMBAT_ENDED", self, "show_if_tracking")
 
 func change_quest(quest: QuestInfo)->void:
 	tracked_quest = quest
 	quest_name.text = tracked_quest.quest_name
 	for child in objective_container.get_children():
 		child.queue_free()
-	for objective in tracked_quest.get_current_stage().quest_objectives:
+	for objective in tracked_quest.get_current_stage().get_stage_objectives():
 		var new_label: Label = Label.new()
 		new_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		new_label.label_settings = objective_label_settings
@@ -25,7 +27,12 @@ func change_quest(quest: QuestInfo)->void:
 			new_label.text += " ("+str(objective.current_count)+"/"+str(objective.total_count)+")"
 		objective_container.add_child(new_label)
 	position.y = get_viewport_rect().size.y-quest_container.size.y
+	show()
 
-func change_quest_if_blank(quest: QuestInfo)->void:
-	if tracked_quest == null:
-		change_quest(quest)
+func stop_tracking()->void:
+	tracked_quest = null
+	hide()
+
+func show_if_tracking()->void:
+	if tracked_quest != null:
+		show()
