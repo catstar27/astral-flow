@@ -6,12 +6,10 @@ enum ai_types {melee_aggressive, melee_safe}
 @export var ai_type: ai_types
 @export var defeat_signal: String
 var watching: Dictionary = {}
-var abilities: Array[Ability] = []
 var target: Character = null
 
 func _ready() -> void:
 	_setup()
-	abilities = get_abilities()
 
 func _process(_delta: float) -> void:
 	if active:
@@ -29,6 +27,8 @@ func check_ray(character: Character)->void:
 func _combat_trigger_entered(body: Node2D) -> void:
 	if body is Character && body != self:
 		var ray: RayCast2D = RayCast2D.new()
+		ray.set_collision_mask_value(1, true)
+		ray.set_collision_mask_value(2, true)
 		add_child(ray)
 		ray.target_position = body.position
 		watching[body] = ray
@@ -54,14 +54,13 @@ func take_turn()->void:
 	call_deferred(str(ai_types.keys()[ai_type]))
 
 func melee_aggressive()->void:
-	abilities = get_abilities()
-	abilities.sort_custom(func(x,y): return x.damage>y.damage)
-	if !abilities[0].is_destination_valid(target.position):
+	abilities.sort_custom(func(x,y): return x.base_damage>y.base_damage)
+	if !abilities[0].is_tile_valid(target.position):
 		move_order.emit(target.position)
 		await get_tree().create_timer(.01).timeout
 		while state_machine.current_state.state_id != "IDLE":
 			await state_machine.state_changed
-	if abilities[0].is_destination_valid(target.position):
+	if abilities[0].is_tile_valid(target.position):
 		while cur_ap>=abilities[0].ap_cost:
 			ability_order.emit([abilities[0], target.position])
 			while state_machine.current_state.state_id != "IDLE":

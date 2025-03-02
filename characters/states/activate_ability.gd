@@ -5,7 +5,7 @@ extends State
 func enter_state(data: Array)->void:
 	var ability: Ability = data[0]
 	var destination: Vector2 = data[1]
-	if !ability.is_destination_valid(destination):
+	if !ability.is_tile_valid(destination):
 		EventBus.broadcast("PLAY_SOUND", [sound, "positional", state_machine.user.global_position])
 		state_machine.change_state_to("IDLE")
 		return

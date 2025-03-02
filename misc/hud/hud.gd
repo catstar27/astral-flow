@@ -33,7 +33,7 @@ func submenu_closed()->void:
 		sequence_display.show()
 
 func set_char_info(selected: Node2D)->void:
-	if selected is not Character && selected is not Ability || selected == null:
+	if selected is not Character || selected == null:
 		char_info.set_character(null)
 		char_info.close_menu()
 	elif selected is Character:

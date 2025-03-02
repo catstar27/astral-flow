@@ -10,6 +10,7 @@ class_name CharInfo
 @onready var menu_button: ControlDisplayButton = %MenuButton
 @export var ability_buttons: Array[AbilityButton]
 var buttons_used: Array[bool] = [false, false, false, false, false, false, false, false, false, false]
+var prev_button_index: int = 0
 var character: Character = null
 var abilities: Array[Ability] = []
 enum states{closed, open, suspended}
@@ -38,8 +39,8 @@ func open_menu()->void:
 	info_container.show()
 	await create_tween().tween_property(info_container, "position", Vector2(0, info_container.position.y), .5).finished
 	EventBus.broadcast("DEACTIVATE_SELECTION", "NULLDATA")
-	if ability_buttons[0].ability != null:
-		ability_buttons[0].grab_focus()
+	if ability_buttons[prev_button_index].ability != null:
+		ability_buttons[prev_button_index].grab_focus()
 	changing_state = false
 
 func close_menu()->void:
@@ -50,6 +51,9 @@ func close_menu()->void:
 		if character.selected_ability != null:
 			character.call_deferred("deselect_ability")
 	for button in ability_buttons:
+		if button.has_focus():
+			prev_button_index = ability_buttons.find(button)
+			get_window().gui_release_focus()
 		button.disabled = true
 	var activate_selection: bool = true
 	if state == states.suspended:
@@ -68,8 +72,11 @@ func suspend_menu(_ability)->void:
 		return
 	changing_state = true
 	state = states.suspended
+	for button in ability_buttons:
+		if button.has_focus():
+			prev_button_index = ability_buttons.find(button)
+			get_window().gui_release_focus()
 	await create_tween().tween_property(self, "modulate", Color(1,1,1,.5), .1).finished
-	get_window().gui_release_focus()
 	EventBus.broadcast("ACTIVATE_SELECTION", "NULLDATA")
 	changing_state = false
 
@@ -80,8 +87,8 @@ func unsuspend_menu()->void:
 	state = states.open
 	await create_tween().tween_property(self, "modulate", Color(1,1,1,1), .1).finished
 	EventBus.broadcast("DEACTIVATE_SELECTION", "NULLDATA")
-	if ability_buttons[0].ability != null:
-		ability_buttons[0].grab_focus()
+	if ability_buttons[prev_button_index].ability != null:
+		ability_buttons[prev_button_index].grab_focus()
 	changing_state = false
 
 func enable_end_turn()->void:
@@ -141,8 +148,9 @@ func set_character(new_char: Character)->void:
 		return
 	if new_char == character:
 		return
-	elif character != null:
+	if character != null:
 		end_turn_button.pressed.disconnect(character.end_self_turn)
+	prev_button_index = 0
 	menu_button.disabled = false
 	create_tween().tween_property(menu_button, "modulate", Color(1,1,1,1), .1)
 	disable_end_turn()

@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="Ability" load_steps=4 format=3 uid="uid://bfr7tnw5d5sp5"]
+
+[ext_resource type="Script" uid="uid://b0xbk38jyra5a" path="res://characters/abilities/ability.gd" id="1_icph7"]
+[ext_resource type="AudioStream" uid="uid://g0lb5si7k3pc" path="res://sfx/punch.wav" id="2_awjdm"]
+[ext_resource type="Script" uid="uid://dxv7e1j21poh5" path="res://misc/helper_scripts/status.gd" id="3_af8to"]
+
+[resource]
+script = ExtResource("1_icph7")
+display_name = "push"
+sound = ExtResource("2_awjdm")
+ap_cost = 1
+mp_cost = 0
+ability_range = 1
+target_type = 4
+activation_type = 0
+base_damage = 0
+ignore_defense = false
+damage_type = 2
+skill_used = 2
+statuses_applied = Dictionary[ExtResource("3_af8to"), int]({})
+metadata/_custom_type_script = "uid://cwkifgiif4kvq"

@@ -6,6 +6,7 @@
 size = Vector2(40, 40)
 
 [node name="DamageActivationInteractive" type="StaticBody2D" groups=["LevelSave"]]
+collision_mask = 3
 script = ExtResource("1_22vp7")
 
 [node name="Sprite" type="Sprite2D" parent="."]

@@ -25,7 +25,6 @@ Dialogic="*res://addons/dialogic/Core/DialogicGameHandler.gd"
 EventBus="*res://misc/autoload/eventbus.gd"
 Settings="*res://misc/autoload/settings.gd"
 NavMaster="*res://misc/autoload/navmaster.gd"
-Utility="*res://misc/autoload/utility.gd"
 SaveLoad="*res://misc/autoload/save_load.gd"
 
 [dialogic]
@@ -256,6 +255,11 @@ default={
 , Object(InputEventJoypadButton,"resource_local_to_scene":false,"resource_name":"","device":-1,"button_index":3,"pressure":0.0,"pressed":true,"script":null)
 ]
 }
+
+[layer_names]
+
+2d_physics/layer_1="Characters and Non-Door Interactives"
+2d_physics/layer_2="Map and Door Interactives"
 
 [rendering]
 

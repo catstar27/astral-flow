@@ -1,4 +1,4 @@
-[gd_scene load_steps=55 format=4 uid="uid://qw4hbk40dyvm"]
+[gd_scene load_steps=54 format=4 uid="uid://qw4hbk40dyvm"]
 
 [ext_resource type="TileSet" uid="uid://dpajsxeb15k7l" path="res://maps/tilesets/dungeon.tres" id="1_bnvg4"]
 [ext_resource type="Script" uid="uid://b8kw4ghpy3r8t" path="res://maps/game_map.gd" id="2_rvbrh"]
@@ -35,12 +35,11 @@
 [ext_resource type="Texture2D" uid="uid://dkgiwp2iwkxkf" path="res://textures/interactive/stairs_s.png" id="24_dpap0"]
 [ext_resource type="Texture2D" uid="uid://c0dsxp62egbv" path="res://textures/interactive/gate_closed.tres" id="26_ysqq4"]
 [ext_resource type="Texture2D" uid="uid://bn6djv1k2bj0b" path="res://textures/interactive/gate_open.tres" id="28_llove"]
-[ext_resource type="Script" uid="uid://cuvk331ioveg" path="res://misc/helper_scripts/npc_task.gd" id="29_ka2xw"]
 [ext_resource type="PackedScene" uid="uid://bxbk83doy5d81" path="res://characters/generic/npc.tscn" id="31_w8a5m"]
 [ext_resource type="Resource" uid="uid://dprgv3h7cyx52" path="res://dialogue/test_room_npc.dtl" id="32_lfqa0"]
-[ext_resource type="Resource" uid="uid://d270jecqm2xyx" path="res://dialogue/test_room_npc_blocked.dtl" id="33_10ei4"]
 [ext_resource type="Texture2D" uid="uid://33u05ljr16og" path="res://textures/interactive/tesla_coil_n.png" id="35_k202b"]
 [ext_resource type="Texture2D" uid="uid://ddu4g3c61ag8s" path="res://textures/interactive/tesla_coil_s.png" id="36_ms4id"]
+[ext_resource type="Script" uid="uid://cuvk331ioveg" path="res://misc/helper_scripts/npc_task.gd" id="38_jrvla"]
 
 [sub_resource type="CanvasTexture" id="CanvasTexture_6k8ls"]
 diffuse_texture = ExtResource("5_5jmsy")
@@ -77,8 +76,8 @@ diffuse_texture = ExtResource("15_ghxts")
 normal_texture = ExtResource("35_k202b")
 specular_texture = ExtResource("36_ms4id")
 
-[sub_resource type="Resource" id="Resource_65y3c"]
-script = ExtResource("29_ka2xw")
+[sub_resource type="Resource" id="Resource_7i0lg"]
+script = ExtResource("38_jrvla")
 type = 4
 wait_time = 0.0
 guard_location = Vector2(0, 0)
@@ -90,9 +89,10 @@ hour_start = 0
 hour_end = 0
 minute_start = 0
 minute_end = 0
+metadata/_custom_type_script = "uid://cuvk331ioveg"
 
-[sub_resource type="Resource" id="Resource_o6g22"]
-script = ExtResource("29_ka2xw")
+[sub_resource type="Resource" id="Resource_v6peg"]
+script = ExtResource("38_jrvla")
 type = 1
 wait_time = 0.0
 guard_location = Vector2(32, -544)
@@ -104,9 +104,10 @@ hour_start = 0
 hour_end = 0
 minute_start = 0
 minute_end = 0
+metadata/_custom_type_script = "uid://cuvk331ioveg"
 
-[sub_resource type="Resource" id="Resource_nnvgt"]
-script = ExtResource("29_ka2xw")
+[sub_resource type="Resource" id="Resource_jrvla"]
+script = ExtResource("38_jrvla")
 type = 0
 wait_time = 5.0
 guard_location = Vector2(0, 0)
@@ -118,9 +119,10 @@ hour_start = 0
 hour_end = 0
 minute_start = 0
 minute_end = 0
+metadata/_custom_type_script = "uid://cuvk331ioveg"
 
-[sub_resource type="Resource" id="Resource_j2onx"]
-script = ExtResource("29_ka2xw")
+[sub_resource type="Resource" id="Resource_cjebi"]
+script = ExtResource("38_jrvla")
 type = 2
 wait_time = 0.0
 guard_location = Vector2(0, 0)
@@ -132,9 +134,10 @@ hour_start = 0
 hour_end = 0
 minute_start = 0
 minute_end = 0
+metadata/_custom_type_script = "uid://cuvk331ioveg"
 
-[sub_resource type="Resource" id="Resource_2iilv"]
-script = ExtResource("29_ka2xw")
+[sub_resource type="Resource" id="Resource_gpbd4"]
+script = ExtResource("38_jrvla")
 type = 1
 wait_time = 0.0
 guard_location = Vector2(288, -736)
@@ -146,6 +149,7 @@ hour_start = 0
 hour_end = 0
 minute_start = 0
 minute_end = 0
+metadata/_custom_type_script = "uid://cuvk331ioveg"
 
 [node name="TestMap" type="TileMapLayer"]
 process_mode = 1
@@ -268,7 +272,7 @@ dialogue = ExtResource("17_er6pd")
 texture = SubResource("CanvasTexture_6rbxq")
 
 [node name="TeslaCoil2" parent="." instance=ExtResource("14_luyw1")]
-position = Vector2(288, -800)
+position = Vector2(224, -800)
 damage_type_required = 1
 dialogue_unlocked = ExtResource("17_7sy0y")
 dialogue = ExtResource("17_er6pd")
@@ -277,15 +281,14 @@ texture = SubResource("CanvasTexture_v6peg")
 [node name="Enemy" parent="." instance=ExtResource("13_augbp")]
 position = Vector2(32, -544)
 display_name = "???"
-schedule = Array[ExtResource("29_ka2xw")]([SubResource("Resource_65y3c"), SubResource("Resource_o6g22"), SubResource("Resource_nnvgt")])
+schedule = Array[ExtResource("38_jrvla")]([SubResource("Resource_7i0lg"), SubResource("Resource_v6peg"), SubResource("Resource_jrvla")])
 loop_schedule = true
 
 [node name="NPC" parent="." instance=ExtResource("31_w8a5m")]
 position = Vector2(480, -288)
 dialogue = ExtResource("32_lfqa0")
 display_name = "???"
-schedule = Array[ExtResource("29_ka2xw")]([SubResource("Resource_j2onx"), SubResource("Resource_2iilv")])
-task_blocked_dialogue = ExtResource("33_10ei4")
+schedule = Array[ExtResource("38_jrvla")]([SubResource("Resource_cjebi"), SubResource("Resource_gpbd4")])
 active = false
 
 [connection signal="unlocked" from="TeslaCoil" to="TeslaGate" method="advance_unlock"]

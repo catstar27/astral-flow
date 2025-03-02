@@ -6,6 +6,8 @@
 size = Vector2(40, 40)
 
 [node name="TravelPoint" type="StaticBody2D"]
+collision_layer = 2
+collision_mask = 3
 script = ExtResource("1_2msm6")
 
 [node name="Sprite" type="Sprite2D" parent="."]

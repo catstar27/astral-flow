@@ -1,10 +1,13 @@
-[gd_scene load_steps=16 format=3 uid="uid://dgmulq68rm1md"]
+[gd_scene load_steps=19 format=3 uid="uid://qjb7sn1qkk44"]
 
 [ext_resource type="Script" uid="uid://duk342kn2rflp" path="res://characters/player.gd" id="1_so47p"]
+[ext_resource type="Script" uid="uid://b0xbk38jyra5a" path="res://characters/abilities/ability.gd" id="2_6rrl0"]
 [ext_resource type="Material" uid="uid://gcx5n0wnotu5" path="res://materials/outline_material.tres" id="2_aa0te"]
+[ext_resource type="Resource" uid="uid://dae4xdag0nd3v" path="res://characters/abilities/punch.tres" id="3_6rrl0"]
 [ext_resource type="Texture2D" uid="uid://ccviqgc6qduy" path="res://textures/character/kalin_spritesheet.png" id="3_rhuoj"]
 [ext_resource type="Texture2D" uid="uid://s8uq7nt6t7do" path="res://textures/character/kalin_spritesheet_n.png" id="4_4kvvd"]
 [ext_resource type="AnimationLibrary" uid="uid://d2follnewo23r" path="res://animations/Character.res" id="4_b3lbu"]
+[ext_resource type="Resource" uid="uid://c6f0begbutw3l" path="res://characters/abilities/block.tres" id="4_eus45"]
 [ext_resource type="PackedScene" uid="uid://b7psjacfk2o1y" path="res://misc/gameplay_managers/status_manager.tscn" id="6_5iydw"]
 [ext_resource type="PackedScene" uid="uid://dj1dbu04os5rj" path="res://misc/state_machine.tscn" id="6_g6tfj"]
 [ext_resource type="PackedScene" uid="uid://co558pdmpfij5" path="res://characters/states/move.tscn" id="7_uo70b"]
@@ -77,17 +80,8 @@ _data = {
 [node name="Player" type="CharacterBody2D" groups=["Persist"]]
 z_index = 1
 script = ExtResource("1_so47p")
-star_stats = {
-"agility": 12,
-"charisma": 10,
-"endurance": 12,
-"intelligence": 10,
-"passion": 10,
-"resolve": 12,
-"strength": 10
-}
-ability_scenes = Array[String](["res://characters/abilities/punch.tscn", "res://characters/abilities/block.tscn"])
-display_name = "Player"
+export_abilities = Array[ExtResource("2_6rrl0")]([ExtResource("3_6rrl0"), ExtResource("4_eus45")])
+display_name = "Kalin"
 
 [node name="Sprite" type="Sprite2D" parent="."]
 unique_name_in_owner = true

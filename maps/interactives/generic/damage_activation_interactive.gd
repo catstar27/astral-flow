@@ -1,8 +1,7 @@
 extends Interactive
 class_name DamageActivationInteractive
 
-enum damage_type_choice {blunt, electric, none}
-@export var damage_type_required: damage_type_choice = damage_type_choice.none
+@export var damage_type_required: Ability.damage_type_options = Ability.damage_type_options.none
 @export var dialogue_unlocked: DialogicTimeline
 var triggered: bool = false
 var to_save: Array[StringName] = [
@@ -16,13 +15,11 @@ func setup_extra()->void:
 	if triggered:
 		unlock()
 
-func attack(source: Ability, _accuracy: int, _amount: int)->void:
+func damage(_source: Node, _amount: int, damage_type: Ability.damage_type_options, _ignore_armor: bool = false)->void:
 	if triggered:
 		return
-	if damage_type_required != damage_type_choice.none:
-		if !source.damage_type == damage_type_required:
-			return
-	unlock()
+	if damage_type == damage_type_required:
+		unlock()
 
 func unlock()->void:
 	triggered = true

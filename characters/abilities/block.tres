@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="Ability" load_steps=5 format=3 uid="uid://c6f0begbutw3l"]
+
+[ext_resource type="Script" uid="uid://b0xbk38jyra5a" path="res://characters/abilities/ability.gd" id="1_e8slm"]
+[ext_resource type="AudioStream" uid="uid://dn0n8crrshix1" path="res://sfx/shield.wav" id="2_54ndt"]
+[ext_resource type="Script" uid="uid://dxv7e1j21poh5" path="res://misc/helper_scripts/status.gd" id="3_k4dky"]
+[ext_resource type="Resource" uid="uid://cw635joog3u4x" path="res://characters/abilities/statuses/blocking.tres" id="4_iy6jr"]
+
+[resource]
+script = ExtResource("1_e8slm")
+display_name = "Block"
+sound = ExtResource("2_54ndt")
+ap_cost = 1
+mp_cost = 0
+ability_range = 0
+target_type = 0
+activation_type = 2
+base_damage = 0
+ignore_defense = false
+damage_type = 2
+skill_used = 3
+statuses_applied = Dictionary[ExtResource("3_k4dky"), int]({
+ExtResource("4_iy6jr"): 1
+})
+metadata/_custom_type_script = "uid://cwkifgiif4kvq"

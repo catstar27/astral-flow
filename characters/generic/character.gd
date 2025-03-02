@@ -34,7 +34,8 @@ var stat_mods: Dictionary = {
 #endregion
 #region Exports
 @export var allies: Array[Character] = []
-@export var ability_scenes: Array[String] = []
+@export var export_abilities: Array[Ability] = []
+var abilities: Array[Ability] = []
 @export var display_name: String = "Name Here"
 @export var text_indicator_shift: Vector2 = Vector2.UP*32
 @export_group("Schedule")
@@ -89,7 +90,8 @@ signal abilities_changed
 signal defeated(character: Character)
 signal defeated_at(pos: Vector2)
 signal defeated_named(display_name: String)
-signal damaged
+signal damaged(source: Node)
+signal rested
 signal combat_entered
 signal combat_exited
 signal ability_deselected
@@ -106,10 +108,13 @@ func _setup()->void:
 	status_manager.status_damage_ticked.connect(damage)
 	status_manager.status_stat_mod_changed.connect(update_stat_mod)
 	status_manager.status_action_occurred.connect(process_status_action)
+	pos_changed.connect(status_manager.process_move)
+	rested.connect(status_manager.process_rest)
+	damaged.connect(status_manager.process_damage)
 	damaged.connect(on_damaged)
 	combat_entered.connect(enter_combat)
 	combat_exited.connect(exit_combat)
-	load_abilities()
+	duplicate_export_abilities()
 	calc_base_stats()
 	cur_hp = base_stats.max_hp+stat_mods.max_hp
 	cur_ap = base_stats.max_ap+stat_mods.max_ap
@@ -117,6 +122,12 @@ func _setup()->void:
 	set_outline_color()
 	EventBus.subscribe("GAMEPLAY_SETTINGS_CHANGED", self, "set_outline_color")
 	init_schedule()
+
+func duplicate_export_abilities()->void:
+	for ability in export_abilities:
+		var copy: Ability = ability.duplicate()
+		copy.user = self
+		abilities.append(copy)
 
 func calc_base_stats()->void:
 	base_stats.max_hp = maxi(5+(star_stats.endurance-10)*2+(star_stats.strength-10), 5)
@@ -140,6 +151,7 @@ func rest()->void:
 	cur_ap = base_stats.max_ap+stat_mods.max_ap
 	cur_hp = base_stats.max_hp+stat_mods.max_hp
 	cur_mp = base_stats.max_mp+stat_mods.max_mp
+	rested.emit()
 #endregion
 
 #region Tasks
@@ -189,14 +201,7 @@ func on_defeated()->void:
 	defeated_named.emit(display_name)
 	deactivate()
 
-func attack(_source: Ability, accuracy: int, amount: int)->void:
-	if accuracy>=(base_stats.avoidance+stat_mods.avoidance):
-		damage(amount)
-	else:
-		var text_ind_pos: Vector2 = text_indicator_shift+global_position
-		EventBus.broadcast("MAKE_TEXT_INDICATOR", ["Miss!", text_ind_pos])
-
-func damage(amount: int, ignore_defense: bool = false)->void:
+func damage(source: Node, amount: int, _damage_type: Ability.damage_type_options, ignore_defense: bool = false)->void:
 	var text_ind_pos: Vector2 = text_indicator_shift+global_position
 	if amount >= base_stats.damage_threshold+stat_mods.damage_threshold || ignore_defense:
 		cur_hp -= amount
@@ -208,7 +213,7 @@ func damage(amount: int, ignore_defense: bool = false)->void:
 			EventBus.broadcast("MAKE_TEXT_INDICATOR", [str(-damage_reduced), text_ind_pos])
 		else:
 			EventBus.broadcast("MAKE_TEXT_INDICATOR", ["Blocked!", text_ind_pos])
-	damaged.emit()
+	damaged.emit(source)
 	stats_changed.emit()
 	if cur_hp <= 0:
 		anim_player.play("Character/defeat")
@@ -225,7 +230,7 @@ func select_ability(ability: Ability)->void:
 	while state_machine.current_state.state_id == "MOVE":
 		await state_machine.state_changed
 	selected_ability = ability
-	place_range_indicators(ability.get_valid_destinations(), ability.target_type)
+	place_range_indicators(ability)
 
 func deselect_ability(will_reselect: bool = false)->void:
 	selected_ability = null
@@ -234,41 +239,20 @@ func deselect_ability(will_reselect: bool = false)->void:
 		ability_deselected.emit()
 
 func get_abilities()->Array[Ability]:
-	ability_scenes = []
-	var arr: Array[Ability] = []
-	for child in get_children():
-		if child is Ability:
-			arr.append(child)
-			ability_scenes.append(child.scene_file_path)
-	return arr
+	return abilities
 
-func load_abilities()->void:
-	for child in get_children():
-		if child is Ability:
-			child.queue_free()
-	for scn in ability_scenes:
-		add_child(load(scn).instantiate())
-
-func add_ability(ability_scene: PackedScene)->void:
-	var ability: Ability = ability_scene.instantiate()
-	add_child(ability)
-	ability_scenes.append(ability.scene_file_path)
+func add_ability(ability: Ability)->void:
+	abilities.append(ability)
+	ability.user = self
 	abilities_changed.emit()
 
 func anim_activate()->void:
 	anim_activate_ability.emit()
 
-func place_range_indicators(locations: Array[Vector2], target_type: Ability.target_type_choice)->void:
-	for location in locations:
+func place_range_indicators(ability: Ability)->void:
+	for location in ability.get_valid_destinations():
 		var indicator: Sprite2D = range_indicator_scene.instantiate()
-		if target_type == Ability.target_type_choice.target_self:
-			indicator.modulate = Settings.gameplay.support_indicator_tint
-		elif target_type == Ability.target_type_choice.target_allies:
-			indicator.modulate = Settings.gameplay.support_indicator_tint
-		elif target_type == Ability.target_type_choice.target_enemies:
-			indicator.modulate = Settings.gameplay.attack_indicator_tint
-		else:
-			indicator.modulate = Settings.gameplay.attack_indicator_tint
+		indicator.modulate = ability.get_targeting_color()
 		indicator.position = location-position
 		add_child(indicator)
 		range_indicators.append(indicator)
@@ -279,7 +263,7 @@ func remove_range_indicators()->void:
 #endregion
 
 #region Status
-func add_status(status: Utility.Status)->void:
+func add_status(status: Status)->void:
 	status_manager.add_status(status)
 	var info: Array = [status.display_name, text_indicator_shift+global_position, status.status_color]
 	EventBus.broadcast("MAKE_TEXT_INDICATOR", info)
@@ -304,7 +288,7 @@ func deselect()->void:
 	if has_method("deselect_ability"):
 		call("deselect_ability")
 
-func on_damaged()->void:
+func on_damaged(_source)->void:
 	return
 
 func deactivate()->void:
@@ -345,7 +329,6 @@ func load_data(dir: String)->void:
 		set(var_name, file.get_var())
 		var_name = file.get_var()
 	file.close()
-	load_abilities()
 	position = NavMaster.map.map_to_local(NavMaster.map.local_to_map(position))
 	state_machine.unpause()
 	if active:

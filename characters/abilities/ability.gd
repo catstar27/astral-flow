@@ -1,62 +1,218 @@
-extends Node2D
+extends Resource
 class_name Ability
+## An ability which can be used by a Character
+##
+## Can perform tasks such as dealing damage or inflicting statuses
 
-enum target_type_choice {target_self, target_allies, target_enemies, target_all}
-enum damage_type_choice {blunt, electric}
-enum skill_used_choice {intelligence, agility, strength, endurance, resolve, charisma, passion}
-@onready var user: Character = get_parent()
-@export var display_name: String = "NameHere"
-@export var sound: AudioStreamWAV
-@export_subgroup("Costs")
-@export var ap_cost: int = 0
-@export var mp_cost: int = 0
-@export_subgroup("Targeting")
-@export var ability_range: int = 1
-@export var target_type: target_type_choice = target_type_choice.target_all
-@export_subgroup("Damage")
-@export var base_damage: int = 0
-@export var damage_type: damage_type_choice = damage_type_choice.blunt
-@export var skill_used: skill_used_choice = skill_used_choice.strength
-signal activated
+#region Variables and Signals
+## Targeting options
+enum target_type_options {
+	user, ## This can be used only on the user
+	allies, ## This can be used only on allies or tiles
+	allies_or_user, ## This can be used on the user or allies or tiles
+	enemies, ## This can be used only on enemies or tiles
+	all, ## This can be used on anything
+	none ## This can be used only on tiles
+	}
+## Activation options
+enum activation_type_options {
+	melee, ## This ability is triggered through a melee attack
+	projectile, ## This ability is triggered through a projectile
+	summon ## This ability simply triggers at the destination
+}
+## Damage type options
+enum damage_type_options {
+	blunt, ## Physical damage relying on blunt force
+	electric, ## Magical damage using electric charge
+	none ## No damage is done
+	}
+## Conditions for Status application
+enum status_effect_conditions {
+	on_hit, ## Status applied when ability hits a target
+	on_use ## Status applied when ability is used on target
+}
+## Skill options
+enum skill_used_options {intelligence, agility, strength, endurance, resolve, charisma, passion}
+var user: Character = null ## Character using the ability
+@export var display_name: String = "NameHere" ## Name of the ability shown in the GUI
+@export var sound: AudioStreamWAV ## Sound that plays when the ability activates
+@export_group("Costs")
+@export var ap_cost: int = 0 ## Amount of AP used by the ability
+@export var mp_cost: int = 0 ## Amount of MP used by the ability
+@export_group("Targeting")
+@export var ability_range: int = 1 ## Number of tiles away from the user this can target
+@export var target_type: target_type_options = target_type_options.all ## The type of target this can be used on
+@export var activation_type: activation_type_options = activation_type_options.melee ## The activation method
+@export var animation_override: Animation = null ## Overrides the generic animation
+@export var projectile_scene: PackedScene = null ## Scene of projectile to use if this is projectile-based
+@export_group("Effects")
+@export var base_damage: int = 0 ## Unmodified damage of the ability
+@export var ignore_defense: bool = false ## Whether damage from this ignores defense
+@export var damage_type: damage_type_options = damage_type_options.blunt ## The type of damage this deals, for resistances
+@export var skill_used: skill_used_options = skill_used_options.strength ## The user skill this checks, for accuracy and damage modifier
+## List of statuses possibly applied by the ability and the conditions where they are applied
+@export var statuses_applied: Dictionary[Status, status_effect_conditions] = {}
+signal activated ## Sent when the ability is activated
+#endregion
 
+func _init() -> void:
+	for status in statuses_applied:
+		if status.action_name != "":
+			if get(status.action_name) is Callable:
+				status.action = get(status.action_name)
+			else:
+				printerr("Attempted to link invalid function to status "+str(status))
+
+#region Range and Targeting
+## Returns a list of destinations that this can target
 func get_valid_destinations()->Array[Vector2]:
-	if target_type == target_type_choice.target_self:
+	if target_type == target_type_options.user:
 		return [user.position]
 	var destinations: Array[Vector2] = []
 	var scale_factor: int = NavMaster.tile_size
 	for x in range(user.position.x-ability_range*scale_factor, user.position.x+ability_range*scale_factor+1, scale_factor):
 		for y in range(user.position.y-ability_range*scale_factor, user.position.y+ability_range*scale_factor+1, scale_factor):
-			if Vector2(x,y) != user.position:
-				if is_destination_valid(Vector2(x, y)):
-					destinations.append(Vector2(x, y))
+			var pos: Vector2 = Vector2(x,y)
+			var query: PhysicsRayQueryParameters2D = PhysicsRayQueryParameters2D.create(user.global_position, pos, 2)
+			if user.get_world_2d().direct_space_state.intersect_ray(query) == {}:
+				if pos != user.position:
+					if is_tile_valid(pos):
+						destinations.append(pos)
 	return destinations
 
-func is_destination_valid(destination: Vector2)->bool:
-	var x_dist: float = abs(global_position.x-destination.x)
-	var y_dist: float = abs(global_position.y-destination.y)
+## Returns true if the tile is a valid target
+func is_tile_valid(destination: Vector2)->bool:
+	var x_dist: float = abs(user.global_position.x-destination.x)
+	var y_dist: float = abs(user.global_position.y-destination.y)
 	var range_factor: float = (x_dist+y_dist)/NavMaster.tile_size
-	if target_type != target_type_choice.target_self && destination == user.position:
+	if !is_target_valid(get_target(destination)):
 		return false
 	return range_factor<=ability_range
 
+## Checks if a given target is a valid target for this ability
+func is_target_valid(target: Node2D)->bool:
+	if target is Interactive:
+		return true
+	if target is Character:
+		match target_type:
+			target_type_options.user:
+				if target == user:
+					return true
+			target_type_options.allies:
+				if target is NPC:
+					return true
+			target_type_options.allies_or_user:
+				if target is NPC || target == user:
+					return true
+			target_type_options.enemies:
+				if target is Enemy:
+					return true
+			target_type_options.all:
+				return true
+			target_type_options.none:
+				return false
+	return true
+
+## Gets the object at the given location
 func get_target(destination: Vector2)->Node2D:
 	return NavMaster.get_obj_at_pos(destination)
 
+## Returns a color corresponding to the type of target this can affect
+func get_targeting_color()->Color:
+	match target_type:
+		target_type_options.user:
+			return Settings.gameplay.support_indicator_tint
+		target_type_options.allies:
+			return Settings.gameplay.support_indicator_tint
+		target_type_options.allies_or_user:
+			return Settings.gameplay.support_indicator_tint
+		target_type_options.enemies:
+			return Settings.gameplay.attack_indicator_tint
+	return Settings.gameplay.support_indicator_tint
+#endregion
+
+#region Effects
+## Deals damage to a target if accuracy is good enough
 func deal_damage(target: Node2D)->void:
 	if target != null:
-		if target.has_method("attack"):
-			var accuracy: int = randi_range(1, 20) + user.star_stats[skill_used_choice.keys()[skill_used]]
-			target.call_deferred("attack", self, accuracy, base_damage)
+		if target is Character:
+			var accuracy: int = randi_range(1, 20) + user.star_stats[skill_used_options.keys()[skill_used]]
+			if accuracy >= (target.base_stats.avoidance+target.stat_mods.avoidance):
+				target.call_deferred("damage", user, base_damage, damage_type, ignore_defense)
+				for status in statuses_applied.keys():
+					if statuses_applied[status] == status_effect_conditions.on_hit:
+						inflict_status(target, status)
+			else:
+				var text_ind_pos: Vector2 = target.text_indicator_shift+target.global_position
+				EventBus.broadcast("MAKE_TEXT_INDICATOR", ["Miss!", text_ind_pos])
+		elif target.has_method("damage"):
+			target.call_deferred("damage", user, base_damage, damage_type)
 
-func inflict_status(target: Node2D, status: Utility.Status)->void:
+## Inflicts a status on a target
+func inflict_status(target: Node2D, status: Status)->void:
 	if target != null && target.has_method("add_status"):
+		if status.action != null:
+			status.action_args = get_status_action_args(target.global_position, status.action)
 		target.call_deferred("add_status", status)
+#endregion
 
-func activate(_destination: Vector2)->void:
+#region Activation
+## Used by base ability class to call side functions related to activation
+func activate(destination: Vector2)->void:
+	play_sound()
+	match activation_type:
+		activation_type_options.projectile:
+			await activation_projectile(destination)
+		activation_type_options.melee:
+			activation_melee(destination)
+		activation_type_options.summon:
+			activation_summon(destination)
+	for status in statuses_applied.keys():
+		if statuses_applied[status] == status_effect_conditions.on_use:
+			inflict_status(get_target(destination), status)
+	if base_damage != 0:
+		deal_damage(get_target(destination))
 	activated.emit()
 
+func activation_projectile(destination: Vector2)->void:
+	if projectile_scene == null:
+		printerr("Missing projectile scene for projectile-based ability "+str(self))
+		return
+	var projectile: Projectile = projectile_scene.instantiate()
+	projectile.ability = self
+	user.add_child(projectile)
+	await projectile.shoot(destination)
+
+func activation_melee(_destination: Vector2)->void:
+	return
+
+func activation_summon(_destination: Vector2)->void:
+	return
+
+## Plays the ability's activation sound
 func play_sound()->void:
 	if sound != null:
-		EventBus.broadcast("PLAY_SOUND", [sound, "positional", global_position])
+		EventBus.broadcast("PLAY_SOUND", [sound, "positional", user.global_position])
 	else:
-		printerr("Empty Sound for Ability: "+name)
+		printerr("Empty Sound for Ability: "+display_name)
+#endregion
+
+#region Status Functions
+func get_status_action_args(destination: Vector2, action: Callable)->Array:
+	if action == push:
+		return [get_target(destination), destination-user.global_position]
+	return []
+
+func push(data: Array)->void:
+	if data[0] == null:
+		return
+	var target: Node2D = data[0]
+	var prev_pos: Vector2 = target.global_position
+	var destination: Vector2 = target.global_position+data[1]
+	var path: Array[Vector2] = NavMaster.request_nav_path(prev_pos, destination, false)
+	path.pop_front()
+	if path.size() == 1:
+		EventBus.broadcast("TILE_OCCUPIED", path.front())
+		await user.create_tween().tween_property(target, "position", path.front(), .1).finished
+		EventBus.broadcast("TILE_UNOCCUPIED", prev_pos)
+#endregion

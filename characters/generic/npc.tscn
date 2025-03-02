@@ -1,7 +1,9 @@
-[gd_scene load_steps=17 format=3 uid="uid://bxbk83doy5d81"]
+[gd_scene load_steps=19 format=3 uid="uid://bxbk83doy5d81"]
 
 [ext_resource type="Script" uid="uid://d3xfkoybfp5c7" path="res://characters/generic/npc.gd" id="1_tipyt"]
+[ext_resource type="Script" uid="uid://b0xbk38jyra5a" path="res://characters/abilities/ability.gd" id="2_a0s2v"]
 [ext_resource type="Shader" uid="uid://c3fdj7fswdl53" path="res://shaders/outline.gdshader" id="2_o2xtu"]
+[ext_resource type="Resource" uid="uid://bfr7tnw5d5sp5" path="res://characters/abilities/push.tres" id="3_14s7m"]
 [ext_resource type="Texture2D" uid="uid://bxary7ep8tnbo" path="res://textures/character/nilak_spritesheet.png" id="3_irndy"]
 [ext_resource type="PackedScene" uid="uid://dj1dbu04os5rj" path="res://misc/state_machine.tscn" id="4_rutmc"]
 [ext_resource type="PackedScene" uid="uid://b7psjacfk2o1y" path="res://misc/gameplay_managers/status_manager.tscn" id="4_vh4ik"]
@@ -83,6 +85,7 @@ _data = {
 
 [node name="NPC" type="CharacterBody2D" groups=["LevelSave"]]
 script = ExtResource("1_tipyt")
+export_abilities = Array[ExtResource("2_a0s2v")]([ExtResource("3_14s7m")])
 
 [node name="Sprite" type="Sprite2D" parent="."]
 unique_name_in_owner = true
