@@ -1,5 +1,9 @@
 extends Resource
 class_name Status
+## The class for a status effect
+##
+## Can apply a variety of effects, 
+## all of which are configured through exports
 
 ## Determines modifier applied to stats when this is active
 @export var stat_mods: Dictionary[String, int] = {
@@ -34,6 +38,7 @@ enum time_options { ## Options for how the status reacts to time
 @export var action_name: String ## Name of function to be called
 var action: Callable ## Callable which will be called by the status on application
 var action_args: Array ## Arguments to pass to function
+var source: Node ## Source of the status
 @export_group("Display")
 @export var status_color: Color = Color.WHITE ## Color of the status
 @export var id: String = "EMPTY_STATUS" ## ID of the status, not displayed

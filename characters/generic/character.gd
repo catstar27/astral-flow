@@ -83,7 +83,6 @@ var to_save: Array[StringName] = [
 @warning_ignore("unused_signal") signal interact_order(object: Node2D)
 @warning_ignore("unused_signal") signal ability_order(data: Array)
 signal pos_changed(character: Character)
-signal anim_activate_ability
 signal ended_turn(character: Character)
 signal stats_changed
 signal abilities_changed
@@ -125,7 +124,7 @@ func _setup()->void:
 
 func duplicate_export_abilities()->void:
 	for ability in export_abilities:
-		var copy: Ability = ability.duplicate()
+		var copy: Ability = ability.duplicate_ability()
 		copy.user = self
 		abilities.append(copy)
 
@@ -152,6 +151,9 @@ func rest()->void:
 	cur_hp = base_stats.max_hp+stat_mods.max_hp
 	cur_mp = base_stats.max_mp+stat_mods.max_mp
 	rested.emit()
+
+func anim_activate()->void:
+	return
 #endregion
 
 #region Tasks
@@ -246,9 +248,6 @@ func add_ability(ability: Ability)->void:
 	ability.user = self
 	abilities_changed.emit()
 
-func anim_activate()->void:
-	anim_activate_ability.emit()
-
 func place_range_indicators(ability: Ability)->void:
 	for location in ability.get_valid_destinations():
 		var indicator: Sprite2D = range_indicator_scene.instantiate()
@@ -263,8 +262,8 @@ func remove_range_indicators()->void:
 #endregion
 
 #region Status
-func add_status(status: Status)->void:
-	status_manager.add_status(status)
+func add_status(status: Status, source: Node)->void:
+	status_manager.add_status(status, source)
 	var info: Array = [status.display_name, text_indicator_shift+global_position, status.status_color]
 	EventBus.broadcast("MAKE_TEXT_INDICATOR", info)
 

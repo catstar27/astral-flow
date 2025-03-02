@@ -5,7 +5,7 @@ class_name StatusManager
 ## Contains all methods necessary to interface status effects with characters
 
 #region Variables and Signals
-var stat_mods: Dictionary = {
+var stat_mods: Dictionary = { ## Current total stat modification from statuses
 	"max_ap": 0,
 	"max_mp": 0,
 	"max_hp": 0,
@@ -15,8 +15,8 @@ var stat_mods: Dictionary = {
 	"damage_threshold": 0,
 	"sequence": 0
 }
-var status_list: Dictionary[Status, int]
-var damage: int = 0
+var status_list: Dictionary[Status, int] ## Current active statuses and their stacks
+var damage: int = 0 ## Total damage dealt per tick by statuses
 signal status_damage_ticked(amount: int) ## Statuses applied this amount of total damage
 signal status_stat_mod_changed(stat_mod: String, amount: int) ## The modification to stats has changed
 signal status_action_occurred(action: Callable, args: Array) ## A status has attempted to call a callable
@@ -24,8 +24,8 @@ signal status_action_occurred(action: Callable, args: Array) ## A status has att
 
 #region Status Management
 ## Adds a status to the list of active statuses and begins calculating its effects
-func add_status(new_status: Status)->void:
-	var status: Status = new_status.duplicate(true)
+func add_status(status: Status, source: Node)->void:
+	status.source = source
 	if status.time_choice == status.time_options.instant:
 		status_action_occurred.emit(status.action, status.action_args)
 		return
@@ -75,16 +75,19 @@ func get_matching_status(id: String)->Status:
 #endregion
 
 #region Process Clear Condition Signals
+## Clears statuses that end on movement
 func process_move(_pos)->void:
 	for status in status_list:
 		if status.clear_conditions.move:
 			remove_status(status)
 
+## Clears statuses that end on rest
 func process_rest()->void:
 	for status in status_list:
 		if status.clear_conditions.rest:
 			remove_status(status)
 
+## Clears statuses that end on taking damage
 func process_damage(source: Node)->void:
 	if source == self:
 		return

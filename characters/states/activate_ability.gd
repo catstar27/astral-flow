@@ -24,10 +24,7 @@ func enter_state(data: Array)->void:
 	state_machine.user.cur_ap -= ability.ap_cost
 	state_machine.user.cur_mp -= ability.mp_cost
 	state_machine.user.stats_changed.emit()
-	state_machine.user.anim_player.play("Character/melee")
-	await state_machine.user.anim_activate_ability
-	ability.call_deferred("activate", destination)
-	await state_machine.user.anim_player.animation_finished
+	await ability.activate(destination)
 	critical_operation = false
 	critical_exited.emit()
 	if state_machine.user.selected_ability == null && prev_ability == ability:

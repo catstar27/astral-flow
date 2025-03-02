@@ -50,18 +50,20 @@ var user: Character = null ## Character using the ability
 @export var ignore_defense: bool = false ## Whether damage from this ignores defense
 @export var damage_type: damage_type_options = damage_type_options.blunt ## The type of damage this deals, for resistances
 @export var skill_used: skill_used_options = skill_used_options.strength ## The user skill this checks, for accuracy and damage modifier
-## List of statuses possibly applied by the ability and the conditions where they are applied
-@export var statuses_applied: Dictionary[Status, status_effect_conditions] = {}
+@export var statuses: Dictionary[Status, status_effect_conditions] ## List of statuses paired with the conditions for them to be applied
 signal activated ## Sent when the ability is activated
 #endregion
 
-func _init() -> void:
-	for status in statuses_applied:
-		if status.action_name != "":
-			if get(status.action_name) is Callable:
-				status.action = get(status.action_name)
-			else:
-				printerr("Attempted to link invalid function to status "+str(status))
+#region Setup
+## Special version of duplicate for abilities
+func duplicate_ability(subresources: bool = false)->Ability:
+	var copy1: Ability = super.duplicate(subresources)
+	var status_dict: Dictionary[Status, status_effect_conditions]
+	for status_to_copy in statuses.keys():
+		status_dict[status_to_copy.duplicate(true)] = statuses[status_to_copy]
+	copy1.set_status_actions()
+	return copy1
+#endregion
 
 #region Range and Targeting
 ## Returns a list of destinations that this can target
@@ -139,8 +141,8 @@ func deal_damage(target: Node2D)->void:
 			var accuracy: int = randi_range(1, 20) + user.star_stats[skill_used_options.keys()[skill_used]]
 			if accuracy >= (target.base_stats.avoidance+target.stat_mods.avoidance):
 				target.call_deferred("damage", user, base_damage, damage_type, ignore_defense)
-				for status in statuses_applied.keys():
-					if statuses_applied[status] == status_effect_conditions.on_hit:
+				for status in statuses:
+					if statuses[status] == status_effect_conditions.on_hit:
 						inflict_status(target, status)
 			else:
 				var text_ind_pos: Vector2 = target.text_indicator_shift+target.global_position
@@ -150,10 +152,12 @@ func deal_damage(target: Node2D)->void:
 
 ## Inflicts a status on a target
 func inflict_status(target: Node2D, status: Status)->void:
+	if status == null:
+		return
 	if target != null && target.has_method("add_status"):
-		if status.action != null:
+		if status.action_name != "":
 			status.action_args = get_status_action_args(target.global_position, status.action)
-		target.call_deferred("add_status", status)
+		target.call_deferred("add_status", status, user)
 #endregion
 
 #region Activation
@@ -164,16 +168,17 @@ func activate(destination: Vector2)->void:
 		activation_type_options.projectile:
 			await activation_projectile(destination)
 		activation_type_options.melee:
-			activation_melee(destination)
+			await activation_melee(destination)
 		activation_type_options.summon:
-			activation_summon(destination)
-	for status in statuses_applied.keys():
-		if statuses_applied[status] == status_effect_conditions.on_use:
+			await activation_summon(destination)
+	for status in statuses:
+		if statuses[status] == status_effect_conditions.on_use:
 			inflict_status(get_target(destination), status)
 	if base_damage != 0:
 		deal_damage(get_target(destination))
 	activated.emit()
 
+## Activates with casting or shooting animations and summons projectile
 func activation_projectile(destination: Vector2)->void:
 	if projectile_scene == null:
 		printerr("Missing projectile scene for projectile-based ability "+str(self))
@@ -183,11 +188,15 @@ func activation_projectile(destination: Vector2)->void:
 	user.add_child(projectile)
 	await projectile.shoot(destination)
 
+## Activates with melee animations (WIP)
 func activation_melee(_destination: Vector2)->void:
-	return
+	user.anim_player.play("Character/melee")
+	await user.anim_player.animation_finished
 
+## Activates with casting animations (WIP)
 func activation_summon(_destination: Vector2)->void:
-	return
+	user.anim_player.play("Character/melee")
+	await user.anim_player.animation_finished
 
 ## Plays the ability's activation sound
 func play_sound()->void:
@@ -198,13 +207,21 @@ func play_sound()->void:
 #endregion
 
 #region Status Functions
+## Sets the actions on given status
+func set_status_actions()->void:
+	for status in statuses.keys():
+		if status.action_name != "":
+			status.action = get(status.action_name)
+
+## Gets the arguments for each status function stored here
 func get_status_action_args(destination: Vector2, action: Callable)->Array:
 	if action == push:
 		return [get_target(destination), destination-user.global_position]
 	return []
 
+## Pushes a target
 func push(data: Array)->void:
-	if data[0] == null:
+	if data == [] || data[0] == null:
 		return
 	var target: Node2D = data[0]
 	var prev_pos: Vector2 = target.global_position

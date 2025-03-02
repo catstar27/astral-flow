@@ -10,7 +10,7 @@
 [ext_resource type="Resource" uid="uid://c6f0begbutw3l" path="res://characters/abilities/block.tres" id="4_6fs2m"]
 [ext_resource type="PackedScene" uid="uid://dj1dbu04os5rj" path="res://misc/state_machine.tscn" id="5_2njyl"]
 [ext_resource type="PackedScene" uid="uid://d1oj7ptthilej" path="res://characters/states/interact.tscn" id="5_b0u4w"]
-[ext_resource type="PackedScene" uid="uid://b7psjacfk2o1y" path="res://misc/gameplay_managers/status_manager.tscn" id="5_fuqcr"]
+[ext_resource type="PackedScene" uid="uid://b7psjacfk2o1y" path="res://characters/abilities/statuses/status_manager.tscn" id="5_fuqcr"]
 [ext_resource type="PackedScene" uid="uid://co558pdmpfij5" path="res://characters/states/move.tscn" id="6_mh07d"]
 [ext_resource type="PackedScene" uid="uid://c87v4rbl0fr7" path="res://characters/states/idle.tscn" id="7_wqdin"]
 [ext_resource type="PackedScene" uid="uid://brlpvcs48fhyc" path="res://characters/states/activate_ability.tscn" id="10_dsg4l"]
