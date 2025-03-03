@@ -123,6 +123,13 @@ func get_nav_path(start_pos: Vector2, end_pos: Vector2, allow_closest: bool = tr
 			return []
 	return []
 
+func get_entrance(id: String)->TravelPoint:
+	for child in get_children():
+		if child is TravelPoint:
+			if child.entrance_id == id:
+				return child
+	return null
+
 func _calc_bounds()->void:
 	var cells: Array[Vector2i] = get_used_cells()
 	for cell in cells:
@@ -142,7 +149,7 @@ func is_in_bounds(pos: Vector2)->bool:
 	return true
 #endregion
 
-#region Save Load
+#region Save and Load
 func unload()->void:
 	queue_free()
 

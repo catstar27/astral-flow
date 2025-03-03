@@ -386,6 +386,9 @@ texture = ExtResource("6_wcq4g")
 
 [node name="EntryStairs" parent="." instance=ExtResource("7_3ojlr")]
 position = Vector2(-32, 32)
+exit_direction = 3
+entrance_id = "dance_party_left"
+target_entrance_id = "tutorial"
 new_map = "res://maps/test_map.tscn"
 texture = ExtResource("6_wcq4g")
 

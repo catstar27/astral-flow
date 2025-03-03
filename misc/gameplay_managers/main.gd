@@ -30,6 +30,7 @@ func _ready() -> void:
 	EventBus.subscribe("COMBAT_ENDED", global_timer, "start")
 	EventBus.subscribe("MAKE_TEXT_INDICATOR", self, "create_text_indicator")
 	EventBus.subscribe("LOAD_MAP", self, "load_map")
+	EventBus.subscribe("LOAD_MAP_AT_ENTRANCE", self, "load_map_at_entrance")
 	EventBus.subscribe("DELOAD", self, "queue_free")
 	EventBus.subscribe("PAUSE", self, "pause")
 	EventBus.subscribe("UNPAUSE", self, "unpause")
@@ -79,7 +80,7 @@ func unload_map()->void:
 		map.unload()
 		map = null
 
-func load_map(new_map: String)->void:
+func load_map(new_map: String, entrance_id: String = "")->void:
 	await unload_map()
 	await get_tree().create_timer(.01).timeout
 	var map_to_load: GameMap = load(new_map).instantiate()
@@ -93,7 +94,11 @@ func load_map(new_map: String)->void:
 	else:
 		remove_child(player)
 	map_to_load.add_child(player)
-	player.position = map_to_load.map_to_local(map_to_load.player_start_pos)
+	var entrance: TravelPoint = map_to_load.get_entrance(entrance_id)
+	if entrance == null:
+		player.position = map_to_load.map_to_local(map_to_load.player_start_pos)
+	else:
+		player.position = entrance.get_exit_position()
 	if map_to_load.has_save_data():
 		await SaveLoad.load_map(map_to_load)
 	map_to_load.prep_map()
@@ -103,6 +108,12 @@ func load_map(new_map: String)->void:
 	if sound_manager.ost.stream != map_to_load.ost:
 		EventBus.broadcast("SET_OST", map_to_load.ost)
 	EventBus.broadcast("MAP_ENTERED", map_to_load.map_name)
+
+func load_map_at_entrance(args: Array)->void:
+	if args.size() != 2 || args[0] is not String || args[1] is not String:
+		printerr("Invalid arguments for loading map at entrance")
+		return
+	load_map(args[0], args[1])
 
 func pause()->void:
 	selection_cursor.reset_move_dir()

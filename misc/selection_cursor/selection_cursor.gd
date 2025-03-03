@@ -166,19 +166,16 @@ func interact_on_pos(pos: Vector2i)->void:
 		selected.emit_signal("interact_order", cur_hover)
 		block_deselect = false
 
-func select_ability(ability: Ability)->void:
-	select(ability.user)
-
-func select(node: Character)->void:
-	if node is Character && node.in_combat && !node.taking_turn:
+func select(character: Character)->void:
+	if character.in_combat && !character.taking_turn:
 		return
-	if node != null && selected == node:
+	if character != null && selected == character:
 		return
 	if block_deselect:
 		return
 	if selected != null:
 		deselect()
-	selected = node
+	selected = character
 	if selected is Character:
 		selected.call_deferred("select")
 		selected.ended_turn.connect(deselect)
@@ -211,8 +208,6 @@ func _selection_area_exited(body: Node2D) -> void:
 
 func save_data(dir: String)->void:
 	deactivate_requests += 1
-	while moving:
-		await move_stopped
 	var file: FileAccess = FileAccess.open(dir+name+".dat", FileAccess.WRITE)
 	for var_name in to_save:
 		file.store_var(var_name)
@@ -228,5 +223,6 @@ func load_data(dir: String)->void:
 	while var_name != "END":
 		set(var_name, file.get_var())
 		var_name = file.get_var()
+	position = NavMaster.map.map_to_local(NavMaster.map.local_to_map(position))
 	file.close()
 	loaded.emit(self)

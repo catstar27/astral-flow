@@ -1,6 +1,7 @@
 extends State
+## State that activates an ability
 
-@export var sound: AudioStreamWAV
+@export var sound: AudioStreamWAV ## Sound to play when attempting to use ability on invalid position
 
 func enter_state(data: Array)->void:
 	var ability: Ability = data[0]
@@ -27,6 +28,6 @@ func enter_state(data: Array)->void:
 	await ability.activate(destination)
 	critical_operation = false
 	critical_exited.emit()
-	if state_machine.user.selected_ability == null && prev_ability == ability:
+	if state_machine.user.selected_ability == null && prev_ability == ability && state_machine.user.is_selected:
 		state_machine.user.call_deferred("select_ability", ability)
 	state_machine.change_state_to("IDLE")

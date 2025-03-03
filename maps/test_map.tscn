@@ -202,6 +202,9 @@ texture = SubResource("CanvasTexture_at7tr")
 [node name="TravelPoint" parent="." instance=ExtResource("16_c5dte")]
 position = Vector2(32, -928)
 rotation = 1.5708
+exit_direction = 1
+entrance_id = "tutorial"
+target_entrance_id = "dance_party_left"
 new_map = "res://maps/test_map_dance_floor.tscn"
 texture = SubResource("CanvasTexture_q1fwp")
 

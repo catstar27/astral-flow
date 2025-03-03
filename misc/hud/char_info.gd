@@ -1,38 +1,48 @@
 extends Control
 class_name CharInfo
+## GUI Panel that contains information and controls for a selected character
+##
+## Allows the player to select abilities or end the character's turn
 
-@onready var ability_list: VBoxContainer = %AbilityList
-@onready var hp_label: Label = %HP
-@onready var ap_label: Label = %AP
-@onready var mp_label: Label = %MP
-@onready var end_turn_button: Button = %EndTurn
-@onready var info_container: VBoxContainer = %Info
-@onready var menu_button: ControlDisplayButton = %MenuButton
-@export var ability_buttons: Array[AbilityButton]
-var buttons_used: Array[bool] = [false, false, false, false, false, false, false, false, false, false]
-var prev_button_index: int = 0
-var character: Character = null
-var abilities: Array[Ability] = []
-enum states{closed, open, suspended}
-var state: states = states.closed
-var changing_state: bool = false
+@onready var ability_list: VBoxContainer = %AbilityList ## Container that holds ability buttons
+@onready var hp_label: Label = %HP ## Shows the character's health points
+@onready var ap_label: Label = %AP ## Shows the character's action points
+@onready var mp_label: Label = %MP ## Shows the character's magic points
+@onready var end_turn_button: Button = %EndTurn ## Button that ends the character's turn
+@onready var info_container: VBoxContainer = %Info ## Container that holds labels for various stats
+@onready var menu_button: ControlDisplayButton = %MenuButton ## Button that extends or hides the menu
+@export var ability_buttons: Array[AbilityButton] ## Array of all ability buttons
+var prev_button_index: int = 0 ## Holds the previously-selected button to reselect it when the menu opens
+var character: Character = null ## The character this is tracking
+var abilities: Array[Ability] = [] ## Array of the tracked character's abilities
+enum states{ ## Contains all the states for the menu
+	closed, ## The menu is closed
+	open, ## The menu is open and ready for selection
+	suspended ## The menu is suspended and transparent
+}
+var state: states = states.closed ## Current state of the menu
+var changing_state: bool = false ## Whether the menu is currently changing states
 
+#region Setup
 func _ready() -> void:
 	menu_button.disabled = true
-	EventBus.subscribe("ABILITY_BUTTON_PRESSED", self, "suspend_menu")
+	for button in ability_buttons:
+		button.pressed.connect(suspend_menu)
+#endregion
 
+#region Display States
+## Toggles the menu between open and closed
 func toggle_menu()->void:
 	if state != states.closed:
 		close_menu()
 	else:
 		open_menu()
 
+## Opens the menu
 func open_menu()->void:
 	if state != states.closed || changing_state:
 		return
 	changing_state = true
-	for i in range(0, 10):
-		ability_buttons[i].disabled = !buttons_used[i]
 	state = states.open
 	menu_button.text = "←"
 	modulate = Color(1,1,1,1)
@@ -43,6 +53,7 @@ func open_menu()->void:
 		ability_buttons[prev_button_index].grab_focus()
 	changing_state = false
 
+## Closes the menu
 func close_menu()->void:
 	if state == states.closed || changing_state:
 		return
@@ -67,7 +78,8 @@ func close_menu()->void:
 	info_container.hide()
 	changing_state = false
 
-func suspend_menu(_ability)->void:
+## Suspends the menu
+func suspend_menu()->void:
 	if state == states.suspended || changing_state:
 		return
 	changing_state = true
@@ -80,6 +92,7 @@ func suspend_menu(_ability)->void:
 	EventBus.broadcast("ACTIVATE_SELECTION", "NULLDATA")
 	changing_state = false
 
+## Unsuspends the menu
 func unsuspend_menu()->void:
 	if state != states.suspended || changing_state:
 		return
@@ -90,17 +103,22 @@ func unsuspend_menu()->void:
 	if ability_buttons[prev_button_index].ability != null:
 		ability_buttons[prev_button_index].grab_focus()
 	changing_state = false
+#endregion
 
+#region Display Updates
+## Enables the end turn button, for when combat is entered
 func enable_end_turn()->void:
 	end_turn_button.disabled = false
 	end_turn_button.focus_mode = Control.FOCUS_ALL
 	set_first_last_buttons()
 
+## Disables the end turn button, for when it is no longer needed
 func disable_end_turn()->void:
 	end_turn_button.disabled = true
 	end_turn_button.focus_mode = Control.FOCUS_NONE
 	set_first_last_buttons()
 
+## Sets neighbors of the first and last buttons, allowing them to wrap around
 func set_first_last_buttons()->void:
 	if end_turn_button.disabled:
 		ability_buttons[0].focus_previous = ability_buttons[abilities.size()-1].get_path()
@@ -113,6 +131,7 @@ func set_first_last_buttons()->void:
 		ability_buttons[abilities.size()-1].focus_next = end_turn_button.get_path()
 		ability_buttons[abilities.size()-1].focus_neighbor_bottom = end_turn_button.get_path()
 
+## Adds an ability to the button list
 func add_ability(index: int, ability: Ability)->AbilityButton:
 	var button: AbilityButton = ability_buttons[index]
 	var prev: AbilityButton = null
@@ -128,11 +147,7 @@ func add_ability(index: int, ability: Ability)->AbilityButton:
 		prev.focus_neighbor_bottom = button.get_path()
 	return button
 
-func clear_abilities()->void:
-	abilities = []
-	for button in ability_buttons:
-		button.clear_ability()
-
+## Sets a new character, updating the display to match
 func set_character(new_char: Character)->void:
 	if new_char == null:
 		if character != null:
@@ -169,26 +184,32 @@ func set_character(new_char: Character)->void:
 	else:
 		disable_end_turn()
 
+## Updates labels for HP, AP, and MP
 func update_labels()->void:
 	hp_label.text = "HP: "+str(character.cur_hp)
 	ap_label.text = "AP: "+str(character.cur_ap)
 	mp_label.text = "MP: "+str(character.cur_mp)
 
+## Updates the abilities in the buttons
 func update_abilities()->void:
 	clear_abilities()
-	for i in range(0, 10):
-		buttons_used[i] = false
 	var index: int = 0
 	for ability in character.get_abilities():
 		if index > 9:
 			break
 		add_ability(index, ability)
 		abilities.append(ability)
-		buttons_used[index] = true
+		ability_buttons[index].disabled = false
 		index += 1
 	set_first_last_buttons()
 	while index < 10:
-		buttons_used[index] = false
 		ability_buttons[index].disabled = true
 		ability_buttons[index].focus_mode = Control.FOCUS_NONE
 		index += 1
+
+## Clears the abilities in the buttons
+func clear_abilities()->void:
+	abilities = []
+	for button in ability_buttons:
+		button.clear_ability()
+#endregion

@@ -1,4 +1,5 @@
 extends State
+## Idle state that does nothing but moves to other states
 
 func enter_state(_data)->void:
 	state_machine.user.move_order.connect(start_move)

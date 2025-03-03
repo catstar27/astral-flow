@@ -63,6 +63,7 @@ var target_position: Vector2 = position
 var schedule_index: int = 0
 var schedule_executed: bool = false
 var schedule_processing: bool = false
+var is_selected: bool = false
 #region Save Vars Array
 var to_save: Array[StringName] = [
 	"position",
@@ -281,11 +282,13 @@ func set_outline_color()->void:
 
 func select()->void:
 	sprite.material.set_shader_parameter("width", 1)
+	is_selected = true
 
 func deselect()->void:
 	sprite.material.set_shader_parameter("width", 0)
 	if has_method("deselect_ability"):
 		call("deselect_ability")
+	is_selected = false
 
 func on_damaged(_source)->void:
 	return
