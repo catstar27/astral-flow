@@ -1,10 +1,11 @@
 extends SettingsMenuChild
 class_name AudioMenu
+## Menu containing audio settings
 
-@onready var master_slider: HSlider = %MasterSlider
-@onready var music_slider: HSlider = %MusicSlider
-@onready var sfx_slider: HSlider = %SFXSlider
-@onready var dialogue_slider: HSlider = %DialogueSlider
+@onready var master_slider: HSlider = %MasterSlider ## Controls master volume
+@onready var music_slider: HSlider = %MusicSlider ## Controls music volume
+@onready var sfx_slider: HSlider = %SFXSlider ## Controls sound effect volume
+@onready var dialogue_slider: HSlider = %DialogueSlider ## Controls dialogue volume
 
 func _ready() -> void:
 	set_values()

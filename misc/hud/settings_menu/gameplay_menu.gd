@@ -1,9 +1,10 @@
 extends SettingsMenuChild
 class_name GameplayMenu
+## Menu containing gameplay settings
 
-@onready var selection_color: ColorPickerButton = %SelectionColor
-@onready var attack_color: ColorPickerButton = %AttackColor
-@onready var support_color: ColorPickerButton = %SupportColor
+@onready var selection_color: ColorPickerButton = %SelectionColor ## Color for the selection cursor
+@onready var attack_color: ColorPickerButton = %AttackColor ## Color indicating aggressive/attack actions
+@onready var support_color: ColorPickerButton = %SupportColor ## Color indicating support actions
 
 func _ready() -> void:
 	set_values()

@@ -38,6 +38,15 @@ func toggle_menu()->void:
 	else:
 		open_menu()
 
+## Finds the position of the menu when closed
+func get_closed_position()->Vector2:
+	var largest_width: float = 0
+	if menu_button.size.x > info_container.size.x:
+		largest_width = menu_button.size.x
+	else:
+		largest_width = info_container.size.x
+	return Vector2(-largest_width, info_container.position.y)
+
 ## Opens the menu
 func open_menu()->void:
 	if state != states.closed || changing_state:
@@ -73,7 +82,7 @@ func close_menu()->void:
 	menu_button.text = "→"
 	if activate_selection:
 		EventBus.broadcast("ACTIVATE_SELECTION", "NULLDATA")
-	await create_tween().tween_property(info_container, "position", Vector2(-82, info_container.position.y), .5).finished
+	await create_tween().tween_property(info_container, "position", get_closed_position(), .5).finished
 	modulate = Color(1,1,1,1)
 	info_container.hide()
 	changing_state = false

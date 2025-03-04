@@ -1,5 +1,8 @@
 extends SettingsMenuChild
 class_name ControlsMenu
+## Menu containing keybind settings
+##
+## Currently unused
 
 func _ready() -> void:
 	set_values()

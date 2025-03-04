@@ -1,25 +1,27 @@
 extends Node
+## Tracks subscriptions and broadcasts events to all nodes that subscribe to them
 
-var events: Dictionary = {}
+var events: Dictionary[String, Array] = {} ## Contains linked subscription info and event ID
 
-class SubscribeInfo:
-	var node: Node
-	var fn: String
+class SubscribeInfo: ## Class holding data on a subscription
+	var node: Node ## The node this represents
+	var fn: String ## The function to be called when triggered
 	func _init(new_node: Node, new_fn: String) -> void:
 		node = new_node
 		fn = new_fn
 	func _to_string() -> String:
 		return "("+str(node)+", "+fn+")"
 
-class Event:
-	var data
-	var id: String
+class Event: ## Event class containing data and an ID
+	var data ## Passed to functions called by this event
+	var id: String ## ID of the event; matched with subscriber subscriptions
 	func _init(new_id: String, new_data) -> void:
 		data = new_data
 		id = new_id
 	func _to_string() -> String:
 		return "["+id+", "+str(data)+"]"
 
+## Subscribes the given node to events of given ID to a given function
 func subscribe(id: String, node: Node, fn: String)->void:
 	if id not in events:
 		events[id] = []
@@ -28,14 +30,19 @@ func subscribe(id: String, node: Node, fn: String)->void:
 			return
 	events[id].append(SubscribeInfo.new(node, fn))
 
+## Removes all subscriptions from a subscriber
 func remove_subscriber(node)->void:
 	for event in events:
 		for sub_info in events[event]:
 			if sub_info.node == node:
 				events[event].erase(sub_info)
 
+## Shorthand for broadcast_event that can take data and ID and makes the event
 func broadcast(id: String, data)->void:
-	var event: Event = Event.new(id, data)
+	broadcast_event(Event.new(id, data))
+
+## Broadcasts the passed event to all relevant subscribers
+func broadcast_event(event: Event)->void:
 	if event.id not in events:
 		return
 	var subscribers: Array = events[event.id]

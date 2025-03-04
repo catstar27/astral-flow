@@ -1,26 +1,42 @@
 extends Control
 class_name UtilityMenu
+## Menu holding utility buttons, such as the party menu and the map
 
-@onready var info_container: VBoxContainer = %Info
-@onready var menu_button: ControlDisplayButton = %MenuButton
-@onready var top_button: Button = %Party
-enum states{closed, open, suspended}
-var state: states = states.closed
-var changing_state: bool = false
+@onready var info_container: VBoxContainer = %Info ## Container holding the utility buttons
+@onready var menu_button: ControlDisplayButton = %MenuButton ## Button that toggles the menu
+@onready var top_button: Button = %Party ## Menu's top button
+enum states{ ## States the menu can be in
+	closed, ## The menu is closed
+	open, ## The menu is open
+	suspended ## The menu is suspended (unused)
+}
+var state: states = states.closed ## Current menu state
+var changing_state: bool = false ## Whether the menu is changing state
 
 func _ready() -> void:
 	menu_button.display_updated.connect(update_menu_button)
 
+## Updates the menu button's position
 func update_menu_button()->void:
 	menu_button.position.x = -menu_button.size.x
-	print(menu_button.size.x)
 
+## Toggles the menu state between open and closed
 func toggle_menu()->void:
 	if state != states.closed:
 		close_menu()
 	else:
 		open_menu()
 
+## Finds the position of the menu when open
+func get_open_position()->Vector2:
+	var largest_width: float = 0
+	if menu_button.size.x > info_container.size.x:
+		largest_width = menu_button.size.x
+	else:
+		largest_width = info_container.size.x
+	return Vector2(-largest_width, info_container.position.y)
+
+## Opens the menu
 func open_menu()->void:
 	if state != states.closed || changing_state:
 		return
@@ -29,11 +45,12 @@ func open_menu()->void:
 	menu_button.text = "→"
 	modulate = Color(1,1,1,1)
 	info_container.show()
-	await create_tween().tween_property(info_container, "position", Vector2(-84, info_container.position.y), .5).finished
+	await create_tween().tween_property(info_container, "position", get_open_position(), .5).finished
 	EventBus.broadcast("DEACTIVATE_SELECTION", "NULLDATA")
 	top_button.grab_focus()
 	changing_state = false
 
+## Closes the menu
 func close_menu()->void:
 	if state == states.closed || changing_state:
 		return

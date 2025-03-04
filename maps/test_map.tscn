@@ -1,4 +1,4 @@
-[gd_scene load_steps=54 format=4 uid="uid://qw4hbk40dyvm"]
+[gd_scene load_steps=53 format=4 uid="uid://qw4hbk40dyvm"]
 
 [ext_resource type="TileSet" uid="uid://dpajsxeb15k7l" path="res://maps/tilesets/dungeon.tres" id="1_bnvg4"]
 [ext_resource type="Script" uid="uid://b8kw4ghpy3r8t" path="res://maps/game_map.gd" id="2_rvbrh"]
@@ -14,7 +14,6 @@
 [ext_resource type="Texture2D" uid="uid://dei0ir8jap6a" path="res://textures/interactive/grapes.png" id="8_1rt1a"]
 [ext_resource type="Resource" uid="uid://bcxwb2tooui81" path="res://dialogue/test_room_couch.dtl" id="8_elwwl"]
 [ext_resource type="Texture2D" uid="uid://c501rjowvd7ww" path="res://textures/interactive/sign_n.png" id="8_prpsj"]
-[ext_resource type="PackedScene" uid="uid://ddmpp54vc5377" path="res://maps/interactives/generic/dialogue_signal_gate.tscn" id="9_amhi4"]
 [ext_resource type="Texture2D" uid="uid://dpnsq7nn8m0l2" path="res://textures/interactive/stairs.png" id="9_sk700"]
 [ext_resource type="Resource" uid="uid://dt5ji5p7n6aqh" path="res://dialogue/test_room_dog.dtl" id="10_u1hjs"]
 [ext_resource type="PackedScene" uid="uid://8hplcp22i5re" path="res://maps/interactives/lights/wall_light.tscn" id="12_kvvyy"]
@@ -167,37 +166,37 @@ color = Color(0, 0, 0, 1)
 [node name="Sign" parent="." instance=ExtResource("4_72sth")]
 position = Vector2(-608, 160)
 rotation = -1.5708
-dialogue = ExtResource("4_6q77p")
 texture = SubResource("CanvasTexture_6k8ls")
+dialogue = ExtResource("4_6q77p")
 
 [node name="Sign2" parent="." instance=ExtResource("4_72sth")]
 position = Vector2(-288, -608)
 rotation = 1.57034
-dialogue = ExtResource("20_mlbwn")
 texture = SubResource("CanvasTexture_prpsj")
+dialogue = ExtResource("20_mlbwn")
 
 [node name="Sun" parent="." instance=ExtResource("4_72sth")]
 position = Vector2(160, 160)
-dialogue = ExtResource("6_lwn61")
 texture = ExtResource("6_dg1xt")
+dialogue = ExtResource("6_lwn61")
 
 [node name="Couch" parent="." instance=ExtResource("4_72sth")]
 position = Vector2(96, -160)
-dialogue = ExtResource("8_elwwl")
 texture = SubResource("CanvasTexture_x3as3")
 dimensions = Vector2i(2, 1)
 offset = Vector2(0, -12)
+dialogue = ExtResource("8_elwwl")
 
 [node name="Dog" parent="." instance=ExtResource("4_72sth")]
 position = Vector2(-224, -160)
-dialogue = ExtResource("10_u1hjs")
 texture = SubResource("CanvasTexture_hbbc7")
+dialogue = ExtResource("10_u1hjs")
 pause_music = true
 
 [node name="Grapes" parent="." instance=ExtResource("4_72sth")]
 position = Vector2(288, 32)
-dialogue = ExtResource("12_shqtc")
 texture = SubResource("CanvasTexture_at7tr")
+dialogue = ExtResource("12_shqtc")
 
 [node name="TravelPoint" parent="." instance=ExtResource("16_c5dte")]
 position = Vector2(32, -928)
@@ -208,28 +207,30 @@ target_entrance_id = "dance_party_left"
 new_map = "res://maps/test_map_dance_floor.tscn"
 texture = SubResource("CanvasTexture_q1fwp")
 
-[node name="InteractPuzzleGate" parent="." instance=ExtResource("9_amhi4")]
+[node name="InteractPuzzleGate" parent="." instance=ExtResource("12_xfvy2")]
 position = Vector2(32, -224)
-dialogic_var = "test_room_puzzle_index"
 locked_texture = ExtResource("26_ysqq4")
 signals_needed = Array[String](["test_room_sun_click", "test_room_couch_click", "test_room_dog_click", "test_room_grapes_click"])
-dialogue = ExtResource("13_ymmi3")
+ordered = true
+is_dialogic = true
+dialogic_var = "test_room_puzzle_index"
 texture = ExtResource("28_llove")
+dialogue = ExtResource("13_ymmi3")
 
 [node name="CombatGate" parent="." instance=ExtResource("12_xfvy2")]
 position = Vector2(32, -608)
 locked_texture = ExtResource("26_ysqq4")
 signals_needed = Array[String](["???"])
-dialogue = ExtResource("13_ymmi3")
 texture = ExtResource("28_llove")
+dialogue = ExtResource("13_ymmi3")
 
 [node name="TeslaGate" parent="." instance=ExtResource("12_xfvy2")]
 position = Vector2(32, -864)
 locked_texture = ExtResource("26_ysqq4")
 signals_needed = Array[String](["unlocked", "unlocked"])
 auto_open = true
-dialogue = ExtResource("13_ymmi3")
 texture = ExtResource("28_llove")
+dialogue = ExtResource("13_ymmi3")
 
 [node name="WallLight" parent="." instance=ExtResource("12_kvvyy")]
 position = Vector2(-288, -32)
@@ -271,15 +272,15 @@ position = Vector2(-544, -608)
 position = Vector2(-160, -800)
 damage_type_required = 1
 dialogue_unlocked = ExtResource("17_7sy0y")
-dialogue = ExtResource("17_er6pd")
 texture = SubResource("CanvasTexture_6rbxq")
+dialogue = ExtResource("17_er6pd")
 
 [node name="TeslaCoil2" parent="." instance=ExtResource("14_luyw1")]
 position = Vector2(224, -800)
 damage_type_required = 1
 dialogue_unlocked = ExtResource("17_7sy0y")
-dialogue = ExtResource("17_er6pd")
 texture = SubResource("CanvasTexture_v6peg")
+dialogue = ExtResource("17_er6pd")
 
 [node name="Enemy" parent="." instance=ExtResource("13_augbp")]
 position = Vector2(32, -544)

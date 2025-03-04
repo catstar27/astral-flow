@@ -381,8 +381,8 @@ rotation = 1.5708
 [node name="ExitStairs" parent="." instance=ExtResource("4_njv6h")]
 position = Vector2(352, 32)
 rotation = 3.14159
-dialogue = ExtResource("5_pmpyx")
 texture = ExtResource("6_wcq4g")
+dialogue = ExtResource("5_pmpyx")
 
 [node name="EntryStairs" parent="." instance=ExtResource("7_3ojlr")]
 position = Vector2(-32, 32)

@@ -212,5 +212,5 @@ label_settings = SubResource("LabelSettings_k4n6i")
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 unique_name_in_owner = true
 libraries = {
-"": SubResource("AnimationLibrary_m64st")
+&"": SubResource("AnimationLibrary_m64st")
 }

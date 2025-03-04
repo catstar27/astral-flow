@@ -163,7 +163,6 @@ func inflict_status(target: Node2D, status: Status)->void:
 #region Activation
 ## Used by base ability class to call side functions related to activation
 func activate(destination: Vector2)->void:
-	play_sound()
 	match activation_type:
 		activation_type_options.projectile:
 			await activation_projectile(destination)
@@ -171,6 +170,7 @@ func activate(destination: Vector2)->void:
 			await activation_melee(destination)
 		activation_type_options.summon:
 			await activation_summon(destination)
+	play_sound()
 	for status in statuses:
 		if statuses[status] == status_effect_conditions.on_use:
 			inflict_status(get_target(destination), status)

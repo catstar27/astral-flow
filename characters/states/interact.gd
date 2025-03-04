@@ -1,4 +1,5 @@
 extends State
+## State that attempts to make the user interact with a given object
 
 func enter_state(target: Node2D)->void:
 	if target is Interactive:

@@ -1,7 +1,8 @@
 extends SettingsMenuChild
 class_name VideoMenu
+## Menu containing video settings
 
-@onready var fullscreen: CheckButton = %FullscreenButton
+@onready var fullscreen: CheckButton = %FullscreenButton ## Whether the game is fullscreen
 
 func _ready() -> void:
 	set_values()
