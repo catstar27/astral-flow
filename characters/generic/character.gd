@@ -326,11 +326,12 @@ func load_data(dir: String)->void:
 	deselect()
 	state_machine.pause()
 	var file: FileAccess = FileAccess.open(dir+name+".dat", FileAccess.READ)
-	var var_name: String = file.get_var()
-	while var_name != "END":
-		set(var_name, file.get_var())
-		var_name = file.get_var()
-	file.close()
+	if file != null:
+		var var_name: String = file.get_var()
+		while var_name != "END":
+			set(var_name, file.get_var())
+			var_name = file.get_var()
+		file.close()
 	position = NavMaster.map.map_to_local(NavMaster.map.local_to_map(position))
 	state_machine.unpause()
 	if active:

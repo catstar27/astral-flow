@@ -13,33 +13,51 @@ var current_index: int = 0 ## Index of the panel that matches the current charac
 var current_order: Array[Character] = [] ## Order of the turn this is tracking
 
 func _ready()->void:
-	EventBus.subscribe("ROUND_STARTED", self, "update_display")
+	EventBus.subscribe("SEQUENCE_UPDATED", self, "update_order")
+	EventBus.subscribe("ROUND_STARTED", self, "update_order")
 	EventBus.subscribe("TURN_ENDED", self, "cycle_display")
 	EventBus.subscribe("COMBAT_ENDED", self, "hide")
 
-## Sets the text of the panels
-func update_display(order: Array[Character])->void:
+## Updates the order of sequence and shows the display
+func update_order(order: Array[Character])->void:
 	show()
 	current_order = order
-	panels[3].get_children()[0].text = "---"
-	panels[2].get_children()[0].text = order[0].display_name
-	panels[1].get_children()[0].text = order[1].display_name
-	if order.size() > 2:
-		panels[0].get_children()[0].text = order[2].display_name
+	await update_display(true)
+
+## Updates the text of the panels
+func update_display(play_animation: bool = false)->void:
+	if play_animation && position.x != 1240:
+		anim.play("slide_out")
+		await anim.animation_finished
+	if current_index == current_order.size():
+		current_index = 0
+		hide()
+	if current_index == 0:
+		panels[3].get_children()[0].text = "---"
 	else:
-		panels[0].get_children()[0].text = "END"
+		panels[3].get_children()[0].text = current_order[current_index-1].display_name
+	panels[2].get_children()[0].text = current_order[current_index].display_name
+	if current_order.size() > current_index+1:
+		panels[1].get_children()[0].text = current_order[current_index+1].display_name
+		if current_order.size() > current_index+2:
+			panels[0].get_children()[0].text = current_order[current_index+2].display_name
+		else:
+			panels[0].get_children()[0].text = "END"
+	else:
+		panels[1].get_children()[0].text = "END"
+		panels[0].get_children()[0].text = "---"
+	if play_animation:
+		anim.play("slide_in")
+		await anim.animation_finished
+		EventBus.broadcast("SEQUENCE_DISPLAY_CYCLED", "NULLDATA")
 
 ## Moves the panels so that the current character is pointed at
 func cycle_display()->void:
 	current_index += 1
 	anim.play("cycle")
 
-## Resets the panels when reaching the end of the cycle
+## Resets the panel positions and shifts the text after the animation plays
 func end_cycle()->void:
-	var panel4_prev_text: String = panels[3].get_children()[0].text
-	panels[3].get_children()[0].text = panels[2].get_children()[0].text
-	panels[2].get_children()[0].text = panels[1].get_children()[0].text
-	panels[1].get_children()[0].text = panels[0].get_children()[0].text
-	panels[0].get_children()[0].text = panel4_prev_text
 	anim.play("RESET")
+	await update_display()
 	EventBus.broadcast("SEQUENCE_DISPLAY_CYCLED", "NULLDATA")
