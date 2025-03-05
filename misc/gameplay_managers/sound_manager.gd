@@ -84,7 +84,7 @@ func fade_in_music(time: float)->void:
 
 ## Changes the volume of the ost
 func change_music_volume(volume: float)->void:
-	if volume == 0.0:
+	if volume < 0.001:
 		volume = 0.001 ## To avoid errors with setting volume to -Inf decibels
 	ost.volume_db = linear_to_db(volume)
 

@@ -95,6 +95,7 @@ func load_data()->void:
 	if loading:
 		return
 	loading = true
+	in_combat = false
 	AudioServer.set_bus_mute(0, true)
 	var file: FileAccess = FileAccess.open(save_file_folder+slot+"/Global.dat", FileAccess.READ)
 	var cur_map: String = file.get_var().split('=', true, 1)[1]

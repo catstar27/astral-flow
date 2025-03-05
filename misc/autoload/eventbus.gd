@@ -45,7 +45,7 @@ func broadcast(id: String, data)->void:
 func broadcast_event(event: Event)->void:
 	if event.id not in events:
 		return
-	var subscribers: Array = events[event.id]
+	var subscribers: Array = events[event.id].duplicate()
 	for sub_info in subscribers:
 		if !is_instance_valid(sub_info.node):
 			remove_subscriber(sub_info.node)

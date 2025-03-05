@@ -136,22 +136,6 @@ tracks/4/keys = {
 }]
 }
 
-[sub_resource type="Animation" id="Animation_ftxbi"]
-resource_name = "slide_out"
-length = 0.5
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath(".:position")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.5),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Vector2(940, 520), Vector2(1240, 520)]
-}
-
 [sub_resource type="Animation" id="Animation_xeueh"]
 resource_name = "slide_in"
 length = 0.5
@@ -166,6 +150,22 @@ tracks/0/keys = {
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
 "values": [Vector2(1240, 520), Vector2(940, 520)]
+}
+
+[sub_resource type="Animation" id="Animation_ftxbi"]
+resource_name = "slide_out"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(940, 520), Vector2(1240, 520)]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_m64st"]

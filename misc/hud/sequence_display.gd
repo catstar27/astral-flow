@@ -11,6 +11,7 @@ class_name SequenceDisplay
 ]
 var current_index: int = 0 ## Index of the panel that matches the current character
 var current_order: Array[Character] = [] ## Order of the turn this is tracking
+var is_updating: bool = false ## Whether the display is currently updating
 
 func _ready()->void:
 	EventBus.subscribe("SEQUENCE_UPDATED", self, "update_order")
@@ -21,16 +22,18 @@ func _ready()->void:
 ## Updates the order of sequence and shows the display
 func update_order(order: Array[Character])->void:
 	show()
-	current_order = order
+	current_order = order.duplicate()
 	await update_display(true)
 
 ## Updates the text of the panels
 func update_display(play_animation: bool = false)->void:
-	if play_animation && position.x != 1240:
+	while anim.is_playing():
+		await anim.animation_finished
+	anim.play("RESET")
+	is_updating = true
+	if play_animation:
 		anim.play("slide_out")
 		await anim.animation_finished
-	if current_index == current_order.size():
-		current_index = 0
 		hide()
 	if current_index == 0:
 		panels[3].get_children()[0].text = "---"
@@ -47,9 +50,11 @@ func update_display(play_animation: bool = false)->void:
 		panels[1].get_children()[0].text = "END"
 		panels[0].get_children()[0].text = "---"
 	if play_animation:
+		show()
 		anim.play("slide_in")
 		await anim.animation_finished
 		EventBus.broadcast("SEQUENCE_DISPLAY_CYCLED", "NULLDATA")
+	is_updating = false
 
 ## Moves the panels so that the current character is pointed at
 func cycle_display()->void:
@@ -59,5 +64,8 @@ func cycle_display()->void:
 ## Resets the panel positions and shifts the text after the animation plays
 func end_cycle()->void:
 	anim.play("RESET")
-	await update_display()
+	if current_index != current_order.size():
+		await update_display()
+	else:
+		current_index = 0
 	EventBus.broadcast("SEQUENCE_DISPLAY_CYCLED", "NULLDATA")
