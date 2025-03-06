@@ -8,7 +8,7 @@
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_6ag3p"]
 
-[node name="SelectionCursor" type="Node2D" groups=["Persist"]]
+[node name="SelectionCursor" type="Node2D"]
 z_index = 3
 script = ExtResource("1_rchw3")
 move_arrow_tex = ExtResource("2_4oduv")

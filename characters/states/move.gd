@@ -1,9 +1,10 @@
 extends State
+## State that moves a character to a given position
 
 var stop_movement: bool = false
 var target: Vector2
 
-func enter_state(data: Vector2)->void:
+func enter_state(data: Vector2, _data2 = null)->void:
 	stop_movement = false
 	state_machine.user.move_order.connect(new_move_order)
 	state_machine.user.stop_move_order.connect(stop)

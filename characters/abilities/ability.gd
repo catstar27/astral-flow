@@ -130,7 +130,7 @@ func get_targeting_color()->Color:
 			return Settings.gameplay.support_indicator_tint
 		target_type_options.enemies:
 			return Settings.gameplay.attack_indicator_tint
-	return Settings.gameplay.support_indicator_tint
+	return Settings.gameplay.attack_indicator_tint
 #endregion
 
 #region Effects

@@ -16,7 +16,7 @@ func _ready()->void:
 	change_state_to(start_state_id)
 
 ## Changes the state based on an id
-func change_state_to(id: String, data = null)->void:
+func change_state_to(id: String, data = null, data2 = null)->void:
 	if paused:
 		return
 	if state_dict[id] == null:
@@ -25,7 +25,7 @@ func change_state_to(id: String, data = null)->void:
 	if current_state != null:
 		current_state.exit_state()
 	current_state = state_dict[id]
-	current_state.enter_state(data)
+	current_state.enter_state(data, data2)
 	state_changed.emit(current_state)
 
 func _physics_process(delta: float) -> void:

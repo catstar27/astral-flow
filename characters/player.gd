@@ -5,8 +5,6 @@ class_name Player
 func _ready() -> void:
 	_setup()
 	Dialogic.signal_event.connect(dialogue_signal_processor)
-	if Dialogic.VAR.get_variable("learned_zap"):
-		dialogue_signal_processor("test_room_zap_learned")
 
 func dialogue_signal_processor(sig: String)->void:
 	if sig == "test_room_zap_learned":
@@ -17,3 +15,7 @@ func _unhandled_input(event: InputEvent) -> void:
 		if selected_ability != null:
 			deselect_ability()
 			get_viewport().set_input_as_handled()
+
+func load_extra()->void:
+	if Dialogic.VAR.get_variable("learned_zap"):
+		dialogue_signal_processor("test_room_zap_learned")

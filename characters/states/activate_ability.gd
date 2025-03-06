@@ -3,9 +3,7 @@ extends State
 
 @export var sound: AudioStreamWAV ## Sound to play when attempting to use ability on invalid position
 
-func enter_state(data: Array)->void:
-	var ability: Ability = data[0]
-	var destination: Vector2 = data[1]
+func enter_state(ability: Ability, destination: Vector2)->void:
 	if !ability.is_tile_valid(destination):
 		EventBus.broadcast("PLAY_SOUND", [sound, "positional", state_machine.user.global_position])
 		state_machine.change_state_to("IDLE")

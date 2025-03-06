@@ -1,7 +1,7 @@
 extends State
 ## Idle state that does nothing but moves to other states
 
-func enter_state(_data)->void:
+func enter_state(_data, _data2 = null)->void:
 	state_machine.user.move_order.connect(start_move)
 	state_machine.user.interact_order.connect(start_interact)
 	state_machine.user.ability_order.connect(start_ability)
@@ -17,5 +17,5 @@ func start_move(pos: Vector2)->void:
 func start_interact(target: Node2D)->void:
 	state_machine.change_state_to("INTERACT", target)
 
-func start_ability(data: Array)->void:
-	state_machine.change_state_to("ACTIVATE_ABILITY", data)
+func start_ability(ability: Ability, destination: Vector2)->void:
+	state_machine.change_state_to("ACTIVATE_ABILITY", ability, destination)

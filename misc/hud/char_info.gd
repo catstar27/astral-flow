@@ -52,6 +52,9 @@ func open_menu()->void:
 	if state != states.closed || changing_state:
 		return
 	changing_state = true
+	for button in ability_buttons:
+		if button.ability != null:
+			button.disabled = false
 	state = states.open
 	menu_button.text = "←"
 	modulate = Color(1,1,1,1)
@@ -203,7 +206,7 @@ func update_labels()->void:
 func update_abilities()->void:
 	clear_abilities()
 	var index: int = 0
-	for ability in character.get_abilities():
+	for ability in character.abilities:
 		if index > 9:
 			break
 		add_ability(index, ability)

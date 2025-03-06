@@ -15,14 +15,7 @@ var marker: Node2D = null
 var move_arrows: Array[Sprite2D] = []
 var deactivate_requests: int = 0
 var block_deselect: bool = false
-var last_map_name: String = ""
-var to_save: Array[StringName] = [
-	"position",
-	"last_map_name"
-]
 signal move_stopped
-signal saved(node)
-signal loaded(node)
 
 func _ready() -> void:
 	update_color()
@@ -31,10 +24,6 @@ func _ready() -> void:
 	EventBus.subscribe("COMBAT_STARTED", self, "deselect")
 	EventBus.subscribe("ABILITY_BUTTON_PRESSED", self, "select_ability")
 	EventBus.subscribe("GAMEPLAY_SETTINGS_CHANGED", self, "update_color")
-	EventBus.subscribe("LOAD_MAP", self, "set_map")
-
-func set_map(map_name: String)->void:
-	last_map_name = map_name
 
 func activate()->void:
 	reset_move_dir()
@@ -154,16 +143,16 @@ func interact_on_pos(pos: Vector2i)->void:
 		return
 	elif selected.selected_ability != null:
 		var ability: Ability = selected.selected_ability
-		selected.emit_signal("ability_order", [ability, pos])
+		selected.activate_ability(ability, pos)
 	elif hovering == null || hovering is GameMap:
-		selected.emit_signal("move_order", pos)
+		selected.move(pos)
 	elif hovering is Interactive || hovering is NPC:
 		var cur_hover = hovering
-		selected.emit_signal("move_order", pos)
+		selected.move(pos)
 		block_deselect = true
 		while selected.state_machine.current_state.state_id != "IDLE":
 			await selected.state_machine.state_changed
-		selected.emit_signal("interact_order", cur_hover)
+		selected.interact(cur_hover)
 		block_deselect = false
 
 func select(character: Character)->void:
@@ -205,24 +194,3 @@ func _selection_area_entered(body: Node2D) -> void:
 func _selection_area_exited(body: Node2D) -> void:
 	if hovering == body:
 		hovering = null
-
-func save_data(dir: String)->void:
-	deactivate_requests += 1
-	var file: FileAccess = FileAccess.open(dir+name+".dat", FileAccess.WRITE)
-	for var_name in to_save:
-		file.store_var(var_name)
-		file.store_var(get(var_name))
-	file.store_var("END")
-	deactivate_requests -= 1
-	file.close()
-	saved.emit(self)
-
-func load_data(dir: String)->void:
-	var file: FileAccess = FileAccess.open(dir+name+".dat", FileAccess.READ)
-	var var_name: String = file.get_var()
-	while var_name != "END":
-		set(var_name, file.get_var())
-		var_name = file.get_var()
-	position = NavMaster.map.map_to_local(NavMaster.map.local_to_map(position))
-	file.close()
-	loaded.emit(self)

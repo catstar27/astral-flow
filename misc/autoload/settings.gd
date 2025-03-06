@@ -4,6 +4,7 @@ var settings_file_location: String = "user://settings.cfg"
 var settings_file: ConfigFile = ConfigFile.new()
 var gameplay: Dictionary = {
 	"selection_tint": Color.DEEP_SKY_BLUE,
+	"enemy_selection_tint": Color.FIREBRICK,
 	"attack_indicator_tint": Color.DARK_ORANGE,
 	"support_indicator_tint": Color.DARK_GREEN,
 }

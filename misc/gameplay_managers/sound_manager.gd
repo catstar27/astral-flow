@@ -72,21 +72,19 @@ func ost_reset()->void:
 
 ## Fades the ost out over a given time
 func fade_out_music(time: float)->void:
-	var start_volume: float = music_volume
-	await create_tween().tween_method(change_music_volume, music_volume, 0, time).finished
+	var start_volume: float = ost.volume_db
+	await create_tween().tween_method(change_music_volume, ost.volume_db, linear_to_db(0.1), time).finished
 	ost.stream_paused = true
 	change_music_volume(start_volume)
 
 ## Fades the ost in over a given time
 func fade_in_music(time: float)->void:
 	ost.stream_paused = false
-	await create_tween().tween_method(change_music_volume, 0, music_volume, time).finished
+	await create_tween().tween_method(change_music_volume, linear_to_db(0.1), ost.volume_db, time).finished
 
 ## Changes the volume of the ost
 func change_music_volume(volume: float)->void:
-	if volume < 0.001:
-		volume = 0.001 ## To avoid errors with setting volume to -Inf decibels
-	ost.volume_db = linear_to_db(volume)
+	ost.volume_db = volume
 
 ## Called when dialogue is entered.
 ## Either fades the music or makes it quieter, depending on whether the dialogue plays music.

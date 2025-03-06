@@ -13,7 +13,7 @@ var critical_operation: bool = false ## Whether this state is in a critical oper
 @warning_ignore("unused_signal") signal critical_exited ## Emitted when state finishes critical operation
 
 ## Called when the state is entered
-func enter_state(_data)->void:
+func enter_state(_data, _data2)->void:
 	return
 
 ## Called on every frame

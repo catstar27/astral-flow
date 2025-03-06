@@ -102,8 +102,7 @@ func load_map(new_map: String, entrance_id: String = "")->void:
 	if map_to_load.has_save_data():
 		await SaveLoad.load_map(map_to_load)
 	map_to_load.prep_map()
-	if selection_cursor.last_map_name != map.map_name:
-		selection_cursor.position = player.position
+	selection_cursor.position = player.position
 	await SaveLoad.save_data(true)
 	if sound_manager.ost.stream != map_to_load.ost:
 		EventBus.broadcast("SET_OST", map_to_load.ost)

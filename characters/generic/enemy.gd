@@ -1,15 +1,14 @@
 extends Character
 class_name Enemy
 
-enum ai_types {melee_aggressive, melee_safe}
+enum ai_types { ## Options for enemy ai
+	melee_aggressive, ## Aggressive melee attacker that tries to damage as much as possible
+	melee_safe ## Safe melee attacker that tries to stay alive but still deal damage
+}
+@export var ai_type: ai_types ## This enemy's ai type
 @onready var combat_trigger: Area2D = %CombatTrigger
-@export var ai_type: ai_types
-@export var defeat_signal: String
 var watching: Dictionary = {}
 var target: Character = null
-
-func _ready() -> void:
-	_setup()
 
 func _process(_delta: float) -> void:
 	if active:
@@ -56,13 +55,13 @@ func take_turn()->void:
 func melee_aggressive()->void:
 	abilities.sort_custom(func(x,y): return x.base_damage>y.base_damage)
 	if !abilities[0].is_tile_valid(target.position):
-		move_order.emit(target.position)
+		move(target.position)
 		await get_tree().create_timer(.01).timeout
 		while state_machine.current_state.state_id != "IDLE":
 			await state_machine.state_changed
 	if abilities[0].is_tile_valid(target.position):
 		while cur_ap>=abilities[0].ap_cost:
-			ability_order.emit([abilities[0], target.position])
+			activate_ability(abilities[0], target.position)
 			while state_machine.current_state.state_id != "IDLE":
 				await state_machine.state_changed
 			if cur_hp <= 0:
@@ -70,4 +69,4 @@ func melee_aggressive()->void:
 	end_turn()
 
 func melee_safe()->void:
-	return
+	end_turn()

@@ -100,16 +100,16 @@ func load_data()->void:
 	var file: FileAccess = FileAccess.open(save_file_folder+slot+"/Global.dat", FileAccess.READ)
 	var cur_map: String = file.get_var().split('=', true, 1)[1]
 	var main: Node2D = await reset_game()
-	await main.load_map(cur_map)
-	for node in get_tree().get_nodes_in_group("Persist"):
-		if !node.has_method("load_data"):
-			printerr("Persistent node"+node.name+"missing load data function")
-		await node.load_data(save_file_folder+slot+'/')
 	var variable: String = file.get_var()
 	while variable != "END_OF_SAVE_DATA":
 		Dialogic.VAR.set_variable(variable, file.get_var())
 		variable = file.get_var()
 	file.close()
+	await main.load_map(cur_map)
+	for node in get_tree().get_nodes_in_group("Persist"):
+		if !node.has_method("load_data"):
+			printerr("Persistent node"+node.name+"missing load data function")
+		await node.load_data(save_file_folder+slot+'/')
 	EventBus.broadcast("LOADED", "NULLDATA")
 	EventBus.broadcast("PRINT_LOG", "Loaded!")
 	AudioServer.set_bus_mute(0, false)

@@ -81,6 +81,15 @@ _data = {
 [node name="Player" type="CharacterBody2D" groups=["Persist"]]
 z_index = 1
 script = ExtResource("1_so47p")
+star_stats = Dictionary[String, int]({
+"agility": 12,
+"charisma": 12,
+"endurance": 12,
+"intelligence": 12,
+"passion": 12,
+"resolve": 12,
+"strength": 12
+})
 export_abilities = Array[ExtResource("2_6rrl0")]([ExtResource("3_6rrl0"), ExtResource("4_eus45"), ExtResource("5_vcag3")])
 display_name = "Kalin"
 
