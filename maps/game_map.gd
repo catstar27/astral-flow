@@ -54,11 +54,13 @@ func prep_map()->void:
 	EventBus.broadcast("MAP_LOADED", self)
 #endregion
 
+#region combat
 func start_combat()->void:
 	EventBus.broadcast("SET_OST", battle_theme)
 
 func end_combat()->void:
 	EventBus.broadcast("SET_OST", ost)
+#endregion
 
 #region Pathfinding
 func get_obj_at_pos(pos: Vector2)->Node2D:
@@ -150,9 +152,6 @@ func is_in_bounds(pos: Vector2)->bool:
 #endregion
 
 #region Save and Load
-func unload()->void:
-	queue_free()
-
 func child_ready(child)->void:
 	if loading:
 		child.loaded.disconnect(child_ready)

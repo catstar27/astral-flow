@@ -1,28 +1,27 @@
 extends Character
 class_name Enemy
+## Basic enemy class that uses raycasts to initiate combat with players
 
-enum ai_types { ## Options for enemy ai
-	melee_aggressive, ## Aggressive melee attacker that tries to damage as much as possible
-	melee_safe ## Safe melee attacker that tries to stay alive but still deal damage
-}
-@export var ai_type: ai_types ## This enemy's ai type
-@onready var combat_trigger: Area2D = %CombatTrigger
-var watching: Dictionary = {}
-var target: Character = null
+@onready var combat_trigger: Area2D = %CombatTrigger ## Area that tracks other characters for combat
+var watching: Dictionary[Node2D, RayCast2D] = {} ## Character/raycast pairs for characters in combat trigger
 
 func _process(_delta: float) -> void:
 	if active:
 		check_rays()
 
+## Checks every ray this enemy is casting
 func check_rays(_character: Character = null)->void:
 	for character in watching:
 		check_ray(character)
 
+## Checks a ray corresponding to the character it is watching for
+## Tries to start combat if the ray is colliding with its target
 func check_ray(character: Character)->void:
 	watching[character].target_position = character.position-position
 	if watching[character].get_collider() == character:
 		try_combat(character)
 
+## Creates a new ray to track the character that entered the combat trigger
 func _combat_trigger_entered(body: Node2D) -> void:
 	if body is Character && body != self:
 		var ray: RayCast2D = RayCast2D.new()
@@ -34,6 +33,7 @@ func _combat_trigger_entered(body: Node2D) -> void:
 		body.pos_changed.connect(check_ray)
 		check_ray(body)
 
+## Removes the ray corresponding to the tracked character
 func _combat_trigger_exited(body: Node2D) -> void:
 	if body is Character && body != self:
 		body.pos_changed.disconnect(check_ray)
@@ -41,32 +41,11 @@ func _combat_trigger_exited(body: Node2D) -> void:
 		watching[body].queue_free()
 		watching.erase(body)
 
+## Attempts to initiate combat with the given character
 func try_combat(character: Character)->void:
 	if !active:
 		return
 	if character is Player && !in_combat:
-		target = character
+		combat_target = character
 		var participants: Array[Character] = [character, self]
 		EventBus.broadcast("START_COMBAT", participants)
-
-func take_turn()->void:
-	call_deferred(str(ai_types.keys()[ai_type]))
-
-func melee_aggressive()->void:
-	abilities.sort_custom(func(x,y): return x.base_damage>y.base_damage)
-	if !abilities[0].is_tile_valid(target.position):
-		move(target.position)
-		await get_tree().create_timer(.01).timeout
-		while state_machine.current_state.state_id != "IDLE":
-			await state_machine.state_changed
-	if abilities[0].is_tile_valid(target.position):
-		while cur_ap>=abilities[0].ap_cost:
-			activate_ability(abilities[0], target.position)
-			while state_machine.current_state.state_id != "IDLE":
-				await state_machine.state_changed
-			if cur_hp <= 0:
-				return
-	end_turn()
-
-func melee_safe()->void:
-	end_turn()

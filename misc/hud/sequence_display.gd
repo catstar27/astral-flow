@@ -21,7 +21,6 @@ func _ready()->void:
 
 ## Updates the order of sequence and shows the display
 func update_order(order: Array[Character])->void:
-	show()
 	current_order = order.duplicate()
 	await update_display(true)
 

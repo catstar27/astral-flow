@@ -77,7 +77,7 @@ func unload_map()->void:
 		if player != null:
 			map.remove_child(player)
 			add_child(player)
-		map.unload()
+		map.queue_free()
 		map = null
 
 func load_map(new_map: String, entrance_id: String = "")->void:

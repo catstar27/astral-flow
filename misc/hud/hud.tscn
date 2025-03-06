@@ -61,6 +61,8 @@ grow_vertical = 1
 unique_name_in_owner = true
 visible = false
 layout_mode = 1
+offset_left = 280.0
+offset_right = 280.0
 
 [node name="QuestTracker" parent="." instance=ExtResource("9_fm45y")]
 unique_name_in_owner = true

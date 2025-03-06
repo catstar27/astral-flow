@@ -6,6 +6,8 @@ func _ready() -> void:
 	_setup()
 	Dialogic.signal_event.connect(dialogue_signal_processor)
 
+## Processes dialogue signals; possibly to be removed in the future
+## Currently just here to add the zap ability
 func dialogue_signal_processor(sig: String)->void:
 	if sig == "test_room_zap_learned":
 		add_ability(load("res://characters/abilities/zap.tres"))

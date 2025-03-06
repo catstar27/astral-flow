@@ -34,6 +34,11 @@ var stat_mods: Dictionary[String, int] = { ## Stat modifiers from statuses, etc.
 }
 #endregion
 #region Exports
+enum ai_types { ## Options for enemy ai
+	melee_aggressive, ## Aggressive melee attacker that tries to damage as much as possible
+	melee_safe ## Safe melee attacker that tries to stay alive but still deal damage
+}
+@export var ai_type: ai_types ## This enemy's ai type
 @export var allies: Array[Character] = [] ## List of allies to bring into combat alongside this character
 @export var export_abilities: Array[Ability] = [] ## Exported ability list for initial abilities
 @export var display_name: String = "Name Here" ## Name displayed in gui and logs
@@ -65,6 +70,7 @@ var schedule_index: int = 0 ## Current index of the task being executed
 var schedule_executed: bool = false ## Whether the schedule has been fully executed
 var schedule_processing: bool = false ## Whether the schedule is being executed currently
 var is_selected: bool = false ## Whether this character is selected
+var combat_target: Character = null ## The character this is attempting to attack
 var to_save: Array[StringName] = [ ## Variables to save
 	"position",
 	"star_stats",
@@ -253,12 +259,38 @@ func damage(source: Node, amount: int, _damage_type: Ability.damage_type_options
 	if cur_hp <= 0:
 		anim_player.play("Character/defeat")
 
+## Activates this character's ai, only if not controlled by player
+func take_turn()->void:
+	if self is not Player:
+		call_deferred(str(ai_types.keys()[ai_type]))
+
 ## Waits until the character is idle, then ends their turn
 func end_turn()->void:
 	while state_machine.current_state.state_id != "IDLE":
 		await state_machine.state_changed
 	remove_range_indicators()
 	ended_turn.emit(self)
+
+## Implementation of melee aggressive ai type that attacks with no self preservation
+func melee_aggressive()->void:
+	abilities.sort_custom(func(x,y): return x.base_damage>y.base_damage)
+	if !abilities[0].is_tile_valid(combat_target.position):
+		move(combat_target.position)
+		await get_tree().create_timer(.01).timeout
+		while state_machine.current_state.state_id != "IDLE":
+			await state_machine.state_changed
+	if abilities[0].is_tile_valid(combat_target.position):
+		while cur_ap>=abilities[0].ap_cost:
+			activate_ability(abilities[0], combat_target.position)
+			while state_machine.current_state.state_id != "IDLE":
+				await state_machine.state_changed
+			if cur_hp <= 0:
+				return
+	end_turn()
+
+## Implementation of melee safe ai type that attempts to stay alive and deal damage
+func melee_safe()->void:
+	end_turn()
 #endregion
 
 #region Abilities
