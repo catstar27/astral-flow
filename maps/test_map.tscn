@@ -38,7 +38,7 @@
 [ext_resource type="Resource" uid="uid://dprgv3h7cyx52" path="res://dialogue/test_room_npc.dtl" id="32_lfqa0"]
 [ext_resource type="Texture2D" uid="uid://33u05ljr16og" path="res://textures/interactive/tesla_coil_n.png" id="35_k202b"]
 [ext_resource type="Texture2D" uid="uid://ddu4g3c61ag8s" path="res://textures/interactive/tesla_coil_s.png" id="36_ms4id"]
-[ext_resource type="Script" uid="uid://cuvk331ioveg" path="res://misc/helper_scripts/npc_task.gd" id="38_jrvla"]
+[ext_resource type="Script" uid="uid://cuvk331ioveg" path="res://characters/tasks/npc_task.gd" id="38_jrvla"]
 
 [sub_resource type="CanvasTexture" id="CanvasTexture_6k8ls"]
 diffuse_texture = ExtResource("5_5jmsy")

@@ -22,6 +22,10 @@ func started_combat(_data: Array[Character])->void:
 func ended_combat()->void:
 	in_combat = false
 
+## Checks if given save slot is blank
+func is_slot_blank(check_slot: String)->bool:
+	return !FileAccess.file_exists(save_file_folder+check_slot+"/Global.dat")
+
 #region Delete and Reset
 ## Removes all non-autoload nodes and makes a new main scene
 func reset_game()->Main:
@@ -64,13 +68,14 @@ func clear_dir(dir: String)->void:
 		clear_dir(dir+'/'+directory)
 #endregion
 
+#region Save and Load
 ## Loads the given map based on its loading method
 func load_map(map: GameMap)->void:
 	await map.load_map(save_file_folder+slot+'/')
 
-## Checks if given save slot is blank
-func is_slot_blank(check_slot: String)->bool:
-	return !FileAccess.file_exists(save_file_folder+check_slot+"/Global.dat")
+## Loads the given player's data
+func load_player(player: Player)->void:
+	player.load_data(save_file_folder+slot+'/')
 
 ## Called when a node finishes saving or loading
 func readied(node: Node)->void:
@@ -149,3 +154,4 @@ func load_data()->void:
 	EventBus.broadcast("LOADED", "NULLDATA")
 	EventBus.broadcast("PRINT_LOG", "Loaded!")
 	loading = false
+#endregion

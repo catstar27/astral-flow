@@ -17,7 +17,7 @@ var minute: int = 0
 var prepped: bool = false
 var to_save: Array[StringName] = [
 	"hour",
-	"minute"
+	"minute",
 ]
 signal saved(node)
 signal loaded(node)
@@ -91,19 +91,23 @@ func load_map(new_map: String, entrance_id: String = "")->void:
 	NavMaster.map = map_to_load
 	map = map_to_load
 	map.process_mode = Node.PROCESS_MODE_PAUSABLE
+	var new_player: bool = false
 	if player == null:
 		player = player_scene.instantiate()
+		new_player = true
 	else:
 		remove_child(player)
 	map_to_load.add_child(player)
+	if map_to_load.has_save_data():
+		await SaveLoad.load_map(map_to_load)
 	var entrance: TravelPoint = map_to_load.get_entrance(entrance_id)
 	if entrance == null:
 		player.position = map_to_load.map_to_local(map_to_load.player_start_pos)
 	else:
 		player.position = entrance.get_exit_position()
-	if map_to_load.has_save_data():
-		await SaveLoad.load_map(map_to_load)
 	map_to_load.prep_map()
+	if new_player:
+		SaveLoad.load_player(player)
 	while selection_cursor.moving:
 		await selection_cursor.move_stopped
 	selection_cursor.position = player.position
@@ -180,6 +184,7 @@ func fade_out()->void:
 func fade_in()->void:
 	await create_tween().tween_property(foreground, "modulate", Color(0,0,0,0), 1).set_ease(Tween.EASE_IN).finished
 
+#region Save and Load
 func save_data(dir: String)->void:
 	var file: FileAccess = FileAccess.open(dir+name+".dat", FileAccess.WRITE)
 	for var_name in to_save:
@@ -198,3 +203,4 @@ func load_data(dir: String)->void:
 	file.close()
 	EventBus.broadcast("TIME_CHANGED", [minute, hour])
 	loaded.emit(self)
+#endregion

@@ -10,7 +10,7 @@
 [ext_resource type="Texture2D" uid="uid://dpnsq7nn8m0l2" path="res://textures/interactive/stairs.png" id="6_wcq4g"]
 [ext_resource type="PackedScene" uid="uid://cexm0cxkxol76" path="res://maps/interactives/generic/travel_point.tscn" id="7_3ojlr"]
 [ext_resource type="PackedScene" uid="uid://bxbk83doy5d81" path="res://characters/generic/npc.tscn" id="10_ll2lb"]
-[ext_resource type="Script" uid="uid://cuvk331ioveg" path="res://misc/helper_scripts/npc_task.gd" id="11_om4xg"]
+[ext_resource type="Script" uid="uid://cuvk331ioveg" path="res://characters/tasks/npc_task.gd" id="11_om4xg"]
 
 [sub_resource type="Resource" id="Resource_p2huu"]
 script = ExtResource("11_om4xg")

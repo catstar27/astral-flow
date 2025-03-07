@@ -1,27 +1,29 @@
 extends TileMapLayer
 class_name GameMap
+## Custom tilemap representing a map in the game
+##
+## Contains all necessary pathfinding functions,
+## as well as the ability to save map-specific nodes
 
+ ## Position for player to start if not coming from an entrance
 @export var player_start_pos: Vector2i = Vector2i.ZERO
-@export var calm_theme: AudioStreamWAV
-@export var battle_theme: AudioStreamWAV
-@export var map_name: String
-@onready var astar: AStarGrid2D
-@onready var light_modulator: CanvasModulate = %LightingModulate
-var children_ready_count: int = 0
-var loading: bool = false
-var player: Player = null
-var occupied_tiles: Array[Vector2i]
-var tile_bounds: Dictionary = {"x_min": 0, "x_max": 0, "y_min": 0, "y_max": 0}
-var to_save: Array[StringName] = [
+@export var calm_theme: AudioStreamWAV ## Theme to play outside combat
+@export var battle_theme: AudioStreamWAV ## Theme to play in combat
+@export var map_name: String ## Display name of map
+@onready var astar: AStarGrid2D ## Astar pathfinding grid
+@onready var light_modulator: CanvasModulate = %LightingModulate ## Modulator for lighting
+var children_ready_count: int = 0 ## Number of children saved/loaded
+var loading: bool = false ## Whether the map is loading
+var player: Player = null ## The player node
+var occupied_tiles: Array[Vector2i] ## Tiles being occupied by an interactive or character
+var to_save: Array[StringName] = [ ## Map variables to save
 	"player_start_pos"
 ]
-#region Signals
-signal map_saved
-signal map_loaded
-signal saved(node)
-signal loaded(node)
-signal child_readied
-#endregion
+signal map_saved ## Emitted when the entire map is saved
+signal map_loaded ## Emitted when the entire map is loaded
+signal saved(node: GameMap) ## Emitted when the map's variables are saved
+signal loaded(node: GameMap) ## Emitted when the map's variables are loaded
+signal child_readied ## Emitted when a child of the map has saved/loaded
 
 #region Prep
 func _ready()->void:
@@ -30,13 +32,11 @@ func _ready()->void:
 	EventBus.subscribe("COMBAT_STARTED", self, "start_combat")
 	EventBus.subscribe("COMBAT_ENDED", self, "end_combat")
 
-func _extra_setup()->void:
-	return
-
+## Prepares the map by resetting its astar
+## Also performs initial operations for its children
 func prep_map()->void:
 	occupied_tiles = []
 	light_modulator.show()
-	_calc_bounds()
 	_astar_setup()
 	for child in get_children():
 		if child is Interactive:
@@ -50,41 +50,9 @@ func prep_map()->void:
 				if child is Player:
 					player = child
 				child.activate(child.position)
-	_extra_setup()
 	EventBus.broadcast("MAP_LOADED", self)
-#endregion
 
-#region combat
-func start_combat()->void:
-	EventBus.broadcast("SET_OST", battle_theme)
-
-func end_combat()->void:
-	EventBus.broadcast("SET_OST", calm_theme)
-#endregion
-
-#region Pathfinding
-func get_obj_at_pos(pos: Vector2)->Node2D:
-	for child in get_children():
-		if child is Interactive || child is Character:
-			if local_to_map(child.position) == local_to_map(pos):
-				if child is Interactive:
-					if !child.collision_active:
-						continue
-				return child
-	return null
-
-func set_pos_occupied(pos: Vector2)->void:
-	var tile: Vector2i = local_to_map(pos)
-	if tile not in occupied_tiles:
-		occupied_tiles.append(tile)
-	astar.set_point_solid(tile, true)
-
-func set_pos_unoccupied(pos: Vector2)->void:
-	var tile: Vector2i = local_to_map(pos)
-	if tile in occupied_tiles:
-		occupied_tiles.remove_at(occupied_tiles.find(tile))
-	astar.set_point_solid(tile, false)
-
+## Preps the astar grid, configuring its settings
 func _astar_setup()->void:
 	astar = AStarGrid2D.new()
 	astar.region = get_used_rect()
@@ -95,36 +63,85 @@ func _astar_setup()->void:
 	astar.update()
 	_set_astar_tiles()
 
+## Sets all tiles not marked as traversible to solid
 func _set_astar_tiles()->void:
 	for cell in get_used_cells():
 		if !get_cell_tile_data(cell).get_custom_data("traversible"):
 			astar.set_point_solid(cell)
+#endregion
 
+#region Combat
+## Called at the start of combat to start the battle theme
+func start_combat()->void:
+	EventBus.broadcast("SET_OST", battle_theme)
+
+## Called after combat ends to return to the calm theme
+func end_combat()->void:
+	EventBus.broadcast("SET_OST", calm_theme)
+#endregion
+
+#region Pathfinding
+## Finds and returns the object at given position, or null if there is none
+func get_obj_at_pos(pos: Vector2)->Node2D:
+	for child in get_children():
+		if child is Interactive || child is Character:
+			if local_to_map(child.position) == local_to_map(pos):
+				if child is Interactive:
+					if !child.collision_active:
+						continue
+				return child
+	return null
+
+## Sets given position to be occupied
+func set_pos_occupied(pos: Vector2)->void:
+	var tile: Vector2i = local_to_map(pos)
+	if tile not in occupied_tiles:
+		occupied_tiles.append(tile)
+	astar.set_point_solid(tile, true)
+
+## Sets the given position to be unoccupied
+func set_pos_unoccupied(pos: Vector2)->void:
+	var tile: Vector2i = local_to_map(pos)
+	if tile in occupied_tiles:
+		occupied_tiles.remove_at(occupied_tiles.find(tile))
+	astar.set_point_solid(tile, false)
+
+## Given a starting and ending position, returns a path between them.
+## If allow_closest is true, it will find the nearest valid tile if the
+## end position is occupied.
 func get_nav_path(start_pos: Vector2, end_pos: Vector2, allow_closest: bool = true)->Array[Vector2]:
 	var start_cell: Vector2i = local_to_map(start_pos)
 	var end_cell: Vector2i = local_to_map(end_pos)
 	if astar.is_in_boundsv(start_cell) && astar.is_in_boundsv(end_cell):
-		if !astar.is_point_solid(end_cell):
-			var path: Array[Vector2i] = astar.get_id_path(start_cell, end_cell, allow_closest)
-			var path_localized: Array[Vector2] = []
-			for tile in path:
-				path_localized.append(map_to_local(tile))
-			return path_localized
-		elif allow_closest:
-			var dist_compare: Callable = (func(a,b): return a.distance_to(start_cell)<b.distance_to(start_cell))
-			var neighbors_sorted: Array[Vector2i] = get_surrounding_cells(end_cell)
-			neighbors_sorted.sort_custom(dist_compare)
-			for cell in neighbors_sorted:
-				if get_cell_tile_data(cell) != null:
-					if !astar.is_point_solid(cell):
-						var path: Array[Vector2i] = astar.get_id_path(start_cell, cell, true)
-						var path_localized: Array[Vector2] = []
-						for tile in path:
-							path_localized.append(map_to_local(tile))
-						return path_localized
-			return []
+		if allow_closest && astar.is_point_solid(end_cell):
+			end_cell = get_nearest_empty_tile(end_cell)
+		var path: Array[Vector2i] = astar.get_id_path(start_cell, end_cell, allow_closest)
+		var path_localized: Array[Vector2] = []
+		for tile in path:
+			path_localized.append(map_to_local(tile))
+		return path_localized
 	return []
 
+## Uses bfs to find the nearest empty tile
+func get_nearest_empty_tile(pos: Vector2i)->Vector2i:
+	var visited: Dictionary[Vector2i, bool]
+	visited[pos] = true
+	var queue: Array[Vector2i]
+	queue.push_front(pos)
+	while queue != []:
+		var cur_pos: Vector2i = queue.pop_front()
+		if get_cell_tile_data(cur_pos) != null && !astar.is_point_solid(cur_pos):
+			return cur_pos
+		for cell in get_surrounding_cells(cur_pos):
+			if cell not in visited:
+				visited[cell] = false
+			if get_cell_tile_data(cell) != null && !visited[cell]:
+				visited[cell] = true
+				queue.push_back(cell)
+	printerr("No Empty Tile in Map!")
+	return pos
+
+## Returns an entrance that has given id
 func get_entrance(id: String)->TravelPoint:
 	for child in get_children():
 		if child is TravelPoint:
@@ -132,18 +149,7 @@ func get_entrance(id: String)->TravelPoint:
 				return child
 	return null
 
-func _calc_bounds()->void:
-	var cells: Array[Vector2i] = get_used_cells()
-	for cell in cells:
-		if cell.x<tile_bounds.x_min:
-			tile_bounds.x_min = cell.x
-		if cell.x>tile_bounds.x_max:
-			tile_bounds.x_max = cell.x
-		if cell.y<tile_bounds.y_min:
-			tile_bounds.y_min = cell.y
-		if cell.y>tile_bounds.y_max:
-			tile_bounds.y_max = cell.y
-
+## Determines if given position is in the map bounds
 func is_in_bounds(pos: Vector2)->bool:
 	var tile: Vector2i = local_to_map(pos)
 	if get_cell_tile_data(tile) == null:
@@ -152,6 +158,7 @@ func is_in_bounds(pos: Vector2)->bool:
 #endregion
 
 #region Save and Load
+## Called when a child finishes saving/loading
 func child_ready(child)->void:
 	if loading:
 		child.loaded.disconnect(child_ready)
@@ -160,12 +167,14 @@ func child_ready(child)->void:
 	children_ready_count += 1
 	child_readied.emit()
 
+## Checks whether the map has save data
 func has_save_data()->bool:
 	var filepath: String = SaveLoad.save_file_folder+SaveLoad.slot+'/'+map_name+'/'
 	if FileAccess.open(filepath+map_name+".dat", FileAccess.READ) != null:
 		return true
 	return false
 
+## Saves the entire map and all its children
 func save_map(filepath: String)->void:
 	if !DirAccess.dir_exists_absolute(filepath+map_name):
 		DirAccess.make_dir_absolute(filepath+map_name)
@@ -184,9 +193,12 @@ func save_map(filepath: String)->void:
 		await child_readied
 	map_saved.emit()
 
+## Loads the entire map and all its children
 func load_map(filepath: String)->void:
 	loading = true
 	NavMaster.map_loading = true
+	if astar == null:
+		_astar_setup()
 	filepath += map_name+'/'
 	load_data(filepath)
 	children_ready_count = 0
@@ -202,11 +214,11 @@ func load_map(filepath: String)->void:
 			node.load_data(filepath)
 	while children_ready_count < children_to_load:
 		await child_readied
-	player.position = map_to_local(player_start_pos)
 	map_loaded.emit()
 	NavMaster.map_loading = false
 	loading = false
 
+## Saves map variables
 func save_data(dir: String)->void:
 	player_start_pos = local_to_map(player.position)
 	var file: FileAccess = FileAccess.open(dir+map_name+".dat", FileAccess.WRITE)
@@ -216,6 +228,7 @@ func save_data(dir: String)->void:
 	file.store_var("END")
 	saved.emit(self)
 
+## Loads map variables
 func load_data(dir: String)->void:
 	var file: FileAccess = FileAccess.open(dir+map_name+".dat", FileAccess.READ)
 	var var_name: String = file.get_var()
@@ -223,9 +236,5 @@ func load_data(dir: String)->void:
 		set(var_name, file.get_var())
 		var_name = file.get_var()
 	file.close()
-	occupied_tiles = []
-	light_modulator.show()
-	_calc_bounds()
-	_astar_setup()
 	loaded.emit(self)
 #endregion
