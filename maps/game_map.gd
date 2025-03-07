@@ -2,7 +2,7 @@ extends TileMapLayer
 class_name GameMap
 
 @export var player_start_pos: Vector2i = Vector2i.ZERO
-@export var ost: AudioStreamWAV
+@export var calm_theme: AudioStreamWAV
 @export var battle_theme: AudioStreamWAV
 @export var map_name: String
 @onready var astar: AStarGrid2D
@@ -59,7 +59,7 @@ func start_combat()->void:
 	EventBus.broadcast("SET_OST", battle_theme)
 
 func end_combat()->void:
-	EventBus.broadcast("SET_OST", ost)
+	EventBus.broadcast("SET_OST", calm_theme)
 #endregion
 
 #region Pathfinding

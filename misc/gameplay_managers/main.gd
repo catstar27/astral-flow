@@ -1,4 +1,5 @@
 extends Node2D
+class_name Main
 
 @onready var global_timer: Timer = %GlobalTimer
 @onready var selection_cursor: SelectionCursor = %SelectionCursor
@@ -9,7 +10,7 @@ var player: Player = null
 var map: GameMap = null
 var current_timeline: Node = null
 var selection_cursor_scene: PackedScene = preload("res://misc/selection_cursor/selection_cursor.tscn")
-var player_scene: PackedScene = preload("res://characters/player.tscn")
+var player_scene: PackedScene = preload("res://characters/generic/player.tscn")
 var text_indicator_scene: PackedScene = preload("res://misc/hud/text_indicator.tscn")
 var hour: int = 0
 var minute: int = 0
@@ -79,10 +80,11 @@ func unload_map()->void:
 			add_child(player)
 		map.queue_free()
 		map = null
+		await get_tree().create_timer(.01).timeout
 
 func load_map(new_map: String, entrance_id: String = "")->void:
 	await unload_map()
-	await get_tree().create_timer(.01).timeout
+	selection_cursor.deactivate()
 	var map_to_load: GameMap = load(new_map).instantiate()
 	map_to_load.position = position
 	add_child(map_to_load)
@@ -102,10 +104,13 @@ func load_map(new_map: String, entrance_id: String = "")->void:
 	if map_to_load.has_save_data():
 		await SaveLoad.load_map(map_to_load)
 	map_to_load.prep_map()
+	while selection_cursor.moving:
+		await selection_cursor.move_stopped
 	selection_cursor.position = player.position
+	selection_cursor.activate()
 	await SaveLoad.save_data(true)
-	if sound_manager.ost.stream != map_to_load.ost:
-		EventBus.broadcast("SET_OST", map_to_load.ost)
+	if sound_manager.ost.stream != map_to_load.calm_theme:
+		EventBus.broadcast("SET_OST", map_to_load.calm_theme)
 	EventBus.broadcast("MAP_ENTERED", map_to_load.map_name)
 
 func load_map_at_entrance(args: Array)->void:
@@ -115,7 +120,7 @@ func load_map_at_entrance(args: Array)->void:
 	load_map(args[0], args[1])
 
 func pause()->void:
-	selection_cursor.reset_move_dir()
+	selection_cursor.move_dir = Vector2.ZERO
 	get_tree().paused = true
 
 func unpause()->void:

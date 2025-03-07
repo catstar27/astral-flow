@@ -14,8 +14,8 @@ enum exit_directions{ ## List of directions
 @export var new_map: String ## File path of the map this leads to
 
 func _interact_extra(character: Character)->void:
-	if character is Player:
-		EventBus.broadcast("LOAD_MAP_AT_ENTRANCE", [new_map, entrance_id])
+	if character is Player && !SaveLoad.loading && !SaveLoad.saving:
+		EventBus.broadcast("LOAD_MAP_AT_ENTRANCE", [new_map, target_entrance_id])
 
 ## Returns the position this exits from
 func get_exit_position()->Vector2:

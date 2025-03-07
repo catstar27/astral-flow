@@ -74,5 +74,5 @@ func load_data(dir: String)->void:
 	file.close()
 	update_complete_quests()
 	EventBus.broadcast("QUEST_TRACK", quests[tracked_id])
-	loaded.emit()
+	loaded.emit(self)
 #endregion
