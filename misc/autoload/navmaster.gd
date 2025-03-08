@@ -23,6 +23,14 @@ func get_obj_at_pos(pos: Vector2)->Node2D:
 		return null
 	return map.get_obj_at_pos(pos)
 
+## Returns array of surrounding tile positions
+func get_pos_tile_neighbors(pos: Vector2)->Array[Vector2]:
+	var neighbors: Array[Vector2i] = map.get_surrounding_cells(map.local_to_map(pos))
+	var positions: Array[Vector2] = []
+	for tile in neighbors:
+		positions.append(map.map_to_local(tile))
+	return positions
+
 ## Checks whether a given position is in the map bounds; returns false always if the map is invalid
 func is_in_bounds(pos: Vector2)->bool:
 	if map == null || !is_instance_valid(map):

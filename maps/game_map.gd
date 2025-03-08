@@ -89,6 +89,9 @@ func get_obj_at_pos(pos: Vector2)->Node2D:
 				if child is Interactive:
 					if !child.collision_active:
 						continue
+				if child is Player:
+					if !child.active:
+						continue
 				return child
 	return null
 
@@ -114,7 +117,7 @@ func get_nav_path(start_pos: Vector2, end_pos: Vector2, allow_closest: bool = tr
 	var end_cell: Vector2i = local_to_map(end_pos)
 	if astar.is_in_boundsv(start_cell) && astar.is_in_boundsv(end_cell):
 		if allow_closest && astar.is_point_solid(end_cell):
-			end_cell = get_nearest_empty_tile(end_cell)
+			end_cell = get_nearest_empty_tile(start_cell, end_cell)
 		var path: Array[Vector2i] = astar.get_id_path(start_cell, end_cell, allow_closest)
 		var path_localized: Array[Vector2] = []
 		for tile in path:
@@ -123,7 +126,7 @@ func get_nav_path(start_pos: Vector2, end_pos: Vector2, allow_closest: bool = tr
 	return []
 
 ## Uses bfs to find the nearest empty tile
-func get_nearest_empty_tile(pos: Vector2i)->Vector2i:
+func get_nearest_empty_tile(origin: Vector2i, pos: Vector2i)->Vector2i:
 	var visited: Dictionary[Vector2i, bool]
 	visited[pos] = true
 	var queue: Array[Vector2i]
@@ -131,6 +134,11 @@ func get_nearest_empty_tile(pos: Vector2i)->Vector2i:
 	while queue != []:
 		var cur_pos: Vector2i = queue.pop_front()
 		if get_cell_tile_data(cur_pos) != null && !astar.is_point_solid(cur_pos):
+			var best_distance: float = (cur_pos-origin).length()+(pos-cur_pos).length_squared()
+			for tile in queue:
+				if (tile-origin).length()+(pos-tile).length_squared() < best_distance:
+					best_distance = (tile-origin).length()+(pos-tile).length_squared()
+					cur_pos = tile
 			return cur_pos
 		for cell in get_surrounding_cells(cur_pos):
 			if cell not in visited:

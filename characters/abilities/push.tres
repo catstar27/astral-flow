@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://b0xbk38jyra5a" path="res://characters/abilities/ability.gd" id="1_icph7"]
 [ext_resource type="AudioStream" uid="uid://g0lb5si7k3pc" path="res://sfx/punch.wav" id="2_awjdm"]
-[ext_resource type="Script" uid="uid://dxv7e1j21poh5" path="res://misc/helper_scripts/status.gd" id="3_wxv4n"]
+[ext_resource type="Script" uid="uid://dxv7e1j21poh5" path="res://characters/abilities/statuses/status.gd" id="3_wxv4n"]
 [ext_resource type="Resource" uid="uid://dtp6xceav7hhg" path="res://characters/abilities/statuses/pushed.tres" id="4_sqsdr"]
 
 [resource]

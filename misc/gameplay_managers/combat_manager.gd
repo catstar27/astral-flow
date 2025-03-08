@@ -28,7 +28,7 @@ func character_defeated(character: Character)->void:
 	if character is Enemy:
 		enemy_team.remove_at(enemy_team.find(character))
 	battle_queue.remove_at(battle_queue.find(character))
-	character.defeated.disconnect(character_defeated)
+	character.defeated_node.disconnect(character_defeated)
 	if enemy_team.size() == 0 || player_team.size() == 0:
 		call_deferred("end_combat")
 		continue_round.emit(false)
@@ -38,7 +38,7 @@ func add_to_combat(character: Character)->void:
 	character.enter_combat()
 	character.taking_turn = false
 	character.stop_movement()
-	character.defeated.connect(character_defeated)
+	character.defeated_node.connect(character_defeated)
 	if character is Player:
 		player_team.append(character)
 	if character is Enemy:
@@ -91,7 +91,7 @@ func start_combat(participants: Array[Character])->void:
 func end_combat()->void:
 	round_num = 1
 	for character in battle_queue:
-		character.defeated.disconnect(character_defeated)
+		character.defeated_node.disconnect(character_defeated)
 		character.exit_combat()
 		character.taking_turn = false
 	battle_queue = []

@@ -93,7 +93,8 @@ signal pos_changed(character: Character) ## Emitted when the character's positio
 signal ended_turn(character: Character) ## Emitted when the character's turn ends
 signal stats_changed ## Emitted when the character's stats change
 signal abilities_changed ## Emitted when the character's abilities change
-signal defeated(character: Character) ## Emitted upon defeat; Sends the character defeated
+signal defeated ## Emitted upon defeat; Sends nothing
+signal defeated_node(node: Character) ## Emitted upon defeat; Sends the character defeated
 signal defeated_at(pos: Vector2) ## Emitted upon defeat; Sends the character defeated position
 signal defeated_named(display_name: String) ## Emitted upon defeat; Sends the character defeated name
 signal damaged(source: Node) ## Emitted upon taking damage; Sends the damage source
@@ -168,10 +169,11 @@ func rest()->void:
 #endregion
 
 #region Tasks
-## Initializes the schedule by setting the user of all tasks
+## Initializes the schedule by setting the user of all tasks and copying the tasks
 func init_schedule()->void:
-	for task in schedule:
-		task.user = self
+	for index in range(0, schedule.size()):
+		schedule[index] = schedule[index].duplicate(true)
+		schedule[index].user = self
 
 ## Processes the schedule, running the proper task
 func process_schedule()->void:
@@ -236,7 +238,8 @@ func on_defeated()->void:
 	EventBus.broadcast("TILE_UNOCCUPIED", position)
 	if taking_turn:
 		ended_turn.emit(self)
-	defeated.emit(self)
+	defeated.emit()
+	defeated_node.emit(self)
 	defeated_at.emit(position)
 	defeated_named.emit(display_name)
 	deactivate()

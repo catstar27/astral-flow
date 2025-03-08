@@ -1,8 +1,8 @@
 extends State
 ## State that moves a character to a given position
 
-var stop_movement: bool = false
-var target: Vector2
+var stop_movement: bool = false ## At each step, determines whether to stop movement or not
+var target: Vector2 ## Position this is trying to move the user to
 
 func enter_state(data: Vector2, _data2 = null)->void:
 	stop_movement = false
@@ -15,9 +15,12 @@ func enter_state(data: Vector2, _data2 = null)->void:
 		state_machine.user.anim_player.play("RESET")
 	state_machine.change_state_to("IDLE")
 
+## Handles actual movement. Returns true if the user reached the destination,
+## or if they should stop attempting to move. 
 func move(cur_target: Vector2)->bool:
 	if cur_target == state_machine.user.position:
 		return true
+	# Prevents calculating a path when the user is adjacent to the target position and the position is occupied
 	if abs(cur_target - state_machine.user.position).x <= (Vector2.ONE*NavMaster.tile_size).x:
 		if abs(cur_target - state_machine.user.position).y <= (Vector2.ONE*NavMaster.tile_size).y:
 			if abs(cur_target - state_machine.user.position) != Vector2.ONE*NavMaster.tile_size:
@@ -68,9 +71,11 @@ func move(cur_target: Vector2)->bool:
 			state_machine.user.stats_changed.emit()
 	return true
 
+## Updates the target position with a new one
 func new_move_order(pos: Vector2)->void:
 	target = pos
 
+## Sets stop_movement, which will end the current movement before the next tween
 func stop()->void:
 	stop_movement = true
 

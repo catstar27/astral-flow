@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="Status" load_steps=2 format=3 uid="uid://cw635joog3u4x"]
 
-[ext_resource type="Script" uid="uid://dxv7e1j21poh5" path="res://misc/helper_scripts/status.gd" id="1_mv7by"]
+[ext_resource type="Script" uid="uid://dxv7e1j21poh5" path="res://characters/abilities/statuses/status.gd" id="1_mv7by"]
 
 [resource]
 script = ExtResource("1_mv7by")

@@ -1,26 +1,26 @@
 extends Node2D
 class_name Main
+## The game's main node; everything is a descendent of this.
 
-@onready var global_timer: Timer = %GlobalTimer
-@onready var selection_cursor: SelectionCursor = %SelectionCursor
-@onready var foreground: Sprite2D = %Foreground
-@onready var sound_manager: SoundManager = %SoundManager
-var in_dialogue: bool = false
-var player: Player = null
-var map: GameMap = null
-var current_timeline: Node = null
-var selection_cursor_scene: PackedScene = preload("res://misc/selection_cursor/selection_cursor.tscn")
-var player_scene: PackedScene = preload("res://characters/generic/player.tscn")
-var text_indicator_scene: PackedScene = preload("res://misc/hud/text_indicator.tscn")
-var hour: int = 0
-var minute: int = 0
-var prepped: bool = false
-var to_save: Array[StringName] = [
+@onready var global_timer: Timer = %GlobalTimer ## The global timer that determines in game time passage
+@onready var selection_cursor: SelectionCursor = %SelectionCursor ## The selection cursor
+@onready var foreground: Sprite2D = %Foreground ## Foreground for fade to black or shaders
+@onready var sound_manager: SoundManager = %SoundManager ## Sound manager node
+var in_dialogue: bool = false ## Whether the game has dialogue running
+var player: Player = null ## The player node
+var map: GameMap = null ## The currently loaded map node
+var current_timeline: Node = null ## Current dialogue timeline node
+var player_scene: PackedScene = preload("res://characters/generic/player.tscn") ## Preloaded player character
+var text_indicator_scene: PackedScene = preload("res://misc/hud/text_indicator.tscn") ## Preloaded text indicators
+var hour: int = 0 ## In game hour
+var minute: int = 0 ## In game minute
+var prepped: bool = false ## Whether this node has finished preparing
+var to_save: Array[StringName] = [ ## Variables to save
 	"hour",
 	"minute",
 ]
-signal saved(node)
-signal loaded(node)
+signal saved(node: Main) ## Emitted when this is saved
+signal loaded(node: Main) ## Emitted when this is loaded
 
 func _ready() -> void:
 	if get_tree().paused:
@@ -46,25 +46,7 @@ func _ready() -> void:
 		SaveLoad.load_data()
 	prepped = true
 
-func _unhandled_input(event: InputEvent)->void:
-	if event.is_action_pressed("quicksave"):
-		SaveLoad.save_data()
-	if event.is_action_pressed("quickload"):
-		SaveLoad.load_data()
-
-func set_video_settings()->void:
-	if Settings.video.fullscreen:
-		get_window().set_mode(Window.MODE_FULLSCREEN)
-	else:
-		get_window().set_mode(Window.MODE_WINDOWED)
-
-func activate_selection_cursor()->void:
-	EventBus.broadcast("ACTIVATE_SELECTION", "NULLDATA")
-
-func deactivate_selection_cursor()->void:
-	EventBus.broadcast("DEACTIVATE_SELECTION", "NULLDATA")
-	selection_cursor.deselect()
-
+## Increments game time
 func global_timer_timeout()->void:
 	EventBus.broadcast("GLOBAL_TIMER_TIMEOUT", "NULLDATA")
 	minute = (1+minute)%60
@@ -72,16 +54,100 @@ func global_timer_timeout()->void:
 		hour = (1+hour)%24
 	EventBus.broadcast("TIME_CHANGED", [minute, hour])
 
-func unload_map()->void:
-	if map != null:
-		await SaveLoad.save_data(true)
-		if player != null:
-			map.remove_child(player)
-			add_child(player)
-		map.queue_free()
-		map = null
-		await get_tree().create_timer(.01).timeout
+## Pauses the game
+func pause()->void:
+	selection_cursor.move_dir = Vector2.ZERO
+	get_tree().paused = true
 
+## Unpauses the game
+func unpause()->void:
+	get_tree().paused = false
+
+#region Dialogue
+## Enters dialogue and pauses the game
+func enter_dialogue(info: Array)->void:
+	if in_dialogue:
+		return
+	in_dialogue = true
+	current_timeline = Dialogic.start(info[0])
+	Dialogic.process_mode = Node.PROCESS_MODE_ALWAYS
+	current_timeline.process_mode = Node.PROCESS_MODE_ALWAYS
+	pause()
+
+## Exits dialogue, unpausing the game
+func exit_dialogue()->void:
+	in_dialogue = false
+	unpause()
+	Dialogic.process_mode = Node.PROCESS_MODE_PAUSABLE
+	current_timeline.process_mode = Node.PROCESS_MODE_PAUSABLE
+	current_timeline = null
+
+## Performs various operations based on dialogic signals
+func check_dialogue_signal(data)->void:
+	if data == "crash_game":
+		queue_free()
+	elif data == "fade_out_exit":
+		selection_cursor.deactivate()
+		await fade_out_slow()
+		await get_tree().create_timer(.5).timeout
+		get_tree().quit()
+	elif data == "rest":
+		await fade_out()
+		EventBus.broadcast("REST", "NULLDATA")
+		await get_tree().create_timer(.5).timeout
+		await fade_in()
+#endregion
+
+#region Visuals
+## Sets the window mode to match video settings
+func set_video_settings()->void:
+	if Settings.video.fullscreen:
+		get_window().set_mode(Window.MODE_FULLSCREEN)
+	else:
+		get_window().set_mode(Window.MODE_WINDOWED)
+
+## Creates a text indicator with settings in the passed array
+func create_text_indicator(info: Array)->void:
+	var ind: TextIndicator = text_indicator_scene.instantiate()
+	ind.hide()
+	ind.text = info[0]
+	ind.position = info[1]
+	if info.size() == 3:
+		ind.color = info[2]
+	add_child(ind)
+	ind.show()
+
+## Fades the screen out slowly
+func fade_out_slow()->void:
+	await create_tween().tween_property(foreground, "modulate", Color.BLACK, .5).set_ease(Tween.EASE_IN).finished
+	await create_tween().tween_property(foreground, "modulate", Color(0,0,0,0), .5).set_ease(Tween.EASE_IN).finished
+	await get_tree().create_timer(.5).timeout
+	await create_tween().tween_property(foreground, "modulate", Color.BLACK, .5).set_ease(Tween.EASE_IN).finished
+	await create_tween().tween_property(foreground, "modulate", Color(0,0,0,0), .5).set_ease(Tween.EASE_IN).finished
+	await get_tree().create_timer(.5).timeout
+	EventBus.broadcast("FADE_OUT_MUSIC", 1)
+	await create_tween().tween_property(foreground, "modulate", Color.BLACK, 1).set_ease(Tween.EASE_IN).finished
+
+## Fades the screen out
+func fade_out()->void:
+	EventBus.broadcast("FADE_OUT_MUSIC", 1)
+	await create_tween().tween_property(foreground, "modulate", Color.BLACK, 1).set_ease(Tween.EASE_IN).finished
+
+## Fades the screen in
+func fade_in()->void:
+	EventBus.broadcast("FADE_IN_MUSIC", 1)
+	await create_tween().tween_property(foreground, "modulate", Color(0,0,0,0), 1).set_ease(Tween.EASE_IN).finished
+#endregion
+
+#region Save and Load
+## Helper that allows running load_map with an entrance id from an Event
+func load_map_at_entrance(args: Array)->void:
+	if args.size() != 2 || args[0] is not String || args[1] is not String:
+		printerr("Invalid arguments for loading map at entrance")
+		return
+	load_map(args[0], args[1])
+
+## Loads a map from the given filepath. Optionally places the player in a location based on the entrance used.
 func load_map(new_map: String, entrance_id: String = "")->void:
 	await unload_map()
 	selection_cursor.deactivate()
@@ -117,74 +183,18 @@ func load_map(new_map: String, entrance_id: String = "")->void:
 		EventBus.broadcast("SET_OST", map_to_load.calm_theme)
 	EventBus.broadcast("MAP_ENTERED", map_to_load.map_name)
 
-func load_map_at_entrance(args: Array)->void:
-	if args.size() != 2 || args[0] is not String || args[1] is not String:
-		printerr("Invalid arguments for loading map at entrance")
-		return
-	load_map(args[0], args[1])
+## Unloads the current map after saving it
+func unload_map()->void:
+	if map != null:
+		await SaveLoad.save_data(true)
+		if player != null:
+			map.remove_child(player)
+			add_child(player)
+		map.queue_free()
+		map = null
+		await get_tree().create_timer(.01).timeout
 
-func pause()->void:
-	selection_cursor.move_dir = Vector2.ZERO
-	get_tree().paused = true
-
-func unpause()->void:
-	get_tree().paused = false
-
-func enter_dialogue(info: Array)->void:
-	if in_dialogue:
-		return
-	in_dialogue = true
-	current_timeline = Dialogic.start(info[0])
-	Dialogic.process_mode = Node.PROCESS_MODE_ALWAYS
-	current_timeline.process_mode = Node.PROCESS_MODE_ALWAYS
-	pause()
-
-func exit_dialogue()->void:
-	in_dialogue = false
-	unpause()
-	Dialogic.process_mode = Node.PROCESS_MODE_PAUSABLE
-	current_timeline.process_mode = Node.PROCESS_MODE_PAUSABLE
-	current_timeline = null
-
-func create_text_indicator(info: Array)->void:
-	var ind: TextIndicator = text_indicator_scene.instantiate()
-	ind.hide()
-	ind.text = info[0]
-	ind.global_position = info[1]
-	if info.size() == 3:
-		ind.color = info[2]
-	add_child(ind)
-	ind.show()
-
-func check_dialogue_signal(data)->void:
-	if data == "crash_game":
-		queue_free()
-	elif data == "fade_out_exit":
-		deactivate_selection_cursor()
-		await fade_out()
-		await get_tree().create_timer(.5).timeout
-		get_tree().quit()
-	elif data == "rest":
-		await fade_out()
-		EventBus.broadcast("REST", "NULLDATA")
-		await get_tree().create_timer(.5).timeout
-		EventBus.broadcast("FADE_IN_MUSIC", 1)
-		await fade_in()
-
-func fade_out()->void:
-	await create_tween().tween_property(foreground, "modulate", Color.BLACK, .5).set_ease(Tween.EASE_IN).finished
-	await create_tween().tween_property(foreground, "modulate", Color(0,0,0,0), .5).set_ease(Tween.EASE_IN).finished
-	await get_tree().create_timer(.5).timeout
-	await create_tween().tween_property(foreground, "modulate", Color.BLACK, .5).set_ease(Tween.EASE_IN).finished
-	await create_tween().tween_property(foreground, "modulate", Color(0,0,0,0), .5).set_ease(Tween.EASE_IN).finished
-	await get_tree().create_timer(.5).timeout
-	EventBus.broadcast("FADE_OUT_MUSIC", 1)
-	await create_tween().tween_property(foreground, "modulate", Color.BLACK, 1).set_ease(Tween.EASE_IN).finished
-
-func fade_in()->void:
-	await create_tween().tween_property(foreground, "modulate", Color(0,0,0,0), 1).set_ease(Tween.EASE_IN).finished
-
-#region Save and Load
+## Saves the main node's data
 func save_data(dir: String)->void:
 	var file: FileAccess = FileAccess.open(dir+name+".dat", FileAccess.WRITE)
 	for var_name in to_save:
@@ -194,6 +204,7 @@ func save_data(dir: String)->void:
 	file.close()
 	saved.emit(self)
 
+## Loads the main node's data
 func load_data(dir: String)->void:
 	var file: FileAccess = FileAccess.open(dir+name+".dat", FileAccess.READ)
 	var var_name: String = file.get_var()

@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=3 uid="uid://c2af6y8es466h"]
+[gd_scene load_steps=22 format=3 uid="uid://c2af6y8es466h"]
 
 [ext_resource type="Script" uid="uid://drs0ccrve8tui" path="res://characters/generic/enemy.gd" id="1_3pgqe"]
 [ext_resource type="Shader" uid="uid://c3fdj7fswdl53" path="res://shaders/outline.gdshader" id="2_4x7kb"]
@@ -8,7 +8,8 @@
 [ext_resource type="Texture2D" uid="uid://s8uq7nt6t7do" path="res://textures/character/kalin_spritesheet_n.png" id="4_5fjt2"]
 [ext_resource type="AnimationLibrary" uid="uid://d2follnewo23r" path="res://animations/Character.res" id="4_05qgc"]
 [ext_resource type="Resource" uid="uid://c6f0begbutw3l" path="res://characters/abilities/block.tres" id="4_6fs2m"]
-[ext_resource type="PackedScene" uid="uid://dj1dbu04os5rj" path="res://misc/state_machine.tscn" id="5_2njyl"]
+[ext_resource type="PackedScene" uid="uid://dj1dbu04os5rj" path="res://misc/state_machine/state_machine.tscn" id="5_2njyl"]
+[ext_resource type="Resource" uid="uid://bfr7tnw5d5sp5" path="res://characters/abilities/push.tres" id="5_2purp"]
 [ext_resource type="PackedScene" uid="uid://d1oj7ptthilej" path="res://characters/states/interact.tscn" id="5_b0u4w"]
 [ext_resource type="PackedScene" uid="uid://b7psjacfk2o1y" path="res://characters/abilities/statuses/status_manager.tscn" id="5_fuqcr"]
 [ext_resource type="PackedScene" uid="uid://co558pdmpfij5" path="res://characters/states/move.tscn" id="6_mh07d"]
@@ -112,7 +113,7 @@ _data = {
 
 [node name="Enemy" type="CharacterBody2D" groups=["LevelSave"]]
 script = ExtResource("1_3pgqe")
-star_stats = {
+star_stats = Dictionary[String, int]({
 "agility": 8,
 "charisma": 8,
 "endurance": 8,
@@ -120,8 +121,8 @@ star_stats = {
 "passion": 8,
 "resolve": 8,
 "strength": 8
-}
-export_abilities = Array[ExtResource("2_uw63f")]([ExtResource("3_2purp"), ExtResource("4_6fs2m")])
+})
+export_abilities = Array[ExtResource("2_uw63f")]([ExtResource("3_2purp"), ExtResource("4_6fs2m"), ExtResource("5_2purp")])
 display_name = "Enemy"
 
 [node name="Sprite" type="Sprite2D" parent="."]

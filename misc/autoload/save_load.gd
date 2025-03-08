@@ -26,6 +26,12 @@ func ended_combat()->void:
 func is_slot_blank(check_slot: String)->bool:
 	return !FileAccess.file_exists(save_file_folder+check_slot+"/Global.dat")
 
+func _unhandled_input(event: InputEvent)->void:
+	if event.is_action_pressed("quicksave"):
+		save_data()
+	if event.is_action_pressed("quickload"):
+		load_data()
+
 #region Delete and Reset
 ## Removes all non-autoload nodes and makes a new main scene
 func reset_game()->Main:

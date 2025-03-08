@@ -1,4 +1,4 @@
-[gd_scene load_steps=53 format=4 uid="uid://qw4hbk40dyvm"]
+[gd_scene load_steps=57 format=4 uid="uid://qw4hbk40dyvm"]
 
 [ext_resource type="TileSet" uid="uid://dpajsxeb15k7l" path="res://maps/tilesets/dungeon.tres" id="1_bnvg4"]
 [ext_resource type="Script" uid="uid://b8kw4ghpy3r8t" path="res://maps/game_map.gd" id="2_rvbrh"]
@@ -39,6 +39,10 @@
 [ext_resource type="Texture2D" uid="uid://33u05ljr16og" path="res://textures/interactive/tesla_coil_n.png" id="35_k202b"]
 [ext_resource type="Texture2D" uid="uid://ddu4g3c61ag8s" path="res://textures/interactive/tesla_coil_s.png" id="36_ms4id"]
 [ext_resource type="Script" uid="uid://cuvk331ioveg" path="res://characters/tasks/npc_task.gd" id="38_jrvla"]
+[ext_resource type="Script" uid="uid://co2e1ra3i780n" path="res://characters/tasks/move.gd" id="38_v6peg"]
+[ext_resource type="Script" uid="uid://cvn861203hxla" path="res://characters/tasks/wait.gd" id="39_v6peg"]
+[ext_resource type="Script" uid="uid://cc0tmmsk43e7j" path="res://characters/tasks/patrol.gd" id="40_7i0lg"]
+[ext_resource type="Script" uid="uid://dkbyrhd2t1qnd" path="res://characters/tasks/interact.gd" id="43_cjebi"]
 
 [sub_resource type="CanvasTexture" id="CanvasTexture_6k8ls"]
 diffuse_texture = ExtResource("5_5jmsy")
@@ -76,79 +80,49 @@ normal_texture = ExtResource("35_k202b")
 specular_texture = ExtResource("36_ms4id")
 
 [sub_resource type="Resource" id="Resource_7i0lg"]
-script = ExtResource("38_jrvla")
-type = 4
-wait_time = 0.0
-guard_location = Vector2(0, 0)
-interact_pos = Vector2(0, 0)
-wander_home = Vector2(0, 0)
-wander_max_tiles = Vector2i(0, 0)
-patrol_points = Array[Vector2]([Vector2(-224, -544), Vector2(-224, -288), Vector2(352, -288), Vector2(352, -544)])
+script = ExtResource("38_v6peg")
+move_location = Vector2(32, -544)
 hour_start = 0
 hour_end = 0
 minute_start = 0
 minute_end = 0
-metadata/_custom_type_script = "uid://cuvk331ioveg"
+metadata/_custom_type_script = "uid://co2e1ra3i780n"
 
-[sub_resource type="Resource" id="Resource_v6peg"]
-script = ExtResource("38_jrvla")
-type = 1
-wait_time = 0.0
-guard_location = Vector2(32, -544)
-interact_pos = Vector2(0, 0)
-wander_home = Vector2(0, 0)
-wander_max_tiles = Vector2i(0, 0)
-patrol_points = Array[Vector2]([])
-hour_start = 0
-hour_end = 0
-minute_start = 0
-minute_end = 0
-metadata/_custom_type_script = "uid://cuvk331ioveg"
-
-[sub_resource type="Resource" id="Resource_jrvla"]
-script = ExtResource("38_jrvla")
-type = 0
+[sub_resource type="Resource" id="Resource_dpap0"]
+script = ExtResource("39_v6peg")
 wait_time = 5.0
-guard_location = Vector2(0, 0)
-interact_pos = Vector2(0, 0)
-wander_home = Vector2(0, 0)
-wander_max_tiles = Vector2i(0, 0)
-patrol_points = Array[Vector2]([])
 hour_start = 0
 hour_end = 0
 minute_start = 0
 minute_end = 0
-metadata/_custom_type_script = "uid://cuvk331ioveg"
+metadata/_custom_type_script = "uid://cvn861203hxla"
 
-[sub_resource type="Resource" id="Resource_cjebi"]
-script = ExtResource("38_jrvla")
-type = 2
-wait_time = 0.0
-guard_location = Vector2(0, 0)
-interact_pos = Vector2(32, -608)
-wander_home = Vector2(0, 0)
-wander_max_tiles = Vector2i(0, 0)
-patrol_points = Array[Vector2]([])
+[sub_resource type="Resource" id="Resource_ysqq4"]
+script = ExtResource("40_7i0lg")
+patrol_points = Array[Vector2]([Vector2(-224, -544), Vector2(352, -544)])
 hour_start = 0
 hour_end = 0
 minute_start = 0
 minute_end = 0
-metadata/_custom_type_script = "uid://cuvk331ioveg"
+metadata/_custom_type_script = "uid://cc0tmmsk43e7j"
 
 [sub_resource type="Resource" id="Resource_gpbd4"]
-script = ExtResource("38_jrvla")
-type = 1
-wait_time = 0.0
-guard_location = Vector2(288, -736)
-interact_pos = Vector2(0, 0)
-wander_home = Vector2(0, 0)
-wander_max_tiles = Vector2i(0, 0)
-patrol_points = Array[Vector2]([])
+script = ExtResource("43_cjebi")
+interact_pos = Vector2(32, -608)
 hour_start = 0
 hour_end = 0
 minute_start = 0
 minute_end = 0
-metadata/_custom_type_script = "uid://cuvk331ioveg"
+metadata/_custom_type_script = "uid://dkbyrhd2t1qnd"
+
+[sub_resource type="Resource" id="Resource_llove"]
+script = ExtResource("38_v6peg")
+move_location = Vector2(288, -736)
+hour_start = 0
+hour_end = 0
+minute_start = 0
+minute_end = 0
+metadata/_custom_type_script = "uid://co2e1ra3i780n"
 
 [node name="TestMap" type="TileMapLayer"]
 process_mode = 1
@@ -285,17 +259,19 @@ dialogue = ExtResource("17_er6pd")
 [node name="Enemy" parent="." instance=ExtResource("13_augbp")]
 position = Vector2(32, -544)
 display_name = "???"
-schedule = Array[ExtResource("38_jrvla")]([SubResource("Resource_7i0lg"), SubResource("Resource_v6peg"), SubResource("Resource_jrvla")])
+schedule = Array[ExtResource("38_jrvla")]([SubResource("Resource_7i0lg"), SubResource("Resource_dpap0"), SubResource("Resource_ysqq4")])
 loop_schedule = true
 
 [node name="NPC" parent="." instance=ExtResource("31_w8a5m")]
 position = Vector2(480, -288)
 dialogue = ExtResource("32_lfqa0")
 display_name = "???"
-schedule = Array[ExtResource("38_jrvla")]([SubResource("Resource_cjebi"), SubResource("Resource_gpbd4")])
+schedule = Array[ExtResource("38_jrvla")]([SubResource("Resource_gpbd4"), SubResource("Resource_llove")])
 active = false
 
 [connection signal="unlocked" from="TeslaCoil" to="TeslaGate" method="advance_unlock"]
 [connection signal="unlocked" from="TeslaCoil2" to="TeslaGate" method="advance_unlock"]
+[connection signal="combat_entered" from="Enemy" to="InteractPuzzleGate" method="close"]
+[connection signal="defeated" from="Enemy" to="InteractPuzzleGate" method="open"]
 [connection signal="defeated_at" from="Enemy" to="NPC" method="activate"]
 [connection signal="defeated_named" from="Enemy" to="CombatGate" method="advance_unlock"]

@@ -1,4 +1,4 @@
-[gd_scene load_steps=36 format=4 uid="uid://dyy0oxkboq8t1"]
+[gd_scene load_steps=28 format=4 uid="uid://dyy0oxkboq8t1"]
 
 [ext_resource type="TileSet" uid="uid://dpajsxeb15k7l" path="res://maps/tilesets/dungeon.tres" id="1_i0d10"]
 [ext_resource type="Script" uid="uid://b8kw4ghpy3r8t" path="res://maps/game_map.gd" id="2_vpgb5"]
@@ -11,342 +11,136 @@
 [ext_resource type="PackedScene" uid="uid://cexm0cxkxol76" path="res://maps/interactives/generic/travel_point.tscn" id="7_3ojlr"]
 [ext_resource type="PackedScene" uid="uid://bxbk83doy5d81" path="res://characters/generic/npc.tscn" id="10_ll2lb"]
 [ext_resource type="Script" uid="uid://cuvk331ioveg" path="res://characters/tasks/npc_task.gd" id="11_om4xg"]
+[ext_resource type="Script" uid="uid://cexcibkkds3yt" path="res://characters/tasks/wander.gd" id="12_re4in"]
+[ext_resource type="Script" uid="uid://cvn861203hxla" path="res://characters/tasks/wait.gd" id="13_lm3pf"]
 
-[sub_resource type="Resource" id="Resource_p2huu"]
-script = ExtResource("11_om4xg")
-type = 3
-wait_time = 0.0
-guard_location = Vector2(0, 0)
-interact_pos = Vector2(0, 0)
+[sub_resource type="Resource" id="Resource_ptbar"]
+script = ExtResource("12_re4in")
 wander_home = Vector2(160, -288)
 wander_max_tiles = Vector2i(3, 3)
-patrol_points = Array[Vector2]([])
 hour_start = 0
 hour_end = 0
 minute_start = 0
 minute_end = 0
+metadata/_custom_type_script = "uid://cexcibkkds3yt"
 
-[sub_resource type="Resource" id="Resource_fsm1u"]
-script = ExtResource("11_om4xg")
-type = 0
+[sub_resource type="Resource" id="Resource_4riad"]
+script = ExtResource("13_lm3pf")
 wait_time = 1.0
-guard_location = Vector2(0, 0)
-interact_pos = Vector2(0, 0)
-wander_home = Vector2(0, 0)
-wander_max_tiles = Vector2i(0, 0)
-patrol_points = Array[Vector2]([])
 hour_start = 0
 hour_end = 0
 minute_start = 0
 minute_end = 0
+metadata/_custom_type_script = "uid://cvn861203hxla"
 
-[sub_resource type="Resource" id="Resource_a7emo"]
-script = ExtResource("11_om4xg")
-type = 3
-wait_time = 0.0
-guard_location = Vector2(0, 0)
-interact_pos = Vector2(0, 0)
+[sub_resource type="Resource" id="Resource_re4in"]
+script = ExtResource("12_re4in")
 wander_home = Vector2(160, -288)
 wander_max_tiles = Vector2i(3, 3)
-patrol_points = Array[Vector2]([])
 hour_start = 0
 hour_end = 0
 minute_start = 0
 minute_end = 0
+metadata/_custom_type_script = "uid://cexcibkkds3yt"
 
-[sub_resource type="Resource" id="Resource_hfkwg"]
-script = ExtResource("11_om4xg")
-type = 0
+[sub_resource type="Resource" id="Resource_lm3pf"]
+script = ExtResource("13_lm3pf")
 wait_time = 1.0
-guard_location = Vector2(0, 0)
-interact_pos = Vector2(0, 0)
-wander_home = Vector2(0, 0)
-wander_max_tiles = Vector2i(0, 0)
-patrol_points = Array[Vector2]([])
 hour_start = 0
 hour_end = 0
 minute_start = 0
 minute_end = 0
+metadata/_custom_type_script = "uid://cvn861203hxla"
 
-[sub_resource type="Resource" id="Resource_dhgwd"]
-script = ExtResource("11_om4xg")
-type = 3
-wait_time = 0.0
-guard_location = Vector2(0, 0)
-interact_pos = Vector2(0, 0)
-wander_home = Vector2(160, -288)
-wander_max_tiles = Vector2i(3, 3)
-patrol_points = Array[Vector2]([])
-hour_start = 0
-hour_end = 0
-minute_start = 0
-minute_end = 0
-
-[sub_resource type="Resource" id="Resource_opc7t"]
-script = ExtResource("11_om4xg")
-type = 0
+[sub_resource type="Resource" id="Resource_j0wbn"]
+script = ExtResource("13_lm3pf")
 wait_time = 1.0
-guard_location = Vector2(0, 0)
-interact_pos = Vector2(0, 0)
-wander_home = Vector2(0, 0)
-wander_max_tiles = Vector2i(0, 0)
-patrol_points = Array[Vector2]([])
 hour_start = 0
 hour_end = 0
 minute_start = 0
 minute_end = 0
+metadata/_custom_type_script = "uid://cvn861203hxla"
 
-[sub_resource type="Resource" id="Resource_s2bki"]
-script = ExtResource("11_om4xg")
-type = 3
-wait_time = 0.0
-guard_location = Vector2(0, 0)
-interact_pos = Vector2(0, 0)
-wander_home = Vector2(160, -288)
-wander_max_tiles = Vector2i(3, 3)
-patrol_points = Array[Vector2]([])
-hour_start = 0
-hour_end = 0
-minute_start = 0
-minute_end = 0
-
-[sub_resource type="Resource" id="Resource_so6oj"]
-script = ExtResource("11_om4xg")
-type = 0
+[sub_resource type="Resource" id="Resource_valx8"]
+script = ExtResource("13_lm3pf")
 wait_time = 1.0
-guard_location = Vector2(0, 0)
-interact_pos = Vector2(0, 0)
-wander_home = Vector2(0, 0)
-wander_max_tiles = Vector2i(0, 0)
-patrol_points = Array[Vector2]([])
 hour_start = 0
 hour_end = 0
 minute_start = 0
 minute_end = 0
+metadata/_custom_type_script = "uid://cvn861203hxla"
 
-[sub_resource type="Resource" id="Resource_w1vxo"]
-script = ExtResource("11_om4xg")
-type = 3
-wait_time = 0.0
-guard_location = Vector2(0, 0)
-interact_pos = Vector2(0, 0)
-wander_home = Vector2(160, -288)
-wander_max_tiles = Vector2i(3, 3)
-patrol_points = Array[Vector2]([])
-hour_start = 0
-hour_end = 0
-minute_start = 0
-minute_end = 0
-
-[sub_resource type="Resource" id="Resource_apu36"]
-script = ExtResource("11_om4xg")
-type = 0
+[sub_resource type="Resource" id="Resource_pl4or"]
+script = ExtResource("13_lm3pf")
 wait_time = 1.0
-guard_location = Vector2(0, 0)
-interact_pos = Vector2(0, 0)
-wander_home = Vector2(0, 0)
-wander_max_tiles = Vector2i(0, 0)
-patrol_points = Array[Vector2]([])
 hour_start = 0
 hour_end = 0
 minute_start = 0
 minute_end = 0
+metadata/_custom_type_script = "uid://cvn861203hxla"
 
-[sub_resource type="Resource" id="Resource_c6w4e"]
-script = ExtResource("11_om4xg")
-type = 3
-wait_time = 0.0
-guard_location = Vector2(0, 0)
-interact_pos = Vector2(0, 0)
-wander_home = Vector2(160, -288)
-wander_max_tiles = Vector2i(3, 3)
-patrol_points = Array[Vector2]([])
-hour_start = 0
-hour_end = 0
-minute_start = 0
-minute_end = 0
-
-[sub_resource type="Resource" id="Resource_sq8r2"]
-script = ExtResource("11_om4xg")
-type = 0
+[sub_resource type="Resource" id="Resource_ugsv5"]
+script = ExtResource("13_lm3pf")
 wait_time = 1.0
-guard_location = Vector2(0, 0)
-interact_pos = Vector2(0, 0)
-wander_home = Vector2(0, 0)
-wander_max_tiles = Vector2i(0, 0)
-patrol_points = Array[Vector2]([])
 hour_start = 0
 hour_end = 0
 minute_start = 0
 minute_end = 0
+metadata/_custom_type_script = "uid://cvn861203hxla"
 
-[sub_resource type="Resource" id="Resource_8nym6"]
-script = ExtResource("11_om4xg")
-type = 3
-wait_time = 0.0
-guard_location = Vector2(0, 0)
-interact_pos = Vector2(0, 0)
-wander_home = Vector2(160, -288)
-wander_max_tiles = Vector2i(3, 3)
-patrol_points = Array[Vector2]([])
-hour_start = 0
-hour_end = 0
-minute_start = 0
-minute_end = 0
-
-[sub_resource type="Resource" id="Resource_17mmd"]
-script = ExtResource("11_om4xg")
-type = 0
+[sub_resource type="Resource" id="Resource_44qfo"]
+script = ExtResource("13_lm3pf")
 wait_time = 1.0
-guard_location = Vector2(0, 0)
-interact_pos = Vector2(0, 0)
-wander_home = Vector2(0, 0)
-wander_max_tiles = Vector2i(0, 0)
-patrol_points = Array[Vector2]([])
 hour_start = 0
 hour_end = 0
 minute_start = 0
 minute_end = 0
+metadata/_custom_type_script = "uid://cvn861203hxla"
 
-[sub_resource type="Resource" id="Resource_jaixk"]
-script = ExtResource("11_om4xg")
-type = 3
-wait_time = 0.0
-guard_location = Vector2(0, 0)
-interact_pos = Vector2(0, 0)
-wander_home = Vector2(160, -288)
-wander_max_tiles = Vector2i(3, 3)
-patrol_points = Array[Vector2]([])
-hour_start = 0
-hour_end = 0
-minute_start = 0
-minute_end = 0
-
-[sub_resource type="Resource" id="Resource_loukb"]
-script = ExtResource("11_om4xg")
-type = 0
+[sub_resource type="Resource" id="Resource_7ifwe"]
+script = ExtResource("13_lm3pf")
 wait_time = 1.0
-guard_location = Vector2(0, 0)
-interact_pos = Vector2(0, 0)
-wander_home = Vector2(0, 0)
-wander_max_tiles = Vector2i(0, 0)
-patrol_points = Array[Vector2]([])
 hour_start = 0
 hour_end = 0
 minute_start = 0
 minute_end = 0
+metadata/_custom_type_script = "uid://cvn861203hxla"
 
-[sub_resource type="Resource" id="Resource_8tikf"]
-script = ExtResource("11_om4xg")
-type = 3
-wait_time = 0.0
-guard_location = Vector2(0, 0)
-interact_pos = Vector2(0, 0)
-wander_home = Vector2(160, -288)
-wander_max_tiles = Vector2i(3, 3)
-patrol_points = Array[Vector2]([])
-hour_start = 0
-hour_end = 0
-minute_start = 0
-minute_end = 0
-
-[sub_resource type="Resource" id="Resource_kciqn"]
-script = ExtResource("11_om4xg")
-type = 0
+[sub_resource type="Resource" id="Resource_xto05"]
+script = ExtResource("13_lm3pf")
 wait_time = 1.0
-guard_location = Vector2(0, 0)
-interact_pos = Vector2(0, 0)
-wander_home = Vector2(0, 0)
-wander_max_tiles = Vector2i(0, 0)
-patrol_points = Array[Vector2]([])
 hour_start = 0
 hour_end = 0
 minute_start = 0
 minute_end = 0
+metadata/_custom_type_script = "uid://cvn861203hxla"
 
-[sub_resource type="Resource" id="Resource_j47yl"]
-script = ExtResource("11_om4xg")
-type = 3
-wait_time = 0.0
-guard_location = Vector2(0, 0)
-interact_pos = Vector2(0, 0)
-wander_home = Vector2(160, -288)
-wander_max_tiles = Vector2i(3, 3)
-patrol_points = Array[Vector2]([])
-hour_start = 0
-hour_end = 0
-minute_start = 0
-minute_end = 0
-
-[sub_resource type="Resource" id="Resource_8q2qa"]
-script = ExtResource("11_om4xg")
-type = 0
+[sub_resource type="Resource" id="Resource_rjbtv"]
+script = ExtResource("13_lm3pf")
 wait_time = 1.0
-guard_location = Vector2(0, 0)
-interact_pos = Vector2(0, 0)
-wander_home = Vector2(0, 0)
-wander_max_tiles = Vector2i(0, 0)
-patrol_points = Array[Vector2]([])
 hour_start = 0
 hour_end = 0
 minute_start = 0
 minute_end = 0
+metadata/_custom_type_script = "uid://cvn861203hxla"
 
-[sub_resource type="Resource" id="Resource_5ks45"]
-script = ExtResource("11_om4xg")
-type = 3
-wait_time = 0.0
-guard_location = Vector2(0, 0)
-interact_pos = Vector2(0, 0)
-wander_home = Vector2(160, -288)
-wander_max_tiles = Vector2i(3, 3)
-patrol_points = Array[Vector2]([])
-hour_start = 0
-hour_end = 0
-minute_start = 0
-minute_end = 0
-
-[sub_resource type="Resource" id="Resource_g68nt"]
-script = ExtResource("11_om4xg")
-type = 0
+[sub_resource type="Resource" id="Resource_lr808"]
+script = ExtResource("13_lm3pf")
 wait_time = 1.0
-guard_location = Vector2(0, 0)
-interact_pos = Vector2(0, 0)
-wander_home = Vector2(0, 0)
-wander_max_tiles = Vector2i(0, 0)
-patrol_points = Array[Vector2]([])
 hour_start = 0
 hour_end = 0
 minute_start = 0
 minute_end = 0
+metadata/_custom_type_script = "uid://cvn861203hxla"
 
-[sub_resource type="Resource" id="Resource_7kbph"]
-script = ExtResource("11_om4xg")
-type = 3
-wait_time = 0.0
-guard_location = Vector2(0, 0)
-interact_pos = Vector2(0, 0)
-wander_home = Vector2(160, -288)
-wander_max_tiles = Vector2i(3, 3)
-patrol_points = Array[Vector2]([])
-hour_start = 0
-hour_end = 0
-minute_start = 0
-minute_end = 0
-
-[sub_resource type="Resource" id="Resource_4c1xa"]
-script = ExtResource("11_om4xg")
-type = 0
+[sub_resource type="Resource" id="Resource_jbryd"]
+script = ExtResource("13_lm3pf")
 wait_time = 1.0
-guard_location = Vector2(0, 0)
-interact_pos = Vector2(0, 0)
-wander_home = Vector2(0, 0)
-wander_max_tiles = Vector2i(0, 0)
-patrol_points = Array[Vector2]([])
 hour_start = 0
 hour_end = 0
 minute_start = 0
 minute_end = 0
+metadata/_custom_type_script = "uid://cvn861203hxla"
 
 [node name="TestMapDanceFloor" type="TileMapLayer"]
 tile_map_data = PackedByteArray("AAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAABAAEAAAAAAAAAAAACAAEAAAAAAAAAAAABAAAAAAAAAAAAAAACAAAAAAAAAAAAAAADAAAAAAAAAAAAAAADAAEAAAAAAAAAAAAEAAEAAAAAAAAAAAAEAAAAAAAAAAAAAAD//wAAAAAAAAAAAAAFAAAAAAAAAAAAAAD+/wAAAAACAAAAAAD+/wEAAAAEAAAAAAD//wEAAAADAAAAAAD//wIAAAABAAAAAAAAAAIAAAABAAAAAAABAAIAAAABAAAAAAACAAIAAAABAAAAAAADAAIAAAABAAAAAAAEAAIAAAABAAAAAAAFAAIAAAABAAAAAAAFAAEAAAAEAAAAAAAGAAEAAAADAAAAAAAGAAAAAAACAAAAAAAGAP//AAABAAAAAAAFAP//AAABAAAAAAAEAP//AAABAAAAAAADAP//AAABAAAAAAACAP//AAABAAAAAAABAP//AAABAAAAAAAAAP//AAABAAAAAAD/////AAABAAAAAAD+////AAABAAAAAAD+//v/AAADAAAAAAD+//n/AAADAAAAAAAGAPn/AAAEAAAAAAAGAPv/AAAEAAAAAAAGAP3/AAAEAAAAAAD+//f/AAADAAAAAAAAAPf/AAACAAAAAAACAPf/AAACAAAAAAAEAPf/AAACAAAAAAAGAPf/AAAEAAAAAAD9//7/AAACAAAAAAD9//3/AAAEAAAAAAD9//z/AAACAAAAAAD9//v/AAAEAAAAAAD9//r/AAACAAAAAAD9//n/AAAEAAAAAAD9//f/AAAEAAAAAAD9//j/AAACAAAAAAAHAPf/AAADAAAAAAAHAPj/AAACAAAAAAAHAPn/AAADAAAAAAAHAPr/AAACAAAAAAAHAPv/AAADAAAAAAAHAPz/AAACAAAAAAAHAP3/AAADAAAAAAD+//3/AAADAAAAAAD9////AAAEAAAAAAAHAP7/AAACAAAAAAAHAP//AAADAAAAAAD///b/AAABAAAAAAD+//b/AAABAAAAAAAAAPb/AAABAAAAAAABAPb/AAABAAAAAAACAPb/AAABAAAAAAADAPb/AAABAAAAAAAEAPb/AAABAAAAAAD9//b/AAAEAAAAAAAHAPb/AAADAAAAAAAGAPb/AAABAAAAAAAFAPb/AAABAAAAAAD+/wIAAAAEAAAAAAAGAAIAAAADAAAAAAACAP3/AAAAAAAAAAACAPz/AAAAAAAAAAACAPv/AAAAAAAAAAACAPr/AAAAAAAAAAACAPn/AAAAAAAAAAACAPj/AAAAAAAAAAABAPj/AAAAAAAAAAABAPf/AAAAAAAAAAAAAPj/AAAAAAAAAAD///j/AAAAAAAAAAD///f/AAAAAAAAAAD+//j/AAAAAAAAAAD///n/AAAAAAAAAAD///r/AAAAAAAAAAD+//r/AAAAAAAAAAD///v/AAAAAAAAAAD///z/AAAAAAAAAAD+//z/AAAAAAAAAAD///3/AAAAAAAAAAD///7/AAAAAAAAAAD+//7/AAAAAAAAAAAAAP7/AAAAAAAAAAAAAP3/AAAAAAAAAAAAAPz/AAAAAAAAAAAAAPv/AAAAAAAAAAAAAPr/AAAAAAAAAAAAAPn/AAAAAAAAAAABAPn/AAAAAAAAAAABAPr/AAAAAAAAAAABAPv/AAAAAAAAAAABAPz/AAAAAAAAAAABAP3/AAAAAAAAAAABAP7/AAAAAAAAAAACAP7/AAAAAAAAAAADAP7/AAAAAAAAAAADAP3/AAAAAAAAAAADAPz/AAAAAAAAAAADAPv/AAAAAAAAAAADAPr/AAAAAAAAAAADAPn/AAAAAAAAAAADAPj/AAAAAAAAAAADAPf/AAAAAAAAAAAEAPj/AAAAAAAAAAAEAPn/AAAAAAAAAAAEAPr/AAAAAAAAAAAEAPv/AAAAAAAAAAAEAPz/AAAAAAAAAAAEAP3/AAAAAAAAAAAEAP7/AAAAAAAAAAAFAP7/AAAAAAAAAAAFAP3/AAAAAAAAAAAFAPz/AAAAAAAAAAAFAPv/AAAAAAAAAAAFAPr/AAAAAAAAAAAFAPn/AAAAAAAAAAAFAPj/AAAAAAAAAAAFAPf/AAAAAAAAAAAGAPj/AAAAAAAAAAAGAPr/AAAAAAAAAAAGAPz/AAAAAAAAAAAGAP7/AAAAAAAAAAA=")
@@ -394,60 +188,60 @@ texture = ExtResource("6_wcq4g")
 
 [node name="NPC" parent="." instance=ExtResource("10_ll2lb")]
 position = Vector2(-96, -96)
-schedule = Array[ExtResource("11_om4xg")]([SubResource("Resource_p2huu"), SubResource("Resource_fsm1u")])
+schedule = Array[ExtResource("11_om4xg")]([SubResource("Resource_ptbar"), SubResource("Resource_4riad")])
 loop_schedule = true
 
 [node name="NPC2" parent="." instance=ExtResource("10_ll2lb")]
 position = Vector2(-96, -224)
-schedule = Array[ExtResource("11_om4xg")]([SubResource("Resource_a7emo"), SubResource("Resource_hfkwg")])
+schedule = Array[ExtResource("11_om4xg")]([SubResource("Resource_re4in"), SubResource("Resource_lm3pf")])
 loop_schedule = true
 
 [node name="NPC3" parent="." instance=ExtResource("10_ll2lb")]
 position = Vector2(-96, -352)
-schedule = Array[ExtResource("11_om4xg")]([SubResource("Resource_dhgwd"), SubResource("Resource_opc7t")])
+schedule = Array[ExtResource("11_om4xg")]([SubResource("Resource_re4in"), SubResource("Resource_j0wbn")])
 loop_schedule = true
 
 [node name="NPC4" parent="." instance=ExtResource("10_ll2lb")]
 position = Vector2(-96, -480)
-schedule = Array[ExtResource("11_om4xg")]([SubResource("Resource_s2bki"), SubResource("Resource_so6oj")])
+schedule = Array[ExtResource("11_om4xg")]([SubResource("Resource_re4in"), SubResource("Resource_valx8")])
 loop_schedule = true
 
 [node name="NPC5" parent="." instance=ExtResource("10_ll2lb")]
 position = Vector2(-32, -544)
-schedule = Array[ExtResource("11_om4xg")]([SubResource("Resource_w1vxo"), SubResource("Resource_apu36")])
+schedule = Array[ExtResource("11_om4xg")]([SubResource("Resource_re4in"), SubResource("Resource_pl4or")])
 loop_schedule = true
 
 [node name="NPC6" parent="." instance=ExtResource("10_ll2lb")]
 position = Vector2(96, -544)
-schedule = Array[ExtResource("11_om4xg")]([SubResource("Resource_c6w4e"), SubResource("Resource_sq8r2")])
+schedule = Array[ExtResource("11_om4xg")]([SubResource("Resource_re4in"), SubResource("Resource_ugsv5")])
 loop_schedule = true
 
 [node name="NPC7" parent="." instance=ExtResource("10_ll2lb")]
 position = Vector2(224, -544)
-schedule = Array[ExtResource("11_om4xg")]([SubResource("Resource_8nym6"), SubResource("Resource_17mmd")])
+schedule = Array[ExtResource("11_om4xg")]([SubResource("Resource_re4in"), SubResource("Resource_44qfo")])
 loop_schedule = true
 
 [node name="NPC8" parent="." instance=ExtResource("10_ll2lb")]
 position = Vector2(352, -544)
-schedule = Array[ExtResource("11_om4xg")]([SubResource("Resource_jaixk"), SubResource("Resource_loukb")])
+schedule = Array[ExtResource("11_om4xg")]([SubResource("Resource_re4in"), SubResource("Resource_7ifwe")])
 loop_schedule = true
 
 [node name="NPC9" parent="." instance=ExtResource("10_ll2lb")]
 position = Vector2(416, -480)
-schedule = Array[ExtResource("11_om4xg")]([SubResource("Resource_8tikf"), SubResource("Resource_kciqn")])
+schedule = Array[ExtResource("11_om4xg")]([SubResource("Resource_re4in"), SubResource("Resource_xto05")])
 loop_schedule = true
 
 [node name="NPC10" parent="." instance=ExtResource("10_ll2lb")]
 position = Vector2(416, -352)
-schedule = Array[ExtResource("11_om4xg")]([SubResource("Resource_j47yl"), SubResource("Resource_8q2qa")])
+schedule = Array[ExtResource("11_om4xg")]([SubResource("Resource_re4in"), SubResource("Resource_rjbtv")])
 loop_schedule = true
 
 [node name="NPC11" parent="." instance=ExtResource("10_ll2lb")]
 position = Vector2(416, -224)
-schedule = Array[ExtResource("11_om4xg")]([SubResource("Resource_5ks45"), SubResource("Resource_g68nt")])
+schedule = Array[ExtResource("11_om4xg")]([SubResource("Resource_re4in"), SubResource("Resource_lr808")])
 loop_schedule = true
 
 [node name="NPC12" parent="." instance=ExtResource("10_ll2lb")]
 position = Vector2(416, -96)
-schedule = Array[ExtResource("11_om4xg")]([SubResource("Resource_7kbph"), SubResource("Resource_4c1xa")])
+schedule = Array[ExtResource("11_om4xg")]([SubResource("Resource_re4in"), SubResource("Resource_jbryd")])
 loop_schedule = true

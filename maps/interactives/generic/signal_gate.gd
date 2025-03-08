@@ -55,6 +55,18 @@ func open(quiet_open: bool = false)->void:
 	interacted.emit()
 	collision_active = false
 
+## Closes the gate, even if the signals are fulfilled
+func close()->void:
+	cur_state = state.locked
+	allow_dialogue = true
+	sprite.texture = locked_texture
+	collision.set_deferred("disabled", false)
+	EventBus.broadcast("PLAY_SOUND", [open_sound, "positional", global_position])
+	for pos in occupied_positions:
+		EventBus.broadcast("TILE_OCCUPIED", pos)
+	interacted.emit()
+	collision_active = true
+
 ## Advances the unlock in the gate; analyzes the given signal, which must pass a string
 func advance_unlock(signal_event: String)->void:
 	if !signal_event in signals_needed:
