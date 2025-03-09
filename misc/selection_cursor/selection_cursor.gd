@@ -138,7 +138,7 @@ func move(dir: Vector2)->void:
 		if Input.is_action_pressed("shift"):
 			time = .1
 		await tween.tween_property(self, "position", new_pos, time).set_ease(Tween.EASE_IN_OUT).finished
-		if selected is Character && NavMaster.is_in_bounds(position):
+		if NavMaster.is_in_bounds(position):
 			update_move_arrows(selected)
 	moving = false
 	move_stopped.emit()
@@ -153,7 +153,7 @@ func act_on_pos(pos: Vector2i)->void:
 		selected.activate_ability(selected.selected_ability, pos)
 	elif hovering == null || hovering is GameMap:
 		selected.move(pos)
-	elif hovering is Interactive || hovering is NPC:
+	elif hovering is Interactive || (hovering is Character && hovering != selected):
 		await selected_interact(pos)
 
 ## Makes the selected character interact with the target
@@ -190,11 +190,10 @@ func select(character: Character)->void:
 	if selected != null:
 		deselect()
 	selected = character
-	if selected is Character:
+	if selected != null:
 		selected.call_deferred("select")
 		selected.ended_turn.connect(deselect)
 		selected.pos_changed.connect(update_move_arrows)
-	if selected != null:
 		_create_marker()
 	EventBus.broadcast("SELECTION_CHANGED",selected)
 

@@ -84,18 +84,19 @@ func exit_dialogue()->void:
 
 ## Performs various operations based on dialogic signals
 func check_dialogue_signal(data)->void:
-	if data == "crash_game":
-		queue_free()
-	elif data == "fade_out_exit":
-		selection_cursor.deactivate()
-		await fade_out_slow()
-		await get_tree().create_timer(.5).timeout
-		get_tree().quit()
-	elif data == "rest":
-		await fade_out()
-		EventBus.broadcast("REST", "NULLDATA")
-		await get_tree().create_timer(.5).timeout
-		await fade_in()
+	if data is String:
+		if data == "crash_game":
+			queue_free()
+		elif data == "fade_out_exit":
+			selection_cursor.deactivate()
+			await fade_out_slow()
+			await get_tree().create_timer(.5).timeout
+			get_tree().quit()
+		elif data == "rest":
+			await fade_out()
+			EventBus.broadcast("REST", "NULLDATA")
+			await get_tree().create_timer(.5).timeout
+			await fade_in()
 #endregion
 
 #region Visuals

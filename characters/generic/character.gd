@@ -1,6 +1,8 @@
 extends CharacterBody2D
 class_name Character
-## Base class for characters that move and interact with the environment and other characters
+## Class for characters that move and interact with the environment and other characters
+##
+## This base type represents anything not player-controlled
 
 #region Stats
 @export var star_stats: Dictionary[String, int] = { ## Stats on the stat star
@@ -38,11 +40,15 @@ enum ai_types { ## Options for enemy ai
 	melee_aggressive, ## Aggressive melee attacker that tries to damage as much as possible
 	melee_safe ## Safe melee attacker that tries to stay alive but still deal damage
 }
+@export var display_name: String = "Name Here" ## Name displayed in gui and logs
+@export var dialogue: DialogicTimeline ## Dialogue for the NPC to enter when interacted
+@export var text_indicator_shift: Vector2 = Vector2.UP*32 ## Distance away from this to spawn text indicators
+@export var export_abilities: Array[Ability] = [] ## Exported ability list for initial abilities
+@export_group("Combat") ## Exports related to combat ai and what this considers an enemy
 @export var ai_type: ai_types ## This enemy's ai type
 @export var allies: Array[Character] = [] ## List of allies to bring into combat alongside this character
-@export var export_abilities: Array[Ability] = [] ## Exported ability list for initial abilities
-@export var display_name: String = "Name Here" ## Name displayed in gui and logs
-@export var text_indicator_shift: Vector2 = Vector2.UP*32 ## Distance away from this to spawn text indicators
+@export var enemies: Array[Character] = [] ## List of enemies to watch for
+@export var hostile_to_player: bool = false ## Whether this character attacks the player on sight
 @export_group("Schedule") ## Exports related to this character's schedule. Do not use for the player
 @export var use_timed_schedule: bool ## Whether the schedule changes based on in game time
 @export var schedule: Array[NPCTask] ## List of tasks for the character to carry out
@@ -52,10 +58,11 @@ enum ai_types { ## Options for enemy ai
 @export var active: bool = true ## Whether the character is active in the game map or disabled
 #endregion
 #region Vars
-@onready var sprite: Sprite2D = %Sprite
-@onready var anim_player: AnimationPlayer = %AnimationPlayer
-@onready var state_machine: StateMachine = %StateMachine
-@onready var status_manager: StatusManager = %StatusManager
+@onready var sprite: Sprite2D = %Sprite ## Sprite of this character
+@onready var anim_player: AnimationPlayer = %AnimationPlayer ## Animation Player for this character
+@onready var state_machine: StateMachine = %StateMachine ## State Machine for this character
+@onready var status_manager: StatusManager = %StatusManager ## Status Manager for this character
+@onready var combat_trigger: Area2D = %CombatTrigger ## Area that tracks other characters for combat
 @onready var range_indicator_scene: PackedScene = preload("res://misc/selection_cursor/range_indicator.tscn")
 var abilities: Array[Ability] = [] ## Actual list of abilities
 var sequence: int ## Order of this character in the current combat and turn
@@ -71,6 +78,7 @@ var schedule_executed: bool = false ## Whether the schedule has been fully execu
 var schedule_processing: bool = false ## Whether the schedule is being executed currently
 var is_selected: bool = false ## Whether this character is selected
 var combat_target: Character = null ## The character this is attempting to attack
+var watching: Dictionary[Node2D, RayCast2D] = {} ## Character/raycast pairs for characters in combat trigger
 var to_save: Array[StringName] = [ ## Variables to save
 	"position",
 	"star_stats",
@@ -81,7 +89,8 @@ var to_save: Array[StringName] = [ ## Variables to save
 	"cur_mp",
 	"active",
 	"schedule_executed",
-	"schedule_index"
+	"schedule_index",
+	"loop_schedule"
 ]
 #endregion
 #region Signals
@@ -196,6 +205,16 @@ func task_done()->void:
 			schedule_executed = true
 		return
 	process_schedule()
+
+## Stops the schedule from looping
+func stop_looping()->void:
+	loop_schedule = false
+
+## Starts looping the schedule
+func start_looping()->void:
+	if !loop_schedule && schedule_executed:
+		loop_schedule = true
+		process_schedule()
 #endregion
 
 #region Orders
@@ -348,7 +367,67 @@ func process_status_action(action: Callable, args: Array)->void:
 		pos_changed.emit(self)
 #endregion
 
+#region Detection
+func _process(_delta: float) -> void:
+	if active:
+		check_rays()
+
+## Sets this character as hostile to the player
+func set_player_enemy()->void:
+	hostile_to_player = true
+
+## Sets this character as non-hostile to the player
+func set_player_neutral()->void:
+	hostile_to_player = false
+
+## Checks every ray this enemy is casting
+func check_rays(_character: Character = null)->void:
+	for character in watching:
+		check_ray(character)
+
+## Checks a ray corresponding to the character it is watching for
+## Tries to start combat if the ray is colliding with its target
+func check_ray(character: Character)->void:
+	watching[character].target_position = character.position-position
+	if watching[character].get_collider() == character:
+		try_combat(character)
+
+## Creates a new ray to track the character that entered the combat trigger
+func _combat_trigger_entered(body: Node2D) -> void:
+	if body is Character && body != self:
+		var ray: RayCast2D = RayCast2D.new()
+		ray.set_collision_mask_value(1, true)
+		ray.set_collision_mask_value(2, true)
+		add_child(ray)
+		ray.target_position = body.position
+		watching[body] = ray
+		body.pos_changed.connect(check_ray)
+		check_ray(body)
+
+## Removes the ray corresponding to the tracked character
+func _combat_trigger_exited(body: Node2D) -> void:
+	if body is Character && body != self:
+		body.pos_changed.disconnect(check_ray)
+		remove_child.call_deferred(watching[body])
+		watching[body].queue_free()
+		watching.erase(body)
+
+## Attempts to initiate combat with the given character
+func try_combat(character: Character)->void:
+	if !active:
+		return
+	if (!character.in_combat || !in_combat) && ((character is Player && hostile_to_player) || character in enemies):
+		combat_target = character
+		var participants: Array[Character] = [character, self]
+		EventBus.broadcast("START_COMBAT", participants)
+#endregion
+
 #region Misc
+## Called when interacted with
+func _interacted(interactor: Character)->void:
+	if dialogue != null && interactor is Player && !hostile_to_player:
+		EventBus.broadcast("ENTER_DIALOGUE", [dialogue, true])
+
 ## Sets the color of the character's outline
 func set_outline_color()->void:
 	var color: Color = Color(Settings.gameplay.selection_tint, 180.0/255.0)

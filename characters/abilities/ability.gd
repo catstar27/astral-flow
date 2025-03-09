@@ -101,13 +101,13 @@ func is_target_valid(target: Node2D)->bool:
 				if target == user:
 					return true
 			target_type_options.allies:
-				if target is NPC:
+				if target not in user.enemies:
 					return true
 			target_type_options.allies_or_user:
-				if target is NPC || target == user:
+				if target not in user.enemies || target == user:
 					return true
 			target_type_options.enemies:
-				if target is Enemy:
+				if target in user.enemies:
 					return true
 			target_type_options.all:
 				return true

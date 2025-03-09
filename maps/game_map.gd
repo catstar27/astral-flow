@@ -31,6 +31,7 @@ func _ready()->void:
 	EventBus.subscribe("TILE_UNOCCUPIED", self, "set_pos_unoccupied")
 	EventBus.subscribe("COMBAT_STARTED", self, "start_combat")
 	EventBus.subscribe("COMBAT_ENDED", self, "end_combat")
+	Dialogic.signal_event.connect(process_dialogue_signal)
 
 ## Prepares the map by resetting its astar
 ## Also performs initial operations for its children
@@ -68,6 +69,17 @@ func _set_astar_tiles()->void:
 	for cell in get_used_cells():
 		if !get_cell_tile_data(cell).get_custom_data("traversible"):
 			astar.set_point_solid(cell)
+#endregion
+
+#region Child Manipulation
+## Processes dialogue signals
+func process_dialogue_signal(arg)->void:
+	if arg is Dictionary:
+		for target_name in arg.keys():
+			for child in get_children():
+				if child is Character && child.display_name == target_name && child.active:
+					if arg[target_name] is String && child.has_method(arg[target_name]):
+						child.call_deferred(arg[target_name])
 #endregion
 
 #region Combat

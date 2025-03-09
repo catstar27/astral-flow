@@ -22,6 +22,9 @@ var cur_state: state = state.locked ## Current state of the gate
 var to_save: Array[StringName] = [ ## Variables to save
 	"cur_state"
 ]
+signal unlocked ## Emitted when unlocked
+signal opened ## Emitted when opened
+signal closed ## Emitted when closed
 signal saved(node: SignalGate) ## Emitted when saved
 signal loaded(node: SignalGate) ## Emitted when loaded
 
@@ -52,7 +55,7 @@ func open(quiet_open: bool = false)->void:
 		EventBus.broadcast("PLAY_SOUND", [open_sound, "positional", global_position])
 	for pos in occupied_positions:
 		EventBus.broadcast("TILE_UNOCCUPIED", pos)
-	interacted.emit()
+	opened.emit()
 	collision_active = false
 
 ## Closes the gate, even if the signals are fulfilled
@@ -64,18 +67,19 @@ func close()->void:
 	EventBus.broadcast("PLAY_SOUND", [open_sound, "positional", global_position])
 	for pos in occupied_positions:
 		EventBus.broadcast("TILE_OCCUPIED", pos)
-	interacted.emit()
+	closed.emit()
 	collision_active = true
 
 ## Advances the unlock in the gate; analyzes the given signal, which must pass a string
-func advance_unlock(signal_event: String)->void:
-	if !signal_event in signals_needed:
+func advance_unlock(signal_event)->void:
+	if signal_event is Dictionary || !signal_event in signals_needed:
 		return
 	if !signal_index>=signals_needed.size():
 		if signal_event==signals_needed[signal_index]:
 			signal_index += 1
 			if signal_index>=signals_needed.size():
 				cur_state = state.unlocked
+				unlocked.emit()
 				allow_dialogue = false
 				if auto_open:
 					open()

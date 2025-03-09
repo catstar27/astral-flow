@@ -42,6 +42,7 @@ directories/dtl_directory={
 "test_room_completion": "res://dialogue/test_room_completion.dtl",
 "test_room_couch": "res://dialogue/test_room_couch.dtl",
 "test_room_dog": "res://dialogue/test_room_dog.dtl",
+"test_room_duel": "res://dialogue/test_room_duel.dtl",
 "test_room_grapes": "res://dialogue/test_room_grapes.dtl",
 "test_room_npc": "res://dialogue/test_room_npc.dtl",
 "test_room_npc_blocked": "res://dialogue/test_room_npc_blocked.dtl",

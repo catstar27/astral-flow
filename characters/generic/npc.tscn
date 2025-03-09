@@ -1,9 +1,7 @@
-[gd_scene load_steps=19 format=3 uid="uid://bxbk83doy5d81"]
+[gd_scene load_steps=18 format=3 uid="uid://bxbk83doy5d81"]
 
-[ext_resource type="Script" uid="uid://d3xfkoybfp5c7" path="res://characters/generic/npc.gd" id="1_tipyt"]
-[ext_resource type="Script" uid="uid://b0xbk38jyra5a" path="res://characters/abilities/ability.gd" id="2_a0s2v"]
+[ext_resource type="Script" uid="uid://bukxn4fr7eh2h" path="res://characters/generic/character.gd" id="1_kbq0t"]
 [ext_resource type="Shader" uid="uid://c3fdj7fswdl53" path="res://shaders/outline.gdshader" id="2_o2xtu"]
-[ext_resource type="Resource" uid="uid://bfr7tnw5d5sp5" path="res://characters/abilities/push.tres" id="3_14s7m"]
 [ext_resource type="Texture2D" uid="uid://bxary7ep8tnbo" path="res://textures/character/nilak_spritesheet.png" id="3_irndy"]
 [ext_resource type="PackedScene" uid="uid://dj1dbu04os5rj" path="res://misc/state_machine/state_machine.tscn" id="4_rutmc"]
 [ext_resource type="PackedScene" uid="uid://b7psjacfk2o1y" path="res://characters/abilities/statuses/status_manager.tscn" id="4_vh4ik"]
@@ -81,11 +79,12 @@ _data = {
 &"RESET": SubResource("Animation_vf0ry")
 }
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_a0s2v"]
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_23jct"]
 
 [node name="NPC" type="CharacterBody2D" groups=["LevelSave"]]
-script = ExtResource("1_tipyt")
-export_abilities = Array[ExtResource("2_a0s2v")]([ExtResource("3_14s7m")])
+script = ExtResource("1_kbq0t")
 
 [node name="Sprite" type="Sprite2D" parent="."]
 unique_name_in_owner = true
@@ -101,6 +100,13 @@ libraries = {
 &"": SubResource("AnimationLibrary_7ssjw"),
 &"Character": ExtResource("4_ykgy0")
 }
+
+[node name="CombatTrigger" type="Area2D" parent="."]
+unique_name_in_owner = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CombatTrigger"]
+scale = Vector2(25, 25)
+shape = SubResource("CircleShape2D_a0s2v")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 scale = Vector2(2, 2)
@@ -124,3 +130,6 @@ state_machine = NodePath("..")
 
 [node name="ActivateAbility" parent="StateMachine" node_paths=PackedStringArray("state_machine") instance=ExtResource("9_xkqqq")]
 state_machine = NodePath("..")
+
+[connection signal="body_entered" from="CombatTrigger" to="." method="_combat_trigger_entered"]
+[connection signal="body_exited" from="CombatTrigger" to="." method="_combat_trigger_exited"]

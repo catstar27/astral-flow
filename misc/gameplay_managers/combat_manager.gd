@@ -23,9 +23,9 @@ func sequence_display_done()->void:
 ## Called when a character in combat is defeated, removing them from combat.
 ## Additionally ends combat if all of a team is defeated.
 func character_defeated(character: Character)->void:
-	if character is Player:
+	if !character.hostile_to_player:
 		player_team.remove_at(player_team.find(character))
-	if character is Enemy:
+	if character.hostile_to_player:
 		enemy_team.remove_at(enemy_team.find(character))
 	battle_queue.remove_at(battle_queue.find(character))
 	character.defeated_node.disconnect(character_defeated)
@@ -39,9 +39,9 @@ func add_to_combat(character: Character)->void:
 	character.taking_turn = false
 	character.stop_movement()
 	character.defeated_node.connect(character_defeated)
-	if character is Player:
+	if !character.hostile_to_player:
 		player_team.append(character)
-	if character is Enemy:
+	if character.hostile_to_player:
 		enemy_team.append(character)
 #endregion
 

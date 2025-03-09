@@ -1,4 +1,4 @@
-[gd_scene load_steps=57 format=4 uid="uid://qw4hbk40dyvm"]
+[gd_scene load_steps=58 format=4 uid="uid://qw4hbk40dyvm"]
 
 [ext_resource type="TileSet" uid="uid://dpajsxeb15k7l" path="res://maps/tilesets/dungeon.tres" id="1_bnvg4"]
 [ext_resource type="Script" uid="uid://b8kw4ghpy3r8t" path="res://maps/game_map.gd" id="2_rvbrh"]
@@ -19,7 +19,6 @@
 [ext_resource type="PackedScene" uid="uid://8hplcp22i5re" path="res://maps/interactives/lights/wall_light.tscn" id="12_kvvyy"]
 [ext_resource type="Resource" uid="uid://dqb1tww6se515" path="res://dialogue/test_room_grapes.dtl" id="12_shqtc"]
 [ext_resource type="PackedScene" uid="uid://b5mdx6baygoum" path="res://maps/interactives/generic/signal_gate.tscn" id="12_xfvy2"]
-[ext_resource type="PackedScene" uid="uid://c2af6y8es466h" path="res://characters/generic/enemy.tscn" id="13_augbp"]
 [ext_resource type="Resource" uid="uid://c3spvp8owd4ea" path="res://dialogue/locked.dtl" id="13_ymmi3"]
 [ext_resource type="PackedScene" uid="uid://v2x25sfrymso" path="res://maps/interactives/generic/damage_activation_interactive.tscn" id="14_luyw1"]
 [ext_resource type="Texture2D" uid="uid://b1i0lroq0snm0" path="res://textures/interactive/couch_n.png" id="14_v6peg"]
@@ -38,6 +37,9 @@
 [ext_resource type="Resource" uid="uid://dprgv3h7cyx52" path="res://dialogue/test_room_npc.dtl" id="32_lfqa0"]
 [ext_resource type="Texture2D" uid="uid://33u05ljr16og" path="res://textures/interactive/tesla_coil_n.png" id="35_k202b"]
 [ext_resource type="Texture2D" uid="uid://ddu4g3c61ag8s" path="res://textures/interactive/tesla_coil_s.png" id="36_ms4id"]
+[ext_resource type="Resource" uid="uid://djnw1m6acv55m" path="res://dialogue/test_room_duel.dtl" id="37_dpap0"]
+[ext_resource type="Script" uid="uid://b0xbk38jyra5a" path="res://characters/abilities/ability.gd" id="37_gpbd4"]
+[ext_resource type="Resource" uid="uid://dae4xdag0nd3v" path="res://characters/abilities/punch.tres" id="38_dpap0"]
 [ext_resource type="Script" uid="uid://cuvk331ioveg" path="res://characters/tasks/npc_task.gd" id="38_jrvla"]
 [ext_resource type="Script" uid="uid://co2e1ra3i780n" path="res://characters/tasks/move.gd" id="38_v6peg"]
 [ext_resource type="Script" uid="uid://cvn861203hxla" path="res://characters/tasks/wait.gd" id="39_v6peg"]
@@ -79,27 +81,18 @@ diffuse_texture = ExtResource("15_ghxts")
 normal_texture = ExtResource("35_k202b")
 specular_texture = ExtResource("36_ms4id")
 
-[sub_resource type="Resource" id="Resource_7i0lg"]
-script = ExtResource("38_v6peg")
-move_location = Vector2(32, -544)
-hour_start = 0
-hour_end = 0
-minute_start = 0
-minute_end = 0
-metadata/_custom_type_script = "uid://co2e1ra3i780n"
-
-[sub_resource type="Resource" id="Resource_dpap0"]
+[sub_resource type="Resource" id="Resource_ysqq4"]
 script = ExtResource("39_v6peg")
-wait_time = 5.0
+wait_time = 1.0
 hour_start = 0
 hour_end = 0
 minute_start = 0
 minute_end = 0
 metadata/_custom_type_script = "uid://cvn861203hxla"
 
-[sub_resource type="Resource" id="Resource_ysqq4"]
+[sub_resource type="Resource" id="Resource_k202b"]
 script = ExtResource("40_7i0lg")
-patrol_points = Array[Vector2]([Vector2(-224, -544), Vector2(352, -544)])
+patrol_points = Array[Vector2]([Vector2(-224, -544), Vector2(352, -544), Vector2(32, -544)])
 hour_start = 0
 hour_end = 0
 minute_start = 0
@@ -256,22 +249,25 @@ dialogue_unlocked = ExtResource("17_7sy0y")
 texture = SubResource("CanvasTexture_v6peg")
 dialogue = ExtResource("17_er6pd")
 
-[node name="Enemy" parent="." instance=ExtResource("13_augbp")]
+[node name="???" parent="." instance=ExtResource("31_w8a5m")]
 position = Vector2(32, -544)
 display_name = "???"
-schedule = Array[ExtResource("38_jrvla")]([SubResource("Resource_7i0lg"), SubResource("Resource_dpap0"), SubResource("Resource_ysqq4")])
+dialogue = ExtResource("37_dpap0")
+export_abilities = Array[ExtResource("37_gpbd4")]([ExtResource("38_dpap0")])
+schedule = Array[ExtResource("38_jrvla")]([SubResource("Resource_ysqq4"), SubResource("Resource_k202b")])
 loop_schedule = true
 
-[node name="NPC" parent="." instance=ExtResource("31_w8a5m")]
+[node name="Nilak" parent="." instance=ExtResource("31_w8a5m")]
 position = Vector2(480, -288)
+display_name = "Nilak"
 dialogue = ExtResource("32_lfqa0")
-display_name = "???"
 schedule = Array[ExtResource("38_jrvla")]([SubResource("Resource_gpbd4"), SubResource("Resource_llove")])
 active = false
 
+[connection signal="unlocked" from="InteractPuzzleGate" to="???" method="stop_looping"]
 [connection signal="unlocked" from="TeslaCoil" to="TeslaGate" method="advance_unlock"]
 [connection signal="unlocked" from="TeslaCoil2" to="TeslaGate" method="advance_unlock"]
-[connection signal="combat_entered" from="Enemy" to="InteractPuzzleGate" method="close"]
-[connection signal="defeated" from="Enemy" to="InteractPuzzleGate" method="open"]
-[connection signal="defeated_at" from="Enemy" to="NPC" method="activate"]
-[connection signal="defeated_named" from="Enemy" to="CombatGate" method="advance_unlock"]
+[connection signal="combat_entered" from="???" to="InteractPuzzleGate" method="close"]
+[connection signal="defeated" from="???" to="InteractPuzzleGate" method="open"]
+[connection signal="defeated_at" from="???" to="Nilak" method="activate"]
+[connection signal="defeated_named" from="???" to="CombatGate" method="advance_unlock"]
