@@ -472,6 +472,9 @@ func save_data(dir: String)->void:
 	if active && schedule != []:
 		schedule[schedule_index].pause.emit()
 	var file: FileAccess = FileAccess.open(dir+name+".dat", FileAccess.WRITE)
+	if file == null:
+		printerr("Failed to open save file for character "+name+"!")
+		return
 	for var_name in to_save:
 		file.store_var(var_name)
 		file.store_var(get(var_name))

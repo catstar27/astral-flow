@@ -249,7 +249,7 @@ dialogue_unlocked = ExtResource("17_7sy0y")
 texture = SubResource("CanvasTexture_v6peg")
 dialogue = ExtResource("17_er6pd")
 
-[node name="???" parent="." instance=ExtResource("31_w8a5m")]
+[node name="Stranger" parent="." instance=ExtResource("31_w8a5m")]
 position = Vector2(32, -544)
 display_name = "???"
 dialogue = ExtResource("37_dpap0")
@@ -264,10 +264,10 @@ dialogue = ExtResource("32_lfqa0")
 schedule = Array[ExtResource("38_jrvla")]([SubResource("Resource_gpbd4"), SubResource("Resource_llove")])
 active = false
 
-[connection signal="unlocked" from="InteractPuzzleGate" to="???" method="stop_looping"]
+[connection signal="unlocked" from="InteractPuzzleGate" to="Stranger" method="stop_looping"]
 [connection signal="unlocked" from="TeslaCoil" to="TeslaGate" method="advance_unlock"]
 [connection signal="unlocked" from="TeslaCoil2" to="TeslaGate" method="advance_unlock"]
-[connection signal="combat_entered" from="???" to="InteractPuzzleGate" method="close"]
-[connection signal="defeated" from="???" to="InteractPuzzleGate" method="open"]
-[connection signal="defeated_at" from="???" to="Nilak" method="activate"]
-[connection signal="defeated_named" from="???" to="CombatGate" method="advance_unlock"]
+[connection signal="combat_entered" from="Stranger" to="InteractPuzzleGate" method="close"]
+[connection signal="defeated" from="Stranger" to="InteractPuzzleGate" method="open"]
+[connection signal="defeated_at" from="Stranger" to="Nilak" method="activate"]
+[connection signal="defeated_named" from="Stranger" to="CombatGate" method="advance_unlock"]

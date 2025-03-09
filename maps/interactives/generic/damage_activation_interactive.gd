@@ -36,6 +36,7 @@ func save_data(dir: String)->void:
 		file.store_var(var_name)
 		file.store_var(get(var_name))
 	file.store_var("END")
+	file.close()
 	saved.emit(self)
 
 ## Loads the data
