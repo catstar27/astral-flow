@@ -73,6 +73,7 @@ func load_data(dir: String)->void:
 		id = file.get_var()
 	file.close()
 	update_complete_quests()
-	EventBus.broadcast("QUEST_TRACK", quests[tracked_id])
+	if tracked_id != "":
+		EventBus.broadcast("QUEST_TRACK", quests[tracked_id])
 	loaded.emit(self)
 #endregion

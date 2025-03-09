@@ -21,4 +21,3 @@ skill_used = 2
 statuses = Dictionary[ExtResource("3_wxv4n"), int]({
 ExtResource("4_sqsdr"): 1
 })
-metadata/_custom_type_script = "uid://cwkifgiif4kvq"

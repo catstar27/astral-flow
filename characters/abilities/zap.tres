@@ -19,5 +19,4 @@ base_damage = 4
 ignore_defense = false
 damage_type = 1
 skill_used = 6
-statuses_applied = Dictionary[ExtResource("4_2lt3u"), int]({})
-metadata/_custom_type_script = "uid://cwkifgiif4kvq"
+statuses = Dictionary[ExtResource("4_2lt3u"), int]({})

@@ -11,6 +11,7 @@ enum target_type_options {
 	allies, ## This can be used only on allies or tiles
 	allies_or_user, ## This can be used on the user or allies or tiles
 	enemies, ## This can be used only on enemies or tiles
+	others, ## This can be used on anything other than the user
 	all, ## This can be used on anything
 	none ## This can be used only on tiles
 	}
@@ -109,6 +110,9 @@ func is_target_valid(target: Node2D)->bool:
 			target_type_options.enemies:
 				if target in user.enemies:
 					return true
+			target_type_options.others:
+				if target.name != user.name:
+					return true
 			target_type_options.all:
 				return true
 			target_type_options.none:
@@ -163,6 +167,7 @@ func inflict_status(target: Node2D, status: Status)->void:
 #region Activation
 ## Used by base ability class to call side functions related to activation
 func activate(destination: Vector2)->void:
+	print(is_target_valid(NavMaster.get_obj_at_pos(destination)))
 	match activation_type:
 		activation_type_options.projectile:
 			await activation_projectile(destination)
