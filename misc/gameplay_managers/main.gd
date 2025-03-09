@@ -103,7 +103,7 @@ func check_dialogue_signal(data)->void:
 ## Sets the window mode to match video settings
 func set_video_settings()->void:
 	if Settings.video.fullscreen:
-		get_window().set_mode(Window.MODE_FULLSCREEN)
+		get_window().set_mode(Window.MODE_EXCLUSIVE_FULLSCREEN)
 	else:
 		get_window().set_mode(Window.MODE_WINDOWED)
 
