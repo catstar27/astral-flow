@@ -1,0 +1,32 @@
+[gd_resource type="Resource" script_class="Status" load_steps=2 format=3 uid="uid://dtp6xceav7hhg"]
+
+[ext_resource type="Script" uid="uid://dxv7e1j21poh5" path="res://characters/statuses/status.gd" id="1_52uah"]
+
+[resource]
+script = ExtResource("1_52uah")
+stat_mods = Dictionary[String, int]({
+"avoidance": 0,
+"crit_range": 0,
+"damage_threshold": 0,
+"defense": 0,
+"max_ap": 0,
+"max_hp": 0,
+"max_mp": 0,
+"sequence": 0
+})
+clear_conditions = Dictionary[String, bool]({
+"move": false,
+"rest": false,
+"take_damage": false
+})
+damage = 0
+time_choice = 2
+duration = 1
+stacking = false
+stacks = 1
+condition = 0
+action_name = "push"
+status_color = Color(0.431373, 0.686275, 1, 1)
+id = "PUSHED"
+display_name = "Pushed"
+metadata/_custom_type_script = "uid://dxv7e1j21poh5"

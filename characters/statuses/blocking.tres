@@ -1,0 +1,32 @@
+[gd_resource type="Resource" script_class="Status" load_steps=2 format=3 uid="uid://cw635joog3u4x"]
+
+[ext_resource type="Script" uid="uid://dxv7e1j21poh5" path="res://characters/statuses/status.gd" id="1_mv7by"]
+
+[resource]
+script = ExtResource("1_mv7by")
+stat_mods = Dictionary[String, int]({
+"avoidance": 0,
+"crit_range": 0,
+"damage_threshold": 2,
+"defense": 2,
+"max_ap": 0,
+"max_hp": 0,
+"max_mp": 0,
+"sequence": 0
+})
+clear_conditions = Dictionary[String, bool]({
+"move": false,
+"rest": false,
+"take_damage": true
+})
+damage = 0
+time_choice = 1
+duration = 1
+stacking = true
+stacks = 1
+condition = 0
+action_name = ""
+status_color = Color(0.362829, 0.362829, 0.362829, 1)
+id = "BLOCKING"
+display_name = "Blocking"
+metadata/_custom_type_script = "uid://dxv7e1j21poh5"

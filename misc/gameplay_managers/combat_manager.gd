@@ -34,21 +34,25 @@ func character_defeated(character: Character)->void:
 			enemy.enemies.remove_at(enemy.enemies.find(character))
 	battle_queue.remove_at(battle_queue.find(character))
 	character.defeated_node.disconnect(character_defeated)
-	character.surrendered.disconnect(character_surrendered)
+	character.surrendered_node.disconnect(character_surrendered)
 	if enemy_team.size() == 0 || player_team.size() == 0:
 		call_deferred("end_combat")
 		continue_round.emit(false)
 
 ## Called when a character surrenders
 func character_surrendered(character: Character)->void:
+	var opposing_team: Array[Character]
+	var character_team: Array[Character]
 	if character in player_team:
-		player_team.remove_at(player_team.find(character))
-		for enemy in enemy_team:
-			enemy.enemies.remove_at(enemy.enemies.find(character))
-	if character in enemy_team:
-		enemy_team.remove_at(enemy_team.find(character))
-		for enemy in player_team:
-			enemy.enemies.remove_at(enemy.enemies.find(character))
+		opposing_team = enemy_team
+		character_team = player_team
+	else:
+		opposing_team = player_team
+		character_team = enemy_team
+	character_team.remove_at(character_team.find(character))
+	for enemy in opposing_team:
+		enemy.enemies.remove_at(enemy.enemies.find(character))
+		character.enemies.remove_at(character.enemies.find(enemy))
 	if enemy_team.size() == 0 || player_team.size() == 0:
 		call_deferred("end_combat")
 		continue_round.emit(false)
@@ -59,7 +63,7 @@ func add_to_combat(character: Character)->void:
 	character.taking_turn = false
 	character.stop_movement()
 	character.defeated_node.connect(character_defeated)
-	character.surrendered.connect(character_surrendered)
+	character.surrendered_node.connect(character_surrendered)
 	if !character.hostile_to_player:
 		player_team.append(character)
 	if character.hostile_to_player:
@@ -122,8 +126,10 @@ func start_combat(participants: Array[Character])->void:
 func end_combat()->void:
 	round_num = 1
 	for character in battle_queue:
+		if character.taking_turn:
+			character.ended_turn.disconnect(end_turn)
 		character.defeated_node.disconnect(character_defeated)
-		character.surrendered.disconnect(character_surrendered)
+		character.surrendered_node.disconnect(character_surrendered)
 		character.exit_combat()
 		character.taking_turn = false
 	battle_queue = []

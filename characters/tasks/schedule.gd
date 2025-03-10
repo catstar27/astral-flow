@@ -29,7 +29,7 @@ func duplicate_schedule()->Schedule:
 	new_schedule.loop_schedule = loop_schedule
 	new_schedule.use_timed_schedule = use_timed_schedule
 	for task in tasks:
-		new_schedule.tasks.append(task.duplicate(true))
+		new_schedule.tasks.append(task.duplicate_task())
 	return new_schedule
 
 ## Initializes the schedule by setting the user of all tasks and copying the tasks
@@ -45,7 +45,8 @@ func process_schedule()->void:
 		return
 	if !use_timed_schedule:
 		user.schedule_processing = true
-		tasks[task_index].task_completed.connect(task_done)
+		if !tasks[task_index].task_completed.is_connected(task_done):
+			tasks[task_index].task_completed.connect(task_done)
 		tasks[task_index].call_deferred("execute_task")
 
 ## Called when the current task has been executed to determine the next action to take

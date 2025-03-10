@@ -1,6 +1,0 @@
-You can't help but close your eyes...
-You feel tired, too tired to climb the stairs...
-You curl up on the floor, your exhaustion overtaking you.
-It seems this journey has reached its end for now.
-[signal arg="fade_out_exit"]
-[end_timeline]

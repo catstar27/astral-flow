@@ -137,7 +137,7 @@ func fade_out()->void:
 ## Fades the screen in
 func fade_in()->void:
 	EventBus.broadcast("FADE_IN_MUSIC", 1)
-	await create_tween().tween_property(foreground, "modulate", Color(0,0,0,0), 1).set_ease(Tween.EASE_IN).finished
+	await create_tween().tween_property(foreground, "modulate", Color(0,0,0,0), .5).set_ease(Tween.EASE_OUT).finished
 #endregion
 
 #region Save and Load

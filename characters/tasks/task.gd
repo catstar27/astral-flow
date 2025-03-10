@@ -58,3 +58,7 @@ func execute_task()->void:
 func task()->void:
 	printerr("Attempted to use task of base type, use subtypes instead")
 	await user.get_tree().create_timer(.1).timeout
+
+## Gets a duplicate of this task
+func duplicate_task()->Task:
+	return self.duplicate(true)

@@ -1,0 +1,33 @@
+[gd_resource type="Resource" script_class="Status" load_steps=2 format=3 uid="uid://dkqwon7fs3tv5"]
+
+[ext_resource type="Script" uid="uid://dxv7e1j21poh5" path="res://characters/statuses/status.gd" id="1_rrcc6"]
+
+[resource]
+script = ExtResource("1_rrcc6")
+stat_mods = Dictionary[String, int]({
+"avoidance": 0,
+"crit_range": 0,
+"damage_threshold": 0,
+"defense": 0,
+"max_ap": 0,
+"max_hp": 0,
+"max_mp": 0,
+"sequence": 0
+})
+clear_conditions = Dictionary[String, bool]({
+"move": false,
+"rest": false,
+"take_damage": false,
+"triggered": false
+})
+damage = 0
+time_choice = 0
+duration = 1
+stacking = false
+stacks = 1
+condition = 1
+action_name = "full_heal"
+status_color = Color(1, 0.713726, 0, 1)
+id = "IMMORTAILITY"
+display_name = "Immortality"
+metadata/_custom_type_script = "uid://dxv7e1j21poh5"

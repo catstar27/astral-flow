@@ -1,0 +1,22 @@
+join nilak left [animation="Bounce In" wait="true"]
+[music path="res://music/carefree_carousel.wav" fade="0.0" volume="0.0"]
+if {learned_zap} == true:
+	jump go_exit
+nilak: Whew! You put up a good fight!
+nilak: I'll admit, I'm impressed. I think you have potential.
+nilak: So, as a reward for a job well done, I will teach you some electric magic tricks!
+You Learned the Zap Ability!
+set {nilak_name} = "Nilak"
+nilak: The name's Nilak, by the way. You better remember it!
+set {learned_zap} = true
+[signal arg="test_room_zap_learned"]
+- Thanks!
+	nilak: Don't worry about it! I'm happy to teach. Maybe now you can escape this place?
+	label go_exit
+	nilak: You should go find the exit!
+- You're just a figment of my imagination.
+	nilak: Heh... you may doubt me now, but believe me. You WILL see me again.
+	nilak: I could even be your best friend if you play your cards right.
+- (Leave)
+	nilak: Uh, goodbye then?
+[end_timeline]

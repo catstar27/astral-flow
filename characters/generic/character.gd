@@ -41,7 +41,8 @@ enum ai_types { ## Options for enemy ai
 	melee_safe ## Safe melee attacker that tries to stay alive but still deal damage
 }
 @export var display_name: String = "Name Here" ## Name displayed in gui and logs
-@export var dialogue: DialogicTimeline ## Dialogue for the NPC to enter when interacted
+@export var dialogues: Array[DialogicTimeline] ## Dialogues for the NPC to enter when interacted
+@export var signal_dialogues: Dictionary[String, DialogicTimeline] ## Second set of dialogue for triggering through signals
 @export var text_indicator_shift: Vector2 = Vector2.UP*32 ## Distance away from this to spawn text indicators
 @export var export_abilities: Array[Ability] = [] ## Exported ability list for initial abilities
 @export var starting_statuses: Array[Status] ## List of statuses to start with
@@ -72,8 +73,11 @@ var selected_ability: Ability = null ## Ability attempted to be used by the char
 var cur_ap: int ## Character's current action points
 var cur_mp: int ## Character's current health points
 var cur_hp: int ## Character's current magic points
+var dialogue_index: int = 0 ## Current index of dialogue scene to play
 var schedule_index: int = 0 ## Current index of the schedule being executed
 var current_schedule_executed: bool = false ## Whether the current schedule has been finished at least once
+var current_schedule_looping: bool = false ## Whether the current schedule is looping
+var current_schedule_task_index: int = 0 ## Index of current schedule's current task
 var schedule_processing: bool = false ## Whether the schedule is being executed currently
 var is_selected: bool = false ## Whether this character is selected
 var combat_target: Character = null ## The character this is attempting to attack
@@ -88,6 +92,7 @@ var to_save: Array[StringName] = [ ## Variables to save
 	"cur_mp",
 	"active",
 	"current_schedule_executed",
+	"current_schedule_looping",
 	"schedule_index",
 ]
 #endregion
@@ -100,12 +105,16 @@ signal pos_changed(character: Character) ## Emitted when the character's positio
 signal ended_turn(character: Character) ## Emitted when the character's turn ends
 signal stats_changed ## Emitted when the character's stats change
 signal abilities_changed ## Emitted when the character's abilities change
-signal surrendered ## Emitted if the character wishes to end combat
+signal surrendered ## Emitted if the character surrenders in combat
+signal surrendered_node(node: Character) ## Emitted if the character surrenders in combat; gives the node
+signal surrendered_named(display_name: String) ## Emitted if the character surrenders in combat; gives the display name
 signal defeated ## Emitted upon defeat; Sends nothing
 signal defeated_node(node: Character) ## Emitted upon defeat; Sends the character defeated
 signal defeated_at(pos: Vector2) ## Emitted upon defeat; Sends the character defeated position
 signal defeated_named(display_name: String) ## Emitted upon defeat; Sends the character defeated name
 signal damaged(source: Node) ## Emitted upon taking damage; Sends the damage source
+signal revived ## Emitted if this character survives despite being lowered to 0 health or less
+signal revived_named(display_name: String) ## Same as revived but sends the display name
 signal rested ## Emitted when the character rests
 signal combat_entered ## Emitted when the character enters combat
 signal combat_exited ## Emitted when the character exits combat
@@ -180,10 +189,13 @@ func rest()->void:
 #region Schedule
 ## Initializes the schedule by setting the user of all tasks and copying the tasks
 func init_schedule()->void:
-	for index in range(0, schedules.size()):
-		schedules[index] = schedules[index].duplicate_schedule()
-		schedules[index].user = self
-		schedules[index].init_schedule()
+	var new_schedules: Array[Schedule]
+	for schedule in schedules:
+		var new_schedule: Schedule = schedule.duplicate_schedule()
+		new_schedules.append(new_schedule)
+		new_schedule.user = self
+		new_schedule.init_schedule()
+	schedules = new_schedules
 
 ## Starts executing the next schedule in the array
 func next_schedule()->void:
@@ -243,10 +255,29 @@ func roll_sequence()->void:
 
 ## Attempts to surrender combat
 func surrender()->void:
+	if !in_combat:
+		return
+	hostile_to_player = false
+	combat_target = null
 	surrendered.emit()
+	surrendered_named.emit(display_name)
+	surrendered_node.emit(self)
+	if taking_turn:
+		ended_turn.emit(self)
 
 ## Called upon defeat; also deactivates the character
 func on_defeated()->void:
+	status_manager.trigger_on_death()
+	while status_manager.processing_conditionals:
+		await status_manager.conditionals_processed
+	if cur_hp > 0:
+		EventBus.broadcast("MAKE_TEXT_INDICATOR", ["Revived!", text_indicator_shift+global_position, Color.ORANGE])
+		anim_player.play("RESET")
+		while anim_player.is_playing():
+			await anim_player.animation_finished
+		revived.emit()
+		revived_named.emit(display_name)
+		return
 	EventBus.broadcast("PRINT_LOG","Defeated "+display_name)
 	EventBus.broadcast("TILE_UNOCCUPIED", position)
 	if taking_turn:
@@ -277,8 +308,10 @@ func damage(source: Node, amount: int, _damage_type: Ability.damage_type_options
 
 ## Activates this character's ai, only if not controlled by player
 func take_turn()->void:
-	if self is not Player:
+	if self is not Player && combat_target != null:
 		call_deferred(str(ai_types.keys()[ai_type]))
+	elif self is not Player && combat_target == null:
+		end_turn()
 
 ## Waits until the character is idle, then ends their turn
 func end_turn()->void:
@@ -350,9 +383,6 @@ func remove_range_indicators()->void:
 func init_statuses()->void:
 	status_manager.remove_all_statuses()
 	for status in starting_statuses:
-		if status.action_name != "":
-			printerr("Initial statuses with status actions are not supported!")
-			continue
 		add_status(status.duplicate(true), self, true)
 
 ## Adds the given status to this character
@@ -429,8 +459,16 @@ func try_combat(character: Character)->void:
 #region Misc
 ## Called when interacted with
 func _interacted(interactor: Character)->void:
-	if dialogue != null && interactor is Player && !hostile_to_player:
-		EventBus.broadcast("ENTER_DIALOGUE", [dialogue, true])
+	if dialogue_index < dialogues.size() && interactor is Player && !hostile_to_player:
+		EventBus.broadcast("ENTER_DIALOGUE", [dialogues[dialogue_index], true])
+
+func activate_signal_dialogue(signal_name: String)->void:
+	if signal_name in signal_dialogues.keys():
+		EventBus.broadcast("ENTER_DIALOGUE", [signal_dialogues[signal_name], true])
+
+## Increments the dialogue index
+func next_dialogue()->void:
+	dialogue_index += 1
 
 ## Sets the color of the character's outline
 func set_outline_color()->void:
@@ -479,6 +517,10 @@ func save_data(dir: String)->void:
 	stop_move_order.emit()
 	if active && schedules.size() > 0:
 		schedules[schedule_index].pause.emit()
+	if schedules.size() > 0:
+		current_schedule_executed = schedules[schedule_index].schedule_executed
+		current_schedule_looping = schedules[schedule_index].loop_schedule
+		current_schedule_task_index = schedules[schedule_index].task_index
 	var file: FileAccess = FileAccess.open(dir+name+".dat", FileAccess.WRITE)
 	if file == null:
 		printerr("Failed to open save file for character "+name+"!")
@@ -504,6 +546,10 @@ func load_data(dir: String)->void:
 			var_name = file.get_var()
 		file.close()
 	position = NavMaster.map.map_to_local(NavMaster.map.local_to_map(position))
+	if schedules.size() > 0:
+		schedules[schedule_index].schedule_executed = current_schedule_executed
+		schedules[schedule_index].loop_schedule = current_schedule_looping
+		schedules[schedule_index].task_index = current_schedule_task_index
 	init_statuses()
 	load_extra()
 	state_machine.unpause()

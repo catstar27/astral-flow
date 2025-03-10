@@ -1,0 +1,13 @@
+The couch looks oddly pristine, but smells like potato chips...
+- Poke
+	You hear a click...
+	[signal arg="test_room_couch_click"]
+	[end_timeline]
+- Nap
+	You decide to take a rest...
+	[signal arg="rest"]
+	[wait time="5.5"]
+	You feel rested!
+	[end_timeline]
+- Leave
+	[end_timeline]

@@ -72,7 +72,7 @@ func close()->void:
 
 ## Advances the unlock in the gate; analyzes the given signal, which must pass a string
 func advance_unlock(signal_event)->void:
-	if signal_event is Dictionary || !signal_event in signals_needed:
+	if signal_event is Dictionary || !signal_event in signals_needed || cur_state == state.open:
 		return
 	if !signal_index>=signals_needed.size():
 		if signal_event==signals_needed[signal_index]:

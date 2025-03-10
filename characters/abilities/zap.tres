@@ -3,7 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://cybrghxvkmk7w" path="res://characters/abilities/projectiles/lightning.tscn" id="1_idoyy"]
 [ext_resource type="Script" uid="uid://b0xbk38jyra5a" path="res://characters/abilities/ability.gd" id="2_2b0af"]
 [ext_resource type="AudioStream" uid="uid://ph4sryxod7aw" path="res://sfx/zap.wav" id="3_5qeq1"]
-[ext_resource type="Script" uid="uid://dxv7e1j21poh5" path="res://characters/abilities/statuses/status.gd" id="4_2lt3u"]
+[ext_resource type="Script" uid="uid://dxv7e1j21poh5" path="res://characters/statuses/status.gd" id="4_2lt3u"]
 
 [resource]
 script = ExtResource("2_2b0af")

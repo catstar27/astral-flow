@@ -2,8 +2,8 @@
 
 [ext_resource type="Script" uid="uid://b0xbk38jyra5a" path="res://characters/abilities/ability.gd" id="1_e8slm"]
 [ext_resource type="AudioStream" uid="uid://dn0n8crrshix1" path="res://sfx/shield.wav" id="2_54ndt"]
-[ext_resource type="Resource" uid="uid://cw635joog3u4x" path="res://characters/abilities/statuses/blocking.tres" id="3_rputp"]
-[ext_resource type="Script" uid="uid://dxv7e1j21poh5" path="res://characters/abilities/statuses/status.gd" id="4_iy6jr"]
+[ext_resource type="Resource" uid="uid://cw635joog3u4x" path="res://characters/statuses/blocking.tres" id="3_rputp"]
+[ext_resource type="Script" uid="uid://dxv7e1j21poh5" path="res://characters/statuses/status.gd" id="4_iy6jr"]
 
 [resource]
 script = ExtResource("1_e8slm")

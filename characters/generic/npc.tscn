@@ -4,7 +4,7 @@
 [ext_resource type="Shader" uid="uid://c3fdj7fswdl53" path="res://shaders/outline.gdshader" id="2_o2xtu"]
 [ext_resource type="Texture2D" uid="uid://bxary7ep8tnbo" path="res://textures/character/nilak_spritesheet.png" id="3_irndy"]
 [ext_resource type="PackedScene" uid="uid://dj1dbu04os5rj" path="res://misc/state_machine/state_machine.tscn" id="4_rutmc"]
-[ext_resource type="PackedScene" uid="uid://b7psjacfk2o1y" path="res://characters/abilities/statuses/status_manager.tscn" id="4_vh4ik"]
+[ext_resource type="PackedScene" uid="uid://b7psjacfk2o1y" path="res://characters/statuses/status_manager.tscn" id="4_vh4ik"]
 [ext_resource type="Texture2D" uid="uid://bk5tdtr6mbqh3" path="res://textures/character/nilak_spritesheet_n.png" id="4_xbwpv"]
 [ext_resource type="AnimationLibrary" uid="uid://d2follnewo23r" path="res://animations/Character.res" id="4_ykgy0"]
 [ext_resource type="PackedScene" uid="uid://co558pdmpfij5" path="res://characters/states/move.tscn" id="5_sd8yb"]

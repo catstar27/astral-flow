@@ -1,6 +1,0 @@
-set {random} = randi()%10
-if {random} == 0:
-	Run
-else:
-	This is a sign.
-[end_timeline]

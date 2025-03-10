@@ -116,8 +116,7 @@ func set_pos_unoccupied(pos: Vector2)->void:
 	astar.set_point_solid(tile, false)
 
 ## Given a starting and ending position, returns a path between them.
-## If allow_closest is true, it will find the nearest valid tile if the
-## end position is occupied.
+## If allow_closest is true, it will find the nearest valid tile if the end position is occupied.
 func get_nav_path(start_pos: Vector2, end_pos: Vector2, allow_closest: bool = true)->Array[Vector2]:
 	var start_cell: Vector2i = local_to_map(start_pos)
 	var end_cell: Vector2i = local_to_map(end_pos)
@@ -142,9 +141,10 @@ func get_nearest_empty_tile(origin: Vector2i, pos: Vector2i)->Vector2i:
 		if get_cell_tile_data(cur_pos) != null && !astar.is_point_solid(cur_pos):
 			var best_distance: float = (cur_pos-origin).length()+1000*(pos-cur_pos).length()
 			for tile in queue:
-				if (tile-origin).length()+1000*(pos-tile).length() < best_distance:
-					best_distance = (tile-origin).length()+1000*(pos-tile).length()
-					cur_pos = tile
+				if !astar.is_point_solid(tile):
+					if ((tile-origin).length()+1000*(pos-tile).length()) < best_distance:
+						best_distance = (tile-origin).length()+1000*(pos-tile).length()
+						cur_pos = tile
 			return cur_pos
 		for cell in get_surrounding_cells(cur_pos):
 			if cell not in visited:

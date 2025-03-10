@@ -9,6 +9,13 @@ class_name PatrolTask
 func task()->void:
 	await patrol()
 
+func duplicate_task()->Task:
+	var new_task: PatrolTask = duplicate(true)
+	new_task.patrol_points = []
+	for point in patrol_points:
+		new_task.patrol_points.append(point)
+	return new_task
+
 func patrol()->void:
 	for pos in patrol_points:
 		if user.in_combat:
