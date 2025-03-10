@@ -96,7 +96,7 @@ func is_tile_valid(destination: Vector2)->bool:
 func is_target_valid(target: Node2D)->bool:
 	if target is Interactive:
 		return true
-	if target is Character:
+	elif target is Character:
 		match target_type:
 			target_type_options.user:
 				if target == user:
@@ -111,13 +111,15 @@ func is_target_valid(target: Node2D)->bool:
 				if target in user.enemies:
 					return true
 			target_type_options.others:
-				if target.name != user.name:
+				if target != user:
 					return true
 			target_type_options.all:
 				return true
 			target_type_options.none:
 				return false
-	return true
+	else:
+		return true
+	return false
 
 ## Gets the object at the given location
 func get_target(destination: Vector2)->Node2D:
@@ -167,7 +169,6 @@ func inflict_status(target: Node2D, status: Status)->void:
 #region Activation
 ## Used by base ability class to call side functions related to activation
 func activate(destination: Vector2)->void:
-	print(is_target_valid(NavMaster.get_obj_at_pos(destination)))
 	match activation_type:
 		activation_type_options.projectile:
 			await activation_projectile(destination)
@@ -234,7 +235,7 @@ func push(data: Array)->void:
 	var path: Array[Vector2] = NavMaster.request_nav_path(prev_pos, destination, false)
 	path.pop_front()
 	if path.size() == 1:
-		EventBus.broadcast("TILE_OCCUPIED", path.front())
+		EventBus.broadcast("TILE_OCCUPIED", [path.front(), target])
 		await user.create_tween().tween_property(target, "position", path.front(), .1).finished
 		EventBus.broadcast("TILE_UNOCCUPIED", prev_pos)
 #endregion

@@ -5,6 +5,7 @@ class_name CombatManager
 var battle_queue: Array[Character] = [] ## Queue of all characters currently in combat
 var player_team: Array[Character] = [] ## Array of characters on the player's team
 var enemy_team: Array[Character] = [] ## Array of characters on the enemy's team
+var defeated: Array[Character] ## Array of characters defeated in this combat
 var round_num: int = 1 ## Current round number
 signal round_ended ## Emitted when a round has ended
 signal continue_round(yes: bool) ## Emitted when a character is defeated; Arg determines whether to continue combat
@@ -23,10 +24,14 @@ func sequence_display_done()->void:
 ## Called when a character in combat is defeated, removing them from combat.
 ## Additionally ends combat if all of a team is defeated.
 func character_defeated(character: Character)->void:
-	if !character.hostile_to_player:
+	if character in player_team:
 		player_team.remove_at(player_team.find(character))
-	if character.hostile_to_player:
+		for enemy in enemy_team:
+			enemy.enemies.remove_at(enemy.enemies.find(character))
+	if character in enemy_team:
 		enemy_team.remove_at(enemy_team.find(character))
+		for enemy in player_team:
+			enemy.enemies.remove_at(enemy.enemies.find(character))
 	battle_queue.remove_at(battle_queue.find(character))
 	character.defeated_node.disconnect(character_defeated)
 	if enemy_team.size() == 0 || player_team.size() == 0:
@@ -64,6 +69,11 @@ func merge_combat(to_merge: Array[Character])->void:
 			merge_queue.append(participant)
 	merge_queue.sort_custom(sequence_sort)
 	battle_queue.append_array(merge_queue)
+	for character in battle_queue:
+		if character in player_team:
+			character.enemies.append_array(enemy_team)
+		else:
+			character.enemies.append_array(player_team)
 	EventBus.broadcast("SEQUENCE_UPDATED", battle_queue)
 	await display_cycled
 
@@ -84,6 +94,11 @@ func start_combat(participants: Array[Character])->void:
 	else:
 		EventBus.broadcast("COMBAT_STARTED", "NULLDATA")
 		battle_queue = participants
+		for character in battle_queue:
+			if character in player_team:
+				character.enemies.append_array(enemy_team)
+			else:
+				character.enemies.append_array(player_team)
 		await get_tree().create_timer(.2).timeout
 		round_ended.emit()
 

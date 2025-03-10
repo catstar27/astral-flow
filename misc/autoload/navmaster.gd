@@ -23,6 +23,14 @@ func get_obj_at_pos(pos: Vector2)->Node2D:
 		return null
 	return map.get_obj_at_pos(pos)
 
+## Returns the character at given position, or null if there is none
+func get_character_at_pos(pos: Vector2)->Character:
+	if map == null || !is_instance_valid(map):
+		return null
+	if map.get_obj_at_pos(pos) is Character:
+		return map.get_obj_at_pos(pos)
+	return null
+
 ## Returns array of surrounding tile positions
 func get_pos_tile_neighbors(pos: Vector2)->Array[Vector2]:
 	var neighbors: Array[Vector2i] = map.get_surrounding_cells(map.local_to_map(pos))

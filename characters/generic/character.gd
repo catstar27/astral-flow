@@ -63,6 +63,7 @@ enum ai_types { ## Options for enemy ai
 @onready var state_machine: StateMachine = %StateMachine ## State Machine for this character
 @onready var status_manager: StatusManager = %StatusManager ## Status Manager for this character
 @onready var combat_trigger: Area2D = %CombatTrigger ## Area that tracks other characters for combat
+@onready var collision: CollisionShape2D = %Collision ## Collision of the character
 @onready var range_indicator_scene: PackedScene = preload("res://misc/selection_cursor/range_indicator.tscn")
 var abilities: Array[Ability] = [] ## Actual list of abilities
 var sequence: int ## Order of this character in the current combat and turn
@@ -448,8 +449,10 @@ func deselect()->void:
 ## Activates the character, putting them into the game map at given position
 func activate(pos: Vector2)->void:
 	active = true
+	collision.set_deferred("disabled", false)
+	combat_trigger.set_deferred("disabled", false)
 	position = pos
-	EventBus.broadcast("TILE_OCCUPIED", pos)
+	EventBus.broadcast("TILE_OCCUPIED", [pos, self])
 	show()
 	if !schedule_processing:
 		process_schedule()
@@ -457,6 +460,8 @@ func activate(pos: Vector2)->void:
 ## Deactivates the character
 func deactivate()->void:
 	active = false
+	collision.set_deferred("disabled", true)
+	combat_trigger.set_deferred("disabled", true)
 	EventBus.broadcast("TILE_UNOCCUPIED", position)
 	hide()
 

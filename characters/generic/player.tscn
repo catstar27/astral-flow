@@ -116,7 +116,8 @@ unique_name_in_owner = true
 scale = Vector2(25, 25)
 shape = SubResource("CircleShape2D_ri3wm")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[node name="Collision" type="CollisionShape2D" parent="."]
+unique_name_in_owner = true
 scale = Vector2(2, 2)
 shape = SubResource("RectangleShape2D_g7ocv")
 

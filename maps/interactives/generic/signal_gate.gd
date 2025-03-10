@@ -66,7 +66,7 @@ func close()->void:
 	collision.set_deferred("disabled", false)
 	EventBus.broadcast("PLAY_SOUND", [open_sound, "positional", global_position])
 	for pos in occupied_positions:
-		EventBus.broadcast("TILE_OCCUPIED", pos)
+		EventBus.broadcast("TILE_OCCUPIED", [pos, self])
 	closed.emit()
 	collision_active = true
 

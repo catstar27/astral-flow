@@ -15,7 +15,7 @@ class_name GameMap
 var children_ready_count: int = 0 ## Number of children saved/loaded
 var loading: bool = false ## Whether the map is loading
 var player: Player = null ## The player node
-var occupied_tiles: Array[Vector2i] ## Tiles being occupied by an interactive or character
+var occupied_tiles: Dictionary[Vector2i, Node2D] ## Tiles being occupied by an interactive or character
 var to_save: Array[StringName] = [ ## Map variables to save
 	"player_start_pos"
 ]
@@ -36,7 +36,7 @@ func _ready()->void:
 ## Prepares the map by resetting its astar
 ## Also performs initial operations for its children
 func prep_map()->void:
-	occupied_tiles = []
+	occupied_tiles = {}
 	light_modulator.show()
 	_astar_setup()
 	for child in get_children():
@@ -44,10 +44,10 @@ func prep_map()->void:
 			child.setup()
 			if child.collision_active:
 				for pos in child.occupied_positions:
-					set_pos_occupied(pos)
+					set_pos_occupied([pos, child])
 		elif child is Character:
 			if child.active:
-				set_pos_occupied(child.position)
+				set_pos_occupied([child.position, child])
 				if child is Player:
 					player = child
 				child.activate(child.position)
@@ -95,30 +95,25 @@ func end_combat()->void:
 #region Pathfinding
 ## Finds and returns the object at given position, or null if there is none
 func get_obj_at_pos(pos: Vector2)->Node2D:
-	for child in get_children():
-		if child is Interactive || child is Character:
-			if local_to_map(child.position) == local_to_map(pos):
-				if child is Interactive:
-					if !child.collision_active:
-						continue
-				if child is Player:
-					if !child.active:
-						continue
-				return child
+	if local_to_map(pos) in occupied_tiles.keys():
+		return occupied_tiles[local_to_map(pos)]
 	return null
 
 ## Sets given position to be occupied
-func set_pos_occupied(pos: Vector2)->void:
-	var tile: Vector2i = local_to_map(pos)
+func set_pos_occupied(data: Array)->void:
+	if data.size() != 2 || data[0] is not Vector2 || data[1] is not Node2D:
+		printerr("Attempted to set pos occupied with invalid arguments: "+str(data))
+		return
+	var tile: Vector2i = local_to_map(data[0])
 	if tile not in occupied_tiles:
-		occupied_tiles.append(tile)
+		occupied_tiles[tile] = data[1]
 	astar.set_point_solid(tile, true)
 
 ## Sets the given position to be unoccupied
 func set_pos_unoccupied(pos: Vector2)->void:
 	var tile: Vector2i = local_to_map(pos)
 	if tile in occupied_tiles:
-		occupied_tiles.remove_at(occupied_tiles.find(tile))
+		occupied_tiles[tile] = null
 	astar.set_point_solid(tile, false)
 
 ## Given a starting and ending position, returns a path between them.

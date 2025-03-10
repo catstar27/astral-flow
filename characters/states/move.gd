@@ -46,7 +46,7 @@ func move(cur_target: Vector2)->bool:
 		var direction: Vector2 = pos-prev_pos
 		if direction.length() > NavMaster.tile_size:
 			continue
-		EventBus.broadcast("TILE_OCCUPIED", pos)
+		EventBus.broadcast("TILE_OCCUPIED", [pos, state_machine.user])
 		if direction != prev_direction || !state_machine.user.anim_player.is_playing():
 			if direction == Vector2.UP*64:
 				state_machine.user.anim_player.play("Character/walk_up")
