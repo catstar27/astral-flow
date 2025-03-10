@@ -34,6 +34,21 @@ func character_defeated(character: Character)->void:
 			enemy.enemies.remove_at(enemy.enemies.find(character))
 	battle_queue.remove_at(battle_queue.find(character))
 	character.defeated_node.disconnect(character_defeated)
+	character.surrendered.disconnect(character_surrendered)
+	if enemy_team.size() == 0 || player_team.size() == 0:
+		call_deferred("end_combat")
+		continue_round.emit(false)
+
+## Called when a character surrenders
+func character_surrendered(character: Character)->void:
+	if character in player_team:
+		player_team.remove_at(player_team.find(character))
+		for enemy in enemy_team:
+			enemy.enemies.remove_at(enemy.enemies.find(character))
+	if character in enemy_team:
+		enemy_team.remove_at(enemy_team.find(character))
+		for enemy in player_team:
+			enemy.enemies.remove_at(enemy.enemies.find(character))
 	if enemy_team.size() == 0 || player_team.size() == 0:
 		call_deferred("end_combat")
 		continue_round.emit(false)
@@ -44,6 +59,7 @@ func add_to_combat(character: Character)->void:
 	character.taking_turn = false
 	character.stop_movement()
 	character.defeated_node.connect(character_defeated)
+	character.surrendered.connect(character_surrendered)
 	if !character.hostile_to_player:
 		player_team.append(character)
 	if character.hostile_to_player:
@@ -107,9 +123,11 @@ func end_combat()->void:
 	round_num = 1
 	for character in battle_queue:
 		character.defeated_node.disconnect(character_defeated)
+		character.surrendered.disconnect(character_surrendered)
 		character.exit_combat()
 		character.taking_turn = false
 	battle_queue = []
+	defeated = []
 	EventBus.broadcast("COMBAT_ENDED", "NULLDATA")
 #endregion
 

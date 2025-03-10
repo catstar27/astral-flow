@@ -25,23 +25,26 @@ signal status_action_occurred(action: Callable, args: Array) ## A status has att
 #region Status Management
 ## Adds a status to the list of active statuses and begins calculating its effects
 func add_status(status: Status, source: Node)->void:
+	status.user = get_parent()
 	status.source = source
-	if status.time_choice == status.time_options.instant:
-		status_action_occurred.emit(status.action, status.action_args)
-		return
+	if status.condition == status.condition_options.none:
+		if status.time_choice == status.time_options.instant:
+			status_action_occurred.emit(status.action, status.action_args)
+			return
 	var duplicate_status: Status = get_matching_status(status.id)
 	if duplicate_status != null && !status.stacking:
 		duplicate_status.duration = status.duration
 		return
-	if duplicate_status != null && status.stacking:
+	elif duplicate_status != null && status.stacking:
 		status_list[duplicate_status] += status.stacks
 		duplicate_status.duration = status.duration
 	else:
 		status_list[status] = status.stacks
-	for stat in status.stat_mods:
-		stat_mods[stat] += status.stat_mods[stat]
-		status_stat_mod_changed.emit(stat, status.stat_mods[stat])
-	damage += status.damage
+	if status.condition == status.condition_options.none:
+		for stat in status.stat_mods:
+			stat_mods[stat] += status.stat_mods[stat]
+			status_stat_mod_changed.emit(stat, status.stat_mods[stat])
+		damage += status.damage
 
 ## Ticks the statuses, dealing their damage and reducing duration
 func tick_status()->void:
@@ -65,6 +68,11 @@ func remove_status(status: Status)->void:
 			status_list.erase(status)
 	else:
 		status_list.erase(status)
+
+## Removes all statuses
+func remove_all_statuses()->void:
+	for status in status_list.keys():
+		remove_status(status)
 
 ## Returns a status in the current list matching given id, or null if there is none
 func get_matching_status(id: String)->Status:
@@ -94,4 +102,18 @@ func process_damage(source: Node)->void:
 	for status in status_list:
 		if status.clear_conditions.take_damage:
 			remove_status(status)
+#endregion
+
+#region Conditional Triggers
+## Triggers on_death condition statuses
+func trigger_on_death()->void:
+	for status in status_list.keys():
+		if status.condition == status.condition_options.on_death:
+			if status.time_choice == status.time_options.instant:
+				status_action_occurred.emit(status.action, status.action_args)
+			else:
+				for stat in status.stat_mods:
+					stat_mods[stat] += status.stat_mods[stat]
+					status_stat_mod_changed.emit(stat, status.stat_mods[stat])
+				damage += status.damage
 #endregion

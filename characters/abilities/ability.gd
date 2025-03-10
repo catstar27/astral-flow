@@ -62,7 +62,6 @@ func duplicate_ability(subresources: bool = false)->Ability:
 	var status_dict: Dictionary[Status, status_effect_conditions]
 	for status_to_copy in statuses.keys():
 		status_dict[status_to_copy.duplicate(true)] = statuses[status_to_copy]
-	copy1.set_status_actions()
 	return copy1
 #endregion
 
@@ -161,8 +160,6 @@ func inflict_status(target: Node2D, status: Status)->void:
 	if status == null:
 		return
 	if target != null && target.has_method("add_status"):
-		if status.action_name != "":
-			status.action_args = get_status_action_args(target.global_position, status.action)
 		target.call_deferred("add_status", status, user)
 #endregion
 
@@ -213,29 +210,5 @@ func play_sound()->void:
 #endregion
 
 #region Status Functions
-## Sets the actions on given status
-func set_status_actions()->void:
-	for status in statuses.keys():
-		if status.action_name != "":
-			status.action = get(status.action_name)
 
-## Gets the arguments for each status function stored here
-func get_status_action_args(destination: Vector2, action: Callable)->Array:
-	if action == push:
-		return [get_target(destination), destination-user.global_position]
-	return []
-
-## Pushes a target
-func push(data: Array)->void:
-	if data == [] || data[0] == null:
-		return
-	var target: Node2D = data[0]
-	var prev_pos: Vector2 = target.global_position
-	var destination: Vector2 = target.global_position+data[1]
-	var path: Array[Vector2] = NavMaster.request_nav_path(prev_pos, destination, false)
-	path.pop_front()
-	if path.size() == 1:
-		EventBus.broadcast("TILE_OCCUPIED", [path.front(), target])
-		await user.create_tween().tween_property(target, "position", path.front(), .1).finished
-		EventBus.broadcast("TILE_UNOCCUPIED", prev_pos)
 #endregion

@@ -105,8 +105,7 @@ func set_pos_occupied(data: Array)->void:
 		printerr("Attempted to set pos occupied with invalid arguments: "+str(data))
 		return
 	var tile: Vector2i = local_to_map(data[0])
-	if tile not in occupied_tiles:
-		occupied_tiles[tile] = data[1]
+	occupied_tiles[tile] = data[1]
 	astar.set_point_solid(tile, true)
 
 ## Sets the given position to be unoccupied

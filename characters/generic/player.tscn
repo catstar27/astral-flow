@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://qjb7sn1qkk44"]
+[gd_scene load_steps=21 format=3 uid="uid://qjb7sn1qkk44"]
 
 [ext_resource type="Script" uid="uid://duk342kn2rflp" path="res://characters/generic/player.gd" id="1_so47p"]
 [ext_resource type="Script" uid="uid://b0xbk38jyra5a" path="res://characters/abilities/ability.gd" id="2_6rrl0"]
@@ -8,6 +8,7 @@
 [ext_resource type="Texture2D" uid="uid://s8uq7nt6t7do" path="res://textures/character/kalin_spritesheet_n.png" id="4_4kvvd"]
 [ext_resource type="AnimationLibrary" uid="uid://d2follnewo23r" path="res://animations/Character.res" id="4_b3lbu"]
 [ext_resource type="Resource" uid="uid://c6f0begbutw3l" path="res://characters/abilities/block.tres" id="4_eus45"]
+[ext_resource type="Resource" uid="uid://bfr7tnw5d5sp5" path="res://characters/abilities/push.tres" id="5_ri3wm"]
 [ext_resource type="PackedScene" uid="uid://b7psjacfk2o1y" path="res://characters/abilities/statuses/status_manager.tscn" id="6_5iydw"]
 [ext_resource type="PackedScene" uid="uid://dj1dbu04os5rj" path="res://misc/state_machine/state_machine.tscn" id="6_g6tfj"]
 [ext_resource type="PackedScene" uid="uid://co558pdmpfij5" path="res://characters/states/move.tscn" id="7_uo70b"]
@@ -92,7 +93,7 @@ star_stats = Dictionary[String, int]({
 "strength": 12
 })
 display_name = "Kalin"
-export_abilities = Array[ExtResource("2_6rrl0")]([ExtResource("3_6rrl0"), ExtResource("4_eus45")])
+export_abilities = Array[ExtResource("2_6rrl0")]([ExtResource("3_6rrl0"), ExtResource("4_eus45"), ExtResource("5_ri3wm")])
 
 [node name="Sprite" type="Sprite2D" parent="."]
 unique_name_in_owner = true

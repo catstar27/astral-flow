@@ -44,6 +44,7 @@ enum ai_types { ## Options for enemy ai
 @export var dialogue: DialogicTimeline ## Dialogue for the NPC to enter when interacted
 @export var text_indicator_shift: Vector2 = Vector2.UP*32 ## Distance away from this to spawn text indicators
 @export var export_abilities: Array[Ability] = [] ## Exported ability list for initial abilities
+@export var starting_statuses: Array[Status] ## List of statuses to start with
 @export_group("Combat") ## Exports related to combat ai and what this considers an enemy
 @export var ai_type: ai_types ## This enemy's ai type
 @export var allies: Array[Character] = [] ## List of allies to bring into combat alongside this character
@@ -99,6 +100,7 @@ signal pos_changed(character: Character) ## Emitted when the character's positio
 signal ended_turn(character: Character) ## Emitted when the character's turn ends
 signal stats_changed ## Emitted when the character's stats change
 signal abilities_changed ## Emitted when the character's abilities change
+signal surrendered ## Emitted if the character wishes to end combat
 signal defeated ## Emitted upon defeat; Sends nothing
 signal defeated_node(node: Character) ## Emitted upon defeat; Sends the character defeated
 signal defeated_at(pos: Vector2) ## Emitted upon defeat; Sends the character defeated position
@@ -137,6 +139,7 @@ func _setup()->void:
 	set_outline_color()
 	EventBus.subscribe("GAMEPLAY_SETTINGS_CHANGED", self, "set_outline_color")
 	init_schedule()
+	init_statuses()
 
 ## Duplicates the export abilities, copying them into the actual ability array
 func duplicate_export_abilities()->void:
@@ -237,6 +240,10 @@ func exit_combat()->void:
 ## Rolls the character's current sequence, adding randomness to the turn order
 func roll_sequence()->void:
 	sequence = base_stats.sequence+stat_mods.sequence+randi_range(1,10)
+
+## Attempts to surrender combat
+func surrender()->void:
+	surrendered.emit()
 
 ## Called upon defeat; also deactivates the character
 func on_defeated()->void:
@@ -339,11 +346,21 @@ func remove_range_indicators()->void:
 #endregion
 
 #region Status
+## Initializes the status list with starting statuses
+func init_statuses()->void:
+	status_manager.remove_all_statuses()
+	for status in starting_statuses:
+		if status.action_name != "":
+			printerr("Initial statuses with status actions are not supported!")
+			continue
+		add_status(status.duplicate(true), self, true)
+
 ## Adds the given status to this character
-func add_status(status: Status, source: Node)->void:
+func add_status(status: Status, source: Node, quiet_add: bool = false)->void:
 	status_manager.add_status(status, source)
 	var info: Array = [status.display_name, text_indicator_shift+global_position, status.status_color]
-	EventBus.broadcast("MAKE_TEXT_INDICATOR", info)
+	if !quiet_add:
+		EventBus.broadcast("MAKE_TEXT_INDICATOR", info)
 
 ## Processes a status action, running the function with the given args
 func process_status_action(action: Callable, args: Array)->void:
@@ -487,6 +504,7 @@ func load_data(dir: String)->void:
 			var_name = file.get_var()
 		file.close()
 	position = NavMaster.map.map_to_local(NavMaster.map.local_to_map(position))
+	init_statuses()
 	load_extra()
 	state_machine.unpause()
 	if active:
