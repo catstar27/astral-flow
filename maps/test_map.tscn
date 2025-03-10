@@ -40,11 +40,10 @@
 [ext_resource type="Resource" uid="uid://djnw1m6acv55m" path="res://dialogue/test_room_duel.dtl" id="37_dpap0"]
 [ext_resource type="Script" uid="uid://b0xbk38jyra5a" path="res://characters/abilities/ability.gd" id="37_gpbd4"]
 [ext_resource type="Resource" uid="uid://dae4xdag0nd3v" path="res://characters/abilities/punch.tres" id="38_dpap0"]
-[ext_resource type="Script" uid="uid://cuvk331ioveg" path="res://characters/tasks/npc_task.gd" id="38_jrvla"]
-[ext_resource type="Script" uid="uid://co2e1ra3i780n" path="res://characters/tasks/move.gd" id="38_v6peg"]
-[ext_resource type="Script" uid="uid://cvn861203hxla" path="res://characters/tasks/wait.gd" id="39_v6peg"]
-[ext_resource type="Script" uid="uid://cc0tmmsk43e7j" path="res://characters/tasks/patrol.gd" id="40_7i0lg"]
-[ext_resource type="Script" uid="uid://dkbyrhd2t1qnd" path="res://characters/tasks/interact.gd" id="43_cjebi"]
+[ext_resource type="Script" uid="uid://cuvk331ioveg" path="res://characters/tasks/task.gd" id="38_jrvla"]
+[ext_resource type="Script" uid="uid://co2e1ra3i780n" path="res://characters/tasks/task_types/move.gd" id="38_v6peg"]
+[ext_resource type="Script" uid="uid://cvn861203hxla" path="res://characters/tasks/task_types/wait.gd" id="39_v6peg"]
+[ext_resource type="Script" uid="uid://eg2p4dq2kutt" path="res://characters/tasks/schedule.gd" id="40_gpbd4"]
 
 [sub_resource type="CanvasTexture" id="CanvasTexture_6k8ls"]
 diffuse_texture = ExtResource("5_5jmsy")
@@ -81,7 +80,34 @@ diffuse_texture = ExtResource("15_ghxts")
 normal_texture = ExtResource("35_k202b")
 specular_texture = ExtResource("36_ms4id")
 
+[sub_resource type="Resource" id="Resource_gpbd4"]
+script = ExtResource("38_v6peg")
+move_location = Vector2(-224, -544)
+hour_start = 0
+hour_end = 0
+minute_start = 0
+minute_end = 0
+metadata/_custom_type_script = "uid://co2e1ra3i780n"
+
+[sub_resource type="Resource" id="Resource_dpap0"]
+script = ExtResource("38_v6peg")
+move_location = Vector2(352, -544)
+hour_start = 0
+hour_end = 0
+minute_start = 0
+minute_end = 0
+metadata/_custom_type_script = "uid://co2e1ra3i780n"
+
 [sub_resource type="Resource" id="Resource_ysqq4"]
+script = ExtResource("38_v6peg")
+move_location = Vector2(32, -544)
+hour_start = 0
+hour_end = 0
+minute_start = 0
+minute_end = 0
+metadata/_custom_type_script = "uid://co2e1ra3i780n"
+
+[sub_resource type="Resource" id="Resource_llove"]
 script = ExtResource("39_v6peg")
 wait_time = 1.0
 hour_start = 0
@@ -91,31 +117,11 @@ minute_end = 0
 metadata/_custom_type_script = "uid://cvn861203hxla"
 
 [sub_resource type="Resource" id="Resource_k202b"]
-script = ExtResource("40_7i0lg")
-patrol_points = Array[Vector2]([Vector2(-224, -544), Vector2(352, -544), Vector2(32, -544)])
-hour_start = 0
-hour_end = 0
-minute_start = 0
-minute_end = 0
-metadata/_custom_type_script = "uid://cc0tmmsk43e7j"
-
-[sub_resource type="Resource" id="Resource_gpbd4"]
-script = ExtResource("43_cjebi")
-interact_pos = Vector2(32, -608)
-hour_start = 0
-hour_end = 0
-minute_start = 0
-minute_end = 0
-metadata/_custom_type_script = "uid://dkbyrhd2t1qnd"
-
-[sub_resource type="Resource" id="Resource_llove"]
-script = ExtResource("38_v6peg")
-move_location = Vector2(288, -736)
-hour_start = 0
-hour_end = 0
-minute_start = 0
-minute_end = 0
-metadata/_custom_type_script = "uid://co2e1ra3i780n"
+script = ExtResource("40_gpbd4")
+tasks = Array[ExtResource("38_jrvla")]([SubResource("Resource_gpbd4"), SubResource("Resource_dpap0"), SubResource("Resource_ysqq4"), SubResource("Resource_llove")])
+loop_schedule = true
+use_timed_schedule = false
+metadata/_custom_type_script = "uid://eg2p4dq2kutt"
 
 [node name="TestMap" type="TileMapLayer"]
 process_mode = 1
@@ -254,14 +260,12 @@ position = Vector2(32, -544)
 display_name = "???"
 dialogue = ExtResource("37_dpap0")
 export_abilities = Array[ExtResource("37_gpbd4")]([ExtResource("38_dpap0")])
-schedule = Array[ExtResource("38_jrvla")]([SubResource("Resource_ysqq4"), SubResource("Resource_k202b")])
-loop_schedule = true
+schedules = Array[ExtResource("40_gpbd4")]([SubResource("Resource_k202b")])
 
 [node name="Nilak" parent="." instance=ExtResource("31_w8a5m")]
 position = Vector2(480, -288)
 display_name = "Nilak"
 dialogue = ExtResource("32_lfqa0")
-schedule = Array[ExtResource("38_jrvla")]([SubResource("Resource_gpbd4"), SubResource("Resource_llove")])
 active = false
 
 [connection signal="unlocked" from="InteractPuzzleGate" to="Stranger" method="stop_looping"]

@@ -50,10 +50,7 @@ enum ai_types { ## Options for enemy ai
 @export var enemies: Array[Character] = [] ## List of enemies to watch for
 @export var hostile_to_player: bool = false ## Whether this character attacks the player on sight
 @export_group("Schedule") ## Exports related to this character's schedule. Do not use for the player
-@export var use_timed_schedule: bool ## Whether the schedule changes based on in game time
-@export var schedule: Array[NPCTask] ## List of tasks for the character to carry out
-@export var loop_schedule: bool = false ## Whether the schedule repeats when reaching the end
-@export var task_blocked_dialogue: DialogicTimeline ## Dialogue to trigger when a task is blocked from completion
+@export var schedules: Array[Schedule] ## List of tasks for the character to carry out
 @export_group("Activation") ## Exports related to character's active state
 @export var active: bool = true ## Whether the character is active in the game map or disabled
 #endregion
@@ -74,8 +71,8 @@ var selected_ability: Ability = null ## Ability attempted to be used by the char
 var cur_ap: int ## Character's current action points
 var cur_mp: int ## Character's current health points
 var cur_hp: int ## Character's current magic points
-var schedule_index: int = 0 ## Current index of the task being executed
-var schedule_executed: bool = false ## Whether the schedule has been fully executed
+var schedule_index: int = 0 ## Current index of the schedule being executed
+var current_schedule_executed: bool = false ## Whether the current schedule has been finished at least once
 var schedule_processing: bool = false ## Whether the schedule is being executed currently
 var is_selected: bool = false ## Whether this character is selected
 var combat_target: Character = null ## The character this is attempting to attack
@@ -89,9 +86,8 @@ var to_save: Array[StringName] = [ ## Variables to save
 	"cur_ap",
 	"cur_mp",
 	"active",
-	"schedule_executed",
+	"current_schedule_executed",
 	"schedule_index",
-	"loop_schedule"
 ]
 #endregion
 #region Signals
@@ -178,44 +174,33 @@ func rest()->void:
 	rested.emit()
 #endregion
 
-#region Tasks
+#region Schedule
 ## Initializes the schedule by setting the user of all tasks and copying the tasks
 func init_schedule()->void:
-	for index in range(0, schedule.size()):
-		schedule[index] = schedule[index].duplicate(true)
-		schedule[index].user = self
+	for index in range(0, schedules.size()):
+		schedules[index] = schedules[index].duplicate_schedule()
+		schedules[index].user = self
+		schedules[index].init_schedule()
 
-## Processes the schedule, running the proper task
-func process_schedule()->void:
-	if schedule.size() == 0 || in_combat || !active:
+## Starts executing the next schedule in the array
+func next_schedule()->void:
+	if schedule_index == schedules.size()-1:
+		printerr("Attempted to change to nonexistent schedule in character "+display_name)
 		return
-	if !loop_schedule && schedule_executed:
-		return
-	if !use_timed_schedule:
-		schedule_processing = true
-		schedule[schedule_index].task_completed.connect(task_done)
-		schedule[schedule_index].call_deferred("execute_task")
-
-## Called when the current task has been executed to determine the next action to take
-func task_done()->void:
-	schedule[schedule_index].task_completed.disconnect(task_done)
-	schedule_processing = false
-	schedule_index = (schedule_index+1)%schedule.size()
-	if (schedule_index == 0 && !loop_schedule) || !active:
-		if schedule_index == 0:
-			schedule_executed = true
-		return
-	process_schedule()
+	stop_looping()
+	schedules[schedule_index].pause.emit()
+	schedule_index += 1
+	schedules[schedule_index].process_schedule()
 
 ## Stops the schedule from looping
 func stop_looping()->void:
-	loop_schedule = false
+	schedules[schedule_index].loop_schedule = false
 
 ## Starts looping the schedule
 func start_looping()->void:
-	if !loop_schedule && schedule_executed:
-		loop_schedule = true
-		process_schedule()
+	if !schedules[schedule_index].loop_schedule && schedules[schedule_index].schedule_executed && schedules.size() > 0:
+		schedules[schedule_index].loop_schedule = true
+		schedules[schedule_index].process_schedule()
 #endregion
 
 #region Orders
@@ -246,7 +231,8 @@ func enter_combat()->void:
 func exit_combat()->void:
 	in_combat = false
 	combat_exited.emit()
-	process_schedule()
+	if schedules.size() > 0:
+		schedules[schedule_index].process_schedule()
 
 ## Rolls the character's current sequence, adding randomness to the turn order
 func roll_sequence()->void:
@@ -454,8 +440,8 @@ func activate(pos: Vector2)->void:
 	position = pos
 	EventBus.broadcast("TILE_OCCUPIED", [pos, self])
 	show()
-	if !schedule_processing:
-		process_schedule()
+	if !schedule_processing && schedules.size() > 0:
+		schedules[schedule_index].process_schedule()
 
 ## Deactivates the character
 func deactivate()->void:
@@ -474,8 +460,8 @@ func on_damaged(_source: Node)->void:
 ## Saves the character's data
 func save_data(dir: String)->void:
 	stop_move_order.emit()
-	if active && schedule != []:
-		schedule[schedule_index].pause.emit()
+	if active && schedules.size() > 0:
+		schedules[schedule_index].pause.emit()
 	var file: FileAccess = FileAccess.open(dir+name+".dat", FileAccess.WRITE)
 	if file == null:
 		printerr("Failed to open save file for character "+name+"!")
@@ -485,8 +471,8 @@ func save_data(dir: String)->void:
 		file.store_var(get(var_name))
 	file.store_var("END")
 	file.close()
-	if active && schedule != []:
-		schedule[schedule_index].unpause.emit()
+	if active && schedules.size() > 0:
+		schedules[schedule_index].unpause.emit()
 	saved.emit(self)
 
 ## Loads the character's data and resets position to be centered to the tile

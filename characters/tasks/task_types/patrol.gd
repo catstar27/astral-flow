@@ -1,4 +1,4 @@
-extends NPCTask
+extends Task
 class_name PatrolTask
 ## Task that makes the user move between an array of positions
 ##

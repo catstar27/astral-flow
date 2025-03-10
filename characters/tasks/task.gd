@@ -1,5 +1,5 @@
 extends Resource
-class_name NPCTask
+class_name Task
 ## Base class representing an npc task
 ##
 ## Does nothing on its own, use subtypes instead

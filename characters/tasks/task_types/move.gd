@@ -1,4 +1,4 @@
-extends NPCTask
+extends Task
 class_name MoveTask
 ## Task that makes the user move to a target location
 ##

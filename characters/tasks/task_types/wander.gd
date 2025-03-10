@@ -1,4 +1,4 @@
-extends NPCTask
+extends Task
 class_name WanderTask
 ## A task that makes an npc wander around a home point a number of tiles within a set maximum
 

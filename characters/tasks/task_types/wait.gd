@@ -1,4 +1,4 @@
-extends NPCTask
+extends Task
 class_name WaitTask
 ## Makes the user wait and do nothing for a set time
 

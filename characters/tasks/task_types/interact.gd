@@ -1,4 +1,4 @@
-extends NPCTask
+extends Task
 class_name InteractTask
 ## Task that makes the user interact with an object at target location
 ##
