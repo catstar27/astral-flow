@@ -1,3 +1,4 @@
+@tool
 extends Interactive
 class_name InteractivePointLight
 ## Interactive that casts light around itself and can be toggled

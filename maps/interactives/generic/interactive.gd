@@ -1,3 +1,4 @@
+@tool
 extends StaticBody2D
 class_name Interactive
 ## Base interactive class that represents objects that can be interacted with
@@ -6,9 +7,18 @@ class_name Interactive
 ## Can be a variety of sizes, taking up any number of tiles
 ## Can function on its own for simple dialogue triggers
 
-@export var texture: Texture2D ## Texture of the interactive
-@export var dimensions: Vector2i = Vector2i.ONE ## Dimensions of the interactive
-@export var offset: Vector2 = Vector2.ZERO ## Offset of the interactive's sprite
+@export var texture: Texture2D: ## Texture of the interactive
+	set(tex):
+		texture = tex
+		%Sprite.texture = tex
+@export var dimensions: Vector2i = Vector2i.ONE: ## Dimensions of the interactive
+	set(dim):
+		dimensions = dim
+		calc_size_properties()
+@export var offset: Vector2 = Vector2.ZERO: ## Offset of the interactive's sprite
+	set(new_offset):
+		offset = new_offset
+		$Sprite.offset = new_offset
 @export var interact_sfx: AudioStreamWAV ## Sound to play when interacted with
 @export_group("Dialogic") ## Variables related to dialogue
 @export var dialogue: DialogicTimeline ## Dialogue to play when this is interacted with
@@ -23,15 +33,7 @@ signal interacted ## Emitted when interacted with
 
 ## Sets up the interactive, scaling it properly and setting its position
 func setup()->void:
-	collision.scale = Vector2(float(dimensions.x)/scale.x, float(dimensions.y)/scale.y)
-	_calc_occupied()
-	var shift_pos: Vector2 = get_middle(occupied_positions) - position
-	collision.position = shift_pos
-	sprite.position = shift_pos
-	if texture != null:
-		sprite.texture = texture
-	if offset != Vector2.ZERO:
-		sprite.offset = offset
+	calc_size_properties()
 	if dialogue != null:
 		dialogue_timeline = dialogue
 	setup_extra()
@@ -39,6 +41,13 @@ func setup()->void:
 ## Called after base class setup
 func setup_extra()->void:
 	return
+
+func calc_size_properties()->void:
+	$Collision.scale = Vector2(float(dimensions.x)/scale.x, float(dimensions.y)/scale.y)
+	_calc_occupied()
+	var shift_pos: Vector2 = get_middle(occupied_positions) - position
+	$Collision.position = shift_pos
+	$Sprite.position = shift_pos
 
 ## Gets the middle of the given positions
 func get_middle(positions: Array[Vector2])->Vector2:
@@ -55,8 +64,8 @@ func _calc_occupied()->void:
 		return
 	for x in range(0, dimensions.x):
 		for y in range(0, dimensions.y):
-			var x_scaled: int = x*NavMaster.tile_size
-			var y_scaled: int = y*NavMaster.tile_size
+			var x_scaled: int = x*64
+			var y_scaled: int = y*64
 			occupied_positions.append(position+Vector2(x_scaled, y_scaled))
 
 ## Called when this interactive is interacted with

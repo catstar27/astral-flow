@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://j4wt7r7pk3ip" path="res://maps/interactives/generic/travel_point.gd" id="1_2msm6"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_4ou26"]
-size = Vector2(40, 40)
+size = Vector2(64, 64)
 
 [node name="TravelPoint" type="StaticBody2D"]
 collision_layer = 2

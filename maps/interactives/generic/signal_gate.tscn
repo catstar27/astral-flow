@@ -4,6 +4,7 @@
 [ext_resource type="AudioStream" uid="uid://b8ebt3ntvbdjl" path="res://sfx/door.wav" id="2_v36mo"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_4ou26"]
+size = Vector2(64, 64)
 
 [node name="SignalGate" type="StaticBody2D" groups=["LevelSave"]]
 collision_layer = 2

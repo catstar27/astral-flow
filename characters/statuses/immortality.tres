@@ -28,6 +28,6 @@ stacks = 1
 condition = 1
 action_name = "full_heal"
 status_color = Color(1, 0.713726, 0, 1)
-id = "IMMORTAILITY"
+id = "IMMORTALITY"
 display_name = "Immortality"
 metadata/_custom_type_script = "uid://dxv7e1j21poh5"

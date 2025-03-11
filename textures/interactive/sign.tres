@@ -1,0 +1,8 @@
+[gd_resource type="CanvasTexture" load_steps=3 format=3 uid="uid://b6wcqn56dvd5y"]
+
+[ext_resource type="Texture2D" uid="uid://cjklr64xiys0a" path="res://textures/interactive/sign.png" id="1_kuyh6"]
+[ext_resource type="Texture2D" uid="uid://c501rjowvd7ww" path="res://textures/interactive/sign_n.png" id="2_4dd6f"]
+
+[resource]
+diffuse_texture = ExtResource("1_kuyh6")
+normal_texture = ExtResource("2_4dd6f")

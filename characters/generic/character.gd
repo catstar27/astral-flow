@@ -383,7 +383,7 @@ func remove_range_indicators()->void:
 func init_statuses()->void:
 	status_manager.remove_all_statuses()
 	for status in starting_statuses:
-		add_status(status.duplicate(true), self, true)
+		add_status(status, self, true)
 
 ## Adds the given status to this character
 func add_status(status: Status, source: Node, quiet_add: bool = false)->void:
@@ -529,6 +529,7 @@ func save_data(dir: String)->void:
 		file.store_var(var_name)
 		file.store_var(get(var_name))
 	file.store_var("END")
+	status_manager.save_data(file)
 	file.close()
 	if active && schedules.size() > 0:
 		schedules[schedule_index].unpause.emit()
@@ -544,6 +545,7 @@ func load_data(dir: String)->void:
 		while var_name != "END":
 			set(var_name, file.get_var())
 			var_name = file.get_var()
+		status_manager.load_data(file)
 		file.close()
 	position = NavMaster.map.map_to_local(NavMaster.map.local_to_map(position))
 	if schedules.size() > 0:

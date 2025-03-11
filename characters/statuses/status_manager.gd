@@ -53,7 +53,7 @@ func add_status(status: Status, source: Node)->void:
 func tick_status()->void:
 	if damage != 0:
 		status_damage_ticked.emit(damage)
-	for status in status_list:
+	for status in status_list.keys():
 		if status.time_choice == status.time_options.timed:
 			status.duration -= 1
 			if status.duration == 0:
@@ -87,7 +87,7 @@ func remove_all_statuses()->void:
 
 ## Returns a status in the current list matching given id, or null if there is none
 func get_matching_status(id: String)->Status:
-	for status in status_list:
+	for status in status_list.keys():
 		if status.id == id:
 			return status
 	return null
@@ -96,13 +96,13 @@ func get_matching_status(id: String)->Status:
 #region Process Clear Condition Signals
 ## Clears statuses that end on movement
 func process_move(_pos)->void:
-	for status in status_list:
+	for status in status_list.keys():
 		if status.clear_conditions.move:
 			remove_status(status)
 
 ## Clears statuses that end on rest
 func process_rest()->void:
-	for status in status_list:
+	for status in status_list.keys():
 		if status.clear_conditions.rest:
 			remove_status(status)
 
@@ -110,7 +110,7 @@ func process_rest()->void:
 func process_damage(source: Node)->void:
 	if source == self:
 		return
-	for status in status_list:
+	for status in status_list.keys():
 		if status.clear_conditions.take_damage:
 			remove_status(status)
 #endregion
@@ -134,4 +134,26 @@ func trigger_on_death()->void:
 				remove_status(status)
 	processing_conditionals = false
 	conditionals_processed.emit()
+#endregion
+
+#region Save and Load
+## Saves this status manager's statuses to the given file
+func save_data(file: FileAccess)->void:
+	for status in status_list.keys():
+		if status.resource_path != "":
+			file.store_var(status.resource_path)
+			file.store_var(status_list[status])
+	file.store_var("STATUS_MANAGER_END")
+
+## Loads this status manager's statuses from the given file
+func load_data(file: FileAccess)->void:
+	var target: String = file.get_var()
+	while target != "STATUS_MANAGER_END":
+		var stacks: int = file.get_var()
+		for num in range(0, stacks):
+			var new_status: Status = load(target)
+			var matching_status: Status = get_matching_status(new_status.id)
+			if matching_status == null || status_list[matching_status] < stacks:
+				add_status(new_status, get_parent())
+		target = file.get_var()
 #endregion

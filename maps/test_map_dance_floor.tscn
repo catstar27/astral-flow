@@ -7,8 +7,8 @@
 [ext_resource type="PackedScene" uid="uid://iwh84j268tml" path="res://maps/interactives/generic/interactive.tscn" id="4_njv6h"]
 [ext_resource type="AudioStream" uid="uid://dqghmnw6mpids" path="res://music/carefree_carousel.wav" id="4_to652"]
 [ext_resource type="Resource" uid="uid://bfqfriuuyo85e" path="res://dialogue/tutorial_completion.dtl" id="5_pmpyx"]
-[ext_resource type="Texture2D" uid="uid://dpnsq7nn8m0l2" path="res://textures/interactive/stairs.png" id="6_wcq4g"]
 [ext_resource type="PackedScene" uid="uid://cexm0cxkxol76" path="res://maps/interactives/generic/travel_point.tscn" id="7_3ojlr"]
+[ext_resource type="Texture2D" uid="uid://c52i6qxjfvprb" path="res://textures/interactive/exit_stairs.tres" id="7_lm3pf"]
 [ext_resource type="PackedScene" uid="uid://bxbk83doy5d81" path="res://characters/generic/npc.tscn" id="10_ll2lb"]
 [ext_resource type="Script" uid="uid://eg2p4dq2kutt" path="res://characters/tasks/schedule.gd" id="11_lm3pf"]
 [ext_resource type="Script" uid="uid://cuvk331ioveg" path="res://characters/tasks/task.gd" id="12_ptbar"]
@@ -74,7 +74,7 @@ rotation = 1.5708
 [node name="ExitStairs" parent="." instance=ExtResource("4_njv6h")]
 position = Vector2(352, 32)
 rotation = 3.14159
-texture = ExtResource("6_wcq4g")
+texture = ExtResource("7_lm3pf")
 dialogue = ExtResource("5_pmpyx")
 
 [node name="EntryStairs" parent="." instance=ExtResource("7_3ojlr")]
@@ -83,7 +83,7 @@ exit_direction = 3
 entrance_id = "dance_party_left"
 target_entrance_id = "tutorial"
 new_map = "res://maps/test_map.tscn"
-texture = ExtResource("6_wcq4g")
+texture = ExtResource("7_lm3pf")
 
 [node name="NPC" parent="." instance=ExtResource("10_ll2lb")]
 position = Vector2(-96, -96)

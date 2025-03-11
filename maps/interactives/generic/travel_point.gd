@@ -1,3 +1,4 @@
+@tool
 extends Interactive
 class_name TravelPoint
 ## An interactive that changes the map

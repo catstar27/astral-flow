@@ -1,10 +1,11 @@
+@tool
 extends Interactive
 class_name SignalGate
 ## Gate that is locked until a set of signals are triggered
 ##
 ## Can optionally require a specific order for the signals
 
-@export var locked_texture: Texture ## Texture of the gate when locked
+@export var open_texture: Texture ## Texture of the gate when locked
 @export var open_sound: AudioStreamWAV ## Sound to play when the gate opens
 @export var signals_needed: Array[String] = [] ## Signals needed for the gate to open
 @export var auto_open: bool = false ## Whether the gate opens automatically when unlocked
@@ -29,17 +30,12 @@ signal saved(node: SignalGate) ## Emitted when saved
 signal loaded(node: SignalGate) ## Emitted when loaded
 
 func setup_extra()->void:
-	var shape: RectangleShape2D = RectangleShape2D.new()
-	shape.size = 64*Vector2(float(dimensions.x)/scale.x, float(dimensions.y)/scale.y)
 	if cur_state != state.open:
-		collision.shape = shape
-		sprite.texture = locked_texture
 		if is_dialogic && cur_state == state.locked:
 			Dialogic.VAR.set(dialogic_var, signal_index)
 	if is_dialogic:
 		if !Dialogic.signal_event.is_connected(advance_unlock):
 			Dialogic.signal_event.connect(advance_unlock)
-	_calc_occupied()
 
 func _interact_extra(_character: Character)->void:
 	if cur_state == state.unlocked:
@@ -49,7 +45,7 @@ func _interact_extra(_character: Character)->void:
 func open(quiet_open: bool = false)->void:
 	cur_state = state.open
 	allow_dialogue = false
-	sprite.texture = texture
+	sprite.texture = open_texture
 	collision.set_deferred("disabled", true)
 	if !quiet_open:
 		EventBus.broadcast("PLAY_SOUND", [open_sound, "positional", global_position])
@@ -62,7 +58,7 @@ func open(quiet_open: bool = false)->void:
 func close()->void:
 	cur_state = state.locked
 	allow_dialogue = true
-	sprite.texture = locked_texture
+	sprite.texture = texture
 	collision.set_deferred("disabled", false)
 	EventBus.broadcast("PLAY_SOUND", [open_sound, "positional", global_position])
 	for pos in occupied_positions:

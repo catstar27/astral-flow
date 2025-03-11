@@ -1,4 +1,4 @@
-[gd_scene load_steps=66 format=4 uid="uid://qw4hbk40dyvm"]
+[gd_scene load_steps=60 format=4 uid="uid://qw4hbk40dyvm"]
 
 [ext_resource type="TileSet" uid="uid://dpajsxeb15k7l" path="res://maps/tilesets/dungeon.tres" id="1_bnvg4"]
 [ext_resource type="Script" uid="uid://b8kw4ghpy3r8t" path="res://maps/game_map.gd" id="2_rvbrh"]
@@ -6,84 +6,66 @@
 [ext_resource type="Resource" uid="uid://c0qpu0p6pyf07" path="res://dialogue/tutorial_help_sign.dtl" id="4_6q77p"]
 [ext_resource type="PackedScene" uid="uid://iwh84j268tml" path="res://maps/interactives/generic/interactive.tscn" id="4_72sth"]
 [ext_resource type="AudioStream" uid="uid://duak0a258sghg" path="res://music/bounce_back.wav" id="4_5082e"]
-[ext_resource type="Texture2D" uid="uid://cjklr64xiys0a" path="res://textures/interactive/sign.png" id="5_5jmsy"]
-[ext_resource type="Texture2D" uid="uid://be0foyybi4008" path="res://textures/interactive/sun.png" id="6_dg1xt"]
+[ext_resource type="Texture2D" uid="uid://b6wcqn56dvd5y" path="res://textures/interactive/sign.tres" id="6_a5lo2"]
 [ext_resource type="Resource" uid="uid://hh2pu7qnxwmr" path="res://dialogue/tutorial_sun.dtl" id="6_lwn61"]
-[ext_resource type="Texture2D" uid="uid://dp8dy1cpk5km0" path="res://textures/interactive/couch.png" id="7_g1jef"]
-[ext_resource type="Texture2D" uid="uid://binxw1c1e5vyc" path="res://textures/interactive/dog.png" id="7_vnn2i"]
-[ext_resource type="Texture2D" uid="uid://dei0ir8jap6a" path="res://textures/interactive/grapes.png" id="8_1rt1a"]
 [ext_resource type="Resource" uid="uid://bcxwb2tooui81" path="res://dialogue/tutorial_couch.dtl" id="8_elwwl"]
-[ext_resource type="Texture2D" uid="uid://c501rjowvd7ww" path="res://textures/interactive/sign_n.png" id="8_prpsj"]
-[ext_resource type="Texture2D" uid="uid://dpnsq7nn8m0l2" path="res://textures/interactive/stairs.png" id="9_sk700"]
+[ext_resource type="Texture2D" uid="uid://be0foyybi4008" path="res://textures/interactive/sun.png" id="9_r82r0"]
 [ext_resource type="Resource" uid="uid://dt5ji5p7n6aqh" path="res://dialogue/tutorial_dog.dtl" id="10_u1hjs"]
+[ext_resource type="Texture2D" uid="uid://dp8dy1cpk5km0" path="res://textures/interactive/couch.png" id="11_jrvla"]
 [ext_resource type="PackedScene" uid="uid://8hplcp22i5re" path="res://maps/interactives/lights/wall_light.tscn" id="12_kvvyy"]
 [ext_resource type="Resource" uid="uid://dqb1tww6se515" path="res://dialogue/tutorial_grapes.dtl" id="12_shqtc"]
+[ext_resource type="Texture2D" uid="uid://b1i0lroq0snm0" path="res://textures/interactive/couch_n.png" id="12_v6peg"]
 [ext_resource type="PackedScene" uid="uid://b5mdx6baygoum" path="res://maps/interactives/generic/signal_gate.tscn" id="12_xfvy2"]
 [ext_resource type="Resource" uid="uid://c3spvp8owd4ea" path="res://dialogue/locked.dtl" id="13_ymmi3"]
+[ext_resource type="Texture2D" uid="uid://binxw1c1e5vyc" path="res://textures/interactive/dog.png" id="14_jrvla"]
 [ext_resource type="PackedScene" uid="uid://v2x25sfrymso" path="res://maps/interactives/generic/damage_activation_interactive.tscn" id="14_luyw1"]
-[ext_resource type="Texture2D" uid="uid://b1i0lroq0snm0" path="res://textures/interactive/couch_n.png" id="14_v6peg"]
-[ext_resource type="Texture2D" uid="uid://cojmn67i5ba6g" path="res://textures/interactive/tesla_coil.png" id="15_ghxts"]
+[ext_resource type="Texture2D" uid="uid://c0dsxp62egbv" path="res://textures/interactive/gate_closed.tres" id="15_prpsj"]
+[ext_resource type="Texture2D" uid="uid://dxv2p6xoxo4n0" path="res://textures/interactive/dog_n.png" id="15_v6peg"]
 [ext_resource type="PackedScene" uid="uid://cexm0cxkxol76" path="res://maps/interactives/generic/travel_point.tscn" id="16_c5dte"]
-[ext_resource type="Texture2D" uid="uid://dxv2p6xoxo4n0" path="res://textures/interactive/dog_n.png" id="17_7i0lg"]
+[ext_resource type="Texture2D" uid="uid://dei0ir8jap6a" path="res://textures/interactive/grapes.png" id="17_7i0lg"]
 [ext_resource type="Resource" uid="uid://byr6mgv4py3bh" path="res://dialogue/tesla_coil_active.dtl" id="17_7sy0y"]
 [ext_resource type="Resource" uid="uid://ckggu1n1nt8o3" path="res://dialogue/tesla_coil_inactive.dtl" id="17_er6pd"]
-[ext_resource type="Texture2D" uid="uid://duqdqyqo5mrlv" path="res://textures/interactive/grapes_n.png" id="20_cjebi"]
+[ext_resource type="Texture2D" uid="uid://bn6djv1k2bj0b" path="res://textures/interactive/gate_open.tres" id="17_r82r0"]
+[ext_resource type="Texture2D" uid="uid://duqdqyqo5mrlv" path="res://textures/interactive/grapes_n.png" id="18_cjebi"]
 [ext_resource type="Resource" uid="uid://co4tp7daojscr" path="res://dialogue/tutorial_run_sign.dtl" id="20_mlbwn"]
-[ext_resource type="Texture2D" uid="uid://wu4x3o502bfq" path="res://textures/interactive/stairs_n.png" id="23_gpbd4"]
-[ext_resource type="Texture2D" uid="uid://dkgiwp2iwkxkf" path="res://textures/interactive/stairs_s.png" id="24_dpap0"]
-[ext_resource type="Texture2D" uid="uid://c0dsxp62egbv" path="res://textures/interactive/gate_closed.tres" id="26_ysqq4"]
-[ext_resource type="Texture2D" uid="uid://bn6djv1k2bj0b" path="res://textures/interactive/gate_open.tres" id="28_llove"]
+[ext_resource type="Texture2D" uid="uid://c52i6qxjfvprb" path="res://textures/interactive/exit_stairs.tres" id="21_cjebi"]
+[ext_resource type="Texture2D" uid="uid://cojmn67i5ba6g" path="res://textures/interactive/tesla_coil.png" id="29_ysqq4"]
+[ext_resource type="Texture2D" uid="uid://33u05ljr16og" path="res://textures/interactive/tesla_coil_n.png" id="30_llove"]
+[ext_resource type="Texture2D" uid="uid://ddu4g3c61ag8s" path="res://textures/interactive/tesla_coil_s.png" id="31_k202b"]
 [ext_resource type="PackedScene" uid="uid://bxbk83doy5d81" path="res://characters/generic/npc.tscn" id="31_w8a5m"]
 [ext_resource type="Resource" uid="uid://dprgv3h7cyx52" path="res://dialogue/tutorial_npc.dtl" id="32_lfqa0"]
-[ext_resource type="Texture2D" uid="uid://33u05ljr16og" path="res://textures/interactive/tesla_coil_n.png" id="35_k202b"]
-[ext_resource type="Texture2D" uid="uid://ddu4g3c61ag8s" path="res://textures/interactive/tesla_coil_s.png" id="36_ms4id"]
+[ext_resource type="Script" uid="uid://dxv7e1j21poh5" path="res://characters/statuses/status.gd" id="37_cjebi"]
 [ext_resource type="Resource" uid="uid://djnw1m6acv55m" path="res://dialogue/tutorial_duel.dtl" id="37_dpap0"]
 [ext_resource type="Script" uid="uid://b0xbk38jyra5a" path="res://characters/abilities/ability.gd" id="37_gpbd4"]
 [ext_resource type="Script" uid="uid://esjh6105v2l5" path="res://addons/dialogic/Resources/timeline.gd" id="37_k202b"]
 [ext_resource type="Resource" uid="uid://dae4xdag0nd3v" path="res://characters/abilities/punch.tres" id="38_dpap0"]
+[ext_resource type="Resource" uid="uid://dkqwon7fs3tv5" path="res://characters/statuses/immortality.tres" id="38_gpbd4"]
 [ext_resource type="Script" uid="uid://cuvk331ioveg" path="res://characters/tasks/task.gd" id="38_jrvla"]
 [ext_resource type="Script" uid="uid://co2e1ra3i780n" path="res://characters/tasks/task_types/move.gd" id="38_v6peg"]
 [ext_resource type="Script" uid="uid://cvn861203hxla" path="res://characters/tasks/task_types/wait.gd" id="39_v6peg"]
-[ext_resource type="Script" uid="uid://dxv7e1j21poh5" path="res://characters/statuses/status.gd" id="40_dpap0"]
 [ext_resource type="Script" uid="uid://eg2p4dq2kutt" path="res://characters/tasks/schedule.gd" id="40_gpbd4"]
 [ext_resource type="Resource" uid="uid://d270jecqm2xyx" path="res://dialogue/tutorial_nilak_revived.dtl" id="40_ms4id"]
-[ext_resource type="Resource" uid="uid://dkqwon7fs3tv5" path="res://characters/statuses/immortality.tres" id="41_ysqq4"]
 [ext_resource type="Script" uid="uid://dkbyrhd2t1qnd" path="res://characters/tasks/task_types/interact.gd" id="46_llove"]
 
-[sub_resource type="CanvasTexture" id="CanvasTexture_6k8ls"]
-diffuse_texture = ExtResource("5_5jmsy")
-normal_texture = ExtResource("8_prpsj")
+[sub_resource type="CanvasTexture" id="CanvasTexture_7i0lg"]
+diffuse_texture = ExtResource("9_r82r0")
 
-[sub_resource type="CanvasTexture" id="CanvasTexture_prpsj"]
-diffuse_texture = ExtResource("5_5jmsy")
-normal_texture = ExtResource("8_prpsj")
+[sub_resource type="CanvasTexture" id="CanvasTexture_cjebi"]
+diffuse_texture = ExtResource("11_jrvla")
+normal_texture = ExtResource("12_v6peg")
 
-[sub_resource type="CanvasTexture" id="CanvasTexture_x3as3"]
-diffuse_texture = ExtResource("7_g1jef")
-normal_texture = ExtResource("14_v6peg")
+[sub_resource type="CanvasTexture" id="CanvasTexture_gpbd4"]
+diffuse_texture = ExtResource("14_jrvla")
+normal_texture = ExtResource("15_v6peg")
 
-[sub_resource type="CanvasTexture" id="CanvasTexture_hbbc7"]
-diffuse_texture = ExtResource("7_vnn2i")
-normal_texture = ExtResource("17_7i0lg")
+[sub_resource type="CanvasTexture" id="CanvasTexture_dpap0"]
+diffuse_texture = ExtResource("17_7i0lg")
+normal_texture = ExtResource("18_cjebi")
 
-[sub_resource type="CanvasTexture" id="CanvasTexture_at7tr"]
-diffuse_texture = ExtResource("8_1rt1a")
-normal_texture = ExtResource("20_cjebi")
-
-[sub_resource type="CanvasTexture" id="CanvasTexture_q1fwp"]
-diffuse_texture = ExtResource("9_sk700")
-normal_texture = ExtResource("23_gpbd4")
-specular_texture = ExtResource("24_dpap0")
-
-[sub_resource type="CanvasTexture" id="CanvasTexture_6rbxq"]
-diffuse_texture = ExtResource("15_ghxts")
-normal_texture = ExtResource("35_k202b")
-specular_texture = ExtResource("36_ms4id")
-
-[sub_resource type="CanvasTexture" id="CanvasTexture_v6peg"]
-diffuse_texture = ExtResource("15_ghxts")
-normal_texture = ExtResource("35_k202b")
-specular_texture = ExtResource("36_ms4id")
+[sub_resource type="CanvasTexture" id="CanvasTexture_ms4id"]
+diffuse_texture = ExtResource("29_ysqq4")
+normal_texture = ExtResource("30_llove")
+specular_texture = ExtResource("31_k202b")
 
 [sub_resource type="Resource" id="Resource_gpbd4"]
 script = ExtResource("38_v6peg")
@@ -169,36 +151,36 @@ color = Color(0, 0, 0, 1)
 [node name="Sign" parent="." instance=ExtResource("4_72sth")]
 position = Vector2(-608, 160)
 rotation = -1.5708
-texture = SubResource("CanvasTexture_6k8ls")
+texture = ExtResource("6_a5lo2")
 dialogue = ExtResource("4_6q77p")
 
 [node name="Sign2" parent="." instance=ExtResource("4_72sth")]
 position = Vector2(-288, -608)
 rotation = 1.57034
-texture = SubResource("CanvasTexture_prpsj")
+texture = ExtResource("6_a5lo2")
 dialogue = ExtResource("20_mlbwn")
 
 [node name="Sun" parent="." instance=ExtResource("4_72sth")]
 position = Vector2(160, 160)
-texture = ExtResource("6_dg1xt")
+texture = SubResource("CanvasTexture_7i0lg")
 dialogue = ExtResource("6_lwn61")
 
 [node name="Couch" parent="." instance=ExtResource("4_72sth")]
 position = Vector2(96, -160)
-texture = SubResource("CanvasTexture_x3as3")
+texture = SubResource("CanvasTexture_cjebi")
 dimensions = Vector2i(2, 1)
-offset = Vector2(0, -12)
+offset = Vector2(0, -10)
 dialogue = ExtResource("8_elwwl")
 
 [node name="Dog" parent="." instance=ExtResource("4_72sth")]
 position = Vector2(-224, -160)
-texture = SubResource("CanvasTexture_hbbc7")
+texture = SubResource("CanvasTexture_gpbd4")
 dialogue = ExtResource("10_u1hjs")
 pause_music = true
 
 [node name="Grapes" parent="." instance=ExtResource("4_72sth")]
 position = Vector2(288, 32)
-texture = SubResource("CanvasTexture_at7tr")
+texture = SubResource("CanvasTexture_dpap0")
 dialogue = ExtResource("12_shqtc")
 
 [node name="TravelPoint" parent="." instance=ExtResource("16_c5dte")]
@@ -208,31 +190,31 @@ exit_direction = 1
 entrance_id = "tutorial"
 target_entrance_id = "dance_party_left"
 new_map = "res://maps/test_map_dance_floor.tscn"
-texture = SubResource("CanvasTexture_q1fwp")
+texture = ExtResource("21_cjebi")
 
 [node name="InteractPuzzleGate" parent="." instance=ExtResource("12_xfvy2")]
 position = Vector2(32, -224)
-locked_texture = ExtResource("26_ysqq4")
+open_texture = ExtResource("17_r82r0")
 signals_needed = Array[String](["test_room_sun_click", "test_room_couch_click", "test_room_dog_click", "test_room_grapes_click"])
 ordered = true
 is_dialogic = true
 dialogic_var = "test_room_puzzle_index"
-texture = ExtResource("28_llove")
+texture = ExtResource("15_prpsj")
 dialogue = ExtResource("13_ymmi3")
 
 [node name="CombatGate" parent="." instance=ExtResource("12_xfvy2")]
 position = Vector2(32, -608)
-locked_texture = ExtResource("26_ysqq4")
+open_texture = ExtResource("17_r82r0")
 signals_needed = Array[String](["???"])
-texture = ExtResource("28_llove")
+texture = ExtResource("15_prpsj")
 dialogue = ExtResource("13_ymmi3")
 
 [node name="TeslaGate" parent="." instance=ExtResource("12_xfvy2")]
 position = Vector2(32, -864)
-locked_texture = ExtResource("26_ysqq4")
+open_texture = ExtResource("17_r82r0")
 signals_needed = Array[String](["unlocked", "unlocked"])
 auto_open = true
-texture = ExtResource("28_llove")
+texture = ExtResource("15_prpsj")
 dialogue = ExtResource("13_ymmi3")
 
 [node name="WallLight" parent="." instance=ExtResource("12_kvvyy")]
@@ -275,14 +257,14 @@ position = Vector2(-544, -608)
 position = Vector2(-160, -800)
 damage_type_required = 1
 dialogue_unlocked = ExtResource("17_7sy0y")
-texture = SubResource("CanvasTexture_6rbxq")
+texture = SubResource("CanvasTexture_ms4id")
 dialogue = ExtResource("17_er6pd")
 
 [node name="TeslaCoil2" parent="." instance=ExtResource("14_luyw1")]
 position = Vector2(224, -800)
 damage_type_required = 1
 dialogue_unlocked = ExtResource("17_7sy0y")
-texture = SubResource("CanvasTexture_v6peg")
+texture = SubResource("CanvasTexture_ms4id")
 dialogue = ExtResource("17_er6pd")
 
 [node name="Nilak" parent="." instance=ExtResource("31_w8a5m")]
@@ -294,15 +276,15 @@ signal_dialogues = Dictionary[String, ExtResource("37_k202b")]({
 "Nilak": ExtResource("40_ms4id")
 })
 export_abilities = Array[ExtResource("37_gpbd4")]([ExtResource("38_dpap0")])
-starting_statuses = Array[ExtResource("40_dpap0")]([ExtResource("41_ysqq4")])
+starting_statuses = Array[ExtResource("37_cjebi")]([ExtResource("38_gpbd4")])
 schedules = Array[ExtResource("40_gpbd4")]([SubResource("Resource_k202b"), SubResource("Resource_hbbc7")])
 
 [connection signal="unlocked" from="InteractPuzzleGate" to="Nilak" method="stop_looping"]
 [connection signal="unlocked" from="TeslaCoil" to="TeslaGate" method="advance_unlock"]
 [connection signal="unlocked" from="TeslaCoil2" to="TeslaGate" method="advance_unlock"]
 [connection signal="combat_entered" from="Nilak" to="InteractPuzzleGate" method="close"]
-[connection signal="combat_exited" from="Nilak" to="Nilak" method="next_schedule"]
 [connection signal="combat_exited" from="Nilak" to="Nilak" method="next_dialogue"]
+[connection signal="combat_exited" from="Nilak" to="Nilak" method="next_schedule"]
 [connection signal="revived" from="Nilak" to="Nilak" method="surrender"]
 [connection signal="revived_named" from="Nilak" to="Nilak" method="activate_signal_dialogue"]
 [connection signal="surrendered" from="Nilak" to="InteractPuzzleGate" method="open"]

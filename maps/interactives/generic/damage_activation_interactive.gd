@@ -1,3 +1,4 @@
+@tool
 extends Interactive
 class_name DamageActivationInteractive
 ## Interactive that emits a signal when dealt damage matching a specific damage type

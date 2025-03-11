@@ -27,6 +27,10 @@ Settings="*res://misc/autoload/settings.gd"
 NavMaster="*res://misc/autoload/navmaster.gd"
 SaveLoad="*res://misc/autoload/save_load.gd"
 
+[debug]
+
+shapes/collision/shape_color=Color(0, 0.6, 0.701961, 0.243137)
+
 [dialogic]
 
 directories/dch_directory={

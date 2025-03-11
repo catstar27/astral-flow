@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://bj1y3i21pffva" path="res://maps/interactives/generic/damage_activation_interactive.gd" id="1_22vp7"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_4ou26"]
-size = Vector2(40, 40)
+size = Vector2(64, 64)
 
 [node name="DamageActivationInteractive" type="StaticBody2D" groups=["LevelSave"]]
 collision_mask = 3
