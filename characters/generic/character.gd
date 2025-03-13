@@ -94,6 +94,7 @@ var to_save: Array[StringName] = [ ## Variables to save
 	"current_schedule_executed",
 	"current_schedule_looping",
 	"schedule_index",
+	"dialogue_index",
 ]
 #endregion
 #region Signals
@@ -259,6 +260,7 @@ func surrender()->void:
 		return
 	hostile_to_player = false
 	combat_target = null
+	EventBus.broadcast("QUEST_EVENT", "defeat:"+display_name)
 	surrendered.emit()
 	surrendered_named.emit(display_name)
 	surrendered_node.emit(self)
@@ -280,6 +282,7 @@ func on_defeated()->void:
 		return
 	EventBus.broadcast("PRINT_LOG","Defeated "+display_name)
 	EventBus.broadcast("TILE_UNOCCUPIED", position)
+	EventBus.broadcast("QUEST_EVENT", "defeat:"+display_name)
 	if taking_turn:
 		ended_turn.emit(self)
 	defeated.emit()
@@ -459,8 +462,10 @@ func try_combat(character: Character)->void:
 #region Misc
 ## Called when interacted with
 func _interacted(interactor: Character)->void:
-	if dialogue_index < dialogues.size() && interactor is Player && !hostile_to_player:
-		EventBus.broadcast("ENTER_DIALOGUE", [dialogues[dialogue_index], true])
+	if interactor is Player:
+		EventBus.broadcast("QUEST_EVENT", "interact_with:"+display_name)
+		if dialogue_index < dialogues.size() && !hostile_to_player:
+			EventBus.broadcast("ENTER_DIALOGUE", [dialogues[dialogue_index], true])
 
 func activate_signal_dialogue(signal_name: String)->void:
 	if signal_name in signal_dialogues.keys():

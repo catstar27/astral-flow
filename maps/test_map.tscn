@@ -151,22 +151,26 @@ color = Color(0, 0, 0, 1)
 [node name="Sign" parent="." instance=ExtResource("4_72sth")]
 position = Vector2(-608, 160)
 rotation = -1.5708
+id = "Sign"
 texture = ExtResource("6_a5lo2")
 dialogue = ExtResource("4_6q77p")
 
 [node name="Sign2" parent="." instance=ExtResource("4_72sth")]
 position = Vector2(-288, -608)
 rotation = 1.57034
+id = "Sign"
 texture = ExtResource("6_a5lo2")
 dialogue = ExtResource("20_mlbwn")
 
 [node name="Sun" parent="." instance=ExtResource("4_72sth")]
 position = Vector2(160, 160)
+id = "Sun"
 texture = SubResource("CanvasTexture_7i0lg")
 dialogue = ExtResource("6_lwn61")
 
 [node name="Couch" parent="." instance=ExtResource("4_72sth")]
 position = Vector2(96, -160)
+id = "Couch"
 texture = SubResource("CanvasTexture_cjebi")
 dimensions = Vector2i(2, 1)
 offset = Vector2(0, -10)
@@ -174,12 +178,14 @@ dialogue = ExtResource("8_elwwl")
 
 [node name="Dog" parent="." instance=ExtResource("4_72sth")]
 position = Vector2(-224, -160)
+id = "Dog"
 texture = SubResource("CanvasTexture_gpbd4")
 dialogue = ExtResource("10_u1hjs")
 pause_music = true
 
 [node name="Grapes" parent="." instance=ExtResource("4_72sth")]
 position = Vector2(288, 32)
+id = "Grapes"
 texture = SubResource("CanvasTexture_dpap0")
 dialogue = ExtResource("12_shqtc")
 
@@ -190,6 +196,7 @@ exit_direction = 1
 entrance_id = "tutorial"
 target_entrance_id = "dance_party_left"
 new_map = "res://maps/test_map_dance_floor.tscn"
+id = "Exit"
 texture = ExtResource("21_cjebi")
 
 [node name="InteractPuzzleGate" parent="." instance=ExtResource("12_xfvy2")]
@@ -199,6 +206,7 @@ signals_needed = Array[String](["test_room_sun_click", "test_room_couch_click", 
 ordered = true
 is_dialogic = true
 dialogic_var = "test_room_puzzle_index"
+id = "InteractPuzzleGate"
 texture = ExtResource("15_prpsj")
 dialogue = ExtResource("13_ymmi3")
 
@@ -206,6 +214,7 @@ dialogue = ExtResource("13_ymmi3")
 position = Vector2(32, -608)
 open_texture = ExtResource("17_r82r0")
 signals_needed = Array[String](["???"])
+id = "CombatGate"
 texture = ExtResource("15_prpsj")
 dialogue = ExtResource("13_ymmi3")
 
@@ -214,6 +223,7 @@ position = Vector2(32, -864)
 open_texture = ExtResource("17_r82r0")
 signals_needed = Array[String](["unlocked", "unlocked"])
 auto_open = true
+id = "TeslaGate"
 texture = ExtResource("15_prpsj")
 dialogue = ExtResource("13_ymmi3")
 
@@ -257,6 +267,7 @@ position = Vector2(-544, -608)
 position = Vector2(-160, -800)
 damage_type_required = 1
 dialogue_unlocked = ExtResource("17_7sy0y")
+id = "TeslaCoil"
 texture = SubResource("CanvasTexture_ms4id")
 dialogue = ExtResource("17_er6pd")
 
@@ -264,6 +275,7 @@ dialogue = ExtResource("17_er6pd")
 position = Vector2(224, -800)
 damage_type_required = 1
 dialogue_unlocked = ExtResource("17_7sy0y")
+id = "TeslaCoil"
 texture = SubResource("CanvasTexture_ms4id")
 dialogue = ExtResource("17_er6pd")
 

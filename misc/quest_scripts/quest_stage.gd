@@ -8,12 +8,14 @@ class_name QuestStage
 ## when all objectives in it are complete.
 
 ## Dictionary of quest objectives held by this stage and their IDs
-@export var quest_objectives: Dictionary[String,QuestObjective]
+@export var show_prev_stage: bool = false ## Whether this stage should allow the previous stage to display
+@export var quest_objectives: Dictionary[String,QuestObjective] ## List of objectives in this stage
 var active: bool = false ## Whether the stage (and its objectives) are active
 var objectives_complete: int = 0 ## Number of objectives that are currently complete
 var complete: bool = false ## Whether this stage is complete
 signal stage_completed(stage: QuestStage) ## Emitted when the stage is completed
 signal objective_updated(stage: QuestObjective) ## Emitted when an objective in the stage is updated
+signal objective_completed(objective: QuestObjective) ## Emitted when an objective in the stage is completed
 
 ## Changes the stage to the active state and begins monitoring its objectives
 func activate()->void:
@@ -21,15 +23,22 @@ func activate()->void:
 	for id in quest_objectives:
 		quest_objectives[id].objective_completed.connect(stage_objective_complete)
 		quest_objectives[id].objective_updated.connect(update_stage)
+		quest_objectives[id].check_completion()
 
 ## Called when an objective is complete. Updates the stage to reflect that
 func stage_objective_complete(objective: QuestObjective)->void:
 	objective.objective_completed.disconnect(stage_objective_complete)
 	objective.objective_updated.disconnect(update_stage)
+	objective_completed.emit(objective)
 	objectives_complete += 1
 	if objectives_complete == quest_objectives.size():
 		complete = true
 		stage_completed.emit(self)
+
+## Checks if the stage is complete
+func check_completion()->void:
+	for id in quest_objectives:
+		quest_objectives[id].check_completion()
 
 ## Called when an objective in the stage updates, emitting the signal for it
 func update_stage(objective: QuestObjective)->void:
@@ -40,6 +49,15 @@ func get_stage_objectives()->Array[QuestObjective]:
 	for id in quest_objectives:
 		out.append(quest_objectives[id])
 	return out
+
+#region Save and Load
+## Duplicates this quest stage and returns the duplicate
+func duplicate_stage()->QuestStage:
+	var new_stage: QuestStage = duplicate(true)
+	new_stage.quest_objectives = {}
+	for id in quest_objectives.keys():
+		new_stage.quest_objectives[id] = quest_objectives[id].duplicate(true)
+	return new_stage
 
 ## Saves the objectives in this stage and their ids
 func save_data(file: FileAccess)->void:
@@ -57,3 +75,4 @@ func load_data(file: FileAccess)->void:
 		else:
 			quest_objectives[id].load_data(file)
 		id = file.get_var()
+#endregion

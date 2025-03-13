@@ -16,7 +16,9 @@ var active: bool = false ## Whether the quest is active
 var current_stage: int = 0 ## Current index of the quest stage
 var complete: bool = false ## Whether the quest is complete
 signal quest_complete(quest: QuestInfo) ## Emitted when the quest is completed
-signal objective_updated(stage: QuestObjective) ## Emitted when an active objective is updated
+signal stage_started(stage: QuestStage) ## Emitted when the current stage is completed
+signal objective_updated(objective: QuestObjective) ## Emitted when an active objective is updated
+signal objective_completed(objective: QuestObjective) ## Emitted when an active objective is completed
 
 ## Activates this quest and its first stage
 func activate()->void:
@@ -24,6 +26,8 @@ func activate()->void:
 	for stage in quest_stages:
 		stage.stage_completed.connect(quest_stage_complete)
 		stage.objective_updated.connect(update_quest)
+	quest_stages[current_stage].activate()
+	quest_stages[current_stage].check_completion()
 
 ## Gets the currently active quest stage
 func get_current_stage()->QuestStage:
@@ -37,6 +41,13 @@ func quest_stage_complete(stage: QuestStage)->void:
 	if current_stage == quest_stages.size():
 		complete = true
 		quest_complete.emit(self)
+	else:
+		stage_started.emit(quest_stages[current_stage])
+		quest_stages[current_stage].activate()
+
+## Called when
+func quest_objective_complete(objective: QuestObjective)->void:
+	objective_completed.emit(objective)
 
 ## Called when an active objective updates, emitting the relevant signal
 func update_quest(objective: QuestObjective)->void:
@@ -45,6 +56,26 @@ func update_quest(objective: QuestObjective)->void:
 ## Sets this quest to complete
 func set_complete()->void:
 	complete = true
+
+## Gets a list of quest objectives that should be tracked
+func get_tracked_objectives()->Array[QuestObjective]:
+	var end_stage: int = current_stage
+	var start_stage: int = current_stage
+	while quest_stages[start_stage].show_prev_stage && start_stage > 0:
+		start_stage -= 1
+	var objectives: Array[QuestObjective] = []
+	for index in range(start_stage, end_stage+1):
+		objectives.append_array(quest_stages[index].get_stage_objectives())
+	return objectives
+
+#region Save and Load
+## Duplicates this quest and returns the duplicate
+func duplicate_quest()->QuestInfo:
+	var new_quest: QuestInfo = duplicate(true)
+	new_quest.quest_stages = []
+	for stage in quest_stages:
+		new_quest.quest_stages.append(stage.duplicate_stage())
+	return new_quest
 
 ## Saves the quest's data
 func save_data(file: FileAccess)->void:
@@ -63,3 +94,4 @@ func load_data(file: FileAccess)->void:
 		else:
 			quest_stages[index.to_int()].load_data(file)
 		index = file.get_var()
+#endregion

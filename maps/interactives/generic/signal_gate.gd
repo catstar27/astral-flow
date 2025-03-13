@@ -51,6 +51,7 @@ func open(quiet_open: bool = false)->void:
 		EventBus.broadcast("PLAY_SOUND", [open_sound, "positional", global_position])
 	for pos in occupied_positions:
 		EventBus.broadcast("TILE_UNOCCUPIED", pos)
+	EventBus.broadcast("QUEST_EVENT", "open_door:"+id)
 	opened.emit()
 	collision_active = false
 
@@ -75,6 +76,7 @@ func advance_unlock(signal_event)->void:
 			signal_index += 1
 			if signal_index>=signals_needed.size():
 				cur_state = state.unlocked
+				EventBus.broadcast("QUEST_EVENT", "unlock_door:"+id)
 				unlocked.emit()
 				allow_dialogue = false
 				if auto_open:

@@ -24,6 +24,7 @@ func damage(_source: Node, _amount: int, damage_type: Ability.damage_type_option
 ## Triggers this interactive
 func trigger(quiet_unlock: bool = false)->void:
 	triggered = true
+	EventBus.broadcast("QUEST_EVENT", "trigger_switch:"+id)
 	dialogue_timeline = dialogue_unlocked
 	if !quiet_unlock:
 		unlocked.emit("unlocked")

@@ -7,6 +7,7 @@ class_name Interactive
 ## Can be a variety of sizes, taking up any number of tiles
 ## Can function on its own for simple dialogue triggers
 
+@export var id: String = ""## Name for this interactive (for quest purposes)
 @export var texture: Texture2D: ## Texture of the interactive
 	set(tex):
 		texture = tex
@@ -70,6 +71,8 @@ func _calc_occupied()->void:
 
 ## Called when this interactive is interacted with
 func _interacted(character: Character)->void:
+	if character is Player:
+		EventBus.broadcast("QUEST_EVENT", "interact_with:"+id)
 	if interact_sfx != null && !SaveLoad.loading && !NavMaster.map_loading:
 		EventBus.broadcast("PLAY_SOUND", [interact_sfx, "positional", global_position])
 	if dialogue_timeline != null && character is Player && allow_dialogue:

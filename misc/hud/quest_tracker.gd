@@ -2,10 +2,10 @@ extends Control
 class_name QuestTracker
 ## Tracks the currently tracked quest, displaying information about the current stage
 
-@export var objective_label_settings: LabelSettings ## Settings for the objective labels
 @onready var quest_name: Label = %Name ## Name of the current quest
 @onready var quest_container: VBoxContainer = %QuestContainer ## Container holding the display info
 @onready var objective_container: VBoxContainer = %ObjectiveContainer ## Container holding the objective info
+var objective_labels: Dictionary[QuestObjective, RichTextLabel] ## Array of the labels containing objective info
 var tracked_quest: QuestInfo = null ## Currently tracked quest
 var in_combat: bool = false ## Whether the game is in combat
 
@@ -19,20 +19,52 @@ func _ready() -> void:
 func change_quest(quest: QuestInfo)->void:
 	tracked_quest = quest
 	quest_name.text = tracked_quest.quest_name
-	for child in objective_container.get_children():
-		child.queue_free()
-	for objective in tracked_quest.get_current_stage().get_stage_objectives():
-		var new_label: Label = Label.new()
-		new_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		new_label.label_settings = objective_label_settings
-		new_label.text = objective.description
-		new_label.use_parent_material = true
-		if objective.total_count > 0:
-			new_label.text += " ("+str(objective.current_count)+"/"+str(objective.total_count)+")"
-		objective_container.add_child(new_label)
-	position.y = get_viewport_rect().size.y-quest_container.size.y
+	build_labels()
+	quest.stage_started.connect(build_labels)
 	if !in_combat:
 		show()
+
+## Updates the label corresponding to the quest objective given
+func update_objective(objective: QuestObjective)->void:
+	objective_labels[objective].text = ""
+	objective_labels[objective].text += objective.description
+	if objective.total_count > 0:
+		objective_labels[objective].text += " ("+str(objective.current_count)+"/"+str(objective.total_count)+")"
+	objective_labels[objective].text += " ["
+	if objective.complete:
+		objective_labels[objective].text += "✓"
+	objective_labels[objective].text += "]"
+	position.y = get_viewport_rect().size.y-quest_container.size.y
+
+## Updates the quest tracker information
+func build_labels(_stage: Resource = null)->void:
+	var objectives: Array[QuestObjective] = tracked_quest.get_tracked_objectives()
+	for objective in objectives:
+		if !objective.objective_updated.is_connected(update_objective):
+			objective.objective_updated.connect(update_objective)
+		if !objective.objective_completed.is_connected(update_objective):
+			objective.objective_completed.connect(update_objective)
+		if objective not in objective_labels.keys():
+			var new_label: RichTextLabel = get_objective_label()
+			objective_container.add_child(new_label)
+			objective_labels[objective] = new_label
+			update_objective(objective)
+	for objective in objective_labels.keys():
+		if objective not in objectives:
+			objective_labels[objective].queue_free()
+			objective_labels.erase(objective)
+	position.y = get_viewport_rect().size.y-quest_container.size.y
+
+## Makes an objective label and returns it
+func get_objective_label()->RichTextLabel:
+	var new_label: RichTextLabel = RichTextLabel.new()
+	new_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	new_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	new_label.bbcode_enabled = true
+	new_label.add_theme_font_size_override("normal_font_size", 16)
+	new_label.fit_content = true
+	new_label.use_parent_material = true
+	return new_label
 
 ## Starts the combat state and hides the tracker
 func start_combat()->void:
