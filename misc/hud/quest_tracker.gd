@@ -25,7 +25,9 @@ func change_quest(quest: QuestInfo)->void:
 		show()
 
 ## Updates the label corresponding to the quest objective given
-func update_objective(objective: QuestObjective)->void:
+func update_objective(objective: QuestObjective, play_anim: bool = false)->void:
+	if play_anim:
+		objective_labels[objective].modulate = Color.TRANSPARENT
 	objective_labels[objective].text = ""
 	objective_labels[objective].text += objective.description
 	if objective.total_count > 0:
@@ -34,7 +36,18 @@ func update_objective(objective: QuestObjective)->void:
 	if objective.complete:
 		objective_labels[objective].text += "✓"
 	objective_labels[objective].text += "]"
+	await get_tree().process_frame
 	position.y = get_viewport_rect().size.y-quest_container.size.y
+	if play_anim:
+		var copy_label: RichTextLabel = get_objective_label()
+		copy_label.global_position = objective_labels[objective].global_position
+		copy_label.global_position.x += objective_labels[objective].size.x
+		copy_label.text = objective_labels[objective].text
+		copy_label.size = objective_labels[objective].size
+		add_child(copy_label)
+		await create_tween().tween_property(copy_label, "global_position", objective_labels[objective].global_position, .5).finished
+		objective_labels[objective].modulate = Color.WHITE
+		copy_label.queue_free()
 
 ## Updates the quest tracker information
 func build_labels(_stage: Resource = null)->void:
@@ -48,7 +61,7 @@ func build_labels(_stage: Resource = null)->void:
 			var new_label: RichTextLabel = get_objective_label()
 			objective_container.add_child(new_label)
 			objective_labels[objective] = new_label
-			update_objective(objective)
+			update_objective(objective, true)
 	for objective in objective_labels.keys():
 		if objective not in objectives:
 			objective_labels[objective].queue_free()

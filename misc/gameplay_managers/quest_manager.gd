@@ -84,7 +84,6 @@ func load_data(dir: String)->void:
 			quests[id].load_data(file)
 		id = file.get_var()
 	file.close()
-
 	update_complete_quests()
 	for quest in active_quests:
 		quests[quest].activate()

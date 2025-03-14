@@ -38,7 +38,3 @@ unique_name_in_owner = true
 use_parent_material = true
 layout_mode = 2
 alignment = 1
-
-[node name="RichTextLabel" type="RichTextLabel" parent="QuestContainer/ObjectiveContainer"]
-layout_mode = 2
-fit_content = true
