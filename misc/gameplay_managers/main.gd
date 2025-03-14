@@ -3,6 +3,7 @@ class_name Main
 ## The game's main node; everything is a descendent of this.
 
 @onready var global_timer: Timer = %GlobalTimer ## The global timer that determines in game time passage
+@onready var subviewport: SubViewport = %SubViewport ## The subviewport for displaying the game world
 @onready var selection_cursor: SelectionCursor = %SelectionCursor ## The selection cursor
 @onready var foreground: Sprite2D = %Foreground ## Foreground for fade to black or shaders
 @onready var sound_manager: SoundManager = %SoundManager ## Sound manager node
@@ -26,6 +27,7 @@ func _ready() -> void:
 	if get_tree().paused:
 		unpause()
 	get_window().min_size = Vector2(960, 540)
+	subviewport.size = Vector2(960, 540)
 	EventBus.subscribe("ENTER_DIALOGUE", self, "enter_dialogue")
 	EventBus.subscribe("COMBAT_STARTED", global_timer, "stop")
 	EventBus.subscribe("COMBAT_ENDED", global_timer, "start")
@@ -115,7 +117,7 @@ func create_text_indicator(info: Array)->void:
 	ind.position = info[1]
 	if info.size() == 3:
 		ind.color = info[2]
-	add_child(ind)
+	subviewport.add_child(ind)
 	ind.show()
 
 ## Fades the screen out slowly
@@ -154,7 +156,7 @@ func load_map(new_map: String, entrance_id: String = "")->void:
 	selection_cursor.deactivate()
 	var map_to_load: GameMap = load(new_map).instantiate()
 	map_to_load.position = position
-	add_child(map_to_load)
+	subviewport.add_child(map_to_load)
 	NavMaster.map = map_to_load
 	map = map_to_load
 	map.process_mode = Node.PROCESS_MODE_PAUSABLE

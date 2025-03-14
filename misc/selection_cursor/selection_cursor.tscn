@@ -1,8 +1,7 @@
-[gd_scene load_steps=7 format=3 uid="uid://b85mlpg1agp8h"]
+[gd_scene load_steps=6 format=3 uid="uid://b85mlpg1agp8h"]
 
 [ext_resource type="Script" uid="uid://d2c55qqweqaku" path="res://misc/selection_cursor/selection_cursor.gd" id="1_rchw3"]
 [ext_resource type="Texture2D" uid="uid://bbo5njqqnookt" path="res://textures/hud/arrow.png" id="2_4oduv"]
-[ext_resource type="PackedScene" uid="uid://t1lqjxny1int" path="res://misc/hud/hud.tscn" id="2_mx35m"]
 [ext_resource type="Texture2D" uid="uid://divirgkfj3hbk" path="res://textures/hud/selection_cursor.png" id="2_yiq7u"]
 [ext_resource type="Material" uid="uid://dcq7n5qyt3hj0" path="res://materials/immaterial.tres" id="3_xq438"]
 
@@ -20,20 +19,6 @@ use_parent_material = true
 texture = ExtResource("2_yiq7u")
 offset = Vector2(0, -32)
 hframes = 2
-
-[node name="HUD" parent="." instance=ExtResource("2_mx35m")]
-unique_name_in_owner = true
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -480.0
-offset_top = -270.0
-offset_right = 480.0
-offset_bottom = 270.0
-grow_horizontal = 2
-grow_vertical = 2
 
 [node name="Camera" type="Camera2D" parent="."]
 unique_name_in_owner = true
