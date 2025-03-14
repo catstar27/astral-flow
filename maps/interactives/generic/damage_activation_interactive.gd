@@ -22,12 +22,11 @@ func damage(_source: Node, _amount: int, damage_type: Ability.damage_type_option
 		trigger()
 
 ## Triggers this interactive
-func trigger(quiet_unlock: bool = false)->void:
+func trigger()->void:
 	triggered = true
 	EventBus.broadcast("QUEST_EVENT", "trigger_switch:"+id)
 	dialogue_timeline = dialogue_unlocked
-	if !quiet_unlock:
-		unlocked.emit("unlocked")
+	unlocked.emit("unlocked")
 	sprite.frame = 1
 
 #region Save and Load
@@ -50,6 +49,6 @@ func load_data(dir: String)->void:
 		var_name = file.get_var()
 	file.close()
 	if triggered:
-		trigger(true)
+		trigger()
 	loaded.emit(self)
 #endregion

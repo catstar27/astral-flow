@@ -20,6 +20,8 @@ func move()->void:
 			await unpause
 		while user.state_machine.current_state.state_id != "IDLE":
 			await user.state_machine.state_changed
+		if user.position != move_location:
+			await user.get_tree().create_timer(.5).timeout
 		attempts += 1
 		if attempts > 99:
 			return
