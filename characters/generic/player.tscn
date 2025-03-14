@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=3 uid="uid://qjb7sn1qkk44"]
+[gd_scene load_steps=22 format=3 uid="uid://qjb7sn1qkk44"]
 
 [ext_resource type="Script" uid="uid://duk342kn2rflp" path="res://characters/generic/player.gd" id="1_so47p"]
 [ext_resource type="Script" uid="uid://b0xbk38jyra5a" path="res://characters/abilities/ability.gd" id="2_6rrl0"]
@@ -13,6 +13,7 @@
 [ext_resource type="PackedScene" uid="uid://dj1dbu04os5rj" path="res://misc/state_machine/state_machine.tscn" id="6_g6tfj"]
 [ext_resource type="PackedScene" uid="uid://co558pdmpfij5" path="res://characters/states/move.tscn" id="7_uo70b"]
 [ext_resource type="PackedScene" uid="uid://c87v4rbl0fr7" path="res://characters/states/idle.tscn" id="8_sjqjw"]
+[ext_resource type="Texture2D" uid="uid://dqh4naxgo2grg" path="res://textures/character/kalin_silhouette_spritesheet.png" id="9_ahu5m"]
 [ext_resource type="PackedScene" uid="uid://d1oj7ptthilej" path="res://characters/states/interact.tscn" id="9_cg4mf"]
 [ext_resource type="PackedScene" uid="uid://brlpvcs48fhyc" path="res://characters/states/activate_ability.tscn" id="11_0xkjr"]
 
@@ -70,6 +71,54 @@ tracks/3/keys = {
 "update": 1,
 "values": [0]
 }
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Silhouette:frame")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Silhouette:position")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 0)]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("Silhouette:scale")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("Silhouette:rotation")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_7ssjw"]
 _data = {
@@ -81,7 +130,7 @@ _data = {
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_g7ocv"]
 
 [node name="Player" type="CharacterBody2D" groups=["Persist"]]
-z_index = 1
+z_index = 2
 script = ExtResource("1_so47p")
 star_stats = Dictionary[String, int]({
 "agility": 12,
@@ -97,11 +146,18 @@ export_abilities = Array[ExtResource("2_6rrl0")]([ExtResource("3_6rrl0"), ExtRes
 
 [node name="Sprite" type="Sprite2D" parent="."]
 unique_name_in_owner = true
-material = ExtResource("2_aa0te")
 texture = SubResource("CanvasTexture_tvd7q")
 hframes = 4
 vframes = 5
 region_rect = Rect2(-2, -2, 36, 36)
+
+[node name="Silhouette" type="Sprite2D" parent="."]
+unique_name_in_owner = true
+z_index = -1
+material = ExtResource("2_aa0te")
+texture = ExtResource("9_ahu5m")
+hframes = 4
+vframes = 5
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 unique_name_in_owner = true

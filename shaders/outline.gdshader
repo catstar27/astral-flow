@@ -1,4 +1,5 @@
 shader_type canvas_item;
+render_mode unshaded;
 
 uniform int width:hint_range(0, 5, 1);
 uniform vec4 outline_color:source_color;

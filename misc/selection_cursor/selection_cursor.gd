@@ -6,7 +6,6 @@ class_name SelectionCursor
 ## move, interact, activate abilities, etc.
 
 @export var move_arrow_tex: Texture2D ## Texture of movement arrows
-@export var move_arrow_mat: CanvasItemMaterial ## Material of movement arrows
 @onready var sprite: Sprite2D = %Sprite ## Sprite of the cursor
 @onready var selection_area: Area2D = %SelectionArea ## Area which detects objects to select/interact
 @onready var camera: Camera2D = %Camera ## Camera node, which is part of this
@@ -56,7 +55,7 @@ func _unhandled_input(event: InputEvent) -> void:
 		if selected != null:
 			if selected.selected_ability == null:
 				deselect()
-	if event.is_action_pressed("info") && selected != null:
+	if event.is_action_pressed("info"):
 		update_move_arrows(selected)
 	if event.is_action_released("info"):
 		clear_move_arrows()
@@ -69,11 +68,14 @@ func _physics_process(_delta: float) -> void:
 ## Creates a new movement arrow
 func get_move_arrow(pos: Vector2)->Sprite2D:
 	var new_arrow: Sprite2D = Sprite2D.new()
+	new_arrow.top_level = true
+	new_arrow.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	new_arrow.z_index = 5
 	new_arrow.texture = move_arrow_tex
 	new_arrow.hframes = 3
 	new_arrow.position = pos
 	new_arrow.scale = Vector2.ONE*4
-	new_arrow.material = move_arrow_mat
+	new_arrow.material = material
 	new_arrow.modulate = sprite.modulate
 	move_arrows.append(new_arrow)
 	return new_arrow
@@ -81,6 +83,8 @@ func get_move_arrow(pos: Vector2)->Sprite2D:
 ## Makes a path of arrow pieces to display the projected path of movement
 func update_move_arrows(character: Character)->void:
 	clear_move_arrows()
+	if character == null:
+		return
 	if Input.is_action_pressed("info"):
 		var path: Array[Vector2] = NavMaster.request_nav_path(character.global_position, global_position)
 		if path.size() == 1 || character.global_position == global_position:
@@ -104,7 +108,7 @@ func update_move_arrows(character: Character)->void:
 			if index == path.size()-1:
 				new_arrow.rotation -= PI
 				new_arrow.frame = 2
-			get_parent().add_child(new_arrow)
+			add_child(new_arrow)
 
 ## Deletes all movement arrow pieces
 func clear_move_arrows()->void:
@@ -171,6 +175,7 @@ func selected_interact(pos: Vector2)->void:
 ## Creates a marker to show a character is selected
 func _create_marker()->void:
 	marker = selection_marker_scene.instantiate()
+	marker.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	marker.modulate = Settings.gameplay.selection_tint
 	selected.add_child(marker)
 

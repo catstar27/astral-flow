@@ -58,6 +58,7 @@ enum ai_types { ## Options for enemy ai
 #endregion
 #region Vars
 @onready var sprite: Sprite2D = %Sprite ## Sprite of this character
+@onready var silhouette: Sprite2D = %Silhouette ## Silhouette of this character
 @onready var anim_player: AnimationPlayer = %AnimationPlayer ## Animation Player for this character
 @onready var state_machine: StateMachine = %StateMachine ## State Machine for this character
 @onready var status_manager: StatusManager = %StatusManager ## Status Manager for this character
@@ -146,6 +147,7 @@ func _setup()->void:
 	cur_hp = base_stats.max_hp+stat_mods.max_hp
 	cur_ap = base_stats.max_ap+stat_mods.max_ap
 	cur_mp = base_stats.max_mp+stat_mods.max_mp
+	silhouette.material = silhouette.material.duplicate()
 	set_outline_color()
 	EventBus.subscribe("GAMEPLAY_SETTINGS_CHANGED", self, "set_outline_color")
 	init_schedule()
@@ -478,16 +480,16 @@ func next_dialogue()->void:
 ## Sets the color of the character's outline
 func set_outline_color()->void:
 	var color: Color = Color(Settings.gameplay.selection_tint, 180.0/255.0)
-	sprite.material.set_shader_parameter("outline_color", color)
+	silhouette.material.set_shader_parameter("outline_color", color)
 
 ## Selects the character and adds the outline
 func select()->void:
-	sprite.material.set_shader_parameter("width", 1)
+	silhouette.material.set_shader_parameter("width", 1)
 	is_selected = true
 
 ## Deselects the character and removes the outline
 func deselect()->void:
-	sprite.material.set_shader_parameter("width", 0)
+	silhouette.material.set_shader_parameter("width", 0)
 	if has_method("deselect_ability"):
 		call("deselect_ability")
 	is_selected = false

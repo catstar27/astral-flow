@@ -31,8 +31,8 @@ func update_display(play_animation: bool = false)->void:
 	anim.play("RESET")
 	is_updating = true
 	if play_animation:
-		anim.play("slide_out")
-		await anim.animation_finished
+		print(position)
+		await create_tween().tween_property(self, "position", position+200*Vector2.RIGHT, .5).finished
 		hide()
 	if current_index == 0:
 		panels[3].get_children()[0].text = "---"
@@ -50,8 +50,7 @@ func update_display(play_animation: bool = false)->void:
 		panels[0].get_children()[0].text = "---"
 	if play_animation:
 		show()
-		anim.play("slide_in")
-		await anim.animation_finished
+		await create_tween().tween_property(self, "position", position+200*Vector2.LEFT, .5).finished
 		EventBus.broadcast("SEQUENCE_DISPLAY_CYCLED", "NULLDATA")
 	is_updating = false
 

@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://dysmxh061ic7i"]
+[gd_scene load_steps=9 format=3 uid="uid://dysmxh061ic7i"]
 
 [ext_resource type="Theme" uid="uid://crcivs73grrf7" path="res://textures/hud/custom_theme.tres" id="1_dovtc"]
 [ext_resource type="Script" uid="uid://xmfhnt1ywc3f" path="res://misc/hud/sequence_display.gd" id="1_m1igy"]
@@ -57,18 +57,6 @@ tracks/3/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 0,
 "values": [Vector2(-180, -20)]
-}
-tracks/4/type = "value"
-tracks/4/imported = false
-tracks/4/enabled = true
-tracks/4/path = NodePath(".:position")
-tracks/4/interp = 1
-tracks/4/loop_wrap = true
-tracks/4/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(940, 520)]
 }
 
 [sub_resource type="Animation" id="Animation_5bd0s"]
@@ -136,44 +124,10 @@ tracks/4/keys = {
 }]
 }
 
-[sub_resource type="Animation" id="Animation_xeueh"]
-resource_name = "slide_in"
-length = 0.5
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath(".:position")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.5),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Vector2(1240, 520), Vector2(940, 520)]
-}
-
-[sub_resource type="Animation" id="Animation_ftxbi"]
-resource_name = "slide_out"
-length = 0.5
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath(".:position")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.5),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Vector2(940, 520), Vector2(1240, 520)]
-}
-
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_m64st"]
 _data = {
 &"RESET": SubResource("Animation_msuku"),
-&"cycle": SubResource("Animation_5bd0s"),
-&"slide_in": SubResource("Animation_xeueh"),
-&"slide_out": SubResource("Animation_ftxbi")
+&"cycle": SubResource("Animation_5bd0s")
 }
 
 [node name="SequenceDisplay" type="Control"]

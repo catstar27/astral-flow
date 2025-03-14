@@ -9,9 +9,9 @@
 
 [node name="SelectionCursor" type="Node2D"]
 z_index = 3
+material = ExtResource("3_xq438")
 script = ExtResource("1_rchw3")
 move_arrow_tex = ExtResource("2_4oduv")
-move_arrow_mat = ExtResource("3_xq438")
 
 [node name="Sprite" type="Sprite2D" parent="."]
 unique_name_in_owner = true

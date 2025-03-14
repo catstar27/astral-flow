@@ -14,6 +14,7 @@ class_name HUD
 var sequence_display_visible: bool = false ## Whether the sequence display is visible
 
 func _ready()->void:
+	EventBus.subscribe("ENTER_DIALOGUE", self, "enter_dialogue")
 	EventBus.subscribe("PRINT_LOG", self, "print_log")
 	EventBus.subscribe("SELECTION_CHANGED", self, "set_char_info")
 	EventBus.subscribe("TIME_CHANGED", self, "set_time_label")
@@ -64,3 +65,7 @@ func set_time_label(time: Array)->void:
 	if time[0] < 10:
 		time_label.text += '0'
 	time_label.text += str(time[0])
+
+## Hides certain elements when dialogue starts
+func enter_dialogue(_info: Array)->void:
+	game_log.get_parent().hide()

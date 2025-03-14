@@ -3,7 +3,9 @@ class_name Main
 ## The game's main node; everything is a descendent of this.
 
 @onready var global_timer: Timer = %GlobalTimer ## The global timer that determines in game time passage
+@onready var game_world_container: SubViewportContainer = %GameWorldContainer ## Container for subviewport
 @onready var subviewport: SubViewport = %SubViewport ## The subviewport for displaying the game world
+@onready var hud: HUD = %HUD
 @onready var selection_cursor: SelectionCursor = %SelectionCursor ## The selection cursor
 @onready var foreground: Sprite2D = %Foreground ## Foreground for fade to black or shaders
 @onready var sound_manager: SoundManager = %SoundManager ## Sound manager node
@@ -27,7 +29,8 @@ func _ready() -> void:
 	if get_tree().paused:
 		unpause()
 	get_window().min_size = Vector2(960, 540)
-	subviewport.size = Vector2(960, 540)
+	get_window().size_changed.connect(resize_screen)
+	resize_screen()
 	EventBus.subscribe("ENTER_DIALOGUE", self, "enter_dialogue")
 	EventBus.subscribe("COMBAT_STARTED", global_timer, "stop")
 	EventBus.subscribe("COMBAT_ENDED", global_timer, "start")
@@ -47,6 +50,11 @@ func _ready() -> void:
 	else:
 		SaveLoad.load_data()
 	prepped = true
+
+## Resizes the hud and subviewport to fit the screen
+func resize_screen()->void:
+	game_world_container.scale = get_viewport_rect().size/Vector2(960,540)
+	hud.set_size(get_viewport_rect().size)
 
 ## Increments game time
 func global_timer_timeout()->void:
