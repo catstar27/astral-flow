@@ -18,8 +18,22 @@ func _ready() -> void:
 ## Changes the currently tracked quest
 func change_quest(quest: QuestInfo)->void:
 	tracked_quest = quest
+	quest.quest_complete.connect(complete_quest)
+	quest_name.modulate = Color.TRANSPARENT
 	quest_name.text = tracked_quest.quest_name
+	await get_tree().process_frame
+	var copy_label: Label = Label.new()
+	copy_label.label_settings = quest_name.label_settings
+	copy_label.use_parent_material = true
+	copy_label.text = quest_name.text
+	copy_label.size = quest_name.size
+	add_child(copy_label)
+	copy_label.global_position = quest_name.global_position
+	copy_label.global_position.y += quest_name.size.y
+	await create_tween().tween_property(copy_label, "global_position", quest_name.global_position, .5).finished
+	quest_name.modulate = Color.WHITE
 	build_labels()
+	copy_label.queue_free()
 	quest.stage_started.connect(build_labels)
 	if !in_combat:
 		show()
@@ -37,14 +51,15 @@ func update_objective(objective: QuestObjective, play_anim: bool = false)->void:
 		objective_labels[objective].text += "✓"
 	objective_labels[objective].text += "]"
 	await get_tree().process_frame
-	position.y = get_viewport_rect().size.y-quest_container.size.y
+	await create_tween().tween_property(self, "position", 
+	Vector2(position.x, get_viewport_rect().size.y-quest_container.size.y), .1).finished
 	if play_anim:
 		var copy_label: RichTextLabel = get_objective_label()
-		copy_label.global_position = objective_labels[objective].global_position
-		copy_label.global_position.x += objective_labels[objective].size.x
 		copy_label.text = objective_labels[objective].text
 		copy_label.size = objective_labels[objective].size
 		add_child(copy_label)
+		copy_label.global_position = objective_labels[objective].global_position
+		copy_label.global_position.x += objective_labels[objective].size.x
 		await create_tween().tween_property(copy_label, "global_position", objective_labels[objective].global_position, .5).finished
 		objective_labels[objective].modulate = Color.WHITE
 		copy_label.queue_free()
@@ -66,7 +81,8 @@ func build_labels(_stage: Resource = null)->void:
 		if objective not in objectives:
 			objective_labels[objective].queue_free()
 			objective_labels.erase(objective)
-	position.y = get_viewport_rect().size.y-quest_container.size.y
+	await create_tween().tween_property(self, "position", 
+	Vector2(position.x, get_viewport_rect().size.y-quest_container.size.y), .1).finished
 
 ## Makes an objective label and returns it
 func get_objective_label()->RichTextLabel:
@@ -78,6 +94,12 @@ func get_objective_label()->RichTextLabel:
 	new_label.fit_content = true
 	new_label.use_parent_material = true
 	return new_label
+
+## Fades out the tracker when the quest completes
+func complete_quest(_quest: QuestInfo)->void:
+	await create_tween().tween_property(self, "modulate", Color.TRANSPARENT, 1).finished
+	stop_tracking()
+	modulate = Color.WHITE
 
 ## Starts the combat state and hides the tracker
 func start_combat()->void:

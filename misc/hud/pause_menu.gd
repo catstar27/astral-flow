@@ -22,7 +22,7 @@ func ended_combat()->void:
 	save_button.disabled = false
 
 func _unhandled_input(event: InputEvent) -> void:
-	if event.is_action_released("menu"):
+	if event.is_action_pressed("menu"):
 		get_viewport().set_input_as_handled()
 		if !menu_open and !get_tree().paused:
 			open_pause_menu()

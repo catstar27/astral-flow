@@ -46,7 +46,6 @@ func complete_quest(quest: QuestInfo)->void:
 	active_quests.remove_at(active_quests.find(quest.quest_id))
 	if tracked_id == quest.quest_id:
 		tracked_id = ""
-		EventBus.broadcast("QUEST_TRACK_STOP", "NULLDATA")
 
 ## Sets all quests to complete if they are completed
 func update_complete_quests()->void:
