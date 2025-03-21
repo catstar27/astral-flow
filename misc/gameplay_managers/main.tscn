@@ -34,27 +34,12 @@ layer = 100
 [node name="HUD" parent="CanvasLayer" instance=ExtResource("9_5e0hy")]
 unique_name_in_owner = true
 
-[node name="GameWorldContainer" type="SubViewportContainer" parent="."]
-unique_name_in_owner = true
-show_behind_parent = true
-z_index = -5
-offset_right = 960.0
-offset_bottom = 540.0
-stretch = true
-
-[node name="SubViewport" type="SubViewport" parent="GameWorldContainer"]
-unique_name_in_owner = true
-disable_3d = true
-handle_input_locally = false
-size = Vector2i(960, 540)
-render_target_update_mode = 4
-
-[node name="SelectionCursor" parent="GameWorldContainer/SubViewport" instance=ExtResource("4_lfpb3")]
+[node name="SelectionCursor" parent="." instance=ExtResource("4_lfpb3")]
 unique_name_in_owner = true
 process_mode = 1
 move_arrow_tex = SubResource("Resource_ut36o")
 
-[node name="Background" type="Sprite2D" parent="GameWorldContainer/SubViewport"]
+[node name="Background" type="Sprite2D" parent="."]
 process_mode = 1
 z_index = -5
 z_as_relative = false
@@ -62,7 +47,7 @@ texture_repeat = 2
 scale = Vector2(100000, 100000)
 texture = ExtResource("3_tsd85")
 
-[node name="Foreground" type="Sprite2D" parent="GameWorldContainer/SubViewport"]
+[node name="Foreground" type="Sprite2D" parent="."]
 unique_name_in_owner = true
 modulate = Color(0, 0, 0, 0)
 z_index = 100
