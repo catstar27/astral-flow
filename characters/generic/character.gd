@@ -22,7 +22,8 @@ var base_stats: Dictionary[String, int] = { ## Base stats calculated from star s
 	"crit_range": 1,
 	"defense": 0,
 	"damage_threshold": 10,
-	"sequence": 0
+	"sequence": 0,
+	"move_speed": 1
 }
 var stat_mods: Dictionary[String, int] = { ## Stat modifiers from statuses, etc.
 	"max_ap": 0,
@@ -32,7 +33,8 @@ var stat_mods: Dictionary[String, int] = { ## Stat modifiers from statuses, etc.
 	"crit_range": 0,
 	"defense": 0,
 	"damage_threshold": 0,
-	"sequence": 0
+	"sequence": 0,
+	"move_speed": 0
 }
 #endregion
 #region Exports
@@ -83,6 +85,7 @@ var schedule_processing: bool = false ## Whether the schedule is being executed 
 var is_selected: bool = false ## Whether this character is selected
 var combat_target: Character = null ## The character this is attempting to attack
 var watching: Dictionary[Node2D, RayCast2D] = {} ## Character/raycast pairs for characters in combat trigger
+var speed_remainder: int = 0 ## Amount of unused free movement
 var to_save: Array[StringName] = [ ## Variables to save
 	"position",
 	"star_stats",
@@ -243,6 +246,7 @@ func activate_ability(ability: Ability, destination: Vector2)->void:
 ## Called when the character enters combat
 func enter_combat()->void:
 	in_combat = true
+	speed_remainder = 0
 	combat_entered.emit()
 
 ## Called when the character exits combat
@@ -251,6 +255,26 @@ func exit_combat()->void:
 	combat_exited.emit()
 	if schedules.size() > 0:
 		schedules[schedule_index].process_schedule()
+
+## Returns an array showing ap required for moving on a path of given length
+func get_ap_for_path(path_length: int, use_ap: bool = true)->Array[Array]:
+	if path_length < 1:
+		printerr("Attempted to get ap for path of length zero on character "+display_name)
+		return []
+	var ap_arr: Array[Array] = [[]]
+	ap_arr[0] = [cur_ap, speed_remainder]
+	for index in range(1, path_length+1):
+		if ap_arr[index-1][1] == 0:
+			if in_combat && ap_arr[index-1][0] == 0:
+				break
+			ap_arr.append([ap_arr[index-1][0]-1, ap_arr[index-1][1]+base_stats.move_speed+stat_mods.move_speed-1])
+		else:
+			ap_arr.append([ap_arr[index-1][0], ap_arr[index-1][1]-1])
+	if use_ap && in_combat:
+		cur_ap = ap_arr.back()[0]
+		speed_remainder = ap_arr.back()[1]
+		stats_changed.emit()
+	return ap_arr
 
 ## Rolls the character's current sequence, adding randomness to the turn order
 func roll_sequence()->void:

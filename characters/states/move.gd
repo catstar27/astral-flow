@@ -13,6 +13,8 @@ func enter_state(data: Vector2, _data2 = null)->void:
 	while !end:
 		end = await move(target)
 		state_machine.user.anim_player.play("RESET")
+		while state_machine.user.anim_player.is_playing():
+			await state_machine.user.anim_player.animation_finished
 	state_machine.change_state_to("IDLE")
 
 ## Handles actual movement. Returns true if the user reached the destination,
@@ -30,17 +32,36 @@ func move(cur_target: Vector2)->bool:
 	var prev_direction: Vector2 = Vector2.ZERO
 	if path.pop_front() != state_machine.user.position:
 		path = []
-	for pos in path:
-		if NavMaster.is_pos_occupied(pos):
-			path = NavMaster.request_nav_path(state_machine.user.position, cur_target)
-			path.pop_front()
-			continue
-		if state_machine.user.cur_ap == 0:
-			EventBus.broadcast("PRINT_LOG","No ap for movement!")
+	var ap_arr: Array[Array] = state_machine.user.get_ap_for_path(path.size())
+	if ap_arr.size() <= path.size():
+		state_machine.user.cur_ap = ap_arr[0][0]
+		state_machine.user.speed_remainder = ap_arr[0][1]
+		state_machine.user.stats_changed.emit()
+		if state_machine.user is Player:
+			EventBus.broadcast("PRINT_LOG", "Not enough AP!")
 			return true
+		else:
+			target = path[ap_arr.size()-2]
+			return false
+	for index in range(0, path.size()):
+		var pos: Vector2 = path[index]
+		if NavMaster.is_pos_occupied(pos):
+			if state_machine.user.in_combat:
+				state_machine.user.cur_ap = ap_arr[index+1][0]
+				state_machine.user.speed_remainder = ap_arr[index+1][1]
+				state_machine.user.stats_changed.emit()
+			return false
 		if stop_movement:
+			if state_machine.user.in_combat:
+				state_machine.user.cur_ap = ap_arr[index+1][0]
+				state_machine.user.speed_remainder = ap_arr[index+1][1]
+				state_machine.user.stats_changed.emit()
 			return true
 		if target != cur_target:
+			if state_machine.user.in_combat:
+				state_machine.user.cur_ap = ap_arr[index+1][0]
+				state_machine.user.speed_remainder = ap_arr[index+1][1]
+				state_machine.user.stats_changed.emit()
 			return false
 		var prev_pos: Vector2 = state_machine.user.position
 		var direction: Vector2 = pos-prev_pos
@@ -66,9 +87,6 @@ func move(cur_target: Vector2)->bool:
 		state_machine.user.pos_changed.emit(state_machine.user)
 		critical_operation = false
 		critical_exited.emit()
-		if state_machine.user.in_combat:
-			state_machine.user.cur_ap -= 1
-			state_machine.user.stats_changed.emit()
 	return true
 
 ## Updates the target position with a new one

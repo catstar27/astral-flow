@@ -80,9 +80,12 @@ func update_move_arrows(character: Character)->void:
 	clear_move_arrows()
 	if character == null:
 		return
+	if NavMaster.is_pos_occupied(position) && position.distance_to(character.position) <= NavMaster.tile_size:
+		return
 	var path: Array[Vector2] = NavMaster.request_nav_path(character.global_position, global_position)
 	if path.size() == 1 || character.global_position == global_position:
 		return
+	var ap_arr: Array[Array] = character.get_ap_for_path(path.size()-1, false)
 	for index in range(1, path.size()):
 		if character != selected:
 			break
@@ -99,6 +102,23 @@ func update_move_arrows(character: Character)->void:
 				move_arrows[index-2].rotation = PI/2
 			elif dir_exit == Vector2.LEFT || dir_enter == Vector2.LEFT:
 				move_arrows[index-2].rotation = -PI/2
+		if character.in_combat:
+			var ap_label: Label = Label.new()
+			ap_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+			ap_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+			ap_label.add_theme_font_size_override("font_size", 12)
+			if ap_arr[index][1] != 0:
+				ap_label.text = "..."
+			else:
+				ap_label.text = str(character.cur_ap-ap_arr[index][0])
+			new_arrow.add_child(ap_label)
+			ap_label.rotation = -new_arrow.rotation
+			if index == ap_arr.size()-1:
+				new_arrow.rotation -= PI
+				new_arrow.frame = 2
+				ap_label.rotation = -new_arrow.rotation
+				add_child(new_arrow)
+				break
 		if index == path.size()-1:
 			new_arrow.rotation -= PI
 			new_arrow.frame = 2
