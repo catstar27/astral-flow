@@ -1,0 +1,40 @@
+[gd_scene load_steps=3 format=3 uid="uid://cjbkwr8dsdqvq"]
+
+[ext_resource type="Theme" uid="uid://dehvu01nlqvsf" path="res://textures/gui/themes/info_box_theme.tres" id="1_oo6ww"]
+[ext_resource type="Script" uid="uid://d05320dyub2mk" path="res://misc/gui/info_box.gd" id="2_2ar6p"]
+
+[node name="InfoBox" type="PanelContainer"]
+custom_minimum_size = Vector2(34, 16)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -21.0
+offset_top = -22.0
+offset_right = 21.0
+offset_bottom = 22.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_oo6ww")
+script = ExtResource("2_2ar6p")
+
+[node name="Label" type="RichTextLabel" parent="."]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(32, 14)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_font_sizes/bold_italics_font_size = 12
+theme_override_font_sizes/italics_font_size = 12
+theme_override_font_sizes/mono_font_size = 12
+theme_override_font_sizes/normal_font_size = 12
+theme_override_font_sizes/bold_font_size = 12
+bbcode_enabled = true
+text = "Sax
+sdssd
+sdasdd"
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
+shortcut_keys_enabled = false

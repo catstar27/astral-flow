@@ -3,7 +3,7 @@ class_name Main
 ## The game's main node; everything is a descendent of this.
 
 @onready var global_timer: Timer = %GlobalTimer ## The global timer that determines in game time passage
-@onready var hud: HUD = %HUD
+@onready var gui: GUI = %GUI
 @onready var selection_cursor: SelectionCursor = %SelectionCursor ## The selection cursor
 @onready var foreground: Sprite2D = %Foreground ## Foreground for fade to black or shaders
 @onready var sound_manager: SoundManager = %SoundManager ## Sound manager node
@@ -11,8 +11,8 @@ var in_dialogue: bool = false ## Whether the game has dialogue running
 var player: Player = null ## The player node
 var map: GameMap = null ## The currently loaded map node
 var current_timeline: Node = null ## Current dialogue timeline node
-var player_scene: PackedScene = preload("res://characters/generic/player.tscn") ## Preloaded player character
-var text_indicator_scene: PackedScene = preload("res://misc/hud/text_indicator.tscn") ## Preloaded text indicators
+var player_scene: PackedScene = preload("uid://qjb7sn1qkk44") ## Preloaded player character
+var text_indicator_scene: PackedScene = preload("uid://dtylaymiixbpw") ## Preloaded text indicators
 var hour: int = 0 ## In game hour
 var minute: int = 0 ## In game minute
 var prepped: bool = false ## Whether this node has finished preparing
@@ -26,7 +26,10 @@ signal loaded(node: Main) ## Emitted when this is loaded
 func _ready() -> void:
 	if get_tree().paused:
 		unpause()
+	Engine.max_fps = maxi(roundi(DisplayServer.screen_get_refresh_rate()), 60)
 	get_window().min_size = Vector2(960, 540)
+	get_window().size_changed.connect(resize_elements)
+	resize_elements()
 	EventBus.subscribe("ENTER_DIALOGUE", self, "enter_dialogue")
 	EventBus.subscribe("COMBAT_STARTED", global_timer, "stop")
 	EventBus.subscribe("COMBAT_ENDED", global_timer, "start")
@@ -46,6 +49,10 @@ func _ready() -> void:
 	else:
 		SaveLoad.load_data()
 	prepped = true
+
+## Resizes the gui when the screen resizes
+func resize_elements()->void:
+	gui.size = get_window().get_visible_rect().size
 
 ## Increments game time
 func global_timer_timeout()->void:

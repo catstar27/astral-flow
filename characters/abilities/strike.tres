@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="Ability" load_steps=4 format=3 uid="uid://dae4xdag0nd3v"]
+
+[ext_resource type="Script" uid="uid://b0xbk38jyra5a" path="res://characters/abilities/ability.gd" id="1_5qlae"]
+[ext_resource type="AudioStream" uid="uid://g0lb5si7k3pc" path="res://sfx/punch.wav" id="2_ve81p"]
+[ext_resource type="Script" uid="uid://dxv7e1j21poh5" path="res://characters/statuses/status.gd" id="3_48qex"]
+
+[resource]
+script = ExtResource("1_5qlae")
+display_name = "Strike"
+description = "Strike a target with a melee weapon or limb.
+Deals 2 damage."
+sound = ExtResource("2_ve81p")
+ap_cost = 2
+mp_cost = 0
+ability_range = 1
+target_type = 3
+activation_type = 0
+base_damage = 2
+ignore_defense = false
+damage_type = 0
+skill_used = 2
+statuses = Dictionary[ExtResource("3_48qex"), int]({})

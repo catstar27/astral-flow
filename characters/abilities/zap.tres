@@ -8,6 +8,7 @@
 [resource]
 script = ExtResource("2_2b0af")
 display_name = "Zap"
+description = "Zaps a target with electricity from far range."
 sound = ExtResource("3_5qeq1")
 ap_cost = 2
 mp_cost = 1

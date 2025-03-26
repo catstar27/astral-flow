@@ -1,0 +1,34 @@
+[gd_scene load_steps=4 format=3 uid="uid://dleye7m8gjxs0"]
+
+[ext_resource type="Material" uid="uid://dcq7n5qyt3hj0" path="res://materials/immaterial.tres" id="1_np2p5"]
+[ext_resource type="Theme" uid="uid://crcivs73grrf7" path="res://textures/gui/themes/custom_theme.tres" id="1_vad1f"]
+[ext_resource type="Script" uid="uid://dybsvmn4dfppo" path="res://misc/gui/control_display_button.gd" id="2_6ni8f"]
+
+[node name="ControlDisplayButton" type="Button"]
+material = ExtResource("1_np2p5")
+custom_minimum_size = Vector2(44, 44)
+offset_right = 32.0
+offset_bottom = 32.0
+focus_mode = 0
+theme = ExtResource("1_vad1f")
+shortcut_in_tooltip = false
+script = ExtResource("2_6ni8f")
+input_action_name = "info"
+
+[node name="KeyLabel" type="Label" parent="."]
+unique_name_in_owner = true
+texture_filter = 1
+use_parent_material = true
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 5.5
+offset_top = -16.5
+offset_right = 71.5
+offset_bottom = 49.5
+grow_vertical = 2
+scale = Vector2(0.5, 0.5)
+horizontal_alignment = 1
+vertical_alignment = 1
+clip_text = true

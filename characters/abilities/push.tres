@@ -8,6 +8,7 @@
 [resource]
 script = ExtResource("1_icph7")
 display_name = "Push"
+description = "Shoves a target one tile away."
 sound = ExtResource("2_awjdm")
 ap_cost = 1
 mp_cost = 0

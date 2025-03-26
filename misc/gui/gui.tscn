@@ -1,0 +1,131 @@
+[gd_scene load_steps=11 format=3 uid="uid://t1lqjxny1int"]
+
+[ext_resource type="Material" uid="uid://dcq7n5qyt3hj0" path="res://materials/immaterial.tres" id="1_cnh4v"]
+[ext_resource type="Theme" uid="uid://crcivs73grrf7" path="res://textures/gui/themes/custom_theme.tres" id="2_stc6v"]
+[ext_resource type="Script" uid="uid://cg5tlka2i66wn" path="res://misc/gui/gui.gd" id="3_l60ds"]
+[ext_resource type="PackedScene" uid="uid://ddv2qool36rfh" path="res://misc/gui/pause_menu.tscn" id="4_dnklx"]
+[ext_resource type="PackedScene" uid="uid://djhm61nx72b66" path="res://misc/gui/settings_menu/settings_menu.tscn" id="5_nx584"]
+[ext_resource type="PackedScene" uid="uid://dn3wvhbb3qaw1" path="res://misc/gui/char_info.tscn" id="6_ogoim"]
+[ext_resource type="PackedScene" uid="uid://cejp7bpbfmkw" path="res://misc/gui/utility_menu.tscn" id="7_d8xy5"]
+[ext_resource type="PackedScene" uid="uid://dysmxh061ic7i" path="res://misc/gui/sequence_display.tscn" id="8_rsuha"]
+[ext_resource type="PackedScene" uid="uid://bsrym6k1vywfo" path="res://misc/gui/quest_tracker.tscn" id="9_uxusl"]
+[ext_resource type="PackedScene" uid="uid://cjbkwr8dsdqvq" path="res://misc/gui/info_box.tscn" id="10_stc6v"]
+
+[node name="GUI" type="Control"]
+process_mode = 3
+z_index = 4
+material = ExtResource("1_cnh4v")
+layout_mode = 3
+anchors_preset = 0
+offset_right = 960.0
+offset_bottom = 540.0
+theme = ExtResource("2_stc6v")
+script = ExtResource("3_l60ds")
+
+[node name="PauseMenu" parent="." instance=ExtResource("4_dnklx")]
+unique_name_in_owner = true
+visible = false
+z_index = 2
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -37.0
+offset_right = 37.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="SettingsMenu" parent="." instance=ExtResource("5_nx584")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+
+[node name="CharInfo" parent="." instance=ExtResource("6_ogoim")]
+unique_name_in_owner = true
+process_mode = 1
+layout_mode = 1
+offset_right = 127.0
+
+[node name="UtilityMenu" parent="." instance=ExtResource("7_d8xy5")]
+unique_name_in_owner = true
+process_mode = 1
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_bottom = 0.0
+grow_horizontal = 0
+grow_vertical = 1
+
+[node name="SequenceDisplay" parent="." instance=ExtResource("8_rsuha")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+
+[node name="QuestTracker" parent="." instance=ExtResource("9_uxusl")]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 0
+grow_vertical = 0
+
+[node name="TimeLabel" type="Label" parent="."]
+unique_name_in_owner = true
+use_parent_material = true
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -20.0
+offset_right = 20.0
+offset_bottom = 23.0
+grow_horizontal = 2
+theme_override_font_sizes/font_size = 16
+text = "00:00"
+
+[node name="InfoBox" parent="." instance=ExtResource("10_stc6v")]
+unique_name_in_owner = true
+visible = false
+z_index = 3
+layout_mode = 0
+
+[node name="LogPanel" type="PanelContainer" parent="."]
+process_mode = 1
+visible = false
+use_parent_material = true
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -156.0
+offset_top = -96.0
+offset_right = 156.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="Log" type="RichTextLabel" parent="LogPanel"]
+unique_name_in_owner = true
+use_parent_material = true
+layout_mode = 2
+theme_override_font_sizes/normal_font_size = 16
+scroll_following = true
+
+[node name="LogTimer" type="Timer" parent="."]
+unique_name_in_owner = true
+process_mode = 1
+wait_time = 3.0
+one_shot = true
+
+[connection signal="open_settings" from="PauseMenu" to="SettingsMenu" method="open_settings_menu"]
+[connection signal="pause_closed" from="PauseMenu" to="." method="submenu_closed"]
+[connection signal="pause_opened" from="PauseMenu" to="." method="submenu_opened"]
+[connection signal="settings_closed" from="SettingsMenu" to="." method="submenu_closed"]
+[connection signal="settings_closed" from="SettingsMenu" to="PauseMenu" method="open_pause_menu"]
+[connection signal="settings_opened" from="SettingsMenu" to="." method="submenu_opened"]

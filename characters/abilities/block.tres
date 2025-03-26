@@ -8,6 +8,9 @@
 [resource]
 script = ExtResource("1_e8slm")
 display_name = "Block"
+description = "Applies a stacking buff that lasts 1 round.
+Grants +2 Damage Threshold.
+One stack is removed upon hit."
 sound = ExtResource("2_54ndt")
 ap_cost = 1
 mp_cost = 0

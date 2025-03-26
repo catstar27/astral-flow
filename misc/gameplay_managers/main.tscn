@@ -1,13 +1,13 @@
 [gd_scene load_steps=10 format=3 uid="uid://c6tflifn824fs"]
 
 [ext_resource type="Script" uid="uid://mnr6ks1d3db6" path="res://misc/gameplay_managers/main.gd" id="1_518bh"]
-[ext_resource type="Texture2D" uid="uid://ceeo5gnqb2rcr" path="res://textures/hud/foreground.png" id="3_khi6w"]
-[ext_resource type="Texture2D" uid="uid://c86rddiynhvpb" path="res://textures/hud/backgrounds.png" id="3_tsd85"]
+[ext_resource type="Texture2D" uid="uid://ceeo5gnqb2rcr" path="res://textures/gui/foreground.png" id="3_khi6w"]
+[ext_resource type="Texture2D" uid="uid://c86rddiynhvpb" path="res://textures/gui/backgrounds.png" id="3_tsd85"]
 [ext_resource type="PackedScene" uid="uid://b85mlpg1agp8h" path="res://misc/selection_cursor/selection_cursor.tscn" id="4_lfpb3"]
 [ext_resource type="PackedScene" uid="uid://covhvnd4w4mkl" path="res://misc/gameplay_managers/sound_manager.tscn" id="5_icnsw"]
 [ext_resource type="PackedScene" uid="uid://dwv4awarhydj0" path="res://misc/gameplay_managers/combat_manager.tscn" id="5_xm8nu"]
 [ext_resource type="PackedScene" uid="uid://81w41aon23of" path="res://misc/gameplay_managers/quest_manager.tscn" id="6_1f2dt"]
-[ext_resource type="PackedScene" uid="uid://t1lqjxny1int" path="res://misc/hud/hud.tscn" id="9_5e0hy"]
+[ext_resource type="PackedScene" uid="uid://t1lqjxny1int" path="res://misc/gui/gui.tscn" id="9_5e0hy"]
 
 [sub_resource type="Resource" id="Resource_ut36o"]
 metadata/__load_path__ = "res://textures/arrow.png"
@@ -48,7 +48,7 @@ texture = ExtResource("3_khi6w")
 unique_name_in_owner = true
 layer = 100
 
-[node name="HUD" parent="HUDLayer" instance=ExtResource("9_5e0hy")]
+[node name="GUI" parent="HUDLayer" instance=ExtResource("9_5e0hy")]
 unique_name_in_owner = true
 z_index = 30
 

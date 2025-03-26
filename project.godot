@@ -113,7 +113,7 @@ LevelSave="This Node is to be Saved as Part of a Level"
 
 [gui]
 
-theme/custom="res://textures/hud/custom_theme.tres"
+theme/custom="res://textures/gui/themes/custom_theme.tres"
 theme/custom_font="res://textures/font/NishikiTeki.ttf"
 
 [input]

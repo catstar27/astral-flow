@@ -15,7 +15,7 @@ specular_texture = ExtResource("4_mkiqq")
 size = Vector2(64, 64)
 
 [node name="WallLight" type="StaticBody2D"]
-z_index = 2
+z_index = 4
 collision_layer = 2
 collision_mask = 3
 script = ExtResource("1_niad6")

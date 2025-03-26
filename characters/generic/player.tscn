@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://duk342kn2rflp" path="res://characters/generic/player.gd" id="1_so47p"]
 [ext_resource type="Script" uid="uid://b0xbk38jyra5a" path="res://characters/abilities/ability.gd" id="2_6rrl0"]
 [ext_resource type="Material" uid="uid://gcx5n0wnotu5" path="res://materials/outline_material.tres" id="2_aa0te"]
-[ext_resource type="Resource" uid="uid://dae4xdag0nd3v" path="res://characters/abilities/punch.tres" id="3_6rrl0"]
+[ext_resource type="Resource" uid="uid://dae4xdag0nd3v" path="res://characters/abilities/strike.tres" id="3_6rrl0"]
 [ext_resource type="Texture2D" uid="uid://ccviqgc6qduy" path="res://textures/character/kalin_spritesheet.png" id="3_rhuoj"]
 [ext_resource type="Texture2D" uid="uid://s8uq7nt6t7do" path="res://textures/character/kalin_spritesheet_n.png" id="4_4kvvd"]
 [ext_resource type="AnimationLibrary" uid="uid://d2follnewo23r" path="res://animations/Character.res" id="4_b3lbu"]

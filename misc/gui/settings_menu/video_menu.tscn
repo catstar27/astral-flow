@@ -1,0 +1,33 @@
+[gd_scene load_steps=3 format=3 uid="uid://b7cxdla4214kn"]
+
+[ext_resource type="Theme" uid="uid://crcivs73grrf7" path="res://textures/gui/themes/custom_theme.tres" id="1_6ts4i"]
+[ext_resource type="Script" uid="uid://d3qcuaoyqf2wy" path="res://misc/gui/settings_menu/video_menu.gd" id="2_k5xkk"]
+
+[node name="VideoMenu" type="PanelContainer" node_paths=PackedStringArray("first_selection")]
+custom_minimum_size = Vector2(380, 300)
+offset_right = 380.0
+offset_bottom = 300.0
+theme = ExtResource("1_6ts4i")
+script = ExtResource("2_k5xkk")
+first_selection = NodePath("GridContainer/FullscreenButton")
+
+[node name="GridContainer" type="GridContainer" parent="."]
+layout_mode = 2
+columns = 2
+
+[node name="FullscreenButton" type="CheckButton" parent="GridContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+flat = true
+
+[node name="FullscreenLabel" type="Label" parent="GridContainer"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+text = "Fullscreen"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[connection signal="toggled" from="GridContainer/FullscreenButton" to="." method="fullscreen_button_toggled"]

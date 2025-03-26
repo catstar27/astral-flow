@@ -1,0 +1,32 @@
+[gd_scene load_steps=3 format=3 uid="uid://bcso2ambvbnge"]
+
+[ext_resource type="Theme" uid="uid://crcivs73grrf7" path="res://textures/gui/themes/custom_theme.tres" id="1_nuhaj"]
+[ext_resource type="Script" uid="uid://cjo4c2nrrkuww" path="res://misc/gui/settings_menu/controls_menu.gd" id="2_emjoq"]
+
+[node name="ControlsMenu" type="PanelContainer"]
+custom_minimum_size = Vector2(380, 300)
+offset_right = 380.0
+offset_bottom = 300.0
+theme = ExtResource("1_nuhaj")
+script = ExtResource("2_emjoq")
+
+[node name="GridContainer" type="GridContainer" parent="."]
+layout_mode = 2
+columns = 2
+
+[node name="PlaceholderButton" type="Button" parent="GridContainer"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="PlaceholderLabel" type="Label" parent="GridContainer"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+text = "Placeholder"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[connection signal="pressed" from="GridContainer/PlaceholderButton" to="." method="placeholder_button_pressed"]

@@ -36,6 +36,7 @@ enum status_effect_conditions {
 enum skill_used_options {intelligence, agility, strength, endurance, resolve, charisma, passion}
 var user: Character = null ## Character using the ability
 @export var display_name: String = "NameHere" ## Name of the ability shown in the GUI
+@export_multiline var description: String = "Description Here" ## Description of the ability
 @export var sound: AudioStreamWAV ## Sound that plays when the ability activates
 @export_group("Costs")
 @export var ap_cost: int = 0 ## Amount of AP used by the ability
@@ -56,9 +57,19 @@ signal activated ## Sent when the ability is activated
 #endregion
 
 #region Setup
+func setup() -> void:
+	description += "\nAP Cost: "+str(ap_cost)+"\nMP Cost: "+str(mp_cost)+"\nRange: "
+	if target_type == target_type_options.user:
+		description += "Self"
+	elif ability_range == 1:
+		description += "Melee"
+	else:
+		description += str(ability_range)+" Tiles"
+
 ## Special version of duplicate for abilities
 func duplicate_ability(subresources: bool = false)->Ability:
 	var copy1: Ability = super.duplicate(subresources)
+	copy1.setup()
 	var status_dict: Dictionary[Status, status_effect_conditions]
 	for status_to_copy in statuses.keys():
 		status_dict[status_to_copy.duplicate(true)] = statuses[status_to_copy]

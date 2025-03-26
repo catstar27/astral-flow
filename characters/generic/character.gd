@@ -364,6 +364,7 @@ func deselect_ability(will_reselect: bool = false)->void:
 
 ## Adds an ability
 func add_ability(ability: Ability)->void:
+	ability = ability.duplicate_ability(true)
 	abilities.append(ability)
 	ability.user = self
 	abilities_changed.emit()

@@ -1,0 +1,105 @@
+[gd_scene load_steps=6 format=3 uid="uid://ddv2qool36rfh"]
+
+[ext_resource type="Theme" uid="uid://crcivs73grrf7" path="res://textures/gui/themes/custom_theme.tres" id="1_6e4nb"]
+[ext_resource type="Material" uid="uid://dcq7n5qyt3hj0" path="res://materials/immaterial.tres" id="1_f4y02"]
+[ext_resource type="Script" uid="uid://ckmxsjnq11wio" path="res://misc/gui/pause_menu.gd" id="1_i7qcp"]
+[ext_resource type="Texture2D" uid="uid://ceeo5gnqb2rcr" path="res://textures/gui/foreground.png" id="2_5gsa7"]
+[ext_resource type="Material" uid="uid://dessed1x8jslv" path="res://materials/blur_material.tres" id="2_yt8ud"]
+
+[node name="PauseMenu" type="Control"]
+process_mode = 3
+z_index = 5
+material = ExtResource("1_f4y02")
+layout_mode = 3
+anchors_preset = 0
+offset_right = 74.0
+script = ExtResource("1_i7qcp")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+use_parent_material = true
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -37.0
+offset_top = -56.5
+offset_right = 37.0
+offset_bottom = 56.5
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_6e4nb")
+
+[node name="Resume" type="Button" parent="VBoxContainer"]
+unique_name_in_owner = true
+use_parent_material = true
+layout_mode = 2
+focus_neighbor_top = NodePath("../Quit")
+focus_neighbor_bottom = NodePath("../Save")
+focus_next = NodePath("../Save")
+focus_previous = NodePath("../Quit")
+text = "Resume"
+
+[node name="Save" type="Button" parent="VBoxContainer"]
+unique_name_in_owner = true
+use_parent_material = true
+layout_mode = 2
+focus_neighbor_top = NodePath("../Resume")
+focus_neighbor_bottom = NodePath("../Load")
+focus_next = NodePath("../Load")
+focus_previous = NodePath("../Resume")
+text = "Save"
+
+[node name="Load" type="Button" parent="VBoxContainer"]
+unique_name_in_owner = true
+use_parent_material = true
+layout_mode = 2
+focus_neighbor_top = NodePath("../Save")
+focus_neighbor_bottom = NodePath("../Settings")
+focus_next = NodePath("../Settings")
+focus_previous = NodePath("../Save")
+text = "Load"
+
+[node name="Settings" type="Button" parent="VBoxContainer"]
+unique_name_in_owner = true
+use_parent_material = true
+layout_mode = 2
+focus_neighbor_top = NodePath("../Load")
+focus_neighbor_bottom = NodePath("../Reset")
+focus_next = NodePath("../Reset")
+focus_previous = NodePath("../Load")
+text = "Settings"
+
+[node name="Reset" type="Button" parent="VBoxContainer"]
+unique_name_in_owner = true
+use_parent_material = true
+layout_mode = 2
+focus_neighbor_top = NodePath("../Settings")
+focus_neighbor_bottom = NodePath("../Quit")
+focus_next = NodePath("../Quit")
+focus_previous = NodePath("../Settings")
+text = "Reset"
+
+[node name="Quit" type="Button" parent="VBoxContainer"]
+unique_name_in_owner = true
+use_parent_material = true
+layout_mode = 2
+focus_neighbor_top = NodePath("../Reset")
+focus_neighbor_bottom = NodePath("../Resume")
+focus_next = NodePath("../Resume")
+focus_previous = NodePath("../Reset")
+text = "Quit"
+
+[node name="Blur" type="Sprite2D" parent="."]
+z_index = -1
+material = ExtResource("2_yt8ud")
+scale = Vector2(10000, 10000)
+texture = ExtResource("2_5gsa7")
+
+[connection signal="pressed" from="VBoxContainer/Resume" to="." method="close_pause_menu"]
+[connection signal="pressed" from="VBoxContainer/Save" to="." method="save_pressed"]
+[connection signal="pressed" from="VBoxContainer/Load" to="." method="load_pressed"]
+[connection signal="pressed" from="VBoxContainer/Settings" to="." method="settings_pressed"]
+[connection signal="pressed" from="VBoxContainer/Reset" to="." method="reset_pressed"]
+[connection signal="pressed" from="VBoxContainer/Quit" to="." method="quit_pressed"]

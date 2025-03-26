@@ -1,0 +1,151 @@
+[gd_scene load_steps=11 format=3 uid="uid://djhm61nx72b66"]
+
+[ext_resource type="Theme" uid="uid://crcivs73grrf7" path="res://textures/gui/themes/custom_theme.tres" id="1_bfybv"]
+[ext_resource type="Material" uid="uid://dcq7n5qyt3hj0" path="res://materials/immaterial.tres" id="1_tvvdr"]
+[ext_resource type="Script" uid="uid://ml36010pk3w6" path="res://misc/gui/settings_menu/settings_menu.gd" id="2_tpe0x"]
+[ext_resource type="Material" uid="uid://dessed1x8jslv" path="res://materials/blur_material.tres" id="3_xurln"]
+[ext_resource type="Texture2D" uid="uid://ceeo5gnqb2rcr" path="res://textures/gui/foreground.png" id="4_50f23"]
+[ext_resource type="PackedScene" uid="uid://dveymygjdbsyw" path="res://misc/gui/settings_menu/gameplay_menu.tscn" id="5_7oobf"]
+[ext_resource type="PackedScene" uid="uid://dleye7m8gjxs0" path="res://misc/gui/control_display_button.tscn" id="6_bo706"]
+[ext_resource type="PackedScene" uid="uid://b7cxdla4214kn" path="res://misc/gui/settings_menu/video_menu.tscn" id="6_oj3kl"]
+[ext_resource type="PackedScene" uid="uid://cw61jejhmqw73" path="res://misc/gui/settings_menu/audio_menu.tscn" id="7_bady6"]
+[ext_resource type="PackedScene" uid="uid://bcso2ambvbnge" path="res://misc/gui/settings_menu/controls_menu.tscn" id="8_go2v4"]
+
+[node name="SettingsMenu" type="Control"]
+material = ExtResource("1_tvvdr")
+layout_mode = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_bfybv")
+script = ExtResource("2_tpe0x")
+
+[node name="Blur" type="Sprite2D" parent="."]
+z_index = -1
+material = ExtResource("3_xurln")
+scale = Vector2(10000, 10000)
+texture = ExtResource("4_50f23")
+
+[node name="SettingsContainer" type="VBoxContainer" parent="."]
+use_parent_material = true
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -190.0
+offset_top = -169.5
+offset_right = 190.0
+offset_bottom = 169.5
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="CategoryContainer" type="HBoxContainer" parent="SettingsContainer"]
+use_parent_material = true
+layout_mode = 2
+
+[node name="ControlDisplayButton" parent="SettingsContainer/CategoryContainer" instance=ExtResource("6_bo706")]
+layout_mode = 2
+input_action_name = "menu_left"
+
+[node name="GameplayCategory" type="Button" parent="SettingsContainer/CategoryContainer"]
+unique_name_in_owner = true
+use_parent_material = true
+custom_minimum_size = Vector2(92, 0)
+layout_mode = 2
+focus_mode = 0
+toggle_mode = true
+button_pressed = true
+text = "Gameplay"
+
+[node name="VideoCategory" type="Button" parent="SettingsContainer/CategoryContainer"]
+unique_name_in_owner = true
+use_parent_material = true
+custom_minimum_size = Vector2(92, 0)
+layout_mode = 2
+focus_mode = 0
+toggle_mode = true
+text = "Video"
+
+[node name="AudioCategory" type="Button" parent="SettingsContainer/CategoryContainer"]
+unique_name_in_owner = true
+use_parent_material = true
+custom_minimum_size = Vector2(92, 0)
+layout_mode = 2
+focus_mode = 0
+toggle_mode = true
+text = "Audio"
+
+[node name="ControlsCategory" type="Button" parent="SettingsContainer/CategoryContainer"]
+unique_name_in_owner = true
+use_parent_material = true
+custom_minimum_size = Vector2(92, 0)
+layout_mode = 2
+focus_mode = 0
+toggle_mode = true
+text = "Controls"
+
+[node name="ControlDisplayButton2" parent="SettingsContainer/CategoryContainer" instance=ExtResource("6_bo706")]
+layout_mode = 2
+input_action_name = "menu_right"
+
+[node name="GameplayMenu" parent="SettingsContainer" instance=ExtResource("5_7oobf")]
+unique_name_in_owner = true
+visible = false
+use_parent_material = true
+layout_mode = 2
+
+[node name="VideoMenu" parent="SettingsContainer" instance=ExtResource("6_oj3kl")]
+unique_name_in_owner = true
+visible = false
+use_parent_material = true
+layout_mode = 2
+
+[node name="AudioMenu" parent="SettingsContainer" instance=ExtResource("7_bady6")]
+unique_name_in_owner = true
+visible = false
+use_parent_material = true
+layout_mode = 2
+
+[node name="ControlsMenu" parent="SettingsContainer" instance=ExtResource("8_go2v4")]
+unique_name_in_owner = true
+visible = false
+use_parent_material = true
+layout_mode = 2
+
+[node name="ConfirmButtons" type="HBoxContainer" parent="SettingsContainer"]
+use_parent_material = true
+layout_mode = 2
+alignment = 1
+
+[node name="ConfirmButton2" parent="SettingsContainer/ConfirmButtons" instance=ExtResource("6_bo706")]
+custom_minimum_size = Vector2(92, 44)
+layout_mode = 2
+text = "Confirm"
+input_action_name = "menu_confirm"
+
+[node name="DefaultButton2" parent="SettingsContainer/ConfirmButtons" instance=ExtResource("6_bo706")]
+custom_minimum_size = Vector2(92, 44)
+layout_mode = 2
+text = "Default"
+input_action_name = "default"
+
+[node name="CancelButton2" parent="SettingsContainer/ConfirmButtons" instance=ExtResource("6_bo706")]
+custom_minimum_size = Vector2(92, 44)
+layout_mode = 2
+text = "Cancel"
+
+[connection signal="pressed" from="SettingsContainer/CategoryContainer/ControlDisplayButton" to="." method="select_prev"]
+[connection signal="pressed" from="SettingsContainer/CategoryContainer/GameplayCategory" to="." method="select_gameplay"]
+[connection signal="pressed" from="SettingsContainer/CategoryContainer/VideoCategory" to="." method="select_video"]
+[connection signal="pressed" from="SettingsContainer/CategoryContainer/AudioCategory" to="." method="select_audio"]
+[connection signal="pressed" from="SettingsContainer/CategoryContainer/ControlsCategory" to="." method="select_controls"]
+[connection signal="pressed" from="SettingsContainer/CategoryContainer/ControlDisplayButton2" to="." method="select_next"]
+[connection signal="pressed" from="SettingsContainer/ConfirmButtons/ConfirmButton2" to="." method="close_settings_menu"]
+[connection signal="pressed" from="SettingsContainer/ConfirmButtons/DefaultButton2" to="." method="default_settings"]
+[connection signal="pressed" from="SettingsContainer/ConfirmButtons/CancelButton2" to="." method="cancel_settings"]

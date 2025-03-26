@@ -55,10 +55,6 @@ func _unhandled_input(event: InputEvent) -> void:
 		if selected != null:
 			if selected.selected_ability == null:
 				deselect()
-	if event.is_action_pressed("info"):
-		update_move_arrows(selected)
-	if event.is_action_released("info"):
-		clear_move_arrows()
 
 func _physics_process(_delta: float) -> void:
 	if !moving && move_dir != Vector2.ZERO:
@@ -69,10 +65,9 @@ func _physics_process(_delta: float) -> void:
 func get_move_arrow(pos: Vector2)->Sprite2D:
 	var new_arrow: Sprite2D = Sprite2D.new()
 	new_arrow.top_level = true
-	new_arrow.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
-	new_arrow.z_index = 5
+	new_arrow.z_index = 0
 	new_arrow.texture = move_arrow_tex
-	new_arrow.hframes = 3
+	new_arrow.hframes = 4
 	new_arrow.position = pos
 	new_arrow.scale = Vector2.ONE*4
 	new_arrow.material = material
@@ -85,30 +80,33 @@ func update_move_arrows(character: Character)->void:
 	clear_move_arrows()
 	if character == null:
 		return
-	if Input.is_action_pressed("info"):
-		var path: Array[Vector2] = NavMaster.request_nav_path(character.global_position, global_position)
-		if path.size() == 1 || character.global_position == global_position:
-			return
-		for index in range(1, path.size()):
-			if character != selected:
-				break
-			var new_arrow: Sprite2D = get_move_arrow(path[index])
-			new_arrow.look_at(path[index-1])
-			if index > 1 && move_arrows[index-2].rotation != new_arrow.rotation:
-				move_arrows[index-2].frame = 1
-				var dir_enter: Vector2 = -(path[index-1]-path[index-2]).normalized()
-				var dir_exit: Vector2 = -(path[index-1]-path[index]).normalized()
-				move_arrows[index-2].rotation = 0
-				if (dir_exit == Vector2.DOWN || dir_enter == Vector2.DOWN) && (dir_exit == Vector2.LEFT || dir_enter == Vector2.LEFT):
-					move_arrows[index-2].rotation = PI
-				elif dir_exit == Vector2.DOWN || dir_enter == Vector2.DOWN:
-					move_arrows[index-2].rotation = PI/2
-				elif dir_exit == Vector2.LEFT || dir_enter == Vector2.LEFT:
-					move_arrows[index-2].rotation = -PI/2
-			if index == path.size()-1:
-				new_arrow.rotation -= PI
-				new_arrow.frame = 2
-			add_child(new_arrow)
+	var path: Array[Vector2] = NavMaster.request_nav_path(character.global_position, global_position)
+	if path.size() == 1 || character.global_position == global_position:
+		return
+	for index in range(1, path.size()):
+		if character != selected:
+			break
+		var new_arrow: Sprite2D = get_move_arrow(path[index])
+		new_arrow.look_at(path[index-1])
+		if index > 1 && move_arrows[index-2].rotation != new_arrow.rotation:
+			move_arrows[index-2].frame = 1
+			var dir_enter: Vector2 = -(path[index-1]-path[index-2]).normalized()
+			var dir_exit: Vector2 = -(path[index-1]-path[index]).normalized()
+			move_arrows[index-2].rotation = 0
+			if (dir_exit == Vector2.DOWN || dir_enter == Vector2.DOWN) && (dir_exit == Vector2.LEFT || dir_enter == Vector2.LEFT):
+				move_arrows[index-2].rotation = PI
+			elif dir_exit == Vector2.DOWN || dir_enter == Vector2.DOWN:
+				move_arrows[index-2].rotation = PI/2
+			elif dir_exit == Vector2.LEFT || dir_enter == Vector2.LEFT:
+				move_arrows[index-2].rotation = -PI/2
+		if index == path.size()-1:
+			new_arrow.rotation -= PI
+			new_arrow.frame = 2
+		add_child(new_arrow)
+	var head_arrow: Sprite2D = get_move_arrow(character.global_position)
+	head_arrow.frame = 3
+	head_arrow.look_at(move_arrows[0].position)
+	add_child(head_arrow)
 
 ## Deletes all movement arrow pieces
 func clear_move_arrows()->void:
