@@ -9,12 +9,11 @@ class_name SelectionCursor
 @onready var sprite: Sprite2D = %Sprite ## Sprite of the cursor
 @onready var selection_area: Area2D = %SelectionArea ## Area which detects objects to select/interact
 @onready var camera: Camera2D = %Camera ## Camera node, which is part of this
-var selection_marker_scene: PackedScene = preload("res://misc/selection_cursor/selection_marker.tscn") ## Scene for selection markers
+@onready var selection_marker: Node2D = %SelectionMarker ## The selection marker
 var selected: Character = null ## Character the cursor has selected
 var hovering: Node2D = null ## Object the cursor is hovering over
 var moving: bool = false ## Whether the cursor is moving
 var move_dir: Vector2 = Vector2i.ZERO ## Direction to move in
-var marker: Node2D = null ## Current selection marker
 var move_arrows: Array[Sprite2D] = [] ## Array of sprites making up the movement arrows
 var deactivate_requests: int = 0 ## Number of sources attempting to deactivate the cursor; inactive if > 0
 var block_deselect: bool = false ## Blocks the cursor from deselecting
@@ -31,6 +30,7 @@ func _ready() -> void:
 ## Updates the color of the cursor and its markers
 func update_color()->void:
 	sprite.modulate = Settings.gameplay.selection_tint
+	selection_marker.modulate = Settings.gameplay.selection_tint
 	for move_arrow in move_arrows:
 		move_arrow.modulate = sprite.modulate
 
@@ -171,16 +171,14 @@ func selected_interact(pos: Vector2)->void:
 
 #region Selection
 ## Creates a marker to show a character is selected
-func _create_marker()->void:
-	marker = selection_marker_scene.instantiate()
-	marker.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
-	marker.modulate = Settings.gameplay.selection_tint
-	selected.add_child(marker)
+func _place_marker()->void:
+	remove_child(selection_marker)
+	selected.add_child(selection_marker)
 
 ## Deletes the current marker
-func _delete_marker()->void:
-	if marker != null:
-		marker.queue_free()
+func _reclaim_marker()->void:
+	selected.remove_child(selection_marker)
+	add_child(selection_marker)
 
 ## Selects the given character
 func select(character: Character)->void:
@@ -197,7 +195,7 @@ func select(character: Character)->void:
 		selected.call_deferred("select")
 		selected.ended_turn.connect(deselect)
 		selected.pos_changed.connect(update_move_arrows)
-		_create_marker()
+		_place_marker()
 	EventBus.broadcast("SELECTION_CHANGED",selected)
 
 ## Deselects the current character
@@ -205,7 +203,7 @@ func deselect(_node: Character = null)->void:
 	if block_deselect:
 		return
 	clear_move_arrows()
-	_delete_marker()
+	_reclaim_marker()
 	if selected == null:
 		return
 	var prev_select: Character = selected

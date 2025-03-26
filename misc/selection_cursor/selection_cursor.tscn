@@ -1,9 +1,10 @@
-[gd_scene load_steps=6 format=3 uid="uid://b85mlpg1agp8h"]
+[gd_scene load_steps=7 format=3 uid="uid://b85mlpg1agp8h"]
 
 [ext_resource type="Script" uid="uid://d2c55qqweqaku" path="res://misc/selection_cursor/selection_cursor.gd" id="1_rchw3"]
 [ext_resource type="Texture2D" uid="uid://bbo5njqqnookt" path="res://textures/gui/arrow.png" id="2_4oduv"]
 [ext_resource type="Texture2D" uid="uid://divirgkfj3hbk" path="res://textures/gui/selection_cursor.png" id="2_yiq7u"]
 [ext_resource type="Material" uid="uid://dcq7n5qyt3hj0" path="res://materials/immaterial.tres" id="3_xq438"]
+[ext_resource type="PackedScene" uid="uid://b1u3sw4jgg3gq" path="res://misc/selection_cursor/selection_marker.tscn" id="5_5ym55"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_6ag3p"]
 
@@ -19,6 +20,9 @@ use_parent_material = true
 texture = ExtResource("2_yiq7u")
 offset = Vector2(0, -32)
 hframes = 2
+
+[node name="SelectionMarker" parent="." instance=ExtResource("5_5ym55")]
+unique_name_in_owner = true
 
 [node name="Camera" type="Camera2D" parent="."]
 unique_name_in_owner = true
