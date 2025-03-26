@@ -31,9 +31,9 @@ theme_override_font_sizes/mono_font_size = 12
 theme_override_font_sizes/normal_font_size = 12
 theme_override_font_sizes/bold_font_size = 12
 bbcode_enabled = true
-text = "Sax
-sdssd
-sdasdd"
+text = "This is just a test
+Set apart from all the rest
+If you see, report"
 fit_content = true
 scroll_active = false
 autowrap_mode = 0

@@ -10,6 +10,7 @@ class_name SelectionCursor
 @onready var selection_area: Area2D = %SelectionArea ## Area which detects objects to select/interact
 @onready var camera: Camera2D = %Camera ## Camera node, which is part of this
 @onready var selection_marker: Node2D = %SelectionMarker ## The selection marker
+var move_arrow_scn: PackedScene = preload("uid://dsp8lf7fyd2h7") ## Movement arrow scene
 var selected: Character = null ## Character the cursor has selected
 var hovering: Node2D = null ## Object the cursor is hovering over
 var moving: bool = false ## Whether the cursor is moving
@@ -61,20 +62,6 @@ func _physics_process(_delta: float) -> void:
 		move(move_dir)
 
 #region Movement Arrow
-## Creates a new movement arrow
-func get_move_arrow(pos: Vector2)->Sprite2D:
-	var new_arrow: Sprite2D = Sprite2D.new()
-	new_arrow.top_level = true
-	new_arrow.z_index = 0
-	new_arrow.texture = move_arrow_tex
-	new_arrow.hframes = 4
-	new_arrow.position = pos
-	new_arrow.scale = Vector2.ONE*4
-	new_arrow.material = material
-	new_arrow.modulate = sprite.modulate
-	move_arrows.append(new_arrow)
-	return new_arrow
-
 ## Makes a path of arrow pieces to display the projected path of movement
 func update_move_arrows(character: Character)->void:
 	clear_move_arrows()
@@ -86,47 +73,29 @@ func update_move_arrows(character: Character)->void:
 	if path.size() == 1 || character.global_position == global_position:
 		return
 	var ap_arr: Array[Array] = character.get_ap_for_path(path.size()-1, false)
-	for index in range(1, path.size()):
+	path.resize(ap_arr.size())
+	for index in range(0, path.size()):
 		if character != selected:
 			break
-		var new_arrow: Sprite2D = get_move_arrow(path[index])
-		new_arrow.look_at(path[index-1])
-		if index > 1 && move_arrows[index-2].rotation != new_arrow.rotation:
-			move_arrows[index-2].frame = 1
-			var dir_enter: Vector2 = -(path[index-1]-path[index-2]).normalized()
-			var dir_exit: Vector2 = -(path[index-1]-path[index]).normalized()
-			move_arrows[index-2].rotation = 0
-			if (dir_exit == Vector2.DOWN || dir_enter == Vector2.DOWN) && (dir_exit == Vector2.LEFT || dir_enter == Vector2.LEFT):
-				move_arrows[index-2].rotation = PI
-			elif dir_exit == Vector2.DOWN || dir_enter == Vector2.DOWN:
-				move_arrows[index-2].rotation = PI/2
-			elif dir_exit == Vector2.LEFT || dir_enter == Vector2.LEFT:
-				move_arrows[index-2].rotation = -PI/2
+		var new_arrow: MoveArrow = move_arrow_scn.instantiate()
+		new_arrow.self_modulate = Settings.gameplay.selection_tint
+		move_arrows.append(new_arrow)
+		if index == 0:
+			new_arrow.position = path[0]
+			new_arrow.draw_tail(path[0],path[1])
+			add_child(new_arrow)
+			continue
+		new_arrow.position = path[index]
+		if index < path.size()-1:
+			new_arrow.draw_between(path[index-1], path[index+1])
+		else:
+			new_arrow.draw_head(path[index-1], path[index])
 		if character.in_combat:
-			var ap_label: Label = Label.new()
-			ap_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-			ap_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-			ap_label.add_theme_font_size_override("font_size", 12)
 			if ap_arr[index][1] != 0:
-				ap_label.text = "..."
+				new_arrow.set_label("...")
 			else:
-				ap_label.text = str(character.cur_ap-ap_arr[index][0])
-			new_arrow.add_child(ap_label)
-			ap_label.rotation = -new_arrow.rotation
-			if index == ap_arr.size()-1:
-				new_arrow.rotation -= PI
-				new_arrow.frame = 2
-				ap_label.rotation = -new_arrow.rotation
-				add_child(new_arrow)
-				break
-		if index == path.size()-1:
-			new_arrow.rotation -= PI
-			new_arrow.frame = 2
+				new_arrow.set_label(str(character.cur_ap-ap_arr[index][0]))
 		add_child(new_arrow)
-	var head_arrow: Sprite2D = get_move_arrow(character.global_position)
-	head_arrow.frame = 3
-	head_arrow.look_at(move_arrows[0].position)
-	add_child(head_arrow)
 
 ## Deletes all movement arrow pieces
 func clear_move_arrows()->void:
