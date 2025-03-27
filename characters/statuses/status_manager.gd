@@ -22,6 +22,8 @@ signal status_damage_ticked(amount: int) ## Statuses applied this amount of tota
 signal status_stat_mod_changed(stat_mod: String, amount: int) ## The modification to stats has changed
 signal status_action_occurred(action: Callable, args: Array) ## A status has attempted to call a callable
 signal conditionals_processed ## Emitted when done processing conditional statuses
+signal status_ticked ## Emitted when statuses are ticked
+signal status_list_changed ## Emitted when the list of statuses changes
 #endregion
 
 #region Status Management
@@ -48,6 +50,7 @@ func add_status(status: Status, source: Node)->void:
 			stat_mods[stat] += status.stat_mods[stat]
 			status_stat_mod_changed.emit(stat, status.stat_mods[stat])
 		damage += status.damage
+	status_list_changed.emit()
 
 ## Ticks the statuses, dealing their damage and reducing duration
 func tick_status()->void:
@@ -58,6 +61,7 @@ func tick_status()->void:
 			status.duration -= 1
 			if status.duration == 0:
 				remove_status(status)
+	status_ticked.emit()
 
 ## Removes modifications from a given status
 func remove_status_mod(status: Status)->void:
@@ -79,6 +83,7 @@ func remove_status(status: Status, remove_all_stacks: bool = false)->void:
 			status_list.erase(status)
 	else:
 		status_list.erase(status)
+	status_list_changed.emit()
 
 ## Removes all statuses
 func remove_all_statuses()->void:

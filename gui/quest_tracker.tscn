@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://bsrym6k1vywfo"]
 
-[ext_resource type="Script" uid="uid://cvqk3cxm2c8t5" path="res://misc/gui/quest_tracker.gd" id="1_k0ovv"]
+[ext_resource type="Script" uid="uid://cvqk3cxm2c8t5" path="res://gui/quest_tracker.gd" id="1_k0ovv"]
 [ext_resource type="Material" uid="uid://dcq7n5qyt3hj0" path="res://materials/immaterial.tres" id="1_mgb1m"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_j8sdj"]

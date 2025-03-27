@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://cw61jejhmqw73"]
 
 [ext_resource type="Theme" uid="uid://crcivs73grrf7" path="res://textures/gui/themes/custom_theme.tres" id="1_yrt7q"]
-[ext_resource type="Script" uid="uid://lw5fennoen3x" path="res://misc/gui/settings_menu/audio_menu.gd" id="2_wj8r0"]
+[ext_resource type="Script" uid="uid://lw5fennoen3x" path="res://gui/settings_menu/audio_menu.gd" id="2_wj8r0"]
 
 [node name="AudioMenu" type="PanelContainer" node_paths=PackedStringArray("first_selection")]
 custom_minimum_size = Vector2(380, 300)

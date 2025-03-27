@@ -2,7 +2,7 @@
 
 [ext_resource type="Material" uid="uid://dcq7n5qyt3hj0" path="res://materials/immaterial.tres" id="1_np2p5"]
 [ext_resource type="Theme" uid="uid://crcivs73grrf7" path="res://textures/gui/themes/custom_theme.tres" id="1_vad1f"]
-[ext_resource type="Script" uid="uid://dybsvmn4dfppo" path="res://misc/gui/control_display_button.gd" id="2_6ni8f"]
+[ext_resource type="Script" uid="uid://dybsvmn4dfppo" path="res://gui/components/control_display_button.gd" id="2_6ni8f"]
 
 [node name="ControlDisplayButton" type="Button"]
 material = ExtResource("1_np2p5")

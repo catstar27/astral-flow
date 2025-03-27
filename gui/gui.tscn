@@ -1,15 +1,16 @@
-[gd_scene load_steps=11 format=3 uid="uid://t1lqjxny1int"]
+[gd_scene load_steps=12 format=3 uid="uid://t1lqjxny1int"]
 
 [ext_resource type="Material" uid="uid://dcq7n5qyt3hj0" path="res://materials/immaterial.tres" id="1_cnh4v"]
 [ext_resource type="Theme" uid="uid://crcivs73grrf7" path="res://textures/gui/themes/custom_theme.tres" id="2_stc6v"]
-[ext_resource type="Script" uid="uid://cg5tlka2i66wn" path="res://misc/gui/gui.gd" id="3_l60ds"]
-[ext_resource type="PackedScene" uid="uid://ddv2qool36rfh" path="res://misc/gui/pause_menu.tscn" id="4_dnklx"]
-[ext_resource type="PackedScene" uid="uid://djhm61nx72b66" path="res://misc/gui/settings_menu/settings_menu.tscn" id="5_nx584"]
-[ext_resource type="PackedScene" uid="uid://dn3wvhbb3qaw1" path="res://misc/gui/char_info.tscn" id="6_ogoim"]
-[ext_resource type="PackedScene" uid="uid://cejp7bpbfmkw" path="res://misc/gui/utility_menu.tscn" id="7_d8xy5"]
-[ext_resource type="PackedScene" uid="uid://dysmxh061ic7i" path="res://misc/gui/sequence_display.tscn" id="8_rsuha"]
-[ext_resource type="PackedScene" uid="uid://bsrym6k1vywfo" path="res://misc/gui/quest_tracker.tscn" id="9_uxusl"]
-[ext_resource type="PackedScene" uid="uid://cjbkwr8dsdqvq" path="res://misc/gui/info_box.tscn" id="10_stc6v"]
+[ext_resource type="Script" uid="uid://cg5tlka2i66wn" path="res://gui/gui.gd" id="3_l60ds"]
+[ext_resource type="PackedScene" uid="uid://ddv2qool36rfh" path="res://gui/pause_menu.tscn" id="4_dnklx"]
+[ext_resource type="PackedScene" uid="uid://djhm61nx72b66" path="res://gui/settings_menu/settings_menu.tscn" id="5_nx584"]
+[ext_resource type="PackedScene" uid="uid://dn3wvhbb3qaw1" path="res://gui/char_info.tscn" id="6_ogoim"]
+[ext_resource type="PackedScene" uid="uid://cejp7bpbfmkw" path="res://gui/utility_menu.tscn" id="7_d8xy5"]
+[ext_resource type="PackedScene" uid="uid://dysmxh061ic7i" path="res://gui/sequence_display.tscn" id="8_rsuha"]
+[ext_resource type="PackedScene" uid="uid://bsrym6k1vywfo" path="res://gui/quest_tracker.tscn" id="9_uxusl"]
+[ext_resource type="PackedScene" uid="uid://cjbkwr8dsdqvq" path="res://gui/info_box.tscn" id="10_stc6v"]
+[ext_resource type="PackedScene" uid="uid://376pccgciomv" path="res://gui/quick_info.tscn" id="11_s1h2m"]
 
 [node name="GUI" type="Control"]
 process_mode = 3
@@ -104,6 +105,21 @@ offset_right = 42.0
 offset_bottom = 44.0
 grow_horizontal = 1
 grow_vertical = 1
+
+[node name="QuickInfo" parent="." instance=ExtResource("11_s1h2m")]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -105.0
+offset_top = 34.0
+offset_right = 105.0
+offset_bottom = 132.0
+grow_horizontal = 2
+grow_vertical = 2
 
 [node name="LogPanel" type="PanelContainer" parent="."]
 process_mode = 1

@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://dtylaymiixbpw"]
 
 [ext_resource type="Material" uid="uid://dcq7n5qyt3hj0" path="res://materials/immaterial.tres" id="1_gcerq"]
-[ext_resource type="Script" uid="uid://cv4grdpnw8jgy" path="res://misc/gui/text_indicator.gd" id="1_j12yn"]
+[ext_resource type="Script" uid="uid://cv4grdpnw8jgy" path="res://gui/components/text_indicator.gd" id="1_j12yn"]
 
 [node name="TextIndicator" type="Node2D"]
 z_index = 8

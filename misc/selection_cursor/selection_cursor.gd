@@ -121,9 +121,11 @@ func deactivate()->void:
 func move(dir: Vector2)->void:
 	moving = true
 	var new_pos: Vector2 = NavMaster.tile_size*dir+position
-	if !NavMaster.is_in_bounds(new_pos):
+	if !NavMaster.is_in_bounds(new_pos) && NavMaster.is_in_bounds(position):
 		pass
 	else:
+		if hovering != null && hovering is Character:
+			EventBus.broadcast("HIDE_QUICK_INFO", "NULLDATA")
 		var tween: Tween = create_tween()
 		var time: float = .2
 		if Input.is_action_pressed("shift"):
@@ -205,8 +207,12 @@ func deselect(_node: Character = null)->void:
 func _selection_area_entered(body: Node2D) -> void:
 	if !body is GameMap:
 		hovering = body
+		if body is Character:
+			EventBus.broadcast("SHOW_QUICK_INFO", body)
 
 func _selection_area_exited(body: Node2D) -> void:
 	if hovering == body:
 		hovering = null
+	if !moving && body != null && body is Character:
+		EventBus.broadcast("HIDE_QUICK_INFO", "NULLDATA")
 #endregion

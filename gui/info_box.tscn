@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://cjbkwr8dsdqvq"]
 
 [ext_resource type="Theme" uid="uid://dehvu01nlqvsf" path="res://textures/gui/themes/info_box_theme.tres" id="1_oo6ww"]
-[ext_resource type="Script" uid="uid://d05320dyub2mk" path="res://misc/gui/info_box.gd" id="2_2ar6p"]
+[ext_resource type="Script" uid="uid://d05320dyub2mk" path="res://gui/info_box.gd" id="2_2ar6p"]
 
 [node name="InfoBox" type="PanelContainer"]
 custom_minimum_size = Vector2(34, 16)

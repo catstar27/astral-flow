@@ -2,9 +2,9 @@
 
 [ext_resource type="Theme" uid="uid://cxq4wi2s4byf1" path="res://textures/gui/themes/custom_theme_alt.tres" id="1_1jw8j"]
 [ext_resource type="Material" uid="uid://dcq7n5qyt3hj0" path="res://materials/immaterial.tres" id="1_7kibo"]
-[ext_resource type="Script" uid="uid://c2wmv4frrvw3h" path="res://misc/gui/char_info.gd" id="1_bnuoq"]
-[ext_resource type="PackedScene" uid="uid://bl1ksh3itp2fl" path="res://misc/gui/ability_button.tscn" id="3_8cx65"]
-[ext_resource type="PackedScene" uid="uid://dleye7m8gjxs0" path="res://misc/gui/control_display_button.tscn" id="4_mqul6"]
+[ext_resource type="Script" uid="uid://c2wmv4frrvw3h" path="res://gui/char_info.gd" id="1_bnuoq"]
+[ext_resource type="PackedScene" uid="uid://bl1ksh3itp2fl" path="res://gui/components/ability_button.tscn" id="3_8cx65"]
+[ext_resource type="PackedScene" uid="uid://dleye7m8gjxs0" path="res://gui/components/control_display_button.tscn" id="4_mqul6"]
 
 [node name="CharInfo" type="Control" node_paths=PackedStringArray("ability_buttons")]
 material = ExtResource("1_7kibo")

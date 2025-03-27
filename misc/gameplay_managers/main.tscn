@@ -7,7 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://covhvnd4w4mkl" path="res://misc/gameplay_managers/sound_manager.tscn" id="5_icnsw"]
 [ext_resource type="PackedScene" uid="uid://dwv4awarhydj0" path="res://misc/gameplay_managers/combat_manager.tscn" id="5_xm8nu"]
 [ext_resource type="PackedScene" uid="uid://81w41aon23of" path="res://misc/gameplay_managers/quest_manager.tscn" id="6_1f2dt"]
-[ext_resource type="PackedScene" uid="uid://t1lqjxny1int" path="res://misc/gui/gui.tscn" id="9_5e0hy"]
+[ext_resource type="PackedScene" uid="uid://t1lqjxny1int" path="res://gui/gui.tscn" id="9_5e0hy"]
 
 [sub_resource type="Resource" id="Resource_ut36o"]
 metadata/__load_path__ = "res://textures/arrow.png"
