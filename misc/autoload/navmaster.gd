@@ -17,6 +17,14 @@ func is_pos_occupied(pos: Vector2)->bool:
 		return false
 	return map.astar.is_point_solid(map.local_to_map(pos))
 
+## Converts local coordinates to a tile position
+func local_to_map(pos: Vector2)->Vector2i:
+	return map.local_to_map(pos)
+
+## Converts a tile position to local coordinates
+func map_to_local(pos: Vector2i)->Vector2:
+	return map.map_to_local(pos)
+
 ## Gets an object at given position; returns null always if the map is invalid
 func get_obj_at_pos(pos: Vector2)->Node2D:
 	if map == null || !is_instance_valid(map):

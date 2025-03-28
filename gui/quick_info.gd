@@ -33,6 +33,7 @@ func track_character(to_track: Character)->void:
 	while is_initiating_tracking:
 		await tracking_initiated
 	is_initiating_tracking = true
+	scale = Vector2.ONE*.01
 	character = to_track
 	update_info()
 	update_statuses()
@@ -40,18 +41,27 @@ func track_character(to_track: Character)->void:
 	character.status_manager.status_list_changed.connect(update_statuses)
 	character.status_manager.status_ticked.connect(update_statuses)
 	show()
+	await create_tween().tween_property(self, "scale", Vector2.ONE, .1).finished
 	is_initiating_tracking = false
 	tracking_initiated.emit()
 
 ## Stops tracking the current character
 func stop_tracking()->void:
-	hide()
 	if character == null:
 		return
+	while is_initiating_tracking:
+		await tracking_initiated
+	if character == null:
+		return
+	is_initiating_tracking = true
+	await create_tween().tween_property(self, "scale", Vector2.ONE*.01, .1).finished
+	hide()
 	character.stats_changed.disconnect(update_info)
 	character.status_manager.status_list_changed.disconnect(update_statuses)
 	character.status_manager.status_ticked.disconnect(update_statuses)
 	character = null
+	is_initiating_tracking = false
+	tracking_initiated.emit()
 
 ## Updates the info based on the tracked character
 func update_info()->void:

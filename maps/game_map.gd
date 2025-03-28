@@ -142,7 +142,7 @@ func get_nearest_empty_tile(origin: Vector2i, pos: Vector2i)->Vector2i:
 			var best_distance: float = (cur_pos-origin).length()+1000*(pos-cur_pos).length()
 			for tile in queue:
 				if !astar.is_point_solid(tile):
-					if ((tile-origin).length()+1000*(pos-tile).length()) < best_distance:
+					if ((tile-origin).length()+1000*(pos-tile).length()) <= best_distance:
 						best_distance = (tile-origin).length()+1000*(pos-tile).length()
 						cur_pos = tile
 			return cur_pos

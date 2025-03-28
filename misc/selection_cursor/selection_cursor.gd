@@ -10,7 +10,6 @@ class_name SelectionCursor
 @onready var selection_area: Area2D = %SelectionArea ## Area which detects objects to select/interact
 @onready var camera: Camera2D = %Camera ## Camera node, which is part of this
 @onready var selection_marker: Node2D = %SelectionMarker ## The selection marker
-@onready var quick_info_timer: Timer = %QuickInfoTimer ## Timer to display quick info
 var move_arrow_scn: PackedScene = preload("uid://dsp8lf7fyd2h7") ## Movement arrow scene
 var selected: Character = null ## Character the cursor has selected
 var hovering: Node2D = null ## Object the cursor is hovering over
@@ -26,6 +25,7 @@ func _ready() -> void:
 	EventBus.subscribe("DEACTIVATE_SELECTION", self, "deactivate")
 	EventBus.subscribe("ACTIVATE_SELECTION", self, "activate")
 	EventBus.subscribe("COMBAT_STARTED", self, "deselect")
+	EventBus.subscribe("COMBAT_STARTED", self, "check_quick_info")
 	EventBus.subscribe("ABILITY_BUTTON_PRESSED", self, "select_ability")
 	EventBus.subscribe("GAMEPLAY_SETTINGS_CHANGED", self, "update_color")
 	await get_tree().create_timer(1).timeout
@@ -67,12 +67,15 @@ func _physics_process(_delta: float) -> void:
 #region Movement Arrow
 ## Makes a path of arrow pieces to display the projected path of movement
 func update_move_arrows(character: Character)->void:
-	if character == null:
+	if character == null || character.selected_ability != null:
+		clear_move_arrows()
 		return
 	if NavMaster.is_pos_occupied(position) && position.distance_to(character.position) <= NavMaster.tile_size:
+		clear_move_arrows()
 		return
 	var path: Array[Vector2] = NavMaster.request_nav_path(character.global_position, global_position)
 	if path.size() <= 1:
+		clear_move_arrows()
 		return
 	var ap_arr: Array[Array] = character.get_ap_for_path(path.size()-1, false)
 	path.resize(ap_arr.size())
@@ -101,6 +104,8 @@ func update_move_arrows(character: Character)->void:
 					move_arrows[index].set_label("...")
 				else:
 					move_arrows[index].set_label(str(character.cur_ap-ap_arr[index][0]))
+			else:
+				move_arrows[index].set_label("")
 		index += 1
 	while index < move_arrows.size():
 		move_arrows[index].hide()
@@ -144,7 +149,7 @@ func move(dir: Vector2)->void:
 			update_move_arrows(selected)
 	moving = false
 	move_stopped.emit()
-	quick_info_timer.start()
+	check_quick_info()
 
 ## Performs an action at given position based on current state
 func act_on_pos(pos: Vector2i)->void:
@@ -197,7 +202,7 @@ func select(character: Character)->void:
 		selected.ended_turn.connect(deselect)
 		selected.pos_changed.connect(update_move_arrows)
 		selected.ability_selected.connect(check_quick_info)
-		selected.state_machine.state_changed.connect(check_quick_info)
+		selected.ability_deselected.connect(check_quick_info)
 		_place_marker()
 	EventBus.broadcast("SELECTION_CHANGED",selected)
 
@@ -215,7 +220,7 @@ func deselect(_node: Character = null)->void:
 	prev_select.ended_turn.disconnect(deselect)
 	prev_select.pos_changed.disconnect(update_move_arrows)
 	prev_select.ability_selected.disconnect(check_quick_info)
-	prev_select.state_machine.state_changed.disconnect(check_quick_info)
+	prev_select.ability_deselected.disconnect(check_quick_info)
 	EventBus.broadcast("SELECTION_CHANGED",selected)
 
 func _selection_area_entered(body: Node2D) -> void:

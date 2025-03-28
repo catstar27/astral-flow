@@ -38,9 +38,5 @@ collision_mask = 3
 [node name="CollisionShape" type="CollisionShape2D" parent="SelectionArea"]
 shape = SubResource("RectangleShape2D_6ag3p")
 
-[node name="QuickInfoTimer" type="Timer" parent="."]
-unique_name_in_owner = true
-
 [connection signal="body_entered" from="SelectionArea" to="." method="_selection_area_entered"]
 [connection signal="body_exited" from="SelectionArea" to="." method="_selection_area_exited"]
-[connection signal="timeout" from="QuickInfoTimer" to="." method="check_quick_info"]
