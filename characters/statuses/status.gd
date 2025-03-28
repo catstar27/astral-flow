@@ -14,7 +14,8 @@ class_name Status
 	"crit_range": 0, ## Ability to Crit
 	"defense": 0, ## Reduces damage taken if below threshold
 	"damage_threshold": 0, ## Threshold at which defense is no longer factored
-	"sequence": 0 ## Likeliness of moving earlier in combat
+	"sequence": 0, ## Likeliness of moving earlier in combat
+	"move_speed": 0 ## Determines amount of tiles moved for each action point
 }
 ## Conditions that cause the status to clear (or lose a stack)
 @export var clear_conditions: Dictionary[String, bool] = {

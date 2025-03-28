@@ -100,10 +100,10 @@ func update_move_arrows(character: Character)->void:
 			else:
 				move_arrows[index].draw_head(path[index-1], path[index])
 			if character.in_combat:
-				if ap_arr[index][1] != 0:
-					move_arrows[index].set_label("...")
-				else:
+				if ap_arr[index-1][0] != ap_arr[index][0]:
 					move_arrows[index].set_label(str(character.cur_ap-ap_arr[index][0]))
+				else:
+					move_arrows[index].set_label("...")
 			else:
 				move_arrows[index].set_label("")
 		index += 1

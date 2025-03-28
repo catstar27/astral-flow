@@ -13,7 +13,8 @@ var stat_mods: Dictionary = { ## Current total stat modification from statuses
 	"crit_range": 0,
 	"defense": 0,
 	"damage_threshold": 0,
-	"sequence": 0
+	"sequence": 0,
+	"move_speed": 0
 }
 var status_list: Dictionary[Status, Array] ## Current active statuses and an array holding duration and stacks respectively
 var damage: int = 0 ## Total damage dealt per tick by statuses
