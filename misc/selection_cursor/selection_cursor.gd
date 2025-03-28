@@ -67,43 +67,49 @@ func _physics_process(_delta: float) -> void:
 #region Movement Arrow
 ## Makes a path of arrow pieces to display the projected path of movement
 func update_move_arrows(character: Character)->void:
-	clear_move_arrows()
 	if character == null:
 		return
 	if NavMaster.is_pos_occupied(position) && position.distance_to(character.position) <= NavMaster.tile_size:
 		return
 	var path: Array[Vector2] = NavMaster.request_nav_path(character.global_position, global_position)
-	if path.size() == 1 || character.global_position == global_position:
+	if path.size() <= 1:
 		return
 	var ap_arr: Array[Array] = character.get_ap_for_path(path.size()-1, false)
 	path.resize(ap_arr.size())
-	for index in range(0, path.size()):
-		if character != selected || (character.in_combat && character.cur_ap == 0):
+	var index: int = 0
+	while index < path.size():
+		if character != selected:
+			return
+		if character.in_combat && character.cur_ap == 0:
 			break
-		var new_arrow: MoveArrow = move_arrow_scn.instantiate()
-		new_arrow.self_modulate = Settings.gameplay.selection_tint
-		move_arrows.append(new_arrow)
-		if index == 0:
-			new_arrow.position = path[0]
-			new_arrow.draw_tail(path[0],path[1])
+		while move_arrows.size() <= index:
+			var new_arrow: MoveArrow = move_arrow_scn.instantiate()
+			new_arrow.self_modulate = Settings.gameplay.selection_tint
+			move_arrows.append(new_arrow)
 			add_child(new_arrow)
-			continue
-		new_arrow.position = path[index]
-		if index < path.size()-1:
-			new_arrow.draw_between(path[index-1], path[index+1])
+		if index == 0:
+			move_arrows[index].position = path[index]
+			move_arrows[index].draw_tail(path[index],path[index+1])
 		else:
-			new_arrow.draw_head(path[index-1], path[index])
-		if character.in_combat:
-			if ap_arr[index][1] != 0:
-				new_arrow.set_label("...")
+			move_arrows[index].position = path[index]
+			if index < path.size()-1:
+				move_arrows[index].draw_between(path[index-1], path[index+1])
 			else:
-				new_arrow.set_label(str(character.cur_ap-ap_arr[index][0]))
-		add_child(new_arrow)
+				move_arrows[index].draw_head(path[index-1], path[index])
+			if character.in_combat:
+				if ap_arr[index][1] != 0:
+					move_arrows[index].set_label("...")
+				else:
+					move_arrows[index].set_label(str(character.cur_ap-ap_arr[index][0]))
+		index += 1
+	while index < move_arrows.size():
+		move_arrows[index].hide()
+		index += 1
 
 ## Deletes all movement arrow pieces
 func clear_move_arrows()->void:
-	while move_arrows != []:
-		move_arrows.pop_back().queue_free()
+	for move_arrow in move_arrows:
+		move_arrow.hide()
 #endregion
 
 #region Actions

@@ -25,22 +25,24 @@ func draw_between(start_pos: Vector2, end_pos: Vector2)->void:
 			frame = 12
 		else:
 			frame = 13
-		return
-	for i in range(0,2):
-		for j in range(0,2):
-			if linked_frames[dir_entry][i] == linked_frames[dir_exit][j]:
-				frame = linked_frames[dir_entry][i]
-				return
+	else:
+		for i in range(0,2):
+			for j in range(0,2):
+				if linked_frames[dir_entry][i] == linked_frames[dir_exit][j]:
+					frame = linked_frames[dir_entry][i]
+	show()
 
 ## Makes an arrowhead
 func draw_head(start_pos: Vector2, end_pos: Vector2)->void:
 	var dir: Vector2 = (end_pos-start_pos).normalized()
 	frame = 4+directions[dir]
+	show()
 
 ## Makes the tail of the arrow
 func draw_tail(start_pos: Vector2, end_pos: Vector2)->void:
 	var dir: Vector2 = (end_pos-start_pos).normalized()
 	frame = directions[dir]
+	show()
 
 ## Sets the text on the label
 func set_label(text: String)->void:
