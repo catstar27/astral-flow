@@ -1,5 +1,6 @@
-[gd_resource type="Resource" script_class="Status" load_steps=2 format=3 uid="uid://dkqwon7fs3tv5"]
+[gd_resource type="Resource" script_class="Status" load_steps=3 format=3 uid="uid://dkqwon7fs3tv5"]
 
+[ext_resource type="Texture2D" uid="uid://cj5tocoxd0pwd" path="res://textures/status_icons/immortality_icon.png" id="1_f2sm1"]
 [ext_resource type="Script" uid="uid://dxv7e1j21poh5" path="res://characters/statuses/status.gd" id="1_rrcc6"]
 
 [resource]
@@ -30,4 +31,5 @@ action_name = "full_heal"
 status_color = Color(1, 0.713726, 0, 1)
 id = "IMMORTALITY"
 display_name = "Immortality"
+icon = ExtResource("1_f2sm1")
 metadata/_custom_type_script = "uid://dxv7e1j21poh5"

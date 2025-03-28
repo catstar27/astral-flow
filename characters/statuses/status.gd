@@ -49,6 +49,7 @@ var user: Node ## Entity the status is affecting
 @export var status_color: Color = Color.WHITE ## Color of the status
 @export var id: String = "EMPTY_STATUS" ## ID of the status, not displayed
 @export var display_name: String = "Empty Status" ## Display name of status
+@export var icon: Texture2D ## Icon for the status
 
 func _to_string() -> String:
 	return "Status<"+id+">"

@@ -124,6 +124,7 @@ signal revived_named(display_name: String) ## Same as revived but sends the disp
 signal rested ## Emitted when the character rests
 signal combat_entered ## Emitted when the character enters combat
 signal combat_exited ## Emitted when the character exits combat
+signal ability_selected ## Emitted when the character selects an ability
 signal ability_deselected ## Emitted when the character deselects their ability
 signal saved(node: Character) ## Emitted when the character saves data
 signal loaded(node: Character) ## Emitted when the character loads data
@@ -379,6 +380,7 @@ func select_ability(ability: Ability)->void:
 		await state_machine.state_changed
 	selected_ability = ability
 	place_range_indicators(ability)
+	ability_selected.emit()
 
 ## Deselects the given ability and removes its indicators
 func deselect_ability(will_reselect: bool = false)->void:

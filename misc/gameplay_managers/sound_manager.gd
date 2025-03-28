@@ -7,6 +7,8 @@ var master_volume: float = .5 ## Volume of master bus
 var music_volume: float = 1.0 ## Volume of music bus
 var sfx_volume: float = 1.0 ## Volume of sfx bus
 var dialogue_volume: float = 1.0 ## Volume of dialogue bus
+var in_dialogue: bool = false ## Whether the game is in dialogue
+signal dialogue_exited ## Emitted when exiting dialogue
 
 func _ready() -> void:
 	Dialogic.Audio.base_music_player.bus = "Music"
@@ -60,6 +62,8 @@ func new_sound(info: Array)->void:
 
 ## Sets a new song to play as the ost
 func new_ost(song: AudioStreamWAV)->void:
+	while in_dialogue:
+		await dialogue_exited
 	if ost.playing:
 		await fade_out_music(.5)
 	ost.stream = song
@@ -84,6 +88,7 @@ func fade_in_music(time: float)->void:
 ## Called when dialogue is entered.
 ## Either fades the music or makes it quieter, depending on whether the dialogue plays music.
 func enter_dialogue(info: Array)->void:
+	in_dialogue = true
 	if info[1]:
 		fade_out_music(.5)
 	else:
@@ -94,3 +99,5 @@ func exit_dialogue()->void:
 	if ost.stream_paused:
 		ost.stream_paused = false
 	await create_tween().tween_property(ost, "volume_db", 0, .5).finished
+	in_dialogue = false
+	dialogue_exited.emit()

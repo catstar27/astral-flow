@@ -32,6 +32,8 @@ func move(cur_target: Vector2)->bool:
 	var prev_direction: Vector2 = Vector2.ZERO
 	if path.pop_front() != state_machine.user.position:
 		path = []
+	if path == []:
+		return true
 	var ap_arr: Array[Array] = state_machine.user.get_ap_for_path(path.size())
 	if ap_arr.size() <= path.size():
 		state_machine.user.cur_ap = ap_arr[0][0]

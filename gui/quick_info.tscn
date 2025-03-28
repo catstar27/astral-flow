@@ -1,17 +1,17 @@
-[gd_scene load_steps=6 format=3 uid="uid://376pccgciomv"]
+[gd_scene load_steps=5 format=3 uid="uid://376pccgciomv"]
 
 [ext_resource type="Texture2D" uid="uid://b3jluv54rfg24" path="res://textures/character/generic_portrait.png" id="1_c1j56"]
 [ext_resource type="Script" uid="uid://cwjm8qr0v6pwm" path="res://gui/quick_info.gd" id="1_riwig"]
-[ext_resource type="PackedScene" uid="uid://dymaugwj65l1f" path="res://gui/status_display.tscn" id="3_p2s0e"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_kwjdn"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_ny3xg"]
 
 [node name="QuickInfo" type="PanelContainer"]
+z_index = -3
 use_parent_material = true
-offset_right = 12.0
-offset_bottom = 12.0
+offset_right = 191.0
+offset_bottom = 98.0
 script = ExtResource("1_riwig")
 generic_portrait = ExtResource("1_c1j56")
 
@@ -56,6 +56,7 @@ vertical_alignment = 1
 [node name="StatsLabel" type="RichTextLabel" parent="HBox/StatContainer"]
 unique_name_in_owner = true
 layout_mode = 2
+size_flags_vertical = 3
 theme_override_font_sizes/bold_italics_font_size = 16
 theme_override_font_sizes/italics_font_size = 16
 theme_override_font_sizes/mono_font_size = 16
@@ -69,6 +70,7 @@ fit_content = true
 autowrap_mode = 0
 
 [node name="StatusContainer" type="VBoxContainer" parent="HBox"]
+unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/separation = 0
 
@@ -79,19 +81,7 @@ label_settings = SubResource("LabelSettings_ny3xg")
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="StatusGrid" type="GridContainer" parent="HBox/StatusContainer"]
+[node name="StatusDisplayContainer" type="HBoxContainer" parent="HBox/StatusContainer"]
 unique_name_in_owner = true
 layout_mode = 2
-columns = 4
-
-[node name="StatusDisplay1" parent="HBox/StatusContainer/StatusGrid" instance=ExtResource("3_p2s0e")]
-layout_mode = 2
-
-[node name="StatusDisplay2" parent="HBox/StatusContainer/StatusGrid" instance=ExtResource("3_p2s0e")]
-layout_mode = 2
-
-[node name="StatusDisplay3" parent="HBox/StatusContainer/StatusGrid" instance=ExtResource("3_p2s0e")]
-layout_mode = 2
-
-[node name="StatusDisplay4" parent="HBox/StatusContainer/StatusGrid" instance=ExtResource("3_p2s0e")]
-layout_mode = 2
+size_flags_vertical = 3

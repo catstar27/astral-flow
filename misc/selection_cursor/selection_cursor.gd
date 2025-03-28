@@ -10,6 +10,7 @@ class_name SelectionCursor
 @onready var selection_area: Area2D = %SelectionArea ## Area which detects objects to select/interact
 @onready var camera: Camera2D = %Camera ## Camera node, which is part of this
 @onready var selection_marker: Node2D = %SelectionMarker ## The selection marker
+@onready var quick_info_timer: Timer = %QuickInfoTimer ## Timer to display quick info
 var move_arrow_scn: PackedScene = preload("uid://dsp8lf7fyd2h7") ## Movement arrow scene
 var selected: Character = null ## Character the cursor has selected
 var hovering: Node2D = null ## Object the cursor is hovering over
@@ -27,6 +28,8 @@ func _ready() -> void:
 	EventBus.subscribe("COMBAT_STARTED", self, "deselect")
 	EventBus.subscribe("ABILITY_BUTTON_PRESSED", self, "select_ability")
 	EventBus.subscribe("GAMEPLAY_SETTINGS_CHANGED", self, "update_color")
+	await get_tree().create_timer(1).timeout
+	check_quick_info()
 
 ## Updates the color of the cursor and its markers
 func update_color()->void:
@@ -75,7 +78,7 @@ func update_move_arrows(character: Character)->void:
 	var ap_arr: Array[Array] = character.get_ap_for_path(path.size()-1, false)
 	path.resize(ap_arr.size())
 	for index in range(0, path.size()):
-		if character != selected:
+		if character != selected || (character.in_combat && character.cur_ap == 0):
 			break
 		var new_arrow: MoveArrow = move_arrow_scn.instantiate()
 		new_arrow.self_modulate = Settings.gameplay.selection_tint
@@ -135,6 +138,7 @@ func move(dir: Vector2)->void:
 			update_move_arrows(selected)
 	moving = false
 	move_stopped.emit()
+	quick_info_timer.start()
 
 ## Performs an action at given position based on current state
 func act_on_pos(pos: Vector2i)->void:
@@ -186,6 +190,8 @@ func select(character: Character)->void:
 		selected.call_deferred("select")
 		selected.ended_turn.connect(deselect)
 		selected.pos_changed.connect(update_move_arrows)
+		selected.ability_selected.connect(check_quick_info)
+		selected.state_machine.state_changed.connect(check_quick_info)
 		_place_marker()
 	EventBus.broadcast("SELECTION_CHANGED",selected)
 
@@ -202,17 +208,29 @@ func deselect(_node: Character = null)->void:
 	prev_select.call_deferred("deselect")
 	prev_select.ended_turn.disconnect(deselect)
 	prev_select.pos_changed.disconnect(update_move_arrows)
+	prev_select.ability_selected.disconnect(check_quick_info)
+	prev_select.state_machine.state_changed.disconnect(check_quick_info)
 	EventBus.broadcast("SELECTION_CHANGED",selected)
 
 func _selection_area_entered(body: Node2D) -> void:
 	if !body is GameMap:
 		hovering = body
-		if body is Character:
-			EventBus.broadcast("SHOW_QUICK_INFO", body)
 
 func _selection_area_exited(body: Node2D) -> void:
 	if hovering == body:
 		hovering = null
-	if !moving && body != null && body is Character:
+		EventBus.broadcast("HIDE_QUICK_INFO", "NULLDATA")
+
+func check_quick_info(_data = null) -> void:
+	if moving:
+		return
+	if hovering != null && hovering is Character && hovering.in_combat:
+		if selected == null:
+			EventBus.broadcast("SHOW_QUICK_INFO", hovering)
+		elif selected.state_machine.current_state.state_id == "IDLE" && selected.selected_ability == null:
+			EventBus.broadcast("SHOW_QUICK_INFO", hovering)
+		else:
+			EventBus.broadcast("HIDE_QUICK_INFO", "NULLDATA")
+	else:
 		EventBus.broadcast("HIDE_QUICK_INFO", "NULLDATA")
 #endregion

@@ -1,6 +1,7 @@
-[gd_resource type="Resource" script_class="Status" load_steps=2 format=3 uid="uid://cw635joog3u4x"]
+[gd_resource type="Resource" script_class="Status" load_steps=3 format=3 uid="uid://cw635joog3u4x"]
 
 [ext_resource type="Script" uid="uid://dxv7e1j21poh5" path="res://characters/statuses/status.gd" id="1_mv7by"]
+[ext_resource type="Texture2D" uid="uid://dk7j0su12u61g" path="res://textures/status_icons/block_icon.png" id="1_qechc"]
 
 [resource]
 script = ExtResource("1_mv7by")
@@ -29,4 +30,5 @@ action_name = ""
 status_color = Color(0.362829, 0.362829, 0.362829, 1)
 id = "BLOCKING"
 display_name = "Blocking"
+icon = ExtResource("1_qechc")
 metadata/_custom_type_script = "uid://dxv7e1j21poh5"

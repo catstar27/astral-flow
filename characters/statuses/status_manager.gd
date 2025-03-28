@@ -15,7 +15,7 @@ var stat_mods: Dictionary = { ## Current total stat modification from statuses
 	"damage_threshold": 0,
 	"sequence": 0
 }
-var status_list: Dictionary[Status, int] ## Current active statuses and their stacks
+var status_list: Dictionary[Status, Array] ## Current active statuses and an array holding duration and stacks respectively
 var damage: int = 0 ## Total damage dealt per tick by statuses
 var processing_conditionals: bool = false ## Whether conditional statuses are being processed currently
 signal status_damage_ticked(amount: int) ## Statuses applied this amount of total damage
@@ -38,13 +38,13 @@ func add_status(status: Status, source: Node)->void:
 		return
 	var duplicate_status: Status = get_matching_status(status.id)
 	if duplicate_status != null && !status.stacking:
-		duplicate_status.duration = status.duration
+		status_list[duplicate_status][0] = status.duration
 		return
 	elif duplicate_status != null && status.stacking:
-		status_list[duplicate_status] += status.stacks
-		duplicate_status.duration = status.duration
+		status_list[duplicate_status][1] += status.stacks
+		status_list[duplicate_status][0] = status.duration
 	else:
-		status_list[status] = status.stacks
+		status_list[status] = [status.duration, status.stacks]
 	if status.condition == status.condition_options.none:
 		for stat in status.stat_mods:
 			stat_mods[stat] += status.stat_mods[stat]
@@ -58,8 +58,8 @@ func tick_status()->void:
 		status_damage_ticked.emit(damage)
 	for status in status_list.keys():
 		if status.time_choice == status.time_options.timed:
-			status.duration -= 1
-			if status.duration == 0:
+			status_list[status][0] -= 1
+			if status_list[status][0] == 0:
 				remove_status(status)
 	status_ticked.emit()
 
@@ -74,12 +74,12 @@ func remove_status_mod(status: Status)->void:
 func remove_status(status: Status, remove_all_stacks: bool = false)->void:
 	remove_status_mod(status)
 	if status.stacking:
-		status_list[status] -= 1
+		status_list[status][1] -= 1
 		if remove_all_stacks:
-			while status_list[status] > 0:
+			while status_list[status][1] > 0:
 				remove_status_mod(status)
-				status_list[status] -= 1
-		if status_list[status] == 0:
+				status_list[status][1] -= 1
+		if status_list[status][1] == 0:
 			status_list.erase(status)
 	else:
 		status_list.erase(status)
@@ -154,11 +154,11 @@ func save_data(file: FileAccess)->void:
 func load_data(file: FileAccess)->void:
 	var target: String = file.get_var()
 	while target != "STATUS_MANAGER_END":
-		var stacks: int = file.get_var()
+		var stacks: int = file.get_var()[1]
 		for num in range(0, stacks):
 			var new_status: Status = load(target)
 			var matching_status: Status = get_matching_status(new_status.id)
-			if matching_status == null || status_list[matching_status] < stacks:
+			if matching_status == null || status_list[matching_status][1] < stacks:
 				add_status(new_status, get_parent())
 		target = file.get_var()
 #endregion

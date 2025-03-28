@@ -76,6 +76,7 @@ func unpause()->void:
 func enter_dialogue(info: Array)->void:
 	if in_dialogue:
 		return
+	EventBus.broadcast("DIALOGUE_ENTERED", "NULLDATA")
 	in_dialogue = true
 	current_timeline = Dialogic.start(info[0])
 	Dialogic.process_mode = Node.PROCESS_MODE_ALWAYS
@@ -89,6 +90,7 @@ func exit_dialogue()->void:
 	Dialogic.process_mode = Node.PROCESS_MODE_PAUSABLE
 	current_timeline.process_mode = Node.PROCESS_MODE_PAUSABLE
 	current_timeline = null
+	EventBus.broadcast("DIALOGUE_EXITED", "NULLDATA")
 
 ## Performs various operations based on dialogic signals
 func check_dialogue_signal(data)->void:

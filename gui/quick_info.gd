@@ -8,15 +8,31 @@ class_name QuickInfo
 @onready var name_label: RichTextLabel = %NameLabel ## Label for character's name
 @onready var stats_label: RichTextLabel = %StatsLabel ## Label for character's stats
 @onready var portrait: TextureRect = %Portrait ## Character Portrait
-@onready var status_grid: GridContainer = %StatusGrid ## Container holding status displays
+@onready var status_container: VBoxContainer = %StatusContainer ## Container for the status section
+@onready var status_display_container: HBoxContainer = %StatusDisplayContainer ## Container holding status displays
+var status_display_scn: PackedScene = preload("uid://dymaugwj65l1f") ## Scene for status displays
 var character: Character = null ## Character this is tracking
+var is_initiating_tracking: bool = false ## Whether this is initiating tracking
+signal tracking_initiated ## Emitted when done initiating tracking
 
 func _ready() -> void:
 	EventBus.subscribe("SHOW_QUICK_INFO", self, "track_character")
 	EventBus.subscribe("HIDE_QUICK_INFO", self, "stop_tracking")
+	EventBus.subscribe("DIALOGUE_ENTERED", self, "hide")
+	EventBus.subscribe("DIALOGUE_EXITED", self, "check_and_show")
+
+## Checks if this tracking, and shows it if so
+func check_and_show()->void:
+	if character != null:
+		show()
 
 ## Starts tracking the given character
 func track_character(to_track: Character)->void:
+	if character == to_track:
+		return
+	while is_initiating_tracking:
+		await tracking_initiated
+	is_initiating_tracking = true
 	character = to_track
 	update_info()
 	update_statuses()
@@ -24,6 +40,8 @@ func track_character(to_track: Character)->void:
 	character.status_manager.status_list_changed.connect(update_statuses)
 	character.status_manager.status_ticked.connect(update_statuses)
 	show()
+	is_initiating_tracking = false
+	tracking_initiated.emit()
 
 ## Stops tracking the current character
 func stop_tracking()->void:
@@ -51,6 +69,25 @@ func update_info()->void:
 func update_statuses()->void:
 	if character == null:
 		return
-	var status_list: Dictionary[Status, int] = character.status_manager.status_list.duplicate()
-	for status in status_list.keys():
-		print(str(status)+":"+str(status_list[status]))
+	if character.status_manager.status_list.keys().size() == 0:
+		status_container.hide()
+		reset_size()
+		position.x = get_parent().size.x/2 - size.x/2
+		return
+	status_container.show()
+	var status_list: Dictionary[Status, Array] = character.status_manager.status_list.duplicate()
+	var status_arr: Array = status_list.keys()
+	var status_displays: Array = status_display_container.get_children()
+	var index: int = 0
+	for status in status_arr:
+		if index >= status_displays.size():
+			var new_display: StatusDisplay = status_display_scn.instantiate()
+			status_display_container.add_child(new_display)
+			status_displays.append(new_display)
+		status_displays[index].display_status(status_arr[index],status_list[status][1],status_list[status][0])
+		index += 1
+	while index < status_displays.size():
+		status_displays[index].hide()
+		index += 1
+	reset_size()
+	position.x = get_parent().size.x/2 - size.x/2
