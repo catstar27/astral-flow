@@ -231,6 +231,12 @@ func start_looping()->void:
 #endregion
 
 #region Orders
+## Sets the position directly with no animation
+func set_pos(pos: Vector2):
+	EventBus.broadcast("POS_UNOCCUPIED", position)
+	position = pos
+	EventBus.broadcast("POS_OCCUPIED", position)
+
 ## Attempts to start moving the character
 func move(pos: Vector2)->void:
 	move_order.emit(pos)

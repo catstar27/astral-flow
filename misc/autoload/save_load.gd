@@ -100,10 +100,20 @@ func load_player(player: Player)->void:
 	if player.name in player_data:
 		load_save_dict(player, player_data[player.name])
 
-func get_save_dict(node: Node)->Dictionary[String, Variant]:
+## Saves the given map to level_data
+func save_map(map: GameMap)->void:
+	level_data[map.name] = map.get_save_data()
+
+## Saves the player to player_data
+func save_player(player: Player)->void:
+	player_data[player.name] = get_save_dict(player, ["position"])
+
+func get_save_dict(node: Node, skip_values: Array[String] = [])->Dictionary[String, Variant]:
 	var dict: Dictionary[String, Variant] = {}
 	node.pre_save()
 	for value in node.to_save:
+		if value in skip_values:
+			continue
 		dict[value] = node.get(value)
 	if node is Player:
 		player_data[node.name] = dict
@@ -138,8 +148,12 @@ func save_data(save_name: String = slot, quiet_save: bool = false)->void:
 	file.store_var(dialogic_vars)
 	var global_data: Dictionary[String, Dictionary]
 	for node in get_tree().get_nodes_in_group("Persist"):
-		global_data[node.name] = get_save_dict(node)
+		if node is Player:
+			save_player(node)
+		else:
+			global_data[node.name] = get_save_dict(node)
 	file.store_var(global_data)
+	file.store_var(player_data)
 	level_data[NavMaster.map.name] = NavMaster.map.get_save_data()
 	file.store_var(level_data)
 	file.close()
@@ -174,6 +188,7 @@ func load_data(save_name: String = "")->void:
 	for node in get_tree().get_nodes_in_group("Persist"):
 		if node.name in global_data:
 			load_save_dict(node, global_data[node.name])
+	player_data = file.get_var()
 	level_data = file.get_var()
 	file.close()
 	await main.load_map(cur_map)

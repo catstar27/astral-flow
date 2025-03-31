@@ -15,8 +15,10 @@ class_name GameMap
 var loading: bool = false ## Whether the map is loading
 var player: Player = null ## The player node
 var occupied_tiles: Dictionary[Vector2i, Node2D] ## Tiles being occupied by an interactive or character
+var last_player_pos: Dictionary[String, Vector2] ## Last saved position of player on this map
 var to_save: Array[StringName] = [ ## Map variables to save
-	"player_start_pos"
+	"player_start_pos",
+	"last_player_pos",
 ]
 signal map_saved ## Emitted when the entire map is saved
 signal map_loaded ## Emitted when the entire map is loaded
@@ -99,6 +101,8 @@ func get_obj_at_pos(pos: Vector2)->Node2D:
 
 ## Sets given position to be occupied
 func set_pos_occupied(data: Array)->void:
+	if loading:
+		return
 	if data.size() != 2 || data[0] is not Vector2 || data[1] is not Node2D:
 		printerr("Attempted to set pos occupied with invalid arguments: "+str(data))
 		return
@@ -108,6 +112,8 @@ func set_pos_occupied(data: Array)->void:
 
 ## Sets the given position to be unoccupied
 func set_pos_unoccupied(pos: Vector2)->void:
+	if loading:
+		return
 	var tile: Vector2i = local_to_map(pos)
 	if tile in occupied_tiles:
 		occupied_tiles[tile] = null
@@ -174,6 +180,9 @@ func is_in_bounds(pos: Vector2)->bool:
 func get_save_data()->Dictionary[String, Dictionary]:
 	var dict: Dictionary[String, Dictionary]
 	var self_dict: Dictionary[String, Variant]
+	for node in get_children():
+		if node is Player:
+			last_player_pos[node.name] = node.position
 	for value in to_save:
 		self_dict[value] = get(value)
 	dict[name] = self_dict
@@ -193,8 +202,7 @@ func get_save_data()->Dictionary[String, Dictionary]:
 func load_save_data(dict: Dictionary[String, Dictionary])->void:
 	loading = true
 	NavMaster.map_loading = true
-	if astar == null:
-		_astar_setup()
+	_astar_setup()
 	if name in dict:
 		var self_dict: Dictionary[String, Variant] = dict[name]
 		for value in self_dict:

@@ -16,9 +16,11 @@ var text_indicator_scene: PackedScene = preload("uid://dtylaymiixbpw") ## Preloa
 var hour: int = 0 ## In game hour
 var minute: int = 0 ## In game minute
 var prepped: bool = false ## Whether this node has finished preparing
+var last_map_name: String = "" ## Name of previously saved map
 var to_save: Array[StringName] = [ ## Variables to save
 	"hour",
 	"minute",
+	"last_map_name",
 ]
 signal saved(node: Main) ## Emitted when this is saved
 signal loaded(node: Main) ## Emitted when this is loaded
@@ -168,26 +170,28 @@ func load_map(new_map: String, entrance_id: String = "")->void:
 	NavMaster.map = map_to_load
 	map = map_to_load
 	map.process_mode = Node.PROCESS_MODE_PAUSABLE
-	var new_player: bool = false
+	SaveLoad.load_map(map_to_load)
 	if player == null:
 		player = player_scene.instantiate()
-		new_player = true
+		player.name = "Kalin"
 	else:
 		remove_child(player)
 	map_to_load.add_child(player)
-	SaveLoad.load_map(map_to_load)
+	var player_pos: Vector2
 	var entrance: TravelPoint = map_to_load.get_entrance(entrance_id)
-	if entrance == null:
-		player.position = map_to_load.map_to_local(map_to_load.player_start_pos)
+	if last_map_name == map_to_load.name:
+		player_pos = map_to_load.last_player_pos[player.name]
+	elif entrance == null:
+		player_pos = map_to_load.map_to_local(map_to_load.player_start_pos)
 	else:
-		player.position = entrance.get_exit_position()
-	map_to_load.prep_map()
-	if new_player:
-		SaveLoad.load_player(player)
+		player_pos = entrance.get_exit_position()
+	SaveLoad.load_player(player)
+	player.position = map_to_load.map_to_local(map_to_load.local_to_map(player_pos))
 	while selection_cursor.moving:
 		await selection_cursor.move_stopped
 	selection_cursor.position = player.position
 	selection_cursor.activate()
+	map_to_load.prep_map()
 	SaveLoad.save_data(SaveLoad.slot, true)
 	if sound_manager.ost.stream != map_to_load.calm_theme:
 		EventBus.broadcast("SET_OST", map_to_load.calm_theme)
@@ -196,7 +200,8 @@ func load_map(new_map: String, entrance_id: String = "")->void:
 ## Unloads the current map after saving it
 func unload_map()->void:
 	if map != null:
-		SaveLoad.save_data(SaveLoad.slot, true)
+		last_map_name = map.name
+		SaveLoad.save_map(map)
 		if player != null:
 			map.remove_child(player)
 			add_child(player)
@@ -206,7 +211,7 @@ func unload_map()->void:
 
 ## Executes before making the save dict
 func pre_save()->void:
-	return
+	last_map_name = map.name
 
 ## Executes after making the save dict
 func post_save()->void:
