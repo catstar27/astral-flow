@@ -24,7 +24,9 @@ func ended_combat()->void:
 
 ## Checks if given save slot is blank
 func is_slot_blank(check_slot: String)->bool:
-	return !FileAccess.file_exists(save_file_folder+check_slot+"/Global.dat")
+	if !DirAccess.dir_exists_absolute(save_file_folder+check_slot):
+		return true
+	return DirAccess.get_files_at(save_file_folder+check_slot).size() == 0
 
 func _unhandled_input(event: InputEvent)->void:
 	if event.is_action_pressed("quicksave"):
@@ -165,8 +167,9 @@ func load_data(save_name: String = "")->void:
 	var cur_map: String = file.get_var()
 	var main: Node2D = await reset_game()
 	var dialogic_vars: Dictionary[String, Variant] = file.get_var()
-	for variable in dialogic_vars:
-		Dialogic.VAR.set_variable(variable, dialogic_vars[variable])
+	for variable in Dialogic.VAR.variables():
+		if variable in dialogic_vars:
+			Dialogic.VAR.set_variable(variable, dialogic_vars[variable])
 	var global_data = file.get_var()
 	for node in get_tree().get_nodes_in_group("Persist"):
 		if node.name in global_data:

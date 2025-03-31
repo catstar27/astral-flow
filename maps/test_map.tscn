@@ -203,7 +203,7 @@ texture = ExtResource("21_cjebi")
 [node name="InteractPuzzleGate" parent="." instance=ExtResource("12_xfvy2")]
 position = Vector2(32, -224)
 open_texture = ExtResource("17_r82r0")
-signals_needed = Array[String](["test_room_sun_click", "test_room_couch_click", "test_room_dog_click", "test_room_grapes_click"])
+signals_needed = Array[String](["tutorial_sun_click", "tutorial_couch_click", "tutorial_dog_click", "tutorial_grapes_click"])
 ordered = true
 is_dialogic = true
 dialogic_var = "test_room_puzzle_index"

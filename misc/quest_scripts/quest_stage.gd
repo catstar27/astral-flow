@@ -21,8 +21,10 @@ signal objective_completed(objective: QuestObjective) ## Emitted when an objecti
 func activate()->void:
 	active = true
 	for id in quest_objectives:
-		quest_objectives[id].objective_completed.connect(stage_objective_complete)
-		quest_objectives[id].objective_updated.connect(update_stage)
+		if !quest_objectives[id].objective_completed.is_connected(stage_objective_complete):
+			quest_objectives[id].objective_completed.connect(stage_objective_complete)
+		if !quest_objectives[id].objective_updated.is_connected(update_stage):
+			quest_objectives[id].objective_updated.connect(update_stage)
 		quest_objectives[id].check_completion()
 
 ## Called when an objective is complete. Updates the stage to reflect that

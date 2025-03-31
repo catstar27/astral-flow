@@ -77,7 +77,9 @@ func post_load()->void:
 	update_complete_quests()
 	for quest in active_quests:
 		quests[quest].activate()
-		quests[quest].quest_complete.connect(complete_quest)
+		if !quests[quest].quest_complete.is_connected(complete_quest):
+			quests[quest].quest_complete.connect(complete_quest)
+	EventBus.broadcast("QUEST_TRACK_STOP", "NULLDATA")
 	if tracked_id != "":
 		EventBus.broadcast("QUEST_TRACK", quests[tracked_id])
 	loaded.emit(self)

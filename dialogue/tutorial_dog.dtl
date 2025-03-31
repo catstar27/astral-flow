@@ -2,9 +2,9 @@ join dog left [animation="Slide In Up" wait="true"]
 [music path="res://music/carefree_carousel.wav" fade="0.0" volume="0.0"]
 \dog: Woof!
 - Pet
-	\dog: *Happy Dog Noises*
+	\dog: Woof! Woof! *The dog seems happy*
 	The dog seems to make a clicking noise...
-	[signal arg="test_room_dog_click"]
+	[signal arg="tutorial_dog_click"]
 	[end_timeline]
 - Leave
 	[end_timeline]

@@ -1,9 +1,7 @@
 The grapes are moldy... how long have they been here?
 - Poke
 	Ew... one of the grapes was hardened... it made a clicking noise...
-	if {tutorial_puzzle_index} == 3:
-		Wait... the gate over there seemed to click, too.
-	[signal arg="test_room_grapes_click"]
+	[signal arg="tutorial_grapes_click"]
 	[end_timeline]
 - Leave
 	[end_timeline]

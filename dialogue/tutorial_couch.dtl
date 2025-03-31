@@ -1,12 +1,12 @@
 The couch looks oddly pristine, but smells like potato chips...
 - Poke
-	You hear a click...
-	[signal arg="test_room_couch_click"]
+	Despite its condition, it is still soft... apart from the button hidden in the cushion, which makes a clicking sound as you touch it...
+	[signal arg="tutorial_couch_click"]
 	[end_timeline]
 - Nap
 	You decide to take a rest...
 	[signal arg="rest"]
-	[wait time="5.5"]
+	[wait time="2.0"]
 	You feel rested!
 	[end_timeline]
 - Leave

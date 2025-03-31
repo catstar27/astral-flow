@@ -220,25 +220,4 @@ func pre_load()->void:
 func post_load()->void:
 	EventBus.broadcast("TIME_CHANGED", [minute, hour])
 	loaded.emit(self)
-
-## Saves the main node's data
-func save_data(dir: String)->void:
-	var file: FileAccess = FileAccess.open(dir+name+".dat", FileAccess.WRITE)
-	for var_name in to_save:
-		file.store_var(var_name)
-		file.store_var(get(var_name))
-	file.store_var("END")
-	file.close()
-	saved.emit(self)
-
-## Loads the main node's data
-func load_data(dir: String)->void:
-	var file: FileAccess = FileAccess.open(dir+name+".dat", FileAccess.READ)
-	var var_name: String = file.get_var()
-	while var_name != "END":
-		set(var_name, file.get_var())
-		var_name = file.get_var()
-	file.close()
-	EventBus.broadcast("TIME_CHANGED", [minute, hour])
-	loaded.emit(self)
 #endregion
