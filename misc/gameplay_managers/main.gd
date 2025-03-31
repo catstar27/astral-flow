@@ -171,6 +171,8 @@ func load_map(new_map: String, entrance_id: String = "")->void:
 	map = map_to_load
 	map.process_mode = Node.PROCESS_MODE_PAUSABLE
 	SaveLoad.load_map(map_to_load)
+	while !map_to_load.is_node_ready():
+		await map_to_load.ready
 	if player == null:
 		player = player_scene.instantiate()
 		player.name = "Kalin"
@@ -185,12 +187,13 @@ func load_map(new_map: String, entrance_id: String = "")->void:
 		player_pos = map_to_load.map_to_local(map_to_load.player_start_pos)
 	else:
 		player_pos = entrance.get_exit_position()
-	SaveLoad.load_player(player)
 	player.position = map_to_load.map_to_local(map_to_load.local_to_map(player_pos))
+	SaveLoad.load_player(player)
 	while selection_cursor.moving:
 		await selection_cursor.move_stopped
 	selection_cursor.position = player.position
 	selection_cursor.activate()
+	selection_cursor.select(player)
 	map_to_load.prep_map()
 	SaveLoad.save_data(SaveLoad.slot, true)
 	if sound_manager.ost.stream != map_to_load.calm_theme:
@@ -202,6 +205,7 @@ func unload_map()->void:
 	if map != null:
 		last_map_name = map.name
 		SaveLoad.save_map(map)
+		selection_cursor.deselect()
 		if player != null:
 			map.remove_child(player)
 			add_child(player)

@@ -13,7 +13,6 @@ class_name GameMap
 @onready var astar: AStarGrid2D ## Astar pathfinding grid
 @onready var light_modulator: CanvasModulate = %LightingModulate ## Modulator for lighting
 var loading: bool = false ## Whether the map is loading
-var player: Player = null ## The player node
 var occupied_tiles: Dictionary[Vector2i, Node2D] ## Tiles being occupied by an interactive or character
 var last_player_pos: Dictionary[String, Vector2] ## Last saved position of player on this map
 var to_save: Array[StringName] = [ ## Map variables to save
@@ -32,6 +31,7 @@ func _ready()->void:
 	EventBus.subscribe("COMBAT_STARTED", self, "start_combat")
 	EventBus.subscribe("COMBAT_ENDED", self, "end_combat")
 	Dialogic.signal_event.connect(process_dialogue_signal)
+	_astar_setup()
 
 ## Prepares the map by resetting its astar
 ## Also performs initial operations for its children
@@ -48,8 +48,6 @@ func prep_map()->void:
 		elif child is Character:
 			if child.active:
 				set_pos_occupied([child.position, child])
-				if child is Player:
-					player = child
 				child.activate(child.position)
 	EventBus.broadcast("MAP_LOADED", self)
 
@@ -101,8 +99,6 @@ func get_obj_at_pos(pos: Vector2)->Node2D:
 
 ## Sets given position to be occupied
 func set_pos_occupied(data: Array)->void:
-	if loading:
-		return
 	if data.size() != 2 || data[0] is not Vector2 || data[1] is not Node2D:
 		printerr("Attempted to set pos occupied with invalid arguments: "+str(data))
 		return
@@ -112,8 +108,6 @@ func set_pos_occupied(data: Array)->void:
 
 ## Sets the given position to be unoccupied
 func set_pos_unoccupied(pos: Vector2)->void:
-	if loading:
-		return
 	var tile: Vector2i = local_to_map(pos)
 	if tile in occupied_tiles:
 		occupied_tiles[tile] = null

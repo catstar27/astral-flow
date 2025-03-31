@@ -60,11 +60,11 @@ func reset_game()->Main:
 
 ## Resets the given save slot to new game state
 func reset_save(reset_slot: String)->void:
-	if !DirAccess.dir_exists_absolute(save_file_folder+reset_slot):
-		return
 	delete_slot(reset_slot)
 	saving = true
 	loading = true
+	level_data = {}
+	player_data = {}
 	Dialogic.VAR.reset()
 	await reset_game()
 	saving = false
