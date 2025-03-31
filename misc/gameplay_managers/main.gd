@@ -175,8 +175,7 @@ func load_map(new_map: String, entrance_id: String = "")->void:
 	else:
 		remove_child(player)
 	map_to_load.add_child(player)
-	if map_to_load.has_save_data():
-		await SaveLoad.load_map(map_to_load)
+	SaveLoad.load_map(map_to_load)
 	var entrance: TravelPoint = map_to_load.get_entrance(entrance_id)
 	if entrance == null:
 		player.position = map_to_load.map_to_local(map_to_load.player_start_pos)
@@ -189,7 +188,7 @@ func load_map(new_map: String, entrance_id: String = "")->void:
 		await selection_cursor.move_stopped
 	selection_cursor.position = player.position
 	selection_cursor.activate()
-	await SaveLoad.save_data(true)
+	SaveLoad.save_data(SaveLoad.slot, true)
 	if sound_manager.ost.stream != map_to_load.calm_theme:
 		EventBus.broadcast("SET_OST", map_to_load.calm_theme)
 	EventBus.broadcast("MAP_ENTERED", map_to_load.map_name)
@@ -197,13 +196,30 @@ func load_map(new_map: String, entrance_id: String = "")->void:
 ## Unloads the current map after saving it
 func unload_map()->void:
 	if map != null:
-		await SaveLoad.save_data(true)
+		SaveLoad.save_data(SaveLoad.slot, true)
 		if player != null:
 			map.remove_child(player)
 			add_child(player)
 		map.queue_free()
 		map = null
 		await get_tree().create_timer(.01).timeout
+
+## Executes before making the save dict
+func pre_save()->void:
+	return
+
+## Executes after making the save dict
+func post_save()->void:
+	saved.emit(self)
+
+## Executes before loading data
+func pre_load()->void:
+	return
+
+## Executes after loading data
+func post_load()->void:
+	EventBus.broadcast("TIME_CHANGED", [minute, hour])
+	loaded.emit(self)
 
 ## Saves the main node's data
 func save_data(dir: String)->void:

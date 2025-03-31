@@ -6,10 +6,12 @@ class_name QuestManager
 var active_quests: Array[String] ## Contains all active quests
 var completed_quests: Array[String] ## Contains all completed quests
 var tracked_id: String = "" ## Contains id of currently tracked quest
+var quest_data: Dictionary[String, Variant] ## Save data of each quest
 var to_save: Array[String] = [ ## Variables to be saved
 	"active_quests",
 	"completed_quests",
-	"tracked_id"
+	"tracked_id",
+	"quest_data"
 ]
 signal saved(node: QuestManager) ## Emitted when saved
 signal loaded(node: QuestManager) ## Emitted when loaded
@@ -53,36 +55,25 @@ func update_complete_quests()->void:
 		quests[id].set_complete()
 
 #region Saving and Loading
-## Saves every quest in the game
-func save_data(dir: String)->void:
-	var file: FileAccess = FileAccess.open(dir+name+".dat", FileAccess.WRITE)
-	for var_name in to_save:
-		file.store_var(var_name)
-		file.store_var(get(var_name))
-	file.store_var("END")
-	for id in quests:
-		file.store_var(id)
-		quests[id].save_data(file)
-	file.store_var("END")
-	file.close()
+## Executes before making the save dict
+func pre_save()->void:
+	for quest in active_quests:
+		quest_data[quest] = quests[quest].get_save_data()
+
+## Executes after making the save dict
+func post_save()->void:
 	saved.emit(self)
 
-## Loads every quest in the game
-func load_data(dir: String)->void:
-	var file: FileAccess = FileAccess.open(dir+name+".dat", FileAccess.READ)
-	var var_name: String = file.get_var()
-	while var_name != "END":
-		set(var_name, file.get_var())
-		var_name = file.get_var()
-	var id: String = file.get_var()
-	while id != "END":
-		if id not in quests:
-			var dummy_quest: QuestInfo = QuestInfo.new()
-			dummy_quest.load_data(file)
-		else:
-			quests[id].load_data(file)
-		id = file.get_var()
-	file.close()
+## Executes before loading data
+func pre_load()->void:
+	return
+
+## Executes after loading data
+func post_load()->void:
+	for quest in quest_data:
+		if quest not in quests:
+			continue
+		quests[quest].load_save_data(quest_data[quest])
 	update_complete_quests()
 	for quest in active_quests:
 		quests[quest].activate()

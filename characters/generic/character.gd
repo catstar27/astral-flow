@@ -87,6 +87,7 @@ var is_selected: bool = false ## Whether this character is selected
 var combat_target: Character = null ## The character this is attempting to attack
 var watching: Dictionary[Node2D, RayCast2D] = {} ## Character/raycast pairs for characters in combat trigger
 var speed_remainder: int = 0 ## Amount of unused free movement
+var status_data: Dictionary[String, Variant] ## Save data for the status manager
 var to_save: Array[StringName] = [ ## Variables to save
 	"position",
 	"star_stats",
@@ -98,8 +99,10 @@ var to_save: Array[StringName] = [ ## Variables to save
 	"active",
 	"current_schedule_executed",
 	"current_schedule_looping",
+	"current_schedule_task_index",
 	"schedule_index",
 	"dialogue_index",
+	"status_data"
 ]
 #endregion
 #region Signals
@@ -213,6 +216,7 @@ func next_schedule()->void:
 	stop_looping()
 	schedules[schedule_index].pause.emit()
 	schedule_index += 1
+	schedules[schedule_index].task_index = 0
 	schedules[schedule_index].process_schedule()
 
 ## Stops the schedule from looping
@@ -547,47 +551,31 @@ func on_damaged(_source: Node)->void:
 #endregion
 
 #region Saving and Loading
-## Saves the character's data
-func save_data(dir: String)->void:
-	stop_move_order.emit()
-	if active && schedules.size() > 0:
-		schedules[schedule_index].pause.emit()
+## Executes before making the save dict
+func pre_save()->void:
 	if schedules.size() > 0:
 		current_schedule_executed = schedules[schedule_index].schedule_executed
 		current_schedule_looping = schedules[schedule_index].loop_schedule
 		current_schedule_task_index = schedules[schedule_index].task_index
-	var file: FileAccess = FileAccess.open(dir+name+".dat", FileAccess.WRITE)
-	if file == null:
-		printerr("Failed to open save file for character "+name+"!")
-		return
-	for var_name in to_save:
-		file.store_var(var_name)
-		file.store_var(get(var_name))
-	file.store_var("END")
-	status_manager.save_data(file)
-	file.close()
-	if active && schedules.size() > 0:
-		schedules[schedule_index].unpause.emit()
+	status_data = status_manager.get_save_data()
+
+## Executes after making the save dict
+func post_save()->void:
 	saved.emit(self)
 
-## Loads the character's data and resets position to be centered to the tile
-func load_data(dir: String)->void:
+## Executes before loading data
+func pre_load()->void:
 	deselect()
-	state_machine.pause()
-	var file: FileAccess = FileAccess.open(dir+name+".dat", FileAccess.READ)
-	if file != null:
-		var var_name: String = file.get_var()
-		while var_name != "END":
-			set(var_name, file.get_var())
-			var_name = file.get_var()
-		status_manager.load_data(file)
-		file.close()
+
+## Executes after loading data
+func post_load()->void:
 	position = NavMaster.map.map_to_local(NavMaster.map.local_to_map(position))
 	if schedules.size() > 0:
 		schedules[schedule_index].schedule_executed = current_schedule_executed
 		schedules[schedule_index].loop_schedule = current_schedule_looping
 		schedules[schedule_index].task_index = current_schedule_task_index
 	init_statuses()
+	status_manager.load_save_data(status_data)
 	load_extra()
 	state_machine.unpause()
 	if active:

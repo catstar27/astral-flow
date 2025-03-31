@@ -30,6 +30,24 @@ func trigger()->void:
 	sprite.frame = 1
 
 #region Save and Load
+## Executes before making the save dict
+func pre_save()->void:
+	return
+
+## Executes after making the save dict
+func post_save()->void:
+	saved.emit(self)
+
+## Executes before loading data
+func pre_load()->void:
+	return
+
+## Executes after loading data
+func post_load()->void:
+	if triggered:
+		trigger()
+	loaded.emit(self)
+
 ## Saves the data
 func save_data(dir: String)->void:
 	var file: FileAccess = FileAccess.open(dir+name+".dat", FileAccess.WRITE)

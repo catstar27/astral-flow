@@ -7,8 +7,8 @@ var slot: String = "save1" ## Current save slot name
 var loading: bool = false ## Whether the game is currently loading
 var saving: bool = false ## Whether the game is currently saving
 var in_combat: bool = false ## Whether the game is in a combat state
-var num_ready: int = 0 ## Number of nodes that have finished saving or loading
-signal node_readied ## Emitted when a node finishes saving or loading
+var level_data: Dictionary[String, Dictionary] = {} ## Dictionary containing all map save data
+var player_data: Dictionary[String, Dictionary] = {} ## Dictionary containing data of player characters
 
 func _ready() -> void:
 	EventBus.subscribe("START_COMBAT", self, "started_combat")
@@ -28,11 +28,24 @@ func is_slot_blank(check_slot: String)->bool:
 
 func _unhandled_input(event: InputEvent)->void:
 	if event.is_action_pressed("quicksave"):
-		save_data()
+		save_data("Quicksave")
 	if event.is_action_pressed("quickload"):
-		load_data()
+		load_data("Quicksave")
 
 #region Delete and Reset
+## Gets the path of the latest save file
+func get_latest_save(slot_to_check: String)->String:
+	if !DirAccess.dir_exists_absolute(save_file_folder+slot_to_check):
+		return ""
+	var files: PackedStringArray = DirAccess.get_files_at(save_file_folder+slot_to_check)
+	var latest_time: int = 0
+	var best_file: String = files[0]
+	for file in files:
+		if FileAccess.get_modified_time(save_file_folder+slot_to_check+'/'+file) > latest_time:
+			latest_time = FileAccess.get_modified_time(save_file_folder+slot_to_check+'/'+file)
+			best_file = file
+	return save_file_folder+slot_to_check+'/'+best_file
+
 ## Removes all non-autoload nodes and makes a new main scene
 func reset_game()->Main:
 	EventBus.broadcast("DELOAD", "NULLDATA")
@@ -75,25 +88,36 @@ func clear_dir(dir: String)->void:
 #endregion
 
 #region Save and Load
-## Loads the given map based on its loading method
+## Loads the given map if it has data
 func load_map(map: GameMap)->void:
-	await map.load_map(save_file_folder+slot+'/')
+	if map.name in level_data:
+		map.load_save_data(level_data[map.name])
 
 ## Loads the given player's data
 func load_player(player: Player)->void:
-	player.load_data(save_file_folder+slot+'/')
+	if player.name in player_data:
+		load_save_dict(player, player_data[player.name])
 
-## Called when a node finishes saving or loading
-func readied(node: Node)->void:
-	if saving:
-		node.saved.disconnect(readied)
-	else:
-		node.loaded.disconnect(readied)
-	num_ready += 1
-	node_readied.emit()
+func get_save_dict(node: Node)->Dictionary[String, Variant]:
+	var dict: Dictionary[String, Variant] = {}
+	node.pre_save()
+	for value in node.to_save:
+		dict[value] = node.get(value)
+	if node is Player:
+		player_data[node.name] = dict
+	node.post_save()
+	return dict
+
+func load_save_dict(node: Node, dict: Dictionary[String, Variant])->void:
+	node.pre_load()
+	for key in dict:
+		node.set(key, dict[key])
+	if node is Player:
+		player_data[node.name] = dict
+	node.post_load()
 
 ## Saves the game, creating the necessary folders if missing
-func save_data(quiet_save: bool = false)->void:
+func save_data(save_name: String = slot, quiet_save: bool = false)->void:
 	if saving || loading:
 		return
 	if in_combat:
@@ -104,58 +128,51 @@ func save_data(quiet_save: bool = false)->void:
 		DirAccess.make_dir_absolute(save_file_folder)
 	if !DirAccess.dir_exists_absolute(save_file_folder+slot):
 		DirAccess.make_dir_absolute(save_file_folder+slot)
-	var file: FileAccess = FileAccess.open(save_file_folder+slot+"/Global.dat", FileAccess.WRITE)
-	file.store_var("CURRENT_MAP="+NavMaster.map.scene_file_path)
+	var file: FileAccess = FileAccess.open(save_file_folder+slot+'/'+save_name+".dat", FileAccess.WRITE)
+	file.store_var(NavMaster.map.scene_file_path)
+	var dialogic_vars: Dictionary[String, Variant]
 	for variable in Dialogic.VAR.variables():
-		file.store_var(variable)
-		file.store_var(Dialogic.VAR.get_variable(variable))
-	file.store_var("END_OF_SAVE_DATA")
-	file.close()
-	num_ready = 0
-	var num_to_save: int = 0
+		dialogic_vars[variable] = Dialogic.VAR.get_variable(variable)
+	file.store_var(dialogic_vars)
+	var global_data: Dictionary[String, Dictionary]
 	for node in get_tree().get_nodes_in_group("Persist"):
-		if !node.has_method("save_data"):
-			printerr("Persistent node"+node.name+"missing save data function")
-		node.saved.connect(readied)
-		num_to_save += 1
-		node.save_data(save_file_folder+slot+'/')
-	while num_ready < num_to_save:
-		await node_readied
-	await NavMaster.map.save_map(save_file_folder+slot+'/')
+		global_data[node.name] = get_save_dict(node)
+	file.store_var(global_data)
+	level_data[NavMaster.map.name] = NavMaster.map.get_save_data()
+	file.store_var(level_data)
+	file.close()
 	if !quiet_save:
 		EventBus.broadcast("PRINT_LOG", "Saved!")
 	saving = false
 
 ## Loads the game
-func load_data()->void:
+func load_data(save_name: String = "")->void:
 	if !DirAccess.dir_exists_absolute(save_file_folder+slot):
 		printerr("Save Folder Not Found")
 		return
-	if !FileAccess.file_exists(save_file_folder+slot+"/Global.dat"):
-		printerr("Save File Not Found in Folder")
+	if DirAccess.get_files_at(save_file_folder+slot).size() < 1:
+		printerr("No Save Files in Folder")
 		return
 	if loading || saving:
 		return
 	loading = true
 	in_combat = false
-	var file: FileAccess = FileAccess.open(save_file_folder+slot+"/Global.dat", FileAccess.READ)
-	var cur_map: String = file.get_var().split('=', true, 1)[1]
+	var file: FileAccess
+	if FileAccess.file_exists(save_file_folder+slot+'/'+save_name+".dat"):
+		file = FileAccess.open(save_file_folder+slot+'/'+save_name+".dat", FileAccess.READ)
+	else:
+		file = FileAccess.open(get_latest_save(slot), FileAccess.READ)
+	var cur_map: String = file.get_var()
 	var main: Node2D = await reset_game()
-	var variable: String = file.get_var()
-	while variable != "END_OF_SAVE_DATA":
-		Dialogic.VAR.set_variable(variable, file.get_var())
-		variable = file.get_var()
-	file.close()
-	num_ready = 0
-	var num_to_load: int = 0
+	var dialogic_vars: Dictionary[String, Variant] = file.get_var()
+	for variable in dialogic_vars:
+		Dialogic.VAR.set_variable(variable, dialogic_vars[variable])
+	var global_data = file.get_var()
 	for node in get_tree().get_nodes_in_group("Persist"):
-		if !node.has_method("load_data"):
-			printerr("Persistent node"+node.name+"missing load data function")
-		node.loaded.connect(readied)
-		num_to_load += 1
-		node.load_data(save_file_folder+slot+'/')
-	while num_ready < num_to_load:
-		await node_readied
+		if node.name in global_data:
+			load_save_dict(node, global_data[node.name])
+	level_data = file.get_var()
+	file.close()
 	await main.load_map(cur_map)
 	EventBus.broadcast("LOADED", "NULLDATA")
 	EventBus.broadcast("PRINT_LOG", "Loaded!")

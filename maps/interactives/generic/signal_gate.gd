@@ -87,6 +87,26 @@ func advance_unlock(signal_event)->void:
 		Dialogic.VAR.set(dialogic_var, signal_index)
 
 #region Save and Load
+## Executes before making the save dict
+func pre_save()->void:
+	return
+
+## Executes after making the save dict
+func post_save()->void:
+	saved.emit(self)
+
+## Executes before loading data
+func pre_load()->void:
+	return
+
+## Executes after loading data
+func post_load()->void:
+	if cur_state == state.open:
+		open(true)
+	elif cur_state == state.unlocked:
+		allow_dialogue = false
+	loaded.emit(self)
+
 ## Saves the gate's data
 func save_data(dir: String)->void:
 	var file: FileAccess = FileAccess.open(dir+name+".dat", FileAccess.WRITE)

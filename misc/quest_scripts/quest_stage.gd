@@ -59,6 +59,20 @@ func duplicate_stage()->QuestStage:
 		new_stage.quest_objectives[id] = quest_objectives[id].duplicate(true)
 	return new_stage
 
+## Returns an array corresponding to completion of each objective
+func get_save_data()->Dictionary[String, int]:
+	var dict: Dictionary[String, int]
+	for objective in quest_objectives:
+		dict[objective] = quest_objectives[objective].current_count
+	return dict
+
+## Loads the save data for each objective in this stage
+func load_save_data(data: Dictionary[String, int])->void:
+	for objective in data:
+		if objective not in quest_objectives:
+			continue
+		quest_objectives[objective].set_count(data[objective])
+
 ## Saves the objectives in this stage and their ids
 func save_data(file: FileAccess)->void:
 	for id in quest_objectives:

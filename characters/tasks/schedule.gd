@@ -8,6 +8,7 @@ class_name Schedule
 var user: Character ## User of this schedule
 var schedule_executed: bool = false ## Whether this schedule has executed
 var task_index: int = 0 ## Index of current task
+signal index_changed(value: int) ## Emitted when the task index changes
 signal pause ## Emitted when this is paused
 signal unpause ## Emitted when this is unpaused
 
@@ -54,6 +55,7 @@ func task_done()->void:
 	tasks[task_index].task_completed.disconnect(task_done)
 	user.schedule_processing = false
 	task_index = (task_index+1)%tasks.size()
+	index_changed.emit(task_index)
 	if (task_index == 0 && !loop_schedule) || !user.active:
 		if task_index == 0:
 			schedule_executed = true

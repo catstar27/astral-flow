@@ -47,7 +47,7 @@ func close_pause_menu()->void:
 ## Saves the game; called when the save button is pressed
 func save_pressed()->void:
 	close_pause_menu()
-	await SaveLoad.save_data()
+	SaveLoad.save_data()
 	open_pause_menu()
 	save_button.grab_focus()
 
@@ -67,4 +67,4 @@ func quit_pressed()->void:
 
 ## Resets the save file; called when reset button is pressed
 func reset_pressed() -> void:
-	SaveLoad.reset_save("save1")
+	SaveLoad.reset_save(SaveLoad.slot)

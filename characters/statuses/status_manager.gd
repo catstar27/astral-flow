@@ -143,23 +143,21 @@ func trigger_on_death()->void:
 #endregion
 
 #region Save and Load
-## Saves this status manager's statuses to the given file
-func save_data(file: FileAccess)->void:
+## Gets a dictionary with saved values
+func get_save_data()->Dictionary[String, Variant]:
+	var dict: Dictionary[String, Variant]
 	for status in status_list.keys():
 		if status.resource_path != "":
-			file.store_var(status.resource_path)
-			file.store_var(status_list[status])
-	file.store_var("STATUS_MANAGER_END")
+			dict[status.resource_path] = status_list[status]
+	return dict
 
-## Loads this status manager's statuses from the given file
-func load_data(file: FileAccess)->void:
-	var target: String = file.get_var()
-	while target != "STATUS_MANAGER_END":
-		var stacks: int = file.get_var()[1]
+## Loads the status effects from given data
+func load_save_data(data: Dictionary[String, Variant])->void:
+	for value in data:
+		var stacks: int = data[value][1]
 		for num in range(0, stacks):
-			var new_status: Status = load(target)
+			var new_status: Status = load(value)
 			var matching_status: Status = get_matching_status(new_status.id)
 			if matching_status == null || status_list[matching_status][1] < stacks:
 				add_status(new_status, get_parent())
-		target = file.get_var()
 #endregion

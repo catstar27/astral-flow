@@ -77,6 +77,18 @@ func duplicate_quest()->QuestInfo:
 		new_quest.quest_stages.append(stage.duplicate_stage())
 	return new_quest
 
+## Gets the save data for this quest
+func get_save_data()->Array[Dictionary]:
+	var arr: Array[Dictionary]
+	for stage in quest_stages:
+		arr.append(stage.get_save_data())
+	return arr
+
+## Loads the save data for this quest
+func load_save_data(data: Array[Dictionary])->void:
+	for index in range(0, quest_stages.size()):
+		quest_stages[index].load_save_data(data[index])
+
 ## Saves the quest's data
 func save_data(file: FileAccess)->void:
 	for index in range(0, quest_stages.size()):

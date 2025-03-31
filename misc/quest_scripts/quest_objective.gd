@@ -27,7 +27,7 @@ signal objective_updated(objective: QuestObjective) ## Emitted when the objectiv
 
 ## Checks if this objective is complete, and emits the signal if so
 func check_completion()->void:
-	if complete:
+	if complete || current_count >= maxi(1, total_count):
 		objective_completed.emit(self)
 
 ## Updates the objective when receiving the required quest event
@@ -40,14 +40,18 @@ func update_objective(incoming_event_id: String)->void:
 	if complete:
 		return
 	objective_updated.emit(self)
-	if total_count == 0:
+	current_count += 1
+	if current_count >= maxi(1, total_count):
 		complete = true
 		objective_completed.emit(self)
-	else:
-		current_count += 1
-		if current_count == total_count:
-			complete = true
-			objective_completed.emit(self)
+
+func set_count(count: int)->void:
+	if count != current_count:
+		objective_updated.emit(self)
+	current_count = count
+	if current_count >= maxi(1, total_count):
+		complete = true
+		objective_completed.emit(self)
 
 #region Save and Load
 ## Saves the objective's current count

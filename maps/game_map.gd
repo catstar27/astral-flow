@@ -12,7 +12,6 @@ class_name GameMap
 @export var map_name: String ## Display name of map
 @onready var astar: AStarGrid2D ## Astar pathfinding grid
 @onready var light_modulator: CanvasModulate = %LightingModulate ## Modulator for lighting
-var children_ready_count: int = 0 ## Number of children saved/loaded
 var loading: bool = false ## Whether the map is loading
 var player: Player = null ## The player node
 var occupied_tiles: Dictionary[Vector2i, Node2D] ## Tiles being occupied by an interactive or character
@@ -23,7 +22,6 @@ signal map_saved ## Emitted when the entire map is saved
 signal map_loaded ## Emitted when the entire map is loaded
 signal saved(node: GameMap) ## Emitted when the map's variables are saved
 signal loaded(node: GameMap) ## Emitted when the map's variables are loaded
-signal child_readied ## Emitted when a child of the map has saved/loaded
 
 #region Prep
 func _ready()->void:
@@ -172,84 +170,44 @@ func is_in_bounds(pos: Vector2)->bool:
 #endregion
 
 #region Save and Load
-## Called when a child finishes saving/loading
-func child_ready(child)->void:
-	if loading:
-		child.loaded.disconnect(child_ready)
-	else:
-		child.saved.disconnect(child_ready)
-	children_ready_count += 1
-	child_readied.emit()
-
-## Checks whether the map has save data
-func has_save_data()->bool:
-	var filepath: String = SaveLoad.save_file_folder+SaveLoad.slot+'/'+map_name+'/'
-	if FileAccess.open(filepath+map_name+".dat", FileAccess.READ) != null:
-		return true
-	return false
-
-## Saves the entire map and all its children
-func save_map(filepath: String)->void:
-	if !DirAccess.dir_exists_absolute(filepath+map_name):
-		DirAccess.make_dir_absolute(filepath+map_name)
-	filepath += map_name+'/'
-	save_data(filepath)
-	children_ready_count = 0
-	var children_to_save: int = 0
+## Gets save data for this map and all its saved children
+func get_save_data()->Dictionary[String, Dictionary]:
+	var dict: Dictionary[String, Dictionary]
+	var self_dict: Dictionary[String, Variant]
+	for value in to_save:
+		self_dict[value] = get(value)
+	dict[name] = self_dict
 	for node in get_children():
 		if node.is_in_group("LevelSave"):
-			if !node.has_method("save_data"):
-				printerr("Persistent node"+node.name+"missing save data function")
-			children_to_save += 1
-			node.saved.connect(child_ready)
-			node.save_data(filepath)
-	while children_ready_count < children_to_save:
-		await child_readied
+			node.pre_save()
+			var node_dict: Dictionary[String, Variant]
+			for value in node.to_save:
+				node_dict[value] = node.get(value)
+			dict[node.name] = node_dict
+			node.post_save()
 	map_saved.emit()
+	saved.emit(self)
+	return dict
 
-## Loads the entire map and all its children
-func load_map(filepath: String)->void:
+## Loads save data for this map and all its saved children
+func load_save_data(dict: Dictionary[String, Dictionary])->void:
 	loading = true
 	NavMaster.map_loading = true
 	if astar == null:
 		_astar_setup()
-	filepath += map_name+'/'
-	load_data(filepath)
-	children_ready_count = 0
-	var children_to_load: int = 0
+	if name in dict:
+		var self_dict: Dictionary[String, Variant] = dict[name]
+		for value in self_dict:
+			set(value, self_dict[value])
 	for node in get_children():
-		if node is Player:
-			player = node
-		if node.is_in_group("LevelSave"):
-			if !node.has_method("load_data"):
-				printerr("Persistent node"+node.name+"missing load data function")
-			children_to_load += 1
-			node.loaded.connect(child_ready)
-			node.load_data(filepath)
-	while children_ready_count < children_to_load:
-		await child_readied
-	map_loaded.emit()
+		if node.is_in_group("LevelSave") && node.name in dict:
+			var node_dict: Dictionary[String, Variant] = dict[node.name]
+			node.pre_load()
+			for value in node_dict:
+				node.set(value, node_dict[value])
+			node.post_load()
 	NavMaster.map_loading = false
 	loading = false
-
-## Saves map variables
-func save_data(dir: String)->void:
-	player_start_pos = local_to_map(player.position)
-	var file: FileAccess = FileAccess.open(dir+map_name+".dat", FileAccess.WRITE)
-	for var_name in to_save:
-		file.store_var(var_name)
-		file.store_var(get(var_name))
-	file.store_var("END")
-	file.close()
-	saved.emit(self)
-
-## Loads map variables
-func load_data(dir: String)->void:
-	var file: FileAccess = FileAccess.open(dir+map_name+".dat", FileAccess.READ)
-	var var_name: String = file.get_var()
-	while var_name != "END":
-		set(var_name, file.get_var())
-		var_name = file.get_var()
-	file.close()
+	map_loaded.emit()
 	loaded.emit(self)
 #endregion
