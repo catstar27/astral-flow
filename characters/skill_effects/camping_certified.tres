@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="SkillEffect" load_steps=3 format=3 uid="uid://dpo2ws0mmk0ae"]
+
+[ext_resource type="Script" uid="uid://bxbgnej1gincs" path="res://characters/skill_effects/skill_effect.gd" id="1_1l3ta"]
+[ext_resource type="Texture2D" uid="uid://b6vnio23pmtyv" path="res://textures/character/skill_effect/survival_training_icon.png" id="1_gihya"]
+
+[resource]
+script = ExtResource("1_1l3ta")
+display_name = "Camping Certified"
+description = "You have been in the wilderness long enough to understand how to make camp.
+You are able to set up camp at campsites and rest."
+icon = ExtResource("1_gihya")
+metadata/_custom_type_script = "uid://bxbgnej1gincs"

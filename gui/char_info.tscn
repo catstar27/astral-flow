@@ -13,7 +13,7 @@ anchors_preset = 0
 offset_right = 960.0
 offset_bottom = 530.0
 script = ExtResource("1_bnuoq")
-ability_buttons = [NodePath("Info/AbilityList/AbilityButton"), NodePath("Info/AbilityList/AbilityButton2"), NodePath("Info/AbilityList/AbilityButton3"), NodePath("Info/AbilityList/AbilityButton4"), NodePath("Info/AbilityList/AbilityButton5"), NodePath("Info/AbilityList/AbilityButton6"), NodePath("Info/AbilityList/AbilityButton7"), NodePath("Info/AbilityList/AbilityButton8"), NodePath("Info/AbilityList/AbilityButton9"), NodePath("Info/AbilityList/AbilityButton10")]
+ability_buttons = [NodePath("Info/AbilityList/AbilityButton"), NodePath("Info/AbilityList/AbilityButton2"), NodePath("Info/AbilityList/AbilityButton3"), NodePath("Info/AbilityList/AbilityButton4"), NodePath("Info/AbilityList/AbilityButton5"), NodePath("Info/AbilityList/AbilityButton6"), NodePath("Info/AbilityList/AbilityButton7"), NodePath("Info/AbilityList/AbilityButton8"), NodePath("Info/AbilityList/AbilityButton9"), NodePath("Info/AbilityList/AbilityButton10"), NodePath("Info/AbilityList/AbilityButton11"), NodePath("Info/AbilityList/AbilityButton12")]
 
 [node name="MenuButton" parent="." instance=ExtResource("4_mqul6")]
 unique_name_in_owner = true
@@ -31,7 +31,6 @@ input_action_name = "menu_left"
 [node name="Info" type="VBoxContainer" parent="."]
 unique_name_in_owner = true
 process_mode = 1
-visible = false
 use_parent_material = true
 layout_mode = 2
 offset_left = -82.0
@@ -78,61 +77,97 @@ size_flags_vertical = 8
 theme_override_font_sizes/font_size = 16
 text = "MP"
 
-[node name="AbilityList" type="VBoxContainer" parent="Info"]
+[node name="AbilityList" type="GridContainer" parent="Info"]
 unique_name_in_owner = true
 process_mode = 1
 use_parent_material = true
 layout_mode = 2
-theme_override_constants/separation = 1
+theme_override_constants/h_separation = 2
+theme_override_constants/v_separation = 2
+columns = 3
 
 [node name="AbilityButton" parent="Info/AbilityList" instance=ExtResource("3_8cx65")]
-custom_minimum_size = Vector2(0, 35)
+custom_minimum_size = Vector2(26, 26)
 layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
 theme_override_font_sizes/font_size = 16
 
 [node name="AbilityButton2" parent="Info/AbilityList" instance=ExtResource("3_8cx65")]
-custom_minimum_size = Vector2(0, 35)
+custom_minimum_size = Vector2(26, 26)
 layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
 theme_override_font_sizes/font_size = 16
 
 [node name="AbilityButton3" parent="Info/AbilityList" instance=ExtResource("3_8cx65")]
-custom_minimum_size = Vector2(0, 35)
+custom_minimum_size = Vector2(26, 26)
 layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
 theme_override_font_sizes/font_size = 16
 
 [node name="AbilityButton4" parent="Info/AbilityList" instance=ExtResource("3_8cx65")]
-custom_minimum_size = Vector2(0, 35)
+custom_minimum_size = Vector2(26, 26)
 layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
 theme_override_font_sizes/font_size = 16
 
 [node name="AbilityButton5" parent="Info/AbilityList" instance=ExtResource("3_8cx65")]
-custom_minimum_size = Vector2(0, 35)
+custom_minimum_size = Vector2(26, 26)
 layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
 theme_override_font_sizes/font_size = 16
 
 [node name="AbilityButton6" parent="Info/AbilityList" instance=ExtResource("3_8cx65")]
-custom_minimum_size = Vector2(0, 35)
+custom_minimum_size = Vector2(26, 26)
 layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
 theme_override_font_sizes/font_size = 16
 
 [node name="AbilityButton7" parent="Info/AbilityList" instance=ExtResource("3_8cx65")]
-custom_minimum_size = Vector2(0, 35)
+custom_minimum_size = Vector2(26, 26)
 layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
 theme_override_font_sizes/font_size = 16
 
 [node name="AbilityButton8" parent="Info/AbilityList" instance=ExtResource("3_8cx65")]
-custom_minimum_size = Vector2(0, 35)
+custom_minimum_size = Vector2(26, 26)
 layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
 theme_override_font_sizes/font_size = 16
 
 [node name="AbilityButton9" parent="Info/AbilityList" instance=ExtResource("3_8cx65")]
-custom_minimum_size = Vector2(0, 35)
+custom_minimum_size = Vector2(26, 26)
 layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
 theme_override_font_sizes/font_size = 16
 
 [node name="AbilityButton10" parent="Info/AbilityList" instance=ExtResource("3_8cx65")]
-custom_minimum_size = Vector2(0, 35)
+custom_minimum_size = Vector2(26, 26)
 layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+theme_override_font_sizes/font_size = 16
+
+[node name="AbilityButton11" parent="Info/AbilityList" instance=ExtResource("3_8cx65")]
+custom_minimum_size = Vector2(26, 26)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+theme_override_font_sizes/font_size = 16
+
+[node name="AbilityButton12" parent="Info/AbilityList" instance=ExtResource("3_8cx65")]
+custom_minimum_size = Vector2(26, 26)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
 theme_override_font_sizes/font_size = 16
 
 [node name="EndTurn" type="Button" parent="Info"]

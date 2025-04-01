@@ -1,12 +1,14 @@
-[gd_scene load_steps=2 format=3 uid="uid://bl1ksh3itp2fl"]
+[gd_scene load_steps=3 format=3 uid="uid://bl1ksh3itp2fl"]
 
+[ext_resource type="Theme" uid="uid://cxq4wi2s4byf1" path="res://textures/gui/themes/custom_theme_alt.tres" id="1_d3frb"]
 [ext_resource type="Script" uid="uid://5jcx6ijynec3" path="res://gui/components/ability_button.gd" id="1_o8rum"]
 
 [node name="AbilityButton" type="Button"]
 process_mode = 1
 use_parent_material = true
-offset_right = 41.0
-offset_bottom = 31.0
+offset_right = 26.0
+offset_bottom = 26.0
+theme = ExtResource("1_d3frb")
 script = ExtResource("1_o8rum")
 
 [connection signal="pressed" from="." to="." method="_on_pressed"]

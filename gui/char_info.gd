@@ -4,7 +4,7 @@ class_name CharInfo
 ##
 ## Allows the player to select abilities or end the character's turn
 
-@onready var ability_list: VBoxContainer = %AbilityList ## Container that holds ability buttons
+@onready var ability_list: GridContainer = %AbilityList ## Container that holds ability buttons
 @onready var hp_label: Label = %HP ## Shows the character's health points
 @onready var ap_label: Label = %AP ## Shows the character's action points
 @onready var mp_label: Label = %MP ## Shows the character's magic points
@@ -37,7 +37,8 @@ func _ready() -> void:
 #region Info Box
 ## Displays info box for an ability
 func request_ability_info()->void:
-	for button in ability_buttons:
+	for index in range(0, ability_buttons.size()):
+		var button: AbilityButton = ability_buttons[index]
 		if button.has_focus():
 			if button.ability != null:
 				var text: String = button.ability.display_name
@@ -45,6 +46,7 @@ func request_ability_info()->void:
 				text += button.ability.description
 				var origin: Vector2 = button.position+Vector2.RIGHT*(button.size.x+4)
 				origin += info_container.position+ability_list.position
+				origin += Vector2.RIGHT*((button.size.x+2)*(2-(index%3)))
 				info_box_requested.emit(self, origin, text)
 				return
 
@@ -145,41 +147,18 @@ func unsuspend_menu()->void:
 func enable_end_turn()->void:
 	end_turn_button.disabled = false
 	end_turn_button.focus_mode = Control.FOCUS_ALL
-	set_first_last_buttons()
 
 ## Disables the end turn button, for when it is no longer needed
 func disable_end_turn()->void:
 	end_turn_button.disabled = true
 	end_turn_button.focus_mode = Control.FOCUS_NONE
-	set_first_last_buttons()
-
-## Sets neighbors of the first and last buttons, allowing them to wrap around
-func set_first_last_buttons()->void:
-	if end_turn_button.disabled:
-		ability_buttons[0].focus_previous = ability_buttons[abilities.size()-1].get_path()
-		ability_buttons[0].focus_neighbor_top = ability_buttons[abilities.size()-1].get_path()
-		ability_buttons[abilities.size()-1].focus_next = ability_buttons[0].get_path()
-		ability_buttons[abilities.size()-1].focus_neighbor_bottom = ability_buttons[0].get_path()
-	else:
-		ability_buttons[0].focus_previous = end_turn_button.get_path()
-		ability_buttons[0].focus_neighbor_top = end_turn_button.get_path()
-		ability_buttons[abilities.size()-1].focus_next = end_turn_button.get_path()
-		ability_buttons[abilities.size()-1].focus_neighbor_bottom = end_turn_button.get_path()
 
 ## Adds an ability to the button list
 func add_ability(index: int, ability: Ability)->AbilityButton:
 	var button: AbilityButton = ability_buttons[index]
-	var prev: AbilityButton = null
-	if index > 0:
-		prev = ability_buttons[index-1]
 	button.disabled = false
 	button.focus_mode = Control.FOCUS_ALL
 	button.set_ability(ability)
-	if prev != null:
-		button.focus_previous = prev.get_path()
-		button.focus_neighbor_top = prev.get_path()
-		prev.focus_next = button.get_path()
-		prev.focus_neighbor_bottom = button.get_path()
 	return button
 
 ## Sets a new character, updating the display to match
@@ -230,14 +209,13 @@ func update_abilities()->void:
 	clear_abilities()
 	var index: int = 0
 	for ability in character.abilities:
-		if index > 9:
+		if index > 11:
 			break
 		add_ability(index, ability)
 		abilities.append(ability)
 		ability_buttons[index].disabled = false
 		index += 1
-	set_first_last_buttons()
-	while index < 10:
+	while index < 12:
 		ability_buttons[index].disabled = true
 		ability_buttons[index].focus_mode = Control.FOCUS_NONE
 		index += 1

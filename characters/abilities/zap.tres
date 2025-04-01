@@ -1,5 +1,6 @@
-[gd_resource type="Resource" script_class="Ability" load_steps=5 format=3 uid="uid://b8fdwoet4bpq5"]
+[gd_resource type="Resource" script_class="Ability" load_steps=6 format=3 uid="uid://b8fdwoet4bpq5"]
 
+[ext_resource type="Texture2D" uid="uid://bb5jprk2d5wkg" path="res://textures/character/ability/icons/zap_icon.png" id="1_2b0af"]
 [ext_resource type="PackedScene" uid="uid://cybrghxvkmk7w" path="res://characters/abilities/projectiles/lightning.tscn" id="1_idoyy"]
 [ext_resource type="Script" uid="uid://b0xbk38jyra5a" path="res://characters/abilities/ability.gd" id="2_2b0af"]
 [ext_resource type="AudioStream" uid="uid://ph4sryxod7aw" path="res://sfx/zap.wav" id="3_5qeq1"]
@@ -9,6 +10,7 @@
 script = ExtResource("2_2b0af")
 display_name = "Zap"
 description = "Zaps a target with electricity from far range."
+icon = ExtResource("1_2b0af")
 sound = ExtResource("3_5qeq1")
 ap_cost = 2
 mp_cost = 1

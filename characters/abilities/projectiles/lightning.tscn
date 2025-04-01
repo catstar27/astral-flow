@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://cybrghxvkmk7w"]
 
-[ext_resource type="Texture2D" uid="uid://d0no71q1v0jd0" path="res://textures/ability/lightning.png" id="1_jarl7"]
+[ext_resource type="Texture2D" uid="uid://d0no71q1v0jd0" path="res://textures/character/ability/lightning.png" id="1_jarl7"]
 [ext_resource type="Script" uid="uid://qs1sy8wa6p20" path="res://characters/abilities/projectiles/lightning_projectile.gd" id="2_jbas3"]
 
 [node name="Lightning" type="Polygon2D"]

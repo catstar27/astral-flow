@@ -1,3 +1,4 @@
+@tool
 extends Button
 class_name AbilityButton
 ## Button that holds an ability makes the user select it when pressed
@@ -7,12 +8,12 @@ class_name AbilityButton
 ## Sets the button's ability and updates the text
 func set_ability(new_ability: Ability)->void:
 	ability = new_ability
-	text = new_ability.display_name
+	icon = ability.icon
 
 ## Clears the button's ability, making it blank
 func clear_ability()->void:
 	ability = null
-	text = ""
+	icon = null
 
 func _on_pressed() -> void:
 	if ability.user.selected_ability == null:

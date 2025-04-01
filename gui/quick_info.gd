@@ -76,6 +76,7 @@ func update_info()->void:
 	stats_label.text += "AP: "+str(character.cur_ap)+"\n"
 	stats_label.text += "MP: "+str(character.cur_mp)
 
+## Updates the displayed status effects
 func update_statuses()->void:
 	if character == null:
 		return

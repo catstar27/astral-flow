@@ -37,6 +37,7 @@ enum skill_used_options {intelligence, agility, strength, endurance, resolve, ch
 var user: Character = null ## Character using the ability
 @export var display_name: String = "NameHere" ## Name of the ability shown in the GUI
 @export_multiline var description: String = "Description Here" ## Description of the ability
+@export var icon: Texture2D ## Icon to show for this ability
 @export var sound: AudioStreamWAV ## Sound that plays when the ability activates
 @export_group("Costs")
 @export var ap_cost: int = 0 ## Amount of AP used by the ability

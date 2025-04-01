@@ -160,4 +160,5 @@ func load_save_data(data: Dictionary[String, Variant])->void:
 			var matching_status: Status = get_matching_status(new_status.id)
 			if matching_status == null || status_list[matching_status][1] < stacks:
 				add_status(new_status, get_parent())
+				matching_status = get_matching_status(new_status.id)
 #endregion

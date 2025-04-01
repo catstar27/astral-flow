@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://cy6pdh0hesumj"]
+
+[ext_resource type="Script" uid="uid://b24clxaptd50g" path="res://gui/components/skill_effect_button.gd" id="1_r35fw"]
+
+[node name="SkillEffectButton" type="Button"]
+offset_right = 12.0
+offset_bottom = 12.0
+script = ExtResource("1_r35fw")

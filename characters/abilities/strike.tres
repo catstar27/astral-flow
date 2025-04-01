@@ -1,6 +1,7 @@
-[gd_resource type="Resource" script_class="Ability" load_steps=4 format=3 uid="uid://dae4xdag0nd3v"]
+[gd_resource type="Resource" script_class="Ability" load_steps=5 format=3 uid="uid://dae4xdag0nd3v"]
 
 [ext_resource type="Script" uid="uid://b0xbk38jyra5a" path="res://characters/abilities/ability.gd" id="1_5qlae"]
+[ext_resource type="Texture2D" uid="uid://k4cstq8yucwu" path="res://textures/character/ability/icons/strike_icon.png" id="1_ve81p"]
 [ext_resource type="AudioStream" uid="uid://g0lb5si7k3pc" path="res://sfx/punch.wav" id="2_ve81p"]
 [ext_resource type="Script" uid="uid://dxv7e1j21poh5" path="res://characters/statuses/status.gd" id="3_48qex"]
 
@@ -9,6 +10,7 @@ script = ExtResource("1_5qlae")
 display_name = "Strike"
 description = "Strike a target with a melee weapon or limb.
 Deals 2 damage."
+icon = ExtResource("1_ve81p")
 sound = ExtResource("2_ve81p")
 ap_cost = 2
 mp_cost = 0

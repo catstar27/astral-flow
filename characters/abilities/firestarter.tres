@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="Ability" load_steps=4 format=3 uid="uid://cobkb8n61mus0"]
+
+[ext_resource type="Script" uid="uid://b0xbk38jyra5a" path="res://characters/abilities/ability.gd" id="1_dgpih"]
+[ext_resource type="Texture2D" uid="uid://by2bi7cf0ba4e" path="res://textures/character/ability/icons/firestarter_icon.png" id="1_gbd76"]
+[ext_resource type="Script" uid="uid://dxv7e1j21poh5" path="res://characters/statuses/status.gd" id="2_gbd76"]
+
+[resource]
+script = ExtResource("1_dgpih")
+display_name = "Firestarter"
+description = "Channel your magical energy to light stuff on fire!"
+icon = ExtResource("1_gbd76")
+ap_cost = 0
+mp_cost = 0
+ability_range = 1
+target_type = 5
+activation_type = 0
+base_damage = 0
+ignore_defense = false
+damage_type = 0
+skill_used = 2
+statuses = Dictionary[ExtResource("2_gbd76"), int]({})
+metadata/_custom_type_script = "uid://b0xbk38jyra5a"

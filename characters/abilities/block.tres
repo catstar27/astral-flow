@@ -1,6 +1,7 @@
-[gd_resource type="Resource" script_class="Ability" load_steps=5 format=3 uid="uid://c6f0begbutw3l"]
+[gd_resource type="Resource" script_class="Ability" load_steps=6 format=3 uid="uid://c6f0begbutw3l"]
 
 [ext_resource type="Script" uid="uid://b0xbk38jyra5a" path="res://characters/abilities/ability.gd" id="1_e8slm"]
+[ext_resource type="Texture2D" uid="uid://wrgjduibkuam" path="res://textures/character/ability/icons/block_icon.png" id="1_f61ji"]
 [ext_resource type="AudioStream" uid="uid://dn0n8crrshix1" path="res://sfx/shield.wav" id="2_54ndt"]
 [ext_resource type="Resource" uid="uid://cw635joog3u4x" path="res://characters/statuses/blocking.tres" id="3_rputp"]
 [ext_resource type="Script" uid="uid://dxv7e1j21poh5" path="res://characters/statuses/status.gd" id="4_iy6jr"]
@@ -11,6 +12,7 @@ display_name = "Block"
 description = "Applies a stacking buff that lasts 1 round.
 Grants +2 Damage Threshold.
 One stack is removed upon hit."
+icon = ExtResource("1_f61ji")
 sound = ExtResource("2_54ndt")
 ap_cost = 1
 mp_cost = 0

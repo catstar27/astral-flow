@@ -14,6 +14,15 @@ class_name Character
 	"resolve": 10,
 	"passion": 10
 }
+var star_stat_mods: Dictionary[String, int] = { ## Modifications to star stats
+	"intelligence": 0,
+	"agility": 0,
+	"strength": 0,
+	"endurance": 0,
+	"charisma": 0,
+	"resolve": 0,
+	"passion": 0
+}
 var base_stats: Dictionary[String, int] = { ## Base stats calculated from star stats
 	"max_ap": 0,
 	"max_mp": 0,
