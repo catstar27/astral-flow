@@ -210,8 +210,9 @@ func unload_map()->void:
 			map.remove_child(player)
 			add_child(player)
 		map.queue_free()
+		while is_instance_valid(map):
+			await get_tree().process_frame
 		map = null
-		await get_tree().create_timer(.01).timeout
 
 ## Executes before making the save dict
 func pre_save()->void:
