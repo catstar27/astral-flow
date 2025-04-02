@@ -3,5 +3,6 @@
 [ext_resource type="StyleBox" uid="uid://0ufgxeweprdh" path="res://textures/gui/themes/info_box.tres" id="1_wooaw"]
 
 [resource]
+Button/styles/normal = null
 Panel/styles/panel = ExtResource("1_wooaw")
 PanelContainer/styles/panel = ExtResource("1_wooaw")

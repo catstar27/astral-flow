@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="Skill" load_steps=4 format=3 uid="uid://bh7ico4hdbucl"]
+
+[ext_resource type="Script" uid="uid://b0xbk38jyra5a" path="res://characters/abilities/ability.gd" id="1_reug8"]
+[ext_resource type="Script" uid="uid://cnjkw62smi3mo" path="res://characters/skills/skill.gd" id="2_ook7t"]
+[ext_resource type="Script" uid="uid://bxbgnej1gincs" path="res://characters/skills/skill_effects/skill_effect.gd" id="3_wmiqq"]
+
+[resource]
+script = ExtResource("2_ook7t")
+id = "survival_training"
+display_name = "Survival Training"
+skill_effects = Array[ExtResource("3_wmiqq")]([])
+abilities = Array[ExtResource("1_reug8")]([])
+required_skills = Array[ExtResource("2_ook7t")]([])
+required_breakthroughs = null
+metadata/_custom_type_script = "uid://cnjkw62smi3mo"

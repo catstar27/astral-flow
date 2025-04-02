@@ -1,0 +1,12 @@
+[gd_scene load_steps=4 format=3 uid="uid://cmd2yidmaqw8e"]
+
+[ext_resource type="Script" uid="uid://iic5ypv0ljx4" path="res://misc/gameplay_managers/skill_manager.gd" id="1_agjct"]
+[ext_resource type="Script" uid="uid://cnjkw62smi3mo" path="res://characters/skills/skill.gd" id="2_232uq"]
+[ext_resource type="Resource" uid="uid://bh7ico4hdbucl" path="res://characters/skills/survival_training.tres" id="3_0payq"]
+
+[node name="SkillManager" type="Node"]
+script = ExtResource("1_agjct")
+skill_list = Array[ExtResource("2_232uq")]([ExtResource("3_0payq")])
+skill_dictionary = Dictionary[String, ExtResource("2_232uq")]({
+"survival_training": ExtResource("3_0payq")
+})

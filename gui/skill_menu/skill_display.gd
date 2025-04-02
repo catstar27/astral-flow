@@ -3,22 +3,20 @@ extends Button
 class_name SkillDisplay
 ## GUI element that displays the name and details of a skill
 
-@export_multiline var display_name: String: ## Name for this skill
-	set(new_name):
-		display_name = new_name
-		%NameLabel.text = new_name
+@export var skill: Skill: ## Skill to display
+	set(new_skill):
+		skill = new_skill
+		if skill != null:
+			%NameLabel.text = skill.display_name
+		else:
+			%NameLabel.text = "Name Here"
 		custom_minimum_size = $VBoxContainer.size + Vector2.ONE*12
 		reset_size()
-@export var effects: Array[SkillEffect]: ## Array of all effects granted by this skill
-	set(arr):
-		effects = arr
 		add_effect_buttons()
-@export var abilities: Array[Ability]: ## Array of abilities granted by this skill
-	set(arr):
-		abilities = arr
 		add_ability_buttons()
 @onready var effects_container: GridContainer = %EffectsContainer ## Container for skill effects
 @onready var ability_container: GridContainer = %AbilitiesContainer ## Container for skill abilities
+@onready var button_theme: Theme = preload("uid://dehvu01nlqvsf")
 var ability_button_scn: PackedScene = preload("uid://bl1ksh3itp2fl") ## Scene for ability buttons
 var effect_button_scn: PackedScene = preload("uid://cy6pdh0hesumj") ## Scene for effect buttons
 
@@ -27,15 +25,16 @@ func add_effect_buttons()->void:
 	for button in %EffectsContainer.get_children():
 		if button is Button:
 			button.queue_free()
-	if effects.size() == 0:
+	if skill.skill_effects.size() == 0:
 		%EffectsContainer.get_child(0).show()
 	else:
 		%EffectsContainer.get_child(0).hide()
-	for effect in effects:
+	for effect in skill.skill_effects:
 		if effect == null:
 			continue
 		var new_button: SkillEffectButton = effect_button_scn.instantiate()
 		new_button.set_effect(effect)
+		new_button.theme = button_theme
 		%EffectsContainer.add_child(new_button)
 		new_button.owner = self
 
@@ -44,15 +43,16 @@ func add_ability_buttons()->void:
 	for button in %AbilitiesContainer.get_children():
 		if button is Button:
 			button.queue_free()
-	if abilities.size() == 0:
+	if skill.abilities.size() == 0:
 		%AbilitiesContainer.get_child(0).show()
 	else:
 		%AbilitiesContainer.get_child(0).hide()
-	for ability in abilities:
+	for ability in skill.abilities:
 		if ability == null:
 			continue
 		var new_button: AbilityButton = ability_button_scn.instantiate()
 		new_button.pressed.disconnect(new_button._on_pressed)
 		new_button.set_ability(ability)
+		new_button.theme = button_theme
 		%AbilitiesContainer.add_child(new_button)
 		new_button.owner = self

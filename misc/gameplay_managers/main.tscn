@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://c6tflifn824fs"]
+[gd_scene load_steps=11 format=3 uid="uid://c6tflifn824fs"]
 
 [ext_resource type="Script" uid="uid://mnr6ks1d3db6" path="res://misc/gameplay_managers/main.gd" id="1_518bh"]
 [ext_resource type="Texture2D" uid="uid://ceeo5gnqb2rcr" path="res://textures/gui/foreground.png" id="3_khi6w"]
@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://b85mlpg1agp8h" path="res://misc/selection_cursor/selection_cursor.tscn" id="4_lfpb3"]
 [ext_resource type="PackedScene" uid="uid://covhvnd4w4mkl" path="res://misc/gameplay_managers/sound_manager.tscn" id="5_icnsw"]
 [ext_resource type="PackedScene" uid="uid://dwv4awarhydj0" path="res://misc/gameplay_managers/combat_manager.tscn" id="5_xm8nu"]
+[ext_resource type="PackedScene" uid="uid://cmd2yidmaqw8e" path="res://misc/gameplay_managers/skill_manager.tscn" id="5_y3pxv"]
 [ext_resource type="PackedScene" uid="uid://81w41aon23of" path="res://misc/gameplay_managers/quest_manager.tscn" id="6_1f2dt"]
 [ext_resource type="PackedScene" uid="uid://t1lqjxny1int" path="res://gui/gui.tscn" id="9_5e0hy"]
 
@@ -27,6 +28,8 @@ unique_name_in_owner = true
 [node name="CombatManager" parent="." instance=ExtResource("5_xm8nu")]
 
 [node name="QuestManager" parent="." instance=ExtResource("6_1f2dt")]
+
+[node name="SkillManager" parent="." instance=ExtResource("5_y3pxv")]
 
 [node name="Background" type="Sprite2D" parent="."]
 process_mode = 1

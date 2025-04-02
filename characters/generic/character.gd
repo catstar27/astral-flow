@@ -56,6 +56,9 @@ enum ai_types { ## Options for enemy ai
 @export var dialogues: Array[DialogicTimeline] ## Dialogues for the NPC to enter when interacted
 @export var signal_dialogues: Dictionary[String, DialogicTimeline] ## Second set of dialogue for triggering through signals
 @export var text_indicator_shift: Vector2 = Vector2.UP*32 ## Distance away from this to spawn text indicators
+@export_group("Initial Stuff")
+@export var starting_skills: Array[Skill] ## List of skills to start with
+@export var breakthroughs: Array[Breakthrough] ## List of breakthroughs
 @export var export_abilities: Array[Ability] = [] ## Exported ability list for initial abilities
 @export var starting_statuses: Array[Status] ## List of statuses to start with
 @export_group("Combat") ## Exports related to combat ai and what this considers an enemy
@@ -77,12 +80,16 @@ enum ai_types { ## Options for enemy ai
 @onready var combat_trigger: Area2D = %CombatTrigger ## Area that tracks other characters for combat
 @onready var collision: CollisionShape2D = %Collision ## Collision of the character
 @onready var range_indicator_scene: PackedScene = preload("res://misc/selection_cursor/range_indicator.tscn")
-var abilities: Array[Ability] = [] ## Actual list of abilities
+var skills: Array[Skill] ## Actual list of skills
+var skill_ids: Array[String] ## List of ids for skills
+var skill_effects: Array[SkillEffect] ## List of skill effects
+var abilities: Array[Ability] ## Actual list of abilities
 var sequence: int ## Order of this character in the current combat and turn
 var in_combat: bool = false ## Whether this character is in combat
 var taking_turn: bool = false ## Whether this character is taking their turn
 var range_indicators: Array[Sprite2D] = [] ## Range indicators for selected ability
 var selected_ability: Ability = null ## Ability attempted to be used by the character
+var skill_points: int ## Characters unused points for learning skills
 var cur_ap: int ## Character's current action points
 var cur_mp: int ## Character's current health points
 var cur_hp: int ## Character's current magic points
@@ -101,7 +108,8 @@ var to_save: Array[StringName] = [ ## Variables to save
 	"position",
 	"star_stats",
 	"base_stats",
-	"ability_scenes",
+	"skill_ids",
+	"skill_points",
 	"cur_hp",
 	"cur_ap",
 	"cur_mp",
@@ -392,6 +400,22 @@ func melee_safe()->void:
 	end_turn()
 #endregion
 
+#region Skills
+## Initializes the skill list
+func init_skills()->void:
+	for skill in starting_skills:
+		EventBus.broadcast("ADD_SKILL", [self, skill.id])
+
+## Adds the given skill to this character
+func add_skill(skill: Skill)->void:
+	if skill not in skills:
+		skills.append(skill)
+		if skill.id not in skill_ids:
+			skill_ids.append(skill.id)
+		for ability in skill.abilities:
+			add_ability(ability)
+#endregion
+
 #region Abilities
 ## Selects the given ability and places its indicators
 func select_ability(ability: Ability)->void:
@@ -591,6 +615,8 @@ func post_load()->void:
 		schedules[schedule_index].task_index = current_schedule_task_index
 	init_statuses()
 	status_manager.load_save_data(status_data)
+	for id in skill_ids:
+		EventBus.broadcast("ADD_SKILL", [self, id])
 	load_extra()
 	state_machine.unpause()
 	if active:
