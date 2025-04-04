@@ -9,13 +9,13 @@ class_name ControlDisplayButton
 	set(ian):
 		input_action_name = ian
 		prep()
-@onready var key_label: Label = %KeyLabel ## Label for if this is a keyboard key
 enum control_types { ## Contains the types of controls this can show
 	keyboard, ## For keyboard and mouse
 	xbox, ## For XBox controllers. Also used as fallback if controller type is not detected
 	playstation, ## For Playstation controllers
 	nintendo ## For Nintendo controllers
 }
+var key_label: Label ## Label for keyboard key
 var controller_tex: AtlasTexture = AtlasTexture.new() ## Texture to contain the relevant controls
 var xbox_buttons: Texture2D = preload("uid://dex3nfkyghgto") ## XBox button spritesheet
 var playstation_buttons: Texture2D = preload("uid://cr3hku7xo62gq") ## Playstation button spritesheet
@@ -28,44 +28,51 @@ var last_device_name: String = "" ## Name of last detected input device
 signal display_updated ## Emitted when the button changes control schemes
 
 func _ready() -> void:
-	if Engine.is_editor_hint():
-		return
-	match icon_alignment:
-		HORIZONTAL_ALIGNMENT_LEFT:
-			key_label.set_anchors_preset(Control.PRESET_CENTER_LEFT)
-		HORIZONTAL_ALIGNMENT_CENTER:
-			key_label.set_anchors_preset(Control.PRESET_CENTER)
-		HORIZONTAL_ALIGNMENT_RIGHT:
-			key_label.set_anchors_preset(Control.PRESET_CENTER_RIGHT)
-	controller_tex.region.size = Vector2.ONE*32
-	shortcut = Shortcut.new()
-	shortcut.events = InputMap.action_get_events(input_action_name)
-	if !InputMap.has_action(input_action_name):
-		printerr("Invalid Input Action "+input_action_name+" on Button "+name)
-	else:
-		update_display(recent_control_type, InputMap.action_get_events(input_action_name))
-		display_updated.emit()
+	prep()
 
 ## Preps the button for display in editor
 func prep()->void:
-	if not Engine.is_editor_hint():
+	if Engine.is_editor_hint():
+		if !ProjectSettings.has_setting("input/"+input_action_name):
+			return
+	else:
+		if !InputMap.has_action(input_action_name):
+			printerr("No such action as: "+input_action_name)
+			return
+	if has_node("KeyLabel"):
+		key_label = $KeyLabel
+	else:
 		return
-	key_label = %KeyLabel
-	match icon_alignment:
-		HORIZONTAL_ALIGNMENT_LEFT:
-			key_label.set_anchors_preset(Control.PRESET_CENTER_LEFT)
-		HORIZONTAL_ALIGNMENT_CENTER:
-			key_label.set_anchors_preset(Control.PRESET_CENTER)
-		HORIZONTAL_ALIGNMENT_RIGHT:
-			key_label.set_anchors_preset(Control.PRESET_CENTER_RIGHT)
+	reset_key_label_pos()
 	controller_tex.region.size = Vector2.ONE*32
 	shortcut = Shortcut.new()
-	shortcut.events = ProjectSettings.get_setting("input/"+input_action_name).events
-	if !ProjectSettings.has_setting("input/"+input_action_name):
-		printerr("Invalid Input Action "+input_action_name+" on Button "+name)
-	else:
+	if Engine.is_editor_hint():
+		shortcut.events = ProjectSettings.get_setting("input/"+input_action_name).events
 		update_display(recent_control_type, ProjectSettings.get_setting("input/"+input_action_name).events)
-		display_updated.emit()
+	else:
+		shortcut.events = InputMap.action_get_events(input_action_name)
+		update_display(recent_control_type, InputMap.action_get_events(input_action_name))
+	display_updated.emit()
+
+## Sets the size and position of the key label
+func reset_key_label_pos()->void:
+	key_label.scale = Vector2.ONE*.5
+	key_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	key_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	if key_label.text.length() <= 1:
+		key_label.size.x = 64
+	else:
+		key_label.size.x = 128
+	key_label.size.y = 2*(size.y-(get_theme_stylebox("normal").get_margin(SIDE_TOP)+
+		get_theme_stylebox("normal").get_margin(SIDE_BOTTOM)))
+	key_label.position = Vector2(get_theme_stylebox("normal").get_margin(SIDE_LEFT),get_theme_stylebox("normal").get_margin(SIDE_TOP))
+	match icon_alignment:
+		HORIZONTAL_ALIGNMENT_LEFT:
+			pass
+		HORIZONTAL_ALIGNMENT_CENTER:
+			key_label.position.x = (size.x-get_theme_stylebox("normal").get_margin(SIDE_RIGHT)-key_label.size.x)/2
+		HORIZONTAL_ALIGNMENT_RIGHT:
+			key_label.position.x = size.x-get_theme_stylebox("normal").get_margin(SIDE_RIGHT)-key_label.size.x/2
 
 func _input(event: InputEvent) -> void:
 	if visible:
@@ -100,7 +107,6 @@ func _unhandled_input(event: InputEvent) -> void:
 
 ## Updates the display when controls or controllers change
 func update_display(type: control_types, events: Array)->void:
-	key_label.hide()
 	match type:
 		control_types.keyboard:
 			update_keyboard_display(events)
@@ -116,6 +122,7 @@ func update_display(type: control_types, events: Array)->void:
 
 ## Updates the sprite on the controller scheme spritesheet to match this button
 func update_controller_display(events: Array)->void:
+	key_label.hide()
 	icon = controller_tex
 	for event in events:
 		if event is InputEventJoypadButton:
@@ -128,12 +135,15 @@ func update_keyboard_display(events: Array)->void:
 	for event in events:
 		if event is InputEventKey:
 			if event.as_text_physical_keycode().length() > 1:
-				key_label.size.x = 130
 				icon = large_keyboard_key
 			else:
-				key_label.size.x = 66
 				icon = keyboard_key
 			key_label.text = event.as_text_physical_keycode().to_upper()
+			if key_label.text.length() > 5:
+				key_label.text = key_label.text.left(3)
+			if is_node_ready():
+				await get_tree().process_frame
+			reset_key_label_pos()
 			key_label.show()
 			return
 		elif event is InputEventMouse:

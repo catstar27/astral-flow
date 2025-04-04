@@ -1,4 +1,4 @@
-[gd_scene load_steps=25 format=3 uid="uid://djhm61nx72b66"]
+[gd_scene load_steps=27 format=3 uid="uid://djhm61nx72b66"]
 
 [ext_resource type="Theme" uid="uid://crcivs73grrf7" path="res://textures/gui/themes/custom_theme.tres" id="1_bfybv"]
 [ext_resource type="Material" uid="uid://dcq7n5qyt3hj0" path="res://materials/immaterial.tres" id="1_tvvdr"]
@@ -12,58 +12,68 @@
 [ext_resource type="Texture2D" uid="uid://bxhwtcxdgtkx6" path="res://textures/gui/keyboard_key.png" id="7_jf5tn"]
 [ext_resource type="PackedScene" uid="uid://bcso2ambvbnge" path="res://gui/settings_menu/controls_menu.tscn" id="8_go2v4"]
 
-[sub_resource type="InputEventKey" id="InputEventKey_y8bv3"]
+[sub_resource type="InputEventKey" id="InputEventKey_jf5tn"]
 device = -1
 physical_keycode = 81
 unicode = 113
 
-[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_6q2hq"]
+[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_y8bv3"]
 device = -1
 button_index = 9
 pressed = true
 
 [sub_resource type="Shortcut" id="Shortcut_jf5tn"]
-events = [SubResource("InputEventKey_y8bv3"), SubResource("InputEventJoypadButton_6q2hq")]
+events = [SubResource("InputEventKey_jf5tn"), SubResource("InputEventJoypadButton_y8bv3")]
 
-[sub_resource type="InputEventKey" id="InputEventKey_3v8ln"]
+[sub_resource type="InputEventKey" id="InputEventKey_327te"]
 device = -1
 physical_keycode = 69
 unicode = 101
 
-[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_nwud4"]
+[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_3v8ln"]
 device = -1
 button_index = 10
 pressed = true
 
 [sub_resource type="Shortcut" id="Shortcut_y8bv3"]
-events = [SubResource("InputEventKey_3v8ln"), SubResource("InputEventJoypadButton_nwud4")]
+events = [SubResource("InputEventKey_327te"), SubResource("InputEventJoypadButton_3v8ln")]
 
-[sub_resource type="InputEventKey" id="InputEventKey_gk0vu"]
+[sub_resource type="InputEventKey" id="InputEventKey_xrwxc"]
 device = -1
 physical_keycode = 4194309
 
-[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_3gu06"]
+[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_gk0vu"]
 device = -1
 button_index = 6
 pressed = true
 
 [sub_resource type="Shortcut" id="Shortcut_6q2hq"]
-events = [SubResource("InputEventKey_gk0vu"), SubResource("InputEventJoypadButton_3gu06")]
+events = [SubResource("InputEventKey_xrwxc"), SubResource("InputEventJoypadButton_gk0vu")]
 
-[sub_resource type="InputEventKey" id="InputEventKey_r7xrs"]
+[sub_resource type="InputEventKey" id="InputEventKey_8ksfv"]
 device = -1
 physical_keycode = 88
 unicode = 120
 
-[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_aujtc"]
+[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_r7xrs"]
 device = -1
 button_index = 3
 pressed = true
 
 [sub_resource type="Shortcut" id="Shortcut_327te"]
-events = [SubResource("InputEventKey_r7xrs"), SubResource("InputEventJoypadButton_aujtc")]
+events = [SubResource("InputEventKey_8ksfv"), SubResource("InputEventJoypadButton_r7xrs")]
+
+[sub_resource type="InputEventKey" id="InputEventKey_sb84n"]
+device = -1
+physical_keycode = 4194305
+
+[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_ss85p"]
+device = -1
+button_index = 1
+pressed = true
 
 [sub_resource type="Shortcut" id="Shortcut_3v8ln"]
+events = [SubResource("InputEventKey_sb84n"), SubResource("InputEventJoypadButton_ss85p")]
 
 [node name="SettingsMenu" type="Control"]
 material = ExtResource("1_tvvdr")
@@ -107,6 +117,7 @@ layout_mode = 2
 layout_mode = 2
 shortcut = SubResource("Shortcut_jf5tn")
 icon = ExtResource("7_jf5tn")
+icon_alignment = 0
 input_action_name = "menu_left"
 
 [node name="GameplayCategory" type="Button" parent="SettingsContainer/CategoryContainer"]
@@ -124,6 +135,7 @@ unique_name_in_owner = true
 use_parent_material = true
 custom_minimum_size = Vector2(92, 0)
 layout_mode = 2
+size_flags_horizontal = 3
 focus_mode = 0
 toggle_mode = true
 text = "Video"
@@ -150,6 +162,7 @@ text = "Controls"
 layout_mode = 2
 shortcut = SubResource("Shortcut_y8bv3")
 icon = ExtResource("7_jf5tn")
+icon_alignment = 0
 input_action_name = "menu_right"
 
 [node name="GameplayMenu" parent="SettingsContainer" instance=ExtResource("5_7oobf")]
@@ -178,10 +191,11 @@ layout_mode = 2
 [node name="ConfirmButtons" type="HBoxContainer" parent="SettingsContainer"]
 use_parent_material = true
 layout_mode = 2
+theme_override_constants/separation = 1
 alignment = 1
 
 [node name="ConfirmButton2" parent="SettingsContainer/ConfirmButtons" instance=ExtResource("6_bo706")]
-custom_minimum_size = Vector2(92, 44)
+custom_minimum_size = Vector2(200, 44)
 layout_mode = 2
 size_flags_horizontal = 3
 shortcut = SubResource("Shortcut_6q2hq")
@@ -189,7 +203,7 @@ text = "Confirm"
 input_action_name = "menu_confirm"
 
 [node name="DefaultButton2" parent="SettingsContainer/ConfirmButtons" instance=ExtResource("6_bo706")]
-custom_minimum_size = Vector2(92, 44)
+custom_minimum_size = Vector2(200, 44)
 layout_mode = 2
 size_flags_horizontal = 3
 shortcut = SubResource("Shortcut_327te")
@@ -197,12 +211,13 @@ text = "Default"
 icon = ExtResource("7_jf5tn")
 input_action_name = "default"
 
-[node name="CancelButton2" parent="SettingsContainer/ConfirmButtons" instance=ExtResource("6_bo706")]
-custom_minimum_size = Vector2(92, 44)
+[node name="CancelButton" parent="SettingsContainer/ConfirmButtons" instance=ExtResource("6_bo706")]
+custom_minimum_size = Vector2(200, 44)
 layout_mode = 2
 size_flags_horizontal = 3
 shortcut = SubResource("Shortcut_3v8ln")
 text = "Cancel"
+input_action_name = "menu_back"
 
 [connection signal="pressed" from="SettingsContainer/CategoryContainer/ControlDisplayButton" to="." method="select_prev"]
 [connection signal="pressed" from="SettingsContainer/CategoryContainer/GameplayCategory" to="." method="select_gameplay"]
@@ -212,4 +227,4 @@ text = "Cancel"
 [connection signal="pressed" from="SettingsContainer/CategoryContainer/ControlDisplayButton2" to="." method="select_next"]
 [connection signal="pressed" from="SettingsContainer/ConfirmButtons/ConfirmButton2" to="." method="close_settings_menu"]
 [connection signal="pressed" from="SettingsContainer/ConfirmButtons/DefaultButton2" to="." method="default_settings"]
-[connection signal="pressed" from="SettingsContainer/ConfirmButtons/CancelButton2" to="." method="cancel_settings"]
+[connection signal="pressed" from="SettingsContainer/ConfirmButtons/CancelButton" to="." method="cancel_settings"]

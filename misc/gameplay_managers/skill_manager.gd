@@ -10,7 +10,8 @@ class_name SkillManager
 @export_storage var skill_dictionary: Dictionary[String, Skill] ## Dictionary linking skills and their ids
 
 func _ready() -> void:
-	EventBus.subscribe("LEARN_SKILL", self, "add_skill")
+	if not Engine.is_editor_hint():
+		EventBus.subscribe("LEARN_SKILL", self, "add_skill")
 
 ## Fills the skill dictionary with the skills in skill_list
 func populate_dictionary()->void:

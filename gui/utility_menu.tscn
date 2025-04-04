@@ -6,18 +6,18 @@
 [ext_resource type="Theme" uid="uid://cxq4wi2s4byf1" path="res://textures/gui/themes/custom_theme_alt.tres" id="3_v0p8v"]
 [ext_resource type="Texture2D" uid="uid://bxhwtcxdgtkx6" path="res://textures/gui/keyboard_key.png" id="5_fubsc"]
 
-[sub_resource type="InputEventKey" id="InputEventKey_0p03a"]
+[sub_resource type="InputEventKey" id="InputEventKey_327te"]
 device = -1
 physical_keycode = 69
 unicode = 101
 
-[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_7g8dw"]
+[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_3v8ln"]
 device = -1
 button_index = 10
 pressed = true
 
 [sub_resource type="Shortcut" id="Shortcut_fubsc"]
-events = [SubResource("InputEventKey_0p03a"), SubResource("InputEventJoypadButton_7g8dw")]
+events = [SubResource("InputEventKey_327te"), SubResource("InputEventJoypadButton_3v8ln")]
 
 [node name="UtilityMenu" type="Control"]
 material = ExtResource("1_jr21q")
@@ -44,7 +44,6 @@ theme = ExtResource("3_v0p8v")
 shortcut = SubResource("Shortcut_fubsc")
 text = "←"
 icon = ExtResource("5_fubsc")
-icon_alignment = 2
 input_action_name = "menu_right"
 
 [node name="Info" type="VBoxContainer" parent="."]
