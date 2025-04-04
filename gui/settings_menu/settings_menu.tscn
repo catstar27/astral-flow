@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://djhm61nx72b66"]
+[gd_scene load_steps=25 format=3 uid="uid://djhm61nx72b66"]
 
 [ext_resource type="Theme" uid="uid://crcivs73grrf7" path="res://textures/gui/themes/custom_theme.tres" id="1_bfybv"]
 [ext_resource type="Material" uid="uid://dcq7n5qyt3hj0" path="res://materials/immaterial.tres" id="1_tvvdr"]
@@ -9,7 +9,61 @@
 [ext_resource type="PackedScene" uid="uid://dleye7m8gjxs0" path="res://gui/components/control_display_button.tscn" id="6_bo706"]
 [ext_resource type="PackedScene" uid="uid://b7cxdla4214kn" path="res://gui/settings_menu/video_menu.tscn" id="6_oj3kl"]
 [ext_resource type="PackedScene" uid="uid://cw61jejhmqw73" path="res://gui/settings_menu/audio_menu.tscn" id="7_bady6"]
+[ext_resource type="Texture2D" uid="uid://bxhwtcxdgtkx6" path="res://textures/gui/keyboard_key.png" id="7_jf5tn"]
 [ext_resource type="PackedScene" uid="uid://bcso2ambvbnge" path="res://gui/settings_menu/controls_menu.tscn" id="8_go2v4"]
+
+[sub_resource type="InputEventKey" id="InputEventKey_y8bv3"]
+device = -1
+physical_keycode = 81
+unicode = 113
+
+[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_6q2hq"]
+device = -1
+button_index = 9
+pressed = true
+
+[sub_resource type="Shortcut" id="Shortcut_jf5tn"]
+events = [SubResource("InputEventKey_y8bv3"), SubResource("InputEventJoypadButton_6q2hq")]
+
+[sub_resource type="InputEventKey" id="InputEventKey_3v8ln"]
+device = -1
+physical_keycode = 69
+unicode = 101
+
+[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_nwud4"]
+device = -1
+button_index = 10
+pressed = true
+
+[sub_resource type="Shortcut" id="Shortcut_y8bv3"]
+events = [SubResource("InputEventKey_3v8ln"), SubResource("InputEventJoypadButton_nwud4")]
+
+[sub_resource type="InputEventKey" id="InputEventKey_gk0vu"]
+device = -1
+physical_keycode = 4194309
+
+[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_3gu06"]
+device = -1
+button_index = 6
+pressed = true
+
+[sub_resource type="Shortcut" id="Shortcut_6q2hq"]
+events = [SubResource("InputEventKey_gk0vu"), SubResource("InputEventJoypadButton_3gu06")]
+
+[sub_resource type="InputEventKey" id="InputEventKey_r7xrs"]
+device = -1
+physical_keycode = 88
+unicode = 120
+
+[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_aujtc"]
+device = -1
+button_index = 3
+pressed = true
+
+[sub_resource type="Shortcut" id="Shortcut_327te"]
+events = [SubResource("InputEventKey_r7xrs"), SubResource("InputEventJoypadButton_aujtc")]
+
+[sub_resource type="Shortcut" id="Shortcut_3v8ln"]
 
 [node name="SettingsMenu" type="Control"]
 material = ExtResource("1_tvvdr")
@@ -51,6 +105,8 @@ layout_mode = 2
 
 [node name="ControlDisplayButton" parent="SettingsContainer/CategoryContainer" instance=ExtResource("6_bo706")]
 layout_mode = 2
+shortcut = SubResource("Shortcut_jf5tn")
+icon = ExtResource("7_jf5tn")
 input_action_name = "menu_left"
 
 [node name="GameplayCategory" type="Button" parent="SettingsContainer/CategoryContainer"]
@@ -92,11 +148,12 @@ text = "Controls"
 
 [node name="ControlDisplayButton2" parent="SettingsContainer/CategoryContainer" instance=ExtResource("6_bo706")]
 layout_mode = 2
+shortcut = SubResource("Shortcut_y8bv3")
+icon = ExtResource("7_jf5tn")
 input_action_name = "menu_right"
 
 [node name="GameplayMenu" parent="SettingsContainer" instance=ExtResource("5_7oobf")]
 unique_name_in_owner = true
-visible = false
 use_parent_material = true
 layout_mode = 2
 
@@ -126,18 +183,25 @@ alignment = 1
 [node name="ConfirmButton2" parent="SettingsContainer/ConfirmButtons" instance=ExtResource("6_bo706")]
 custom_minimum_size = Vector2(92, 44)
 layout_mode = 2
+size_flags_horizontal = 3
+shortcut = SubResource("Shortcut_6q2hq")
 text = "Confirm"
 input_action_name = "menu_confirm"
 
 [node name="DefaultButton2" parent="SettingsContainer/ConfirmButtons" instance=ExtResource("6_bo706")]
 custom_minimum_size = Vector2(92, 44)
 layout_mode = 2
+size_flags_horizontal = 3
+shortcut = SubResource("Shortcut_327te")
 text = "Default"
+icon = ExtResource("7_jf5tn")
 input_action_name = "default"
 
 [node name="CancelButton2" parent="SettingsContainer/ConfirmButtons" instance=ExtResource("6_bo706")]
 custom_minimum_size = Vector2(92, 44)
 layout_mode = 2
+size_flags_horizontal = 3
+shortcut = SubResource("Shortcut_3v8ln")
 text = "Cancel"
 
 [connection signal="pressed" from="SettingsContainer/CategoryContainer/ControlDisplayButton" to="." method="select_prev"]

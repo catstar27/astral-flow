@@ -1,9 +1,23 @@
-[gd_scene load_steps=5 format=3 uid="uid://cejp7bpbfmkw"]
+[gd_scene load_steps=9 format=3 uid="uid://cejp7bpbfmkw"]
 
 [ext_resource type="Script" uid="uid://btvo5nimkcrmi" path="res://gui/utility_menu.gd" id="1_db426"]
 [ext_resource type="Material" uid="uid://dcq7n5qyt3hj0" path="res://materials/immaterial.tres" id="1_jr21q"]
 [ext_resource type="PackedScene" uid="uid://dleye7m8gjxs0" path="res://gui/components/control_display_button.tscn" id="2_lco6t"]
 [ext_resource type="Theme" uid="uid://cxq4wi2s4byf1" path="res://textures/gui/themes/custom_theme_alt.tres" id="3_v0p8v"]
+[ext_resource type="Texture2D" uid="uid://bxhwtcxdgtkx6" path="res://textures/gui/keyboard_key.png" id="5_fubsc"]
+
+[sub_resource type="InputEventKey" id="InputEventKey_0p03a"]
+device = -1
+physical_keycode = 69
+unicode = 101
+
+[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_7g8dw"]
+device = -1
+button_index = 10
+pressed = true
+
+[sub_resource type="Shortcut" id="Shortcut_fubsc"]
+events = [SubResource("InputEventKey_0p03a"), SubResource("InputEventJoypadButton_7g8dw")]
 
 [node name="UtilityMenu" type="Control"]
 material = ExtResource("1_jr21q")
@@ -27,7 +41,9 @@ offset_bottom = 48.0
 size_flags_horizontal = 8
 size_flags_vertical = 0
 theme = ExtResource("3_v0p8v")
+shortcut = SubResource("Shortcut_fubsc")
 text = "←"
+icon = ExtResource("5_fubsc")
 icon_alignment = 2
 input_action_name = "menu_right"
 
