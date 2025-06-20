@@ -1,0 +1,60 @@
+[gd_scene load_steps=10 format=3 uid="uid://c6kh3esjn5743"]
+
+[ext_resource type="Script" uid="uid://4h8i0utuabag" path="res://gui/tab_menu.gd" id="1_h8l0p"]
+[ext_resource type="PackedScene" uid="uid://dleye7m8gjxs0" path="res://gui/components/control_display_button.tscn" id="2_lhxtm"]
+[ext_resource type="Texture2D" uid="uid://bxhwtcxdgtkx6" path="res://textures/gui/keyboard_key.png" id="3_66o3j"]
+
+[sub_resource type="InputEventKey" id="InputEventKey_ppe0i"]
+device = -1
+physical_keycode = 81
+unicode = 113
+
+[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_a5ktr"]
+device = -1
+button_index = 9
+pressed = true
+
+[sub_resource type="Shortcut" id="Shortcut_lhxtm"]
+events = [SubResource("InputEventKey_ppe0i"), SubResource("InputEventJoypadButton_a5ktr")]
+
+[sub_resource type="InputEventKey" id="InputEventKey_ij2q1"]
+device = -1
+physical_keycode = 69
+unicode = 101
+
+[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_du62d"]
+device = -1
+button_index = 10
+pressed = true
+
+[sub_resource type="Shortcut" id="Shortcut_66o3j"]
+events = [SubResource("InputEventKey_ij2q1"), SubResource("InputEventJoypadButton_du62d")]
+
+[node name="TabMenu" type="VBoxContainer"]
+offset_right = 598.0
+offset_bottom = 351.0
+script = ExtResource("1_h8l0p")
+
+[node name="TabButtonContainer" type="HBoxContainer" parent="."]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="PrevButton" parent="TabButtonContainer" instance=ExtResource("2_lhxtm")]
+unique_name_in_owner = true
+layout_mode = 2
+shortcut = SubResource("Shortcut_lhxtm")
+icon = ExtResource("3_66o3j")
+input_action_name = "menu_left"
+
+[node name="NextButton" parent="TabButtonContainer" instance=ExtResource("2_lhxtm")]
+unique_name_in_owner = true
+layout_mode = 2
+shortcut = SubResource("Shortcut_66o3j")
+icon = ExtResource("3_66o3j")
+input_action_name = "menu_right"
+
+[connection signal="child_entered_tree" from="." to="." method="add_tab"]
+[connection signal="child_exiting_tree" from="." to="." method="remove_tab"]
+[connection signal="child_order_changed" from="." to="." method="reorder"]
+[connection signal="pressed" from="TabButtonContainer/PrevButton" to="." method="prev_tab"]
+[connection signal="pressed" from="TabButtonContainer/NextButton" to="." method="next_tab"]

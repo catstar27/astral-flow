@@ -38,6 +38,6 @@ offset_top = 6.0
 offset_right = 134.0
 offset_bottom = 70.0
 scale = Vector2(0.5, 0.5)
-text = "ESCAPE"
+text = "ESC"
 horizontal_alignment = 1
 vertical_alignment = 1

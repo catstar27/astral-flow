@@ -24,10 +24,9 @@ layout_mode = 2
 size_flags_horizontal = 3
 theme = ExtResource("2_s5afe")
 tab_alignment = 1
-current_tab = 8
+current_tab = 0
 
 [node name="Body" type="Control" parent="HBoxContainer/TabContainer"]
-visible = false
 layout_mode = 2
 metadata/_tab_index = 0
 
@@ -45,27 +44,3 @@ metadata/_tab_index = 2
 visible = false
 layout_mode = 2
 metadata/_tab_index = 3
-
-[node name="Brawling" type="Control" parent="HBoxContainer/TabContainer"]
-visible = false
-layout_mode = 2
-metadata/_tab_index = 4
-
-[node name="Gunslinging" type="Control" parent="HBoxContainer/TabContainer"]
-visible = false
-layout_mode = 2
-metadata/_tab_index = 5
-
-[node name="Pyromancy" type="Control" parent="HBoxContainer/TabContainer"]
-visible = false
-layout_mode = 2
-metadata/_tab_index = 6
-
-[node name="Cryomancy" type="Control" parent="HBoxContainer/TabContainer"]
-visible = false
-layout_mode = 2
-metadata/_tab_index = 7
-
-[node name="Electromancy" type="Control" parent="HBoxContainer/TabContainer"]
-layout_mode = 2
-metadata/_tab_index = 8
