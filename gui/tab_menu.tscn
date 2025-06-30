@@ -4,52 +4,74 @@
 [ext_resource type="PackedScene" uid="uid://dleye7m8gjxs0" path="res://gui/components/control_display_button.tscn" id="2_lhxtm"]
 [ext_resource type="Texture2D" uid="uid://bxhwtcxdgtkx6" path="res://textures/gui/keyboard_key.png" id="3_66o3j"]
 
-[sub_resource type="InputEventKey" id="InputEventKey_ppe0i"]
+[sub_resource type="InputEventKey" id="InputEventKey_du62d"]
 device = -1
 physical_keycode = 81
 unicode = 113
 
-[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_a5ktr"]
+[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_c1lr2"]
 device = -1
 button_index = 9
 pressed = true
 
-[sub_resource type="Shortcut" id="Shortcut_lhxtm"]
-events = [SubResource("InputEventKey_ppe0i"), SubResource("InputEventJoypadButton_a5ktr")]
+[sub_resource type="Shortcut" id="Shortcut_66o3j"]
+events = [SubResource("InputEventKey_du62d"), SubResource("InputEventJoypadButton_c1lr2")]
 
-[sub_resource type="InputEventKey" id="InputEventKey_ij2q1"]
+[sub_resource type="InputEventKey" id="InputEventKey_ii665"]
 device = -1
 physical_keycode = 69
 unicode = 101
 
-[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_du62d"]
+[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_xrr0a"]
 device = -1
 button_index = 10
 pressed = true
 
-[sub_resource type="Shortcut" id="Shortcut_66o3j"]
-events = [SubResource("InputEventKey_ij2q1"), SubResource("InputEventJoypadButton_du62d")]
+[sub_resource type="Shortcut" id="Shortcut_lm0uq"]
+events = [SubResource("InputEventKey_ii665"), SubResource("InputEventJoypadButton_xrr0a")]
 
 [node name="TabMenu" type="VBoxContainer"]
-offset_right = 598.0
-offset_bottom = 351.0
+custom_minimum_size = Vector2(480, 0)
+offset_right = 300.0
+offset_bottom = 44.0
 script = ExtResource("1_h8l0p")
 
 [node name="TabButtonContainer" type="HBoxContainer" parent="."]
 unique_name_in_owner = true
 layout_mode = 2
+alignment = 1
 
 [node name="PrevButton" parent="TabButtonContainer" instance=ExtResource("2_lhxtm")]
 unique_name_in_owner = true
 layout_mode = 2
-shortcut = SubResource("Shortcut_lhxtm")
+shortcut = SubResource("Shortcut_66o3j")
 icon = ExtResource("3_66o3j")
 input_action_name = "menu_left"
+
+[node name="EllipseLeft" type="Button" parent="TabButtonContainer"]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(44, 44)
+layout_mode = 2
+focus_mode = 0
+theme_override_font_sizes/font_size = 28
+button_mask = 0
+text = "..."
+
+[node name="EllipseRight" type="Button" parent="TabButtonContainer"]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(44, 44)
+layout_mode = 2
+focus_mode = 0
+theme_override_font_sizes/font_size = 28
+button_mask = 0
+text = "..."
 
 [node name="NextButton" parent="TabButtonContainer" instance=ExtResource("2_lhxtm")]
 unique_name_in_owner = true
 layout_mode = 2
-shortcut = SubResource("Shortcut_66o3j")
+shortcut = SubResource("Shortcut_lm0uq")
 icon = ExtResource("3_66o3j")
 input_action_name = "menu_right"
 

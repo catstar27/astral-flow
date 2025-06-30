@@ -5,6 +5,11 @@ class_name ControlDisplayButton
 ##
 ## Changes its visuals to match the current controller
 
+const xbox_buttons: Texture2D = preload("uid://dex3nfkyghgto") ## XBox button spritesheet
+const playstation_buttons: Texture2D = preload("uid://cr3hku7xo62gq") ## Playstation button spritesheet
+const nintendo_buttons: Texture2D = preload("uid://btwblsu5qgtyu") ## Nintendo button spritesheet
+const keyboard_key: Texture2D = preload("uid://bxhwtcxdgtkx6") ## Keyboard key sprite
+const large_keyboard_key: Texture2D = preload("uid://cdsoyfxaorth3") ## Large keyboard key sprite (for space, ctrl, etc)
 @export var input_action_name: String: ## Name of the input this will display
 	set(ian):
 		input_action_name = ian
@@ -17,11 +22,6 @@ enum control_types { ## Contains the types of controls this can show
 }
 var key_label: Label ## Label for keyboard key
 var controller_tex: AtlasTexture = AtlasTexture.new() ## Texture to contain the relevant controls
-var xbox_buttons: Texture2D = preload("uid://dex3nfkyghgto") ## XBox button spritesheet
-var playstation_buttons: Texture2D = preload("uid://cr3hku7xo62gq") ## Playstation button spritesheet
-var nintendo_buttons: Texture2D = preload("uid://btwblsu5qgtyu") ## Nintendo button spritesheet
-var keyboard_key: Texture2D = preload("uid://bxhwtcxdgtkx6") ## Keyboard key sprite
-var large_keyboard_key: Texture2D = preload("uid://cdsoyfxaorth3") ## Large keyboard key sprite (for space, ctrl, etc)
 var recent_control_type: control_types = control_types.keyboard ## Most recent control type
 var prev_control_type: control_types = control_types.keyboard ## Previous control type
 var last_device_name: String = "" ## Name of last detected input device

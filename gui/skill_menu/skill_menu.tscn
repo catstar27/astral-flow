@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://bp3kviw2dmw1c"]
 
 [ext_resource type="Texture2D" uid="uid://c86rddiynhvpb" path="res://textures/gui/backgrounds.png" id="1_vjr7l"]
-[ext_resource type="Theme" uid="uid://dehvu01nlqvsf" path="res://textures/gui/themes/info_box_theme.tres" id="2_s5afe"]
+[ext_resource type="PackedScene" uid="uid://c6kh3esjn5743" path="res://gui/tab_menu.tscn" id="2_3b158"]
 
 [node name="SkillMenu" type="MarginContainer"]
 custom_minimum_size = Vector2(960, 540)
@@ -18,29 +18,23 @@ expand_mode = 2
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
 layout_mode = 2
+alignment = 1
 
-[node name="TabContainer" type="TabContainer" parent="HBoxContainer"]
+[node name="TabMenu" parent="HBoxContainer" instance=ExtResource("2_3b158")]
+custom_minimum_size = Vector2(960, 0)
 layout_mode = 2
-size_flags_horizontal = 3
-theme = ExtResource("2_s5afe")
-tab_alignment = 1
-current_tab = 0
 
-[node name="Body" type="Control" parent="HBoxContainer/TabContainer"]
+[node name="Body" type="Control" parent="HBoxContainer/TabMenu"]
 layout_mode = 2
-metadata/_tab_index = 0
 
-[node name="Mind" type="Control" parent="HBoxContainer/TabContainer"]
+[node name="Mind" type="Control" parent="HBoxContainer/TabMenu"]
 visible = false
 layout_mode = 2
-metadata/_tab_index = 1
 
-[node name="Soul" type="Control" parent="HBoxContainer/TabContainer"]
+[node name="Soul" type="Control" parent="HBoxContainer/TabMenu"]
 visible = false
 layout_mode = 2
-metadata/_tab_index = 2
 
-[node name="Survivalism" type="Control" parent="HBoxContainer/TabContainer"]
+[node name="Survivalism" type="Control" parent="HBoxContainer/TabMenu"]
 visible = false
 layout_mode = 2
-metadata/_tab_index = 3
