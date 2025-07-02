@@ -47,7 +47,8 @@ layout_mode = 1
 unique_name_in_owner = true
 process_mode = 1
 layout_mode = 1
-offset_right = 127.0
+offset_right = 0.0
+offset_bottom = 0.0
 
 [node name="UtilityMenu" parent="." instance=ExtResource("7_d8xy5")]
 unique_name_in_owner = true
@@ -156,3 +157,5 @@ one_shot = true
 [connection signal="settings_closed" from="SettingsMenu" to="." method="submenu_closed"]
 [connection signal="settings_closed" from="SettingsMenu" to="PauseMenu" method="open_pause_menu"]
 [connection signal="settings_opened" from="SettingsMenu" to="." method="submenu_opened"]
+[connection signal="opened" from="CharInfo" to="UtilityMenu" method="close_menu"]
+[connection signal="opened" from="UtilityMenu" to="CharInfo" method="close_menu"]

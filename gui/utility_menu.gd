@@ -47,10 +47,10 @@ func open_menu()->void:
 	menu_button.text = "→"
 	modulate = Color(1,1,1,1)
 	info_container.show()
+	opened.emit()
 	await create_tween().tween_property(info_container, "position", get_open_position(), .5).finished
 	EventBus.broadcast("DEACTIVATE_SELECTION", "NULLDATA")
 	top_button.grab_focus()
-	opened.emit()
 	changing_state = false
 
 ## Closes the menu

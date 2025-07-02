@@ -24,6 +24,8 @@ var state: states = states.closed ## Current state of the menu
 var changing_state: bool = false ## Whether the menu is currently changing states
 signal info_box_requested(requester: CharInfo, origin: Vector2, text: String) ## Emitted when requesting the info box
 signal info_box_closed ## Emitted when the info box is no longer needed
+signal opened ## Emitted when this menu opens
+signal closed ## Emitted when this menu closes
 
 #region Setup
 func _ready() -> void:
@@ -84,6 +86,7 @@ func open_menu()->void:
 	menu_button.text = "←"
 	modulate = Color(1,1,1,1)
 	info_container.show()
+	opened.emit()
 	await create_tween().tween_property(info_container, "position", Vector2(0, info_container.position.y), .5).finished
 	EventBus.broadcast("DEACTIVATE_SELECTION", "NULLDATA")
 	if ability_buttons[prev_button_index].ability != null:
@@ -95,6 +98,7 @@ func close_menu()->void:
 	if state == states.closed || changing_state:
 		return
 	changing_state = true
+	closed.emit()
 	if character != null:
 		if character.selected_ability != null:
 			character.call_deferred("deselect_ability")

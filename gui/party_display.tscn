@@ -1,7 +1,12 @@
-[gd_scene load_steps=3 format=3 uid="uid://blpc84uugpfvi"]
+[gd_scene load_steps=6 format=3 uid="uid://blpc84uugpfvi"]
 
 [ext_resource type="Script" uid="uid://4mrbb4gavqmq" path="res://gui/party_display.gd" id="1_8qkei"]
 [ext_resource type="PackedScene" uid="uid://376pccgciomv" path="res://gui/quick_info.tscn" id="2_lrwt7"]
+[ext_resource type="Theme" uid="uid://cxq4wi2s4byf1" path="res://textures/gui/themes/custom_theme_alt.tres" id="2_ti3u5"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_sw3kj"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_frj83"]
 
 [node name="PartyDisplay" type="VBoxContainer"]
 offset_right = 40.0
@@ -10,45 +15,74 @@ theme_override_constants/separation = 1
 script = ExtResource("1_8qkei")
 
 [node name="Party1" type="Button" parent="."]
-custom_minimum_size = Vector2(191, 98)
+custom_minimum_size = Vector2(194, 98)
 layout_mode = 2
 size_flags_horizontal = 8
-flat = true
+theme = ExtResource("2_ti3u5")
 
 [node name="QuickInfo" parent="Party1" instance=ExtResource("2_lrwt7")]
+z_index = 0
 layout_mode = 0
+offset_left = 6.0
+offset_top = 6.0
+offset_right = 197.0
+offset_bottom = 104.0
+theme_override_styles/panel = SubResource("StyleBoxEmpty_sw3kj")
 manage_position = false
 animated = false
 
 [node name="Party2" type="Button" parent="."]
-custom_minimum_size = Vector2(191, 98)
+custom_minimum_size = Vector2(194, 98)
 layout_mode = 2
 size_flags_horizontal = 8
-flat = true
+theme = ExtResource("2_ti3u5")
 
 [node name="QuickInfo" parent="Party2" instance=ExtResource("2_lrwt7")]
+z_index = 0
 layout_mode = 0
+offset_left = 6.0
+offset_top = 6.0
+offset_right = 197.0
+offset_bottom = 104.0
+theme_override_styles/panel = SubResource("StyleBoxEmpty_frj83")
 manage_position = false
 animated = false
 
 [node name="Party3" type="Button" parent="."]
-custom_minimum_size = Vector2(191, 98)
+custom_minimum_size = Vector2(194, 98)
 layout_mode = 2
 size_flags_horizontal = 8
-flat = true
+theme = ExtResource("2_ti3u5")
 
 [node name="QuickInfo" parent="Party3" instance=ExtResource("2_lrwt7")]
+z_index = 0
 layout_mode = 0
+offset_left = 6.0
+offset_top = 6.0
+offset_right = 197.0
+offset_bottom = 104.0
+theme_override_styles/panel = SubResource("StyleBoxEmpty_frj83")
 manage_position = false
 animated = false
 
 [node name="Party4" type="Button" parent="."]
-custom_minimum_size = Vector2(191, 98)
+custom_minimum_size = Vector2(194, 98)
 layout_mode = 2
 size_flags_horizontal = 8
-flat = true
+theme = ExtResource("2_ti3u5")
 
 [node name="QuickInfo" parent="Party4" instance=ExtResource("2_lrwt7")]
+z_index = 0
 layout_mode = 0
+offset_left = 6.0
+offset_top = 6.0
+offset_right = 197.0
+offset_bottom = 104.0
+theme_override_styles/panel = SubResource("StyleBoxEmpty_frj83")
 manage_position = false
 animated = false
+
+[connection signal="updated" from="Party1/QuickInfo" to="." method="update_display"]
+[connection signal="updated" from="Party2/QuickInfo" to="." method="update_display"]
+[connection signal="updated" from="Party3/QuickInfo" to="." method="update_display"]
+[connection signal="updated" from="Party4/QuickInfo" to="." method="update_display"]

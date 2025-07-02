@@ -16,6 +16,7 @@ var status_display_scn: PackedScene = preload("uid://dymaugwj65l1f") ## Scene fo
 var character: Character = null ## Character this is tracking
 var is_initiating_tracking: bool = false ## Whether this is initiating tracking
 signal tracking_initiated ## Emitted when done initiating tracking
+signal updated ## Emitted when the display changes
 
 func _ready() -> void:
 	EventBus.subscribe("SHOW_QUICK_INFO", self, "track_character")
@@ -34,6 +35,8 @@ func track_character(to_track: Character)->void:
 		return
 	while is_initiating_tracking:
 		await tracking_initiated
+	if character == to_track:
+		return
 	is_initiating_tracking = true
 	if animated:
 		scale = Vector2.ONE*.01
@@ -51,11 +54,11 @@ func track_character(to_track: Character)->void:
 
 ## Stops tracking the current character
 func stop_tracking()->void:
-	if character == null || !is_visible_in_tree():
+	if character == null:
 		return
 	while is_initiating_tracking:
 		await tracking_initiated
-	if character == null || !is_visible_in_tree():
+	if character == null:
 		return
 	is_initiating_tracking = true
 	if animated:
@@ -80,6 +83,7 @@ func update_info()->void:
 	stats_label.text = "HP: "+str(character.cur_hp)+"\n"
 	stats_label.text += "AP: "+str(character.cur_ap)+"\n"
 	stats_label.text += "MP: "+str(character.cur_mp)
+	updated.emit()
 
 ## Updates the displayed status effects
 func update_statuses()->void:
@@ -109,3 +113,4 @@ func update_statuses()->void:
 	reset_size()
 	if manage_position:
 		position.x = get_parent().size.x/2 - size.x/2
+	updated.emit()
