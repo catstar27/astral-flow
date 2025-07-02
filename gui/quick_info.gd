@@ -4,6 +4,8 @@ class_name QuickInfo
 ## 
 ## Meant to be shown when the character is hovered over
 
+@export var manage_position: bool = true ## Whether this QuickInfo should manage its position or not
+@export var animated: bool = true ## Whether this QuickInfo should play the pop in animation
 @export var generic_portrait: Texture2D ## Generic character portrait for backup
 @onready var name_label: RichTextLabel = %NameLabel ## Label for character's name
 @onready var stats_label: RichTextLabel = %StatsLabel ## Label for character's stats
@@ -33,7 +35,8 @@ func track_character(to_track: Character)->void:
 	while is_initiating_tracking:
 		await tracking_initiated
 	is_initiating_tracking = true
-	scale = Vector2.ONE*.01
+	if animated:
+		scale = Vector2.ONE*.01
 	character = to_track
 	update_info()
 	update_statuses()
@@ -41,20 +44,22 @@ func track_character(to_track: Character)->void:
 	character.status_manager.status_list_changed.connect(update_statuses)
 	character.status_manager.status_ticked.connect(update_statuses)
 	show()
-	await create_tween().tween_property(self, "scale", Vector2.ONE, .1).finished
+	if animated:
+		await create_tween().tween_property(self, "scale", Vector2.ONE, .1).finished
 	is_initiating_tracking = false
 	tracking_initiated.emit()
 
 ## Stops tracking the current character
 func stop_tracking()->void:
-	if character == null:
+	if character == null || !is_visible_in_tree():
 		return
 	while is_initiating_tracking:
 		await tracking_initiated
-	if character == null:
+	if character == null || !is_visible_in_tree():
 		return
 	is_initiating_tracking = true
-	await create_tween().tween_property(self, "scale", Vector2.ONE*.01, .1).finished
+	if animated:
+		await create_tween().tween_property(self, "scale", Vector2.ONE*.01, .1).finished
 	hide()
 	character.stats_changed.disconnect(update_info)
 	character.status_manager.status_list_changed.disconnect(update_statuses)
@@ -83,7 +88,8 @@ func update_statuses()->void:
 	if character.status_manager.status_list.keys().size() == 0:
 		status_container.hide()
 		reset_size()
-		position.x = get_parent().size.x/2 - size.x/2
+		if manage_position:
+			position.x = get_parent().size.x/2 - size.x/2
 		return
 	status_container.show()
 	var status_list: Dictionary[Status, Array] = character.status_manager.status_list.duplicate()
@@ -101,4 +107,5 @@ func update_statuses()->void:
 		status_displays[index].hide()
 		index += 1
 	reset_size()
-	position.x = get_parent().size.x/2 - size.x/2
+	if manage_position:
+		position.x = get_parent().size.x/2 - size.x/2

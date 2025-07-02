@@ -1,0 +1,54 @@
+[gd_scene load_steps=3 format=3 uid="uid://blpc84uugpfvi"]
+
+[ext_resource type="Script" uid="uid://4mrbb4gavqmq" path="res://gui/party_display.gd" id="1_8qkei"]
+[ext_resource type="PackedScene" uid="uid://376pccgciomv" path="res://gui/quick_info.tscn" id="2_lrwt7"]
+
+[node name="PartyDisplay" type="VBoxContainer"]
+offset_right = 40.0
+offset_bottom = 40.0
+theme_override_constants/separation = 1
+script = ExtResource("1_8qkei")
+
+[node name="Party1" type="Button" parent="."]
+custom_minimum_size = Vector2(191, 98)
+layout_mode = 2
+size_flags_horizontal = 8
+flat = true
+
+[node name="QuickInfo" parent="Party1" instance=ExtResource("2_lrwt7")]
+layout_mode = 0
+manage_position = false
+animated = false
+
+[node name="Party2" type="Button" parent="."]
+custom_minimum_size = Vector2(191, 98)
+layout_mode = 2
+size_flags_horizontal = 8
+flat = true
+
+[node name="QuickInfo" parent="Party2" instance=ExtResource("2_lrwt7")]
+layout_mode = 0
+manage_position = false
+animated = false
+
+[node name="Party3" type="Button" parent="."]
+custom_minimum_size = Vector2(191, 98)
+layout_mode = 2
+size_flags_horizontal = 8
+flat = true
+
+[node name="QuickInfo" parent="Party3" instance=ExtResource("2_lrwt7")]
+layout_mode = 0
+manage_position = false
+animated = false
+
+[node name="Party4" type="Button" parent="."]
+custom_minimum_size = Vector2(191, 98)
+layout_mode = 2
+size_flags_horizontal = 8
+flat = true
+
+[node name="QuickInfo" parent="Party4" instance=ExtResource("2_lrwt7")]
+layout_mode = 0
+manage_position = false
+animated = false

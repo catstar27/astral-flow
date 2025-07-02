@@ -25,6 +25,7 @@ custom_minimum_size = Vector2(960, 0)
 layout_mode = 2
 
 [node name="Body" type="Control" parent="HBoxContainer/TabMenu"]
+visible = false
 layout_mode = 2
 
 [node name="Mind" type="Control" parent="HBoxContainer/TabMenu"]

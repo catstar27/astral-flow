@@ -72,6 +72,7 @@ enum ai_types { ## Options for enemy ai
 @export var active: bool = true ## Whether the character is active in the game map or disabled
 #endregion
 #region Vars
+const range_indicator_scene: PackedScene = preload("res://misc/selection_cursor/range_indicator.tscn")
 @onready var sprite: Sprite2D = %Sprite ## Sprite of this character
 @onready var silhouette: Sprite2D = %Silhouette ## Silhouette of this character
 @onready var anim_player: AnimationPlayer = %AnimationPlayer ## Animation Player for this character
@@ -79,7 +80,6 @@ enum ai_types { ## Options for enemy ai
 @onready var status_manager: StatusManager = %StatusManager ## Status Manager for this character
 @onready var combat_trigger: Area2D = %CombatTrigger ## Area that tracks other characters for combat
 @onready var collision: CollisionShape2D = %Collision ## Collision of the character
-@onready var range_indicator_scene: PackedScene = preload("res://misc/selection_cursor/range_indicator.tscn")
 var skills: Array[Skill] ## Actual list of skills
 var skill_ids: Array[String] ## List of ids for skills
 var skill_effects: Array[SkillEffect] ## List of skill effects

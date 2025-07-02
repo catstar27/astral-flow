@@ -8,7 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://dn3wvhbb3qaw1" path="res://gui/char_info.tscn" id="6_ogoim"]
 [ext_resource type="PackedScene" uid="uid://cejp7bpbfmkw" path="res://gui/utility_menu.tscn" id="7_d8xy5"]
 [ext_resource type="PackedScene" uid="uid://dysmxh061ic7i" path="res://gui/sequence_display.tscn" id="8_rsuha"]
-[ext_resource type="PackedScene" uid="uid://bsrym6k1vywfo" path="res://gui/quest_tracker.tscn" id="9_uxusl"]
+[ext_resource type="PackedScene" uid="uid://bsrym6k1vywfo" path="res://gui/quests/quest_tracker.tscn" id="9_uxusl"]
 [ext_resource type="PackedScene" uid="uid://cjbkwr8dsdqvq" path="res://gui/info_box.tscn" id="10_stc6v"]
 [ext_resource type="PackedScene" uid="uid://376pccgciomv" path="res://gui/quick_info.tscn" id="11_s1h2m"]
 

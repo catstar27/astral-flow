@@ -23,7 +23,8 @@ func _ready() -> void:
 		cur_tab = get_children()[1]
 	var children: Array[Node] = get_children()
 	for node in get_children():
-		remove_child(node)
+		if node != tab_button_container:
+			remove_child(node)
 	for child in tab_button_container.get_children():
 		if child is TabButton:
 			tab_button_container.remove_child(child)
@@ -33,8 +34,9 @@ func _ready() -> void:
 ## Initializes the menu by re-adding the children after the node is ready
 func set_children(children: Array[Node])->void:
 	for child in children:
-		add_child(child)
-		child.owner = self
+		if child != tab_button_container:
+			add_child(child)
+			child.set_owner(self)
 	cur_tab = get_child(1)
 	tab_buttons[cur_tab].button_pressed = true
 
@@ -71,7 +73,7 @@ func add_tab(node: Node)->void:
 		if node not in tab_buttons:
 			tab_buttons[node] = get_tab_button(node)
 			tab_button_container.add_child(tab_buttons[node])
-			tab_buttons[node].owner = self
+			tab_buttons[node].set_owner(self)
 			tab_buttons[node].tab_shown.connect(tab_shown)
 			if get_child_count() > 2:
 				node.hide()

@@ -109,6 +109,7 @@ enabled=PackedStringArray("res://addons/dialogic/plugin.cfg")
 
 Persist="This node has data to save"
 LevelSave="This Node is to be Saved as Part of a Level"
+PartyMember="This group denotes Character nodes that are in the active party"
 
 [gui]
 

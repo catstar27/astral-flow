@@ -1,10 +1,11 @@
-[gd_scene load_steps=9 format=3 uid="uid://cejp7bpbfmkw"]
+[gd_scene load_steps=10 format=3 uid="uid://cejp7bpbfmkw"]
 
 [ext_resource type="Script" uid="uid://btvo5nimkcrmi" path="res://gui/utility_menu.gd" id="1_db426"]
 [ext_resource type="Material" uid="uid://dcq7n5qyt3hj0" path="res://materials/immaterial.tres" id="1_jr21q"]
 [ext_resource type="PackedScene" uid="uid://dleye7m8gjxs0" path="res://gui/components/control_display_button.tscn" id="2_lco6t"]
 [ext_resource type="Theme" uid="uid://cxq4wi2s4byf1" path="res://textures/gui/themes/custom_theme_alt.tres" id="3_v0p8v"]
 [ext_resource type="Texture2D" uid="uid://bxhwtcxdgtkx6" path="res://textures/gui/keyboard_key.png" id="5_fubsc"]
+[ext_resource type="PackedScene" uid="uid://blpc84uugpfvi" path="res://gui/party_display.tscn" id="6_f8scv"]
 
 [sub_resource type="InputEventKey" id="InputEventKey_fubsc"]
 device = -1
@@ -16,7 +17,7 @@ device = -1
 button_index = 10
 pressed = true
 
-[sub_resource type="Shortcut" id="Shortcut_4y04n"]
+[sub_resource type="Shortcut" id="Shortcut_f8scv"]
 events = [SubResource("InputEventKey_fubsc"), SubResource("InputEventJoypadButton_f8scv")]
 
 [node name="UtilityMenu" type="Control"]
@@ -41,10 +42,23 @@ offset_bottom = 48.0
 size_flags_horizontal = 8
 size_flags_vertical = 0
 theme = ExtResource("3_v0p8v")
-shortcut = SubResource("Shortcut_4y04n")
+shortcut = SubResource("Shortcut_f8scv")
 text = "←"
 icon = ExtResource("5_fubsc")
 input_action_name = "menu_right"
+
+[node name="PartyDisplay" parent="." instance=ExtResource("6_f8scv")]
+visible = false
+layout_mode = 1
+offset_left = -193.0
+offset_top = 49.0
+offset_right = -2.0
+offset_bottom = 444.0
+
+[node name="BackButton" type="Button" parent="PartyDisplay"]
+layout_mode = 2
+size_flags_horizontal = 8
+text = "Back"
 
 [node name="Info" type="VBoxContainer" parent="."]
 unique_name_in_owner = true
@@ -97,4 +111,10 @@ focus_previous = NodePath("../Map")
 theme_override_font_sizes/font_size = 16
 text = "Inventory"
 
+[connection signal="closed" from="." to="PartyDisplay" method="hide"]
 [connection signal="pressed" from="MenuButton" to="." method="toggle_menu"]
+[connection signal="pressed" from="PartyDisplay/BackButton" to="PartyDisplay" method="hide"]
+[connection signal="pressed" from="PartyDisplay/BackButton" to="Info" method="show"]
+[connection signal="pressed" from="PartyDisplay/BackButton" to="Info/Party" method="grab_focus"]
+[connection signal="pressed" from="Info/Party" to="PartyDisplay" method="open_menu"]
+[connection signal="pressed" from="Info/Party" to="Info" method="hide"]

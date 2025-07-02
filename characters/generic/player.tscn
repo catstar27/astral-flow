@@ -128,7 +128,7 @@ _data = {
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_g7ocv"]
 
-[node name="Player" type="CharacterBody2D" groups=["Persist"]]
+[node name="Player" type="CharacterBody2D" groups=["PartyMember", "Persist"]]
 z_index = 2
 script = ExtResource("1_so47p")
 star_stats = Dictionary[String, int]({

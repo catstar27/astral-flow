@@ -47,6 +47,7 @@ input_action_name = "menu_left"
 [node name="Info" type="VBoxContainer" parent="."]
 unique_name_in_owner = true
 process_mode = 1
+visible = false
 use_parent_material = true
 layout_mode = 2
 offset_left = -82.0

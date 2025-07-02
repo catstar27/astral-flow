@@ -5,6 +5,7 @@ class_name Player
 func _ready() -> void:
 	_setup()
 	Dialogic.signal_event.connect(dialogue_signal_processor)
+	EventBus.broadcast("PARTY_CHANGED", "NULLDATA")
 
 ## Processes dialogue signals; possibly to be removed in the future
 ## Currently just here to add the zap ability

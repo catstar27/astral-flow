@@ -12,6 +12,8 @@ enum states{ ## States the menu can be in
 }
 var state: states = states.closed ## Current menu state
 var changing_state: bool = false ## Whether the menu is changing state
+signal opened ## Emitted when this menu opens
+signal closed ## Emitted when this menu closes
 
 func _ready() -> void:
 	menu_button.display_updated.connect(update_menu_button)
@@ -48,6 +50,7 @@ func open_menu()->void:
 	await create_tween().tween_property(info_container, "position", get_open_position(), .5).finished
 	EventBus.broadcast("DEACTIVATE_SELECTION", "NULLDATA")
 	top_button.grab_focus()
+	opened.emit()
 	changing_state = false
 
 ## Closes the menu
@@ -59,6 +62,7 @@ func close_menu()->void:
 	if state == states.suspended:
 		activate_selection = false
 	state = states.closed
+	closed.emit()
 	menu_button.text = "←"
 	if activate_selection:
 		EventBus.broadcast("ACTIVATE_SELECTION", "NULLDATA")

@@ -3,6 +3,9 @@ extends Button
 class_name SkillDisplay
 ## GUI element that displays the name and details of a skill
 
+const button_theme: Theme = preload("uid://dehvu01nlqvsf") ## Theme for ability buttons
+const ability_button_scn: PackedScene = preload("uid://bl1ksh3itp2fl") ## Scene for ability buttons
+const effect_button_scn: PackedScene = preload("uid://cy6pdh0hesumj") ## Scene for effect buttons
 @export var skill: Skill: ## Skill to display
 	set(new_skill):
 		skill = new_skill
@@ -16,9 +19,6 @@ class_name SkillDisplay
 		add_ability_buttons()
 @onready var effects_container: GridContainer = %EffectsContainer ## Container for skill effects
 @onready var ability_container: GridContainer = %AbilitiesContainer ## Container for skill abilities
-@onready var button_theme: Theme = preload("uid://dehvu01nlqvsf")
-var ability_button_scn: PackedScene = preload("uid://bl1ksh3itp2fl") ## Scene for ability buttons
-var effect_button_scn: PackedScene = preload("uid://cy6pdh0hesumj") ## Scene for effect buttons
 
 ## Adds an informational button for each effect
 func add_effect_buttons()->void:
