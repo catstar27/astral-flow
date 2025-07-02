@@ -1,0 +1,9 @@
+[gd_scene load_steps=3 format=3 uid="uid://56of3t5mf4gn"]
+
+[ext_resource type="TileSet" uid="uid://dgoynsd0fhkte" path="res://maps/tilesets/desert_canyon.tres" id="1_gmsv6"]
+[ext_resource type="Script" uid="uid://b8kw4ghpy3r8t" path="res://maps/game_map.gd" id="2_xtdji"]
+
+[node name="GroundZero" type="TileMapLayer"]
+tile_set = ExtResource("1_gmsv6")
+script = ExtResource("2_xtdji")
+metadata/_custom_type_script = "uid://b8kw4ghpy3r8t"
