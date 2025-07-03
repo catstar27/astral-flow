@@ -4,6 +4,15 @@ class_name PartyDisplay
 ##
 ## Also allows quick access of character sheets
 
+## Shifts the menu to the right
+func shift_right()->void:
+	await create_tween().tween_property(self, "position", Vector2(0,position.y), .5).finished
+	hide()
+
+## Shifts the menu to the left
+func shift_left()->void:
+	position = Vector2(-2-size.x,position.y)
+
 ## Updates the party display by removing and adding QuickInfos
 func update_display()->void:
 	var index: int = 0

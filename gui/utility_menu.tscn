@@ -63,10 +63,10 @@ input_action_name = "menu_right"
 [node name="PartyDisplay" parent="." instance=ExtResource("6_f8scv")]
 visible = false
 layout_mode = 1
-offset_left = -193.0
+offset_left = -196.0
 offset_top = 49.0
 offset_right = -2.0
-offset_bottom = 444.0
+offset_bottom = 490.0
 
 [node name="BackButton" parent="PartyDisplay" instance=ExtResource("2_lco6t")]
 layout_mode = 2
@@ -129,7 +129,12 @@ focus_previous = NodePath("../Map")
 theme_override_font_sizes/font_size = 16
 text = "Inventory"
 
-[connection signal="closed" from="." to="PartyDisplay" method="hide"]
+[connection signal="closed" from="." to="PartyDisplay" method="shift_right"]
+[connection signal="closed" from="." to="Info/Party" method="release_focus"]
+[connection signal="closed" from="." to="Info/Journal" method="release_focus"]
+[connection signal="closed" from="." to="Info/Map" method="release_focus"]
+[connection signal="closed" from="." to="Info/Inventory" method="release_focus"]
+[connection signal="opened" from="." to="PartyDisplay" method="shift_left"]
 [connection signal="pressed" from="MenuButton" to="." method="toggle_menu"]
 [connection signal="pressed" from="PartyDisplay/BackButton" to="PartyDisplay" method="hide"]
 [connection signal="pressed" from="PartyDisplay/BackButton" to="Info" method="show"]

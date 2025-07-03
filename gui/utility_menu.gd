@@ -36,7 +36,7 @@ func get_open_position()->Vector2:
 		largest_width = menu_button.size.x
 	else:
 		largest_width = info_container.size.x
-	return Vector2(-largest_width, info_container.position.y)
+	return Vector2(-largest_width-2, info_container.position.y)
 
 ## Opens the menu
 func open_menu()->void:
@@ -47,6 +47,8 @@ func open_menu()->void:
 	menu_button.text = "→"
 	modulate = Color(1,1,1,1)
 	info_container.show()
+	for button in info_container.get_children():
+		button.set_disabled(false)
 	opened.emit()
 	await create_tween().tween_property(info_container, "position", get_open_position(), .5).finished
 	EventBus.broadcast("DEACTIVATE_SELECTION", "NULLDATA")
@@ -62,6 +64,8 @@ func close_menu()->void:
 	if state == states.suspended:
 		activate_selection = false
 	state = states.closed
+	for button in info_container.get_children():
+		button.set_disabled(true)
 	closed.emit()
 	menu_button.text = "←"
 	if activate_selection:
