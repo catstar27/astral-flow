@@ -25,6 +25,10 @@ use_parent_material = true
 layout_mode = 2
 alignment = 1
 
+[node name="Icon" type="TextureRect" parent="QuestContainer/NameIconContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+
 [node name="Name" type="Label" parent="QuestContainer/NameIconContainer"]
 unique_name_in_owner = true
 use_parent_material = true

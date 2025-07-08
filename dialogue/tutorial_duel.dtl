@@ -1,6 +1,7 @@
 join kalin left [animation="Instant In" length="0.0"]
 join nilak right [animation="Slide In Left" wait="true" mirrored="true"]
 nilak: Hi!
+[signal arg="start_quest:UNCANNY_VALLEY"]
 - Who are you?
 	nilak: I'll tell you, but only after you beat me in a fight!
 - What is this place?

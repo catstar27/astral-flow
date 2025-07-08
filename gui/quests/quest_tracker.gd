@@ -2,12 +2,16 @@ extends Control
 class_name QuestTracker
 ## Tracks the currently tracked quest, displaying information about the current stage
 
+@onready var quest_icon: TextureRect = %Icon ## Icon of the current quest
 @onready var quest_name: Label = %Name ## Name of the current quest
 @onready var quest_container: VBoxContainer = %QuestContainer ## Container holding the display info
 @onready var objective_container: VBoxContainer = %ObjectiveContainer ## Container holding the objective info
 var objective_labels: Dictionary[QuestObjective, RichTextLabel] ## Array of the labels containing objective info
 var tracked_quest: QuestInfo = null ## Currently tracked quest
 var in_combat: bool = false ## Whether the game is in combat
+var starting_tracking: bool = false ## Whether the tracker is starting to track a quest
+var updating_objective: int = 0 ## Number of objectives updating
+signal objective_updated ## Emitted when a quest objective is updated
 
 func _ready() -> void:
 	EventBus.subscribe("QUEST_TRACK", self, "change_quest")
@@ -17,10 +21,19 @@ func _ready() -> void:
 
 ## Changes the currently tracked quest
 func change_quest(quest: QuestInfo)->void:
+	if tracked_quest == quest || starting_tracking:
+		return
+	while updating_objective > 0:
+		await objective_updated
+	if tracked_quest != null:
+		tracked_quest.quest_complete.disconnect(complete_quest)
+		tracked_quest.stage_started.disconnect(build_labels)
+	starting_tracking = true
 	tracked_quest = quest
 	quest.quest_complete.connect(complete_quest)
 	quest_name.modulate = Color.TRANSPARENT
 	quest_name.text = tracked_quest.quest_name
+	quest_icon.texture = tracked_quest.quest_icon
 	await get_tree().process_frame
 	var copy_label: Label = Label.new()
 	copy_label.label_settings = quest_name.label_settings
@@ -35,11 +48,13 @@ func change_quest(quest: QuestInfo)->void:
 	build_labels()
 	copy_label.queue_free()
 	quest.stage_started.connect(build_labels)
+	starting_tracking = false
 	if !in_combat:
 		show()
 
 ## Updates the label corresponding to the quest objective given
 func update_objective(objective: QuestObjective, play_anim: bool = false)->void:
+	updating_objective += 1
 	if play_anim:
 		objective_labels[objective].modulate = Color.TRANSPARENT
 	objective_labels[objective].text = ""
@@ -63,6 +78,8 @@ func update_objective(objective: QuestObjective, play_anim: bool = false)->void:
 		await create_tween().tween_property(copy_label, "global_position", objective_labels[objective].global_position, .5).finished
 		objective_labels[objective].modulate = Color.WHITE
 		copy_label.queue_free()
+	updating_objective -= 1
+	objective_updated.emit()
 
 ## Updates the quest tracker information
 func build_labels(_stage: Resource = null)->void:
@@ -113,6 +130,9 @@ func end_combat()->void:
 
 ## Stops tracking any quests
 func stop_tracking()->void:
+	if tracked_quest != null:
+		tracked_quest.quest_complete.disconnect(complete_quest)
+		tracked_quest.stage_started.disconnect(build_labels)
 	tracked_quest = null
 	hide()
 

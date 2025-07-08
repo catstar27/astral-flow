@@ -33,6 +33,7 @@ func start_quest(id: String)->void:
 	if tracked_id == "":
 		tracked_id = id
 		EventBus.broadcast("QUEST_TRACK", quests[tracked_id])
+	broadcast_quest_list()
 
 ## Processes incoming quest events, broadcasting them to the necessary quests
 func process_quest_event(id: String)->void:
@@ -48,11 +49,22 @@ func complete_quest(quest: QuestInfo)->void:
 	active_quests.remove_at(active_quests.find(quest.quest_id))
 	if tracked_id == quest.quest_id:
 		tracked_id = ""
+	broadcast_quest_list()
 
 ## Sets all quests to complete if they are completed
 func update_complete_quests()->void:
 	for id in completed_quests:
 		quests[id].set_complete()
+
+## Broadcasts an event containing a list of active and complete quests
+func broadcast_quest_list()->void:
+	var active_quest_list: Array[QuestInfo]
+	var completed_quest_list: Array[QuestInfo]
+	for quest in active_quests:
+		active_quest_list.append(quests[quest])
+	for quest in completed_quests:
+		completed_quest_list.append(quests[quest])
+	EventBus.broadcast("QUEST_LIST_UPDATE", [active_quest_list, completed_quest_list])
 
 #region Saving and Loading
 ## Executes before making the save dict
@@ -82,5 +94,6 @@ func post_load()->void:
 	EventBus.broadcast("QUEST_TRACK_STOP", "NULLDATA")
 	if tracked_id != "":
 		EventBus.broadcast("QUEST_TRACK", quests[tracked_id])
+	broadcast_quest_list()
 	loaded.emit(self)
 #endregion

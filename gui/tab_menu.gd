@@ -92,8 +92,10 @@ func tab_shown(shown_tab: Node)->void:
 	cur_tab.show()
 	if cur_tab.has_method("select"):
 		cur_tab.select()
-	else:
+	elif cur_tab.focus_mode != FocusMode.FOCUS_NONE:
 		cur_tab.grab_focus()
+	elif cur_tab.get_child_count() > 0 && cur_tab.get_child(0).focus_mode == FocusMode.FOCUS_NONE:
+		grab_focus_on_subtree()
 	crunch_tabs()
 
 ## Selects the next tab
@@ -110,8 +112,10 @@ func next_tab()->void:
 	cur_tab.show()
 	if cur_tab.has_method("select"):
 		cur_tab.select()
-	else:
+	elif cur_tab.focus_mode != FocusMode.FOCUS_NONE:
 		cur_tab.grab_focus()
+	elif cur_tab.get_child_count() > 0 && cur_tab.get_child(0).focus_mode == FocusMode.FOCUS_NONE:
+		grab_focus_on_subtree()
 	crunch_tabs()
 
 ## Selects the previous tab
@@ -128,8 +132,10 @@ func prev_tab()->void:
 	cur_tab.show()
 	if cur_tab.has_method("select"):
 		cur_tab.select()
-	else:
+	elif cur_tab.focus_mode != FocusMode.FOCUS_NONE:
 		cur_tab.grab_focus()
+	elif cur_tab.get_child_count() > 0 && cur_tab.get_child(0).focus_mode == FocusMode.FOCUS_NONE:
+		grab_focus_on_subtree()
 	crunch_tabs()
 
 ## Gets the width of the tab button container buttons
@@ -172,3 +178,15 @@ func visible_tab_button_count()->int:
 		if child is TabButton && child.visible:
 			count += 1
 	return count
+
+## Finds the first node within the cur_tab subtree that can grab focus and grabs focus on it
+func grab_focus_on_subtree()->void:
+	var to_focus: Control = cur_tab.get_child(0)
+	while to_focus != null:
+		if to_focus.get_child_count() > 0:
+			to_focus = to_focus.get_child(0)
+		else:
+			to_focus = null
+		if to_focus != null && to_focus.focus_mode != FocusMode.FOCUS_NONE:
+			to_focus.grab_focus()
+			break

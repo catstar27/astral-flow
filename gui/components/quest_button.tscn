@@ -1,0 +1,12 @@
+[gd_scene load_steps=2 format=3 uid="uid://c3maf43m7h1c1"]
+
+[ext_resource type="Script" uid="uid://bxqqx4q71r3kx" path="res://gui/components/quest_button.gd" id="1_ywfvj"]
+
+[node name="QuestButton" type="Button"]
+offset_right = 12.0
+offset_bottom = 12.0
+toggle_mode = true
+script = ExtResource("1_ywfvj")
+
+[connection signal="focus_entered" from="." to="." method="focus_quest"]
+[connection signal="toggled" from="." to="." method="manage_quest_signal"]

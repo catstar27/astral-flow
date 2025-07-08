@@ -1,0 +1,29 @@
+[gd_resource type="Resource" script_class="QuestInfo" load_steps=6 format=3 uid="uid://1lcwn5ff6yy4"]
+
+[ext_resource type="Script" uid="uid://4v676nts104o" path="res://misc/quest_scripts/quest_stage.gd" id="1_gb2ow"]
+[ext_resource type="Script" uid="uid://uypovxnppjgr" path="res://misc/quest_scripts/quest_objective.gd" id="2_7v4dp"]
+[ext_resource type="Script" uid="uid://bnigcbtc7ky3a" path="res://misc/quest_scripts/quest_info.gd" id="2_26w24"]
+
+[sub_resource type="Resource" id="Resource_rvs6v"]
+script = ExtResource("2_7v4dp")
+description = "Find information on the stranger"
+event_type = 3
+event_emitter_name = "Johnson"
+total_count = 0
+metadata/_custom_type_script = "uid://uypovxnppjgr"
+
+[sub_resource type="Resource" id="Resource_lveop"]
+script = ExtResource("1_gb2ow")
+show_prev_stage = false
+quest_objectives = Dictionary[String, ExtResource("2_7v4dp")]({
+"Find Some Answers": SubResource("Resource_rvs6v")
+})
+metadata/_custom_type_script = "uid://4v676nts104o"
+
+[resource]
+script = ExtResource("2_26w24")
+quest_name = "Uncanny Valley"
+quest_id = "UNCANNY_VALLEY"
+quest_description = "Who is this strange being, and why do they look like me?"
+quest_stages = Array[ExtResource("1_gb2ow")]([SubResource("Resource_lveop")])
+metadata/_custom_type_script = "uid://bnigcbtc7ky3a"

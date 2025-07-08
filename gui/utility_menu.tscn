@@ -17,21 +17,21 @@ device = -1
 button_index = 10
 pressed = true
 
-[sub_resource type="Shortcut" id="Shortcut_f8scv"]
+[sub_resource type="Shortcut" id="Shortcut_au610"]
 events = [SubResource("InputEventKey_f8scv"), SubResource("InputEventJoypadButton_4y04n")]
 
-[sub_resource type="InputEventKey" id="InputEventKey_llcg2"]
+[sub_resource type="InputEventKey" id="InputEventKey_2eb54"]
 device = -1
 physical_keycode = 88
 unicode = 120
 
-[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_crsu6"]
+[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_l4r7o"]
 device = -1
 button_index = 1
 pressed = true
 
-[sub_resource type="Shortcut" id="Shortcut_4y04n"]
-events = [SubResource("InputEventKey_llcg2"), SubResource("InputEventJoypadButton_crsu6")]
+[sub_resource type="Shortcut" id="Shortcut_llcg2"]
+events = [SubResource("InputEventKey_2eb54"), SubResource("InputEventJoypadButton_l4r7o")]
 
 [node name="UtilityMenu" type="Control"]
 material = ExtResource("1_jr21q")
@@ -55,7 +55,7 @@ offset_bottom = 48.0
 size_flags_horizontal = 8
 size_flags_vertical = 0
 theme = ExtResource("3_v0p8v")
-shortcut = SubResource("Shortcut_f8scv")
+shortcut = SubResource("Shortcut_au610")
 text = "←"
 icon = ExtResource("5_fubsc")
 input_action_name = "menu_right"
@@ -73,7 +73,7 @@ layout_mode = 2
 size_flags_horizontal = 8
 focus_mode = 2
 theme = ExtResource("3_v0p8v")
-shortcut = SubResource("Shortcut_4y04n")
+shortcut = SubResource("Shortcut_llcg2")
 text = "Back"
 icon = ExtResource("5_fubsc")
 input_action_name = "clear"
@@ -100,6 +100,7 @@ theme_override_font_sizes/font_size = 16
 text = "Party"
 
 [node name="Journal" type="Button" parent="Info"]
+unique_name_in_owner = true
 use_parent_material = true
 layout_mode = 2
 focus_neighbor_top = NodePath("../Party")
@@ -141,3 +142,4 @@ text = "Inventory"
 [connection signal="pressed" from="PartyDisplay/BackButton" to="Info/Party" method="grab_focus"]
 [connection signal="pressed" from="Info/Party" to="PartyDisplay" method="open_menu"]
 [connection signal="pressed" from="Info/Party" to="Info" method="hide"]
+[connection signal="pressed" from="Info/Journal" to="." method="journal_pressed"]

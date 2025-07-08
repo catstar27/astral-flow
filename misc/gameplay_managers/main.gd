@@ -46,8 +46,8 @@ func _ready() -> void:
 	Dialogic.signal_event.connect(check_dialogue_signal)
 	set_video_settings()
 	if SaveLoad.is_slot_blank("save1"):
-		load_map("res://maps/test_map.tscn")
 		EventBus.broadcast("QUEST_START", "AWAKENING")
+		load_map("res://maps/test_map.tscn")
 	else:
 		SaveLoad.load_data()
 	prepped = true
@@ -109,6 +109,8 @@ func check_dialogue_signal(data)->void:
 			EventBus.broadcast("REST", "NULLDATA")
 			await get_tree().create_timer(.5).timeout
 			await fade_in()
+		elif data.left(12) == "start_quest:":
+			EventBus.broadcast("QUEST_START", data.split("start_quest:")[1])
 #endregion
 
 #region Visuals

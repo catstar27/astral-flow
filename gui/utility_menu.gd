@@ -14,6 +14,7 @@ var state: states = states.closed ## Current menu state
 var changing_state: bool = false ## Whether the menu is changing state
 signal opened ## Emitted when this menu opens
 signal closed ## Emitted when this menu closes
+signal journal_button_pressed ## Emitted when the journal button is pressed
 
 func _ready() -> void:
 	menu_button.display_updated.connect(update_menu_button)
@@ -74,3 +75,19 @@ func close_menu()->void:
 	modulate = Color(1,1,1,1)
 	info_container.hide()
 	changing_state = false
+
+## Emits the signal for the journal button
+func journal_pressed()->void:
+	journal_button_pressed.emit()
+
+## Grabs focus on the journal button
+func focus_journal()->void:
+	%Journal.grab_focus()
+
+## Hides the menu buttons while keeping the menu open
+func hide_buttons()->void:
+	info_container.hide()
+
+## Shows the menu buttons
+func show_buttons()->void:
+	info_container.show()

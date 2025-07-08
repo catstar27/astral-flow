@@ -1,17 +1,54 @@
-[gd_scene load_steps=2 format=3 uid="uid://bkt6ueeylogtc"]
+[gd_scene load_steps=10 format=3 uid="uid://bkt6ueeylogtc"]
 
-[ext_resource type="PackedScene" uid="uid://bsrym6k1vywfo" path="res://gui/quests/quest_tracker.tscn" id="1_gq28c"]
+[ext_resource type="Script" uid="uid://1yju7cyvj754" path="res://gui/quests/quest_log.gd" id="1_47374"]
+[ext_resource type="PackedScene" uid="uid://dleye7m8gjxs0" path="res://gui/components/control_display_button.tscn" id="2_sxah1"]
+[ext_resource type="Texture2D" uid="uid://bxhwtcxdgtkx6" path="res://textures/gui/keyboard_key.png" id="3_47374"]
+[ext_resource type="PackedScene" uid="uid://c6kh3esjn5743" path="res://gui/tab_menu.tscn" id="3_l4r7o"]
+[ext_resource type="Material" uid="uid://dessed1x8jslv" path="res://materials/blur_material.tres" id="5_2eb54"]
+[ext_resource type="Texture2D" uid="uid://ceeo5gnqb2rcr" path="res://textures/gui/foreground.png" id="6_l4r7o"]
+
+[sub_resource type="InputEventKey" id="InputEventKey_2eb54"]
+device = -1
+physical_keycode = 88
+unicode = 120
+
+[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_l4r7o"]
+device = -1
+button_index = 1
+pressed = true
+
+[sub_resource type="Shortcut" id="Shortcut_x6uqe"]
+events = [SubResource("InputEventKey_2eb54"), SubResource("InputEventJoypadButton_l4r7o")]
 
 [node name="QuestLog" type="PanelContainer"]
+process_mode = 3
+z_index = 2
 custom_minimum_size = Vector2(400, 0)
 offset_right = 40.0
 offset_bottom = 40.0
+script = ExtResource("1_47374")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
 layout_mode = 2
-alignment = 2
+alignment = 1
 
-[node name="QuestTracker" parent="HBoxContainer" instance=ExtResource("1_gq28c")]
+[node name="QuestTrackerContainer" type="VBoxContainer" parent="HBoxContainer"]
+layout_mode = 2
+
+[node name="NameIconContainer" type="HBoxContainer" parent="HBoxContainer/QuestTrackerContainer"]
+layout_mode = 2
+
+[node name="QuestIcon" type="TextureRect" parent="HBoxContainer/QuestTrackerContainer/NameIconContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="QuestName" type="Label" parent="HBoxContainer/QuestTrackerContainer/NameIconContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Quest Name"
+
+[node name="ObjectiveContainer" type="VBoxContainer" parent="HBoxContainer/QuestTrackerContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 
 [node name="Divider" type="ColorRect" parent="HBoxContainer"]
@@ -19,55 +56,67 @@ custom_minimum_size = Vector2(4, 0)
 layout_mode = 2
 color = Color(0.114897, 0.114897, 0.114897, 1)
 
-[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer"]
+[node name="QuestListContainer" type="VBoxContainer" parent="HBoxContainer"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="HBoxContainer/VBoxContainer"]
+[node name="Label" type="Label" parent="HBoxContainer/QuestListContainer"]
 layout_mode = 2
+size_flags_horizontal = 4
 text = "Quests"
 
-[node name="QuestListScroll" type="ScrollContainer" parent="HBoxContainer/VBoxContainer"]
-custom_minimum_size = Vector2(0, 400)
+[node name="TabMenu" parent="HBoxContainer/QuestListContainer" instance=ExtResource("3_l4r7o")]
+custom_minimum_size = Vector2(360, 0)
 layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="Active" type="ScrollContainer" parent="HBoxContainer/QuestListContainer/TabMenu"]
+visible = false
+custom_minimum_size = Vector2(0, 252)
+layout_mode = 2
+size_flags_horizontal = 4
 follow_focus = true
 horizontal_scroll_mode = 0
 vertical_scroll_mode = 4
 
-[node name="QuestList" type="VBoxContainer" parent="HBoxContainer/VBoxContainer/QuestListScroll"]
+[node name="ActiveQuestList" type="VBoxContainer" parent="HBoxContainer/QuestListContainer/TabMenu/Active"]
 layout_mode = 2
 
-[node name="Button" type="Button" parent="HBoxContainer/VBoxContainer/QuestListScroll/QuestList"]
+[node name="Label" type="Label" parent="HBoxContainer/QuestListContainer/TabMenu/Active/ActiveQuestList"]
 layout_mode = 2
-text = "test"
+text = "
+No Active Quests"
 
-[node name="Button2" type="Button" parent="HBoxContainer/VBoxContainer/QuestListScroll/QuestList"]
+[node name="Complete" type="ScrollContainer" parent="HBoxContainer/QuestListContainer/TabMenu"]
+visible = false
+custom_minimum_size = Vector2(0, 252)
 layout_mode = 2
-text = "test"
+size_flags_horizontal = 4
+follow_focus = true
+horizontal_scroll_mode = 0
+vertical_scroll_mode = 4
 
-[node name="Button3" type="Button" parent="HBoxContainer/VBoxContainer/QuestListScroll/QuestList"]
+[node name="CompleteQuestList" type="VBoxContainer" parent="HBoxContainer/QuestListContainer/TabMenu/Complete"]
 layout_mode = 2
-text = "test"
 
-[node name="Button4" type="Button" parent="HBoxContainer/VBoxContainer/QuestListScroll/QuestList"]
+[node name="Label" type="Label" parent="HBoxContainer/QuestListContainer/TabMenu/Complete/CompleteQuestList"]
 layout_mode = 2
-text = "test"
+text = "
+No Complete Quests"
 
-[node name="Button5" type="Button" parent="HBoxContainer/VBoxContainer/QuestListScroll/QuestList"]
+[node name="ExitButton" parent="HBoxContainer/QuestListContainer" instance=ExtResource("2_sxah1")]
 layout_mode = 2
-text = "test"
+size_flags_horizontal = 4
+shortcut = SubResource("Shortcut_x6uqe")
+text = "Back"
+icon = ExtResource("3_47374")
+input_action_name = "clear"
 
-[node name="Button6" type="Button" parent="HBoxContainer/VBoxContainer/QuestListScroll/QuestList"]
-layout_mode = 2
-text = "test"
+[node name="Blur" type="Sprite2D" parent="."]
+z_index = -1
+material = ExtResource("5_2eb54")
+position = Vector2(6, 6)
+scale = Vector2(10000, 10000)
+texture = ExtResource("6_l4r7o")
 
-[node name="Button7" type="Button" parent="HBoxContainer/VBoxContainer/QuestListScroll/QuestList"]
-layout_mode = 2
-text = "test"
-
-[node name="Button8" type="Button" parent="HBoxContainer/VBoxContainer/QuestListScroll/QuestList"]
-layout_mode = 2
-text = "test"
-
-[node name="Button9" type="Button" parent="HBoxContainer/VBoxContainer/QuestListScroll/QuestList"]
-layout_mode = 2
-text = "test"
+[connection signal="opened" from="." to="HBoxContainer/QuestListContainer/TabMenu" method="grab_focus_on_subtree"]
+[connection signal="pressed" from="HBoxContainer/QuestListContainer/ExitButton" to="." method="close"]

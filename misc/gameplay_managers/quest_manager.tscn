@@ -1,11 +1,13 @@
-[gd_scene load_steps=4 format=3 uid="uid://81w41aon23of"]
+[gd_scene load_steps=5 format=3 uid="uid://81w41aon23of"]
 
 [ext_resource type="Script" uid="uid://bpj1eheptgs5o" path="res://misc/gameplay_managers/quest_manager.gd" id="1_vc13q"]
 [ext_resource type="Script" uid="uid://bnigcbtc7ky3a" path="res://misc/quest_scripts/quest_info.gd" id="2_5pg7l"]
 [ext_resource type="Resource" uid="uid://xf8deqj7gdws" path="res://quests/awakening.tres" id="3_tad5d"]
+[ext_resource type="Resource" uid="uid://1lcwn5ff6yy4" path="res://quests/uncanny_valley.tres" id="4_tad5d"]
 
 [node name="QuestManager" type="Node" groups=["Persist"]]
 script = ExtResource("1_vc13q")
 quests = Dictionary[String, ExtResource("2_5pg7l")]({
-"AWAKENING": ExtResource("3_tad5d")
+"AWAKENING": ExtResource("3_tad5d"),
+"UNCANNY_VALLEY": ExtResource("4_tad5d")
 })

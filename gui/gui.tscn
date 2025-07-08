@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://t1lqjxny1int"]
+[gd_scene load_steps=13 format=3 uid="uid://t1lqjxny1int"]
 
 [ext_resource type="Material" uid="uid://dcq7n5qyt3hj0" path="res://materials/immaterial.tres" id="1_cnh4v"]
 [ext_resource type="Theme" uid="uid://crcivs73grrf7" path="res://textures/gui/themes/custom_theme.tres" id="2_stc6v"]
@@ -9,6 +9,7 @@
 [ext_resource type="PackedScene" uid="uid://cejp7bpbfmkw" path="res://gui/utility_menu.tscn" id="7_d8xy5"]
 [ext_resource type="PackedScene" uid="uid://dysmxh061ic7i" path="res://gui/sequence_display.tscn" id="8_rsuha"]
 [ext_resource type="PackedScene" uid="uid://bsrym6k1vywfo" path="res://gui/quests/quest_tracker.tscn" id="9_uxusl"]
+[ext_resource type="PackedScene" uid="uid://bkt6ueeylogtc" path="res://gui/quests/quest_log.tscn" id="10_22my7"]
 [ext_resource type="PackedScene" uid="uid://cjbkwr8dsdqvq" path="res://gui/info_box.tscn" id="10_stc6v"]
 [ext_resource type="PackedScene" uid="uid://376pccgciomv" path="res://gui/quick_info.tscn" id="11_s1h2m"]
 
@@ -75,6 +76,21 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 0
 grow_vertical = 0
+
+[node name="QuestLog" parent="." instance=ExtResource("10_22my7")]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -200.0
+offset_top = -225.5
+offset_right = 200.0
+offset_bottom = 225.5
+grow_horizontal = 2
+grow_vertical = 2
 
 [node name="TimeLabel" type="Label" parent="."]
 unique_name_in_owner = true
@@ -158,4 +174,9 @@ one_shot = true
 [connection signal="settings_closed" from="SettingsMenu" to="PauseMenu" method="open_pause_menu"]
 [connection signal="settings_opened" from="SettingsMenu" to="." method="submenu_opened"]
 [connection signal="opened" from="CharInfo" to="UtilityMenu" method="close_menu"]
+[connection signal="journal_button_pressed" from="UtilityMenu" to="QuestLog" method="open"]
 [connection signal="opened" from="UtilityMenu" to="CharInfo" method="close_menu"]
+[connection signal="closed" from="QuestLog" to="UtilityMenu" method="focus_journal"]
+[connection signal="closed" from="QuestLog" to="UtilityMenu" method="show_buttons"]
+[connection signal="opened" from="QuestLog" to="UtilityMenu" method="hide_buttons"]
+[connection signal="opened" from="QuestLog" to="LogPanel" method="hide"]
