@@ -19,6 +19,11 @@ func _ready() -> void:
 	active_quest_list = get_node("HBoxContainer/QuestListContainer/TabMenu/Active/ActiveQuestList")
 	complete_quest_list = get_node("HBoxContainer/QuestListContainer/TabMenu/Complete/CompleteQuestList")
 
+## Grabs focus on the current button if possible
+func focus_current()->void:
+	if cur_button != null && is_instance_valid(cur_button):
+		cur_button.grab_focus()
+
 ## Makes an objective label and returns it
 func get_objective_label()->RichTextLabel:
 	var new_label: RichTextLabel = RichTextLabel.new()
@@ -34,7 +39,8 @@ func get_objective_label()->RichTextLabel:
 func open()->void:
 	EventBus.broadcast("PAUSE", "NULLDATA")
 	show()
-	cur_button.grab_focus()
+	if is_instance_valid(cur_button):
+		cur_button.grab_focus()
 	opened.emit()
 
 ## Closes the menu
@@ -65,10 +71,9 @@ func display_quest(quest: QuestInfo)->void:
 
 ## Tracks the given quest in the QuestTracker
 func track_quest(button: QuestButton, quest: QuestInfo)->void:
-	if cur_button != null:
-		if cur_button != button:
-			cur_button.set_pressed_no_signal(false)
-		EventBus.broadcast("QUEST_TRACK", quest)
+	if cur_button != button && cur_button != null:
+		cur_button.set_pressed_no_signal(false)
+	EventBus.broadcast("QUEST_TRACK", quest)
 	cur_button = button
 
 ## Untracks the given quest in the QuestTracker

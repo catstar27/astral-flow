@@ -16,13 +16,14 @@ script = ExtResource("1_k0ovv")
 unique_name_in_owner = true
 use_parent_material = true
 layout_mode = 1
-offset_left = -200.0
+offset_left = -240.0
 offset_top = -40.0
 alignment = 1
 
 [node name="NameIconContainer" type="HBoxContainer" parent="QuestContainer"]
 use_parent_material = true
 layout_mode = 2
+size_flags_vertical = 4
 alignment = 1
 
 [node name="Icon" type="TextureRect" parent="QuestContainer/NameIconContainer"]

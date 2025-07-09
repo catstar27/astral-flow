@@ -17,7 +17,7 @@ device = -1
 button_index = 1
 pressed = true
 
-[sub_resource type="Shortcut" id="Shortcut_x6uqe"]
+[sub_resource type="Shortcut" id="Shortcut_2eb54"]
 events = [SubResource("InputEventKey_2eb54"), SubResource("InputEventJoypadButton_l4r7o")]
 
 [node name="QuestLog" type="PanelContainer"]
@@ -33,10 +33,12 @@ layout_mode = 2
 alignment = 1
 
 [node name="QuestTrackerContainer" type="VBoxContainer" parent="HBoxContainer"]
+custom_minimum_size = Vector2(300, 0)
 layout_mode = 2
 
 [node name="NameIconContainer" type="HBoxContainer" parent="HBoxContainer/QuestTrackerContainer"]
 layout_mode = 2
+alignment = 1
 
 [node name="QuestIcon" type="TextureRect" parent="HBoxContainer/QuestTrackerContainer/NameIconContainer"]
 unique_name_in_owner = true
@@ -106,7 +108,7 @@ No Complete Quests"
 [node name="ExitButton" parent="HBoxContainer/QuestListContainer" instance=ExtResource("2_sxah1")]
 layout_mode = 2
 size_flags_horizontal = 4
-shortcut = SubResource("Shortcut_x6uqe")
+shortcut = SubResource("Shortcut_2eb54")
 text = "Back"
 icon = ExtResource("3_47374")
 input_action_name = "clear"
@@ -119,4 +121,5 @@ scale = Vector2(10000, 10000)
 texture = ExtResource("6_l4r7o")
 
 [connection signal="opened" from="." to="HBoxContainer/QuestListContainer/TabMenu" method="grab_focus_on_subtree"]
+[connection signal="tab_changed" from="HBoxContainer/QuestListContainer/TabMenu" to="." method="focus_current"]
 [connection signal="pressed" from="HBoxContainer/QuestListContainer/ExitButton" to="." method="close"]

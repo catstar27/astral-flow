@@ -15,6 +15,7 @@ const tab_button_scn: PackedScene = preload("uid://cayiahrutslld") ## Tab button
 @onready var tab_button_container: HBoxContainer = %TabButtonContainer ## Container for tab buttons
 var tab_buttons: Dictionary[Node, TabButton] ## Stores key/value pairs of button names and buttons
 var cur_tab: Node ## The currently shown tab
+signal tab_changed ## Emitted when changing tabs
 
 func _ready() -> void:
 	if Engine.is_editor_hint():
@@ -97,6 +98,7 @@ func tab_shown(shown_tab: Node)->void:
 	elif cur_tab.get_child_count() > 0 && cur_tab.get_child(0).focus_mode == FocusMode.FOCUS_NONE:
 		grab_focus_on_subtree()
 	crunch_tabs()
+	tab_changed.emit()
 
 ## Selects the next tab
 func next_tab()->void:
@@ -117,6 +119,7 @@ func next_tab()->void:
 	elif cur_tab.get_child_count() > 0 && cur_tab.get_child(0).focus_mode == FocusMode.FOCUS_NONE:
 		grab_focus_on_subtree()
 	crunch_tabs()
+	tab_changed.emit()
 
 ## Selects the previous tab
 func prev_tab()->void:
@@ -137,6 +140,7 @@ func prev_tab()->void:
 	elif cur_tab.get_child_count() > 0 && cur_tab.get_child(0).focus_mode == FocusMode.FOCUS_NONE:
 		grab_focus_on_subtree()
 	crunch_tabs()
+	tab_changed.emit()
 
 ## Gets the width of the tab button container buttons
 func get_tab_buttons_width()->int:

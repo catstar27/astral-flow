@@ -38,6 +38,7 @@ func track_character(to_track: Character)->void:
 	if character == to_track:
 		return
 	is_initiating_tracking = true
+	stop_tracking(true)
 	if animated:
 		scale = Vector2.ONE*.01
 	character = to_track
@@ -53,10 +54,10 @@ func track_character(to_track: Character)->void:
 	tracking_initiated.emit()
 
 ## Stops tracking the current character
-func stop_tracking()->void:
+func stop_tracking(ignore_starting: bool = false)->void:
 	if character == null:
 		return
-	while is_initiating_tracking:
+	while is_initiating_tracking && !ignore_starting:
 		await tracking_initiated
 	if character == null:
 		return
@@ -68,8 +69,9 @@ func stop_tracking()->void:
 	character.status_manager.status_list_changed.disconnect(update_statuses)
 	character.status_manager.status_ticked.disconnect(update_statuses)
 	character = null
-	is_initiating_tracking = false
-	tracking_initiated.emit()
+	if !ignore_starting:
+		is_initiating_tracking = false
+		tracking_initiated.emit()
 
 ## Updates the info based on the tracked character
 func update_info()->void:
