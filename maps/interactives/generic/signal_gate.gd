@@ -12,7 +12,7 @@ class_name SignalGate
 @export var ordered: bool = false ## Whether the signals need to happen in the same order
 @export_group("Dialogic") ## Variables relating to dialogic
 @export var is_dialogic: bool = false ## Whether this gate uses dialogic signals
-@export var dialogic_var: String ## 
+@export var dialogic_var: String ## Variable for this interactive's state stored in dialogic
 var signal_index: int = 0 ## Current index of the signal being tracked
 enum state { ## States the gate can be in
 	locked, ## The gate is locked and closed

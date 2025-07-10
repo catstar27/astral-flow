@@ -15,6 +15,9 @@ var changing_state: bool = false ## Whether the menu is changing state
 signal opened ## Emitted when this menu opens
 signal closed ## Emitted when this menu closes
 signal journal_button_pressed ## Emitted when the journal button is pressed
+signal map_button_pressed ## Emitted when the map button is pressed
+signal inventory_button_pressed ## Emitted when the inventory button is pressed
+signal pause_button_pressed ## Emitted when the pause button is pressed
 
 func _ready() -> void:
 	menu_button.display_updated.connect(update_menu_button)
@@ -80,9 +83,33 @@ func close_menu()->void:
 func journal_pressed()->void:
 	journal_button_pressed.emit()
 
+## Emits the signal for the map button
+func map_pressed()->void:
+	map_button_pressed.emit()
+
+## Emits the signal for the inventory button
+func inventory_pressed()->void:
+	inventory_button_pressed.emit()
+
+## Emits the signal for the pause button
+func pause_pressed()->void:
+	pause_button_pressed.emit()
+
 ## Grabs focus on the journal button
 func focus_journal()->void:
 	%Journal.grab_focus()
+
+## Grabs focus on the map button
+func focus_map()->void:
+	%Map.grab_focus()
+
+## Grabs focus on the inventory button
+func focus_inventory()->void:
+	%Inventory.grab_focus()
+
+## Grabs focus on the pause button
+func focus_pause()->void:
+	%Pause.grab_focus()
 
 ## Hides the menu buttons while keeping the menu open
 func hide_buttons()->void:

@@ -1,24 +1,22 @@
-[gd_scene load_steps=10 format=3 uid="uid://bkt6ueeylogtc"]
+[gd_scene load_steps=9 format=3 uid="uid://bkt6ueeylogtc"]
 
 [ext_resource type="Script" uid="uid://1yju7cyvj754" path="res://gui/quests/quest_log.gd" id="1_47374"]
 [ext_resource type="PackedScene" uid="uid://dleye7m8gjxs0" path="res://gui/components/control_display_button.tscn" id="2_sxah1"]
-[ext_resource type="Texture2D" uid="uid://bxhwtcxdgtkx6" path="res://textures/gui/keyboard_key.png" id="3_47374"]
 [ext_resource type="PackedScene" uid="uid://c6kh3esjn5743" path="res://gui/tab_menu.tscn" id="3_l4r7o"]
 [ext_resource type="Material" uid="uid://dessed1x8jslv" path="res://materials/blur_material.tres" id="5_2eb54"]
 [ext_resource type="Texture2D" uid="uid://ceeo5gnqb2rcr" path="res://textures/gui/foreground.png" id="6_l4r7o"]
 
-[sub_resource type="InputEventKey" id="InputEventKey_2eb54"]
+[sub_resource type="InputEventKey" id="InputEventKey_7hl7v"]
 device = -1
-physical_keycode = 88
-unicode = 120
+physical_keycode = 4194305
 
-[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_l4r7o"]
+[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_7312b"]
 device = -1
 button_index = 1
 pressed = true
 
-[sub_resource type="Shortcut" id="Shortcut_2eb54"]
-events = [SubResource("InputEventKey_2eb54"), SubResource("InputEventJoypadButton_l4r7o")]
+[sub_resource type="Shortcut" id="Shortcut_aa6ol"]
+events = [SubResource("InputEventKey_7hl7v"), SubResource("InputEventJoypadButton_7312b")]
 
 [node name="QuestLog" type="PanelContainer"]
 process_mode = 3
@@ -108,10 +106,9 @@ No Complete Quests"
 [node name="ExitButton" parent="HBoxContainer/QuestListContainer" instance=ExtResource("2_sxah1")]
 layout_mode = 2
 size_flags_horizontal = 4
-shortcut = SubResource("Shortcut_2eb54")
+shortcut = SubResource("Shortcut_aa6ol")
 text = "Back"
-icon = ExtResource("3_47374")
-input_action_name = "clear"
+input_action_name = "menu_back"
 
 [node name="Blur" type="Sprite2D" parent="."]
 z_index = -1

@@ -21,6 +21,7 @@ offset_top = -40.0
 alignment = 1
 
 [node name="NameIconContainer" type="HBoxContainer" parent="QuestContainer"]
+unique_name_in_owner = true
 use_parent_material = true
 layout_mode = 2
 size_flags_vertical = 4

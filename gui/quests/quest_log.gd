@@ -21,8 +21,14 @@ func _ready() -> void:
 
 ## Grabs focus on the current button if possible
 func focus_current()->void:
-	if cur_button != null && is_instance_valid(cur_button):
+	if !is_node_ready():
+		return
+	if cur_button != null && cur_button.is_visible_in_tree():
 		cur_button.grab_focus()
+	elif active_quest_list.is_visible_in_tree():
+		active_quest_list.get_child(0).grab_focus()
+	else:
+		complete_quest_list.get_child(0).grab_focus()
 
 ## Makes an objective label and returns it
 func get_objective_label()->RichTextLabel:
@@ -56,7 +62,7 @@ func display_quest(quest: QuestInfo)->void:
 	for child in objective_conainer.get_children():
 		child.queue_free()
 	for stage in quest.quest_stages:
-		if stage.active || stage.complete:
+		if stage.active || stage.complete || quest.complete:
 			for objective in stage.quest_objectives.values():
 				var label: RichTextLabel = get_objective_label()
 				label.text = ""
@@ -64,7 +70,7 @@ func display_quest(quest: QuestInfo)->void:
 				if objective.total_count > 0:
 					label.text += " ("+str(objective.current_count)+"/"+str(objective.total_count)+")"
 				label.text += " ["
-				if objective.complete:
+				if objective.complete || quest.complete:
 					label.text += "✓"
 				label.text += "]"
 				objective_conainer.add_child(label)

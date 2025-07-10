@@ -152,6 +152,14 @@ func fade_out()->void:
 func fade_in()->void:
 	EventBus.broadcast("FADE_IN_MUSIC", 1)
 	await create_tween().tween_property(foreground, "modulate", Color(0,0,0,0), .5).set_ease(Tween.EASE_OUT).finished
+
+## Fades to black over custom time
+func custom_fade_out(duration: float)->void:
+	await create_tween().tween_property(foreground, "modulate", Color.BLACK, duration).set_ease(Tween.EASE_IN).finished
+
+## Fades in over custom time
+func custom_fade_in(duration: float)->void:
+	await create_tween().tween_property(foreground, "modulate", Color(0,0,0,0), duration).set_ease(Tween.EASE_OUT).finished
 #endregion
 
 #region Save and Load
@@ -164,6 +172,9 @@ func load_map_at_entrance(args: Array)->void:
 
 ## Loads a map from the given filepath. Optionally places the player in a location based on the entrance used.
 func load_map(new_map: String, entrance_id: String = "")->void:
+	gui.hide()
+	await custom_fade_out(.5)
+	selection_cursor.hide()
 	await unload_map()
 	selection_cursor.deactivate()
 	var map_to_load: GameMap = load(new_map).instantiate()
@@ -201,6 +212,9 @@ func load_map(new_map: String, entrance_id: String = "")->void:
 	if sound_manager.ost.stream != map_to_load.calm_theme:
 		EventBus.broadcast("SET_OST", map_to_load.calm_theme)
 	EventBus.broadcast("MAP_ENTERED", map_to_load.map_name)
+	selection_cursor.show()
+	await custom_fade_in(.5)
+	gui.show()
 
 ## Unloads the current map after saving it
 func unload_map()->void:

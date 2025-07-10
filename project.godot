@@ -59,7 +59,8 @@ variables={
 "learned_zap": false,
 "nilak_name": "???",
 "random": 0,
-"tutorial_npc_revived": 0
+"tutorial_npc_revived": 0,
+"tutorial_puzzle_index": 0
 }
 layout/style_list=["res://dialogue/dialogue_style.tres"]
 layout/default_style="res://dialogue/dialogue_style.tres"

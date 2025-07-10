@@ -5,6 +5,7 @@ class_name QuestTracker
 @onready var quest_icon: TextureRect = %Icon ## Icon of the current quest
 @onready var quest_name: Label = %Name ## Name of the current quest
 @onready var quest_container: VBoxContainer = %QuestContainer ## Container holding the display info
+@onready var name_icon_container: HBoxContainer = %NameIconContainer ## Container holding name and icon
 @onready var objective_container: VBoxContainer = %ObjectiveContainer ## Container holding the objective info
 var objective_labels: Dictionary[QuestObjective, RichTextLabel] ## Array of the labels containing objective info
 var tracked_quest: QuestInfo = null ## Currently tracked quest
@@ -22,7 +23,7 @@ func _ready() -> void:
 
 ## Changes the currently tracked quest
 func change_quest(quest: QuestInfo)->void:
-	if tracked_quest == quest:
+	if tracked_quest == quest || starting_tracking:
 		return
 	while updating_objective > 0:
 		await objective_updated
@@ -35,29 +36,35 @@ func change_quest(quest: QuestInfo)->void:
 		objective_labels[objective].queue_free()
 		objective_labels.erase(objective)
 	quest.quest_complete.connect(complete_quest)
-	quest_name.modulate = Color.TRANSPARENT
 	quest_name.text = tracked_quest.quest_name
 	quest_icon.texture = tracked_quest.quest_icon
+	quest_icon.modulate = Color.TRANSPARENT
+	quest_name.modulate = Color.TRANSPARENT
 	if quest != tracked_quest:
 		return
 	await get_tree().process_frame
 	position.y = get_viewport_rect().size.y-quest_container.size.y
-	var copy_label: Label = Label.new()
-	copy_label.label_settings = quest_name.label_settings
-	copy_label.use_parent_material = true
-	copy_label.text = quest_name.text
-	copy_label.size = quest_name.size
-	add_child(copy_label)
-	copy_label.global_position = Vector2(quest_name.global_position.x, get_viewport_rect().size.y)
 	if quest != tracked_quest:
 		return
 	objective_container.hide()
-	show()
-	await create_tween().tween_property(copy_label, "global_position", quest_name.global_position, .5).finished
-	objective_container.show()
-	build_labels()
+	if !in_combat:
+		show()
+	while !is_visible_in_tree() && !in_combat:
+		await visibility_changed
+	await get_tree().process_frame
+	var fake_name_icon: HBoxContainer = name_icon_container.duplicate()
+	fake_name_icon.get_child(0).modulate = Color.WHITE
+	fake_name_icon.get_child(1).modulate = Color.WHITE
+	add_child(fake_name_icon)
+	fake_name_icon.global_position = Vector2(name_icon_container.global_position.x, get_viewport_rect().size.y)
+	fake_name_icon.size = name_icon_container.size
+	await create_tween().tween_property(fake_name_icon, "global_position", name_icon_container.global_position, .5).finished
+	quest_icon.modulate = Color.WHITE
 	quest_name.modulate = Color.WHITE
-	copy_label.queue_free()
+	fake_name_icon.queue_free()
+	objective_container.show()
+	await get_tree().create_timer(.1).timeout
+	build_labels()
 	quest.stage_started.connect(build_labels)
 	starting_tracking = false
 	if !in_combat:
@@ -136,7 +143,9 @@ func start_combat()->void:
 ## Ends combat and shows the tracker if it was tracking a quest
 func end_combat()->void:
 	in_combat = false
-	show_if_tracking()
+	var old_tracked: QuestInfo = tracked_quest
+	stop_tracking()
+	change_quest(old_tracked)
 
 ## Stops tracking any quests
 func stop_tracking()->void:

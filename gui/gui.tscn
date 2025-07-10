@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://t1lqjxny1int"]
+[gd_scene load_steps=14 format=3 uid="uid://t1lqjxny1int"]
 
 [ext_resource type="Material" uid="uid://dcq7n5qyt3hj0" path="res://materials/immaterial.tres" id="1_cnh4v"]
 [ext_resource type="Theme" uid="uid://crcivs73grrf7" path="res://textures/gui/themes/custom_theme.tres" id="2_stc6v"]
@@ -12,6 +12,7 @@
 [ext_resource type="PackedScene" uid="uid://bkt6ueeylogtc" path="res://gui/quests/quest_log.tscn" id="10_22my7"]
 [ext_resource type="PackedScene" uid="uid://cjbkwr8dsdqvq" path="res://gui/info_box.tscn" id="10_stc6v"]
 [ext_resource type="PackedScene" uid="uid://376pccgciomv" path="res://gui/quick_info.tscn" id="11_s1h2m"]
+[ext_resource type="PackedScene" uid="uid://qh5q0oumswup" path="res://gui/world_map.tscn" id="13_qv6l0"]
 
 [node name="GUI" type="Control"]
 process_mode = 3
@@ -138,6 +139,21 @@ offset_bottom = 44.0
 grow_horizontal = 1
 grow_vertical = 1
 
+[node name="WorldMap" parent="." instance=ExtResource("13_qv6l0")]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -338.5
+offset_top = -258.5
+offset_right = 338.5
+offset_bottom = 258.5
+grow_horizontal = 2
+grow_vertical = 2
+
 [node name="LogPanel" type="PanelContainer" parent="."]
 process_mode = 1
 visible = false
@@ -169,14 +185,21 @@ one_shot = true
 
 [connection signal="open_settings" from="PauseMenu" to="SettingsMenu" method="open_settings_menu"]
 [connection signal="pause_closed" from="PauseMenu" to="." method="submenu_closed"]
+[connection signal="pause_closed" from="PauseMenu" to="UtilityMenu" method="focus_pause"]
 [connection signal="pause_opened" from="PauseMenu" to="." method="submenu_opened"]
 [connection signal="settings_closed" from="SettingsMenu" to="." method="submenu_closed"]
 [connection signal="settings_closed" from="SettingsMenu" to="PauseMenu" method="open_pause_menu"]
 [connection signal="settings_opened" from="SettingsMenu" to="." method="submenu_opened"]
 [connection signal="opened" from="CharInfo" to="UtilityMenu" method="close_menu"]
 [connection signal="journal_button_pressed" from="UtilityMenu" to="QuestLog" method="open"]
+[connection signal="map_button_pressed" from="UtilityMenu" to="WorldMap" method="open"]
 [connection signal="opened" from="UtilityMenu" to="CharInfo" method="close_menu"]
+[connection signal="pause_button_pressed" from="UtilityMenu" to="PauseMenu" method="open_pause_menu"]
 [connection signal="closed" from="QuestLog" to="UtilityMenu" method="focus_journal"]
 [connection signal="closed" from="QuestLog" to="UtilityMenu" method="show_buttons"]
 [connection signal="opened" from="QuestLog" to="UtilityMenu" method="hide_buttons"]
 [connection signal="opened" from="QuestLog" to="LogPanel" method="hide"]
+[connection signal="closed" from="WorldMap" to="UtilityMenu" method="show_buttons"]
+[connection signal="closed" from="WorldMap" to="UtilityMenu" method="focus_map"]
+[connection signal="opened" from="WorldMap" to="UtilityMenu" method="hide_buttons"]
+[connection signal="opened" from="WorldMap" to="LogPanel" method="hide"]

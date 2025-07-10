@@ -17,21 +17,20 @@ device = -1
 button_index = 10
 pressed = true
 
-[sub_resource type="Shortcut" id="Shortcut_au610"]
+[sub_resource type="Shortcut" id="Shortcut_f8scv"]
 events = [SubResource("InputEventKey_f8scv"), SubResource("InputEventJoypadButton_4y04n")]
 
-[sub_resource type="InputEventKey" id="InputEventKey_2eb54"]
+[sub_resource type="InputEventKey" id="InputEventKey_7hl7v"]
 device = -1
-physical_keycode = 88
-unicode = 120
+physical_keycode = 4194305
 
-[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_l4r7o"]
+[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_7312b"]
 device = -1
 button_index = 1
 pressed = true
 
-[sub_resource type="Shortcut" id="Shortcut_llcg2"]
-events = [SubResource("InputEventKey_2eb54"), SubResource("InputEventJoypadButton_l4r7o")]
+[sub_resource type="Shortcut" id="Shortcut_4y04n"]
+events = [SubResource("InputEventKey_7hl7v"), SubResource("InputEventJoypadButton_7312b")]
 
 [node name="UtilityMenu" type="Control"]
 material = ExtResource("1_jr21q")
@@ -55,7 +54,7 @@ offset_bottom = 48.0
 size_flags_horizontal = 8
 size_flags_vertical = 0
 theme = ExtResource("3_v0p8v")
-shortcut = SubResource("Shortcut_au610")
+shortcut = SubResource("Shortcut_f8scv")
 text = "←"
 icon = ExtResource("5_fubsc")
 input_action_name = "menu_right"
@@ -73,10 +72,9 @@ layout_mode = 2
 size_flags_horizontal = 8
 focus_mode = 2
 theme = ExtResource("3_v0p8v")
-shortcut = SubResource("Shortcut_llcg2")
+shortcut = SubResource("Shortcut_4y04n")
 text = "Back"
-icon = ExtResource("5_fubsc")
-input_action_name = "clear"
+input_action_name = "menu_back"
 
 [node name="Info" type="VBoxContainer" parent="."]
 unique_name_in_owner = true
@@ -92,10 +90,10 @@ theme_override_constants/separation = 1
 unique_name_in_owner = true
 use_parent_material = true
 layout_mode = 2
-focus_neighbor_top = NodePath("../Inventory")
+focus_neighbor_top = NodePath("../Pause")
 focus_neighbor_bottom = NodePath("../Journal")
 focus_next = NodePath("../Journal")
-focus_previous = NodePath("../Inventory")
+focus_previous = NodePath("../Pause")
 theme_override_font_sizes/font_size = 16
 text = "Party"
 
@@ -111,6 +109,7 @@ theme_override_font_sizes/font_size = 16
 text = "Journal"
 
 [node name="Map" type="Button" parent="Info"]
+unique_name_in_owner = true
 use_parent_material = true
 layout_mode = 2
 focus_neighbor_top = NodePath("../Journal")
@@ -121,14 +120,26 @@ theme_override_font_sizes/font_size = 16
 text = "Map"
 
 [node name="Inventory" type="Button" parent="Info"]
+unique_name_in_owner = true
 use_parent_material = true
 layout_mode = 2
 focus_neighbor_top = NodePath("../Map")
-focus_neighbor_bottom = NodePath("../Party")
-focus_next = NodePath("../Party")
+focus_neighbor_bottom = NodePath("../Pause")
+focus_next = NodePath("../Pause")
 focus_previous = NodePath("../Map")
 theme_override_font_sizes/font_size = 16
 text = "Inventory"
+
+[node name="Pause" type="Button" parent="Info"]
+unique_name_in_owner = true
+use_parent_material = true
+layout_mode = 2
+focus_neighbor_top = NodePath("../Inventory")
+focus_neighbor_bottom = NodePath("../Party")
+focus_next = NodePath("../Party")
+focus_previous = NodePath("../Inventory")
+theme_override_font_sizes/font_size = 16
+text = "Pause"
 
 [connection signal="closed" from="." to="PartyDisplay" method="shift_right"]
 [connection signal="closed" from="." to="Info/Party" method="release_focus"]
@@ -143,3 +154,6 @@ text = "Inventory"
 [connection signal="pressed" from="Info/Party" to="PartyDisplay" method="open_menu"]
 [connection signal="pressed" from="Info/Party" to="Info" method="hide"]
 [connection signal="pressed" from="Info/Journal" to="." method="journal_pressed"]
+[connection signal="pressed" from="Info/Map" to="." method="map_pressed"]
+[connection signal="pressed" from="Info/Inventory" to="." method="inventory_pressed"]
+[connection signal="pressed" from="Info/Pause" to="." method="pause_pressed"]

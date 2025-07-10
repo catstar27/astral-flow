@@ -41,7 +41,7 @@ texture = ExtResource("3_tsd85")
 
 [node name="Foreground" type="Sprite2D" parent="."]
 unique_name_in_owner = true
-modulate = Color(0, 0, 0, 0)
+modulate = Color(0, 0, 0, 1)
 z_index = 100
 z_as_relative = false
 scale = Vector2(100000, 100000)
@@ -53,6 +53,7 @@ layer = 100
 
 [node name="GUI" parent="HUDLayer" instance=ExtResource("9_5e0hy")]
 unique_name_in_owner = true
+visible = false
 z_index = 30
 
 [node name="SelectionCursor" parent="." instance=ExtResource("4_lfpb3")]

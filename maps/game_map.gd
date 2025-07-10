@@ -5,7 +5,7 @@ class_name GameMap
 ## Contains all necessary pathfinding functions,
 ## as well as the ability to save map-specific nodes
 
- ## Position for player to start if not coming from an entrance
+## Position for player to start if not coming from an entrance
 @export var player_start_pos: Vector2i = Vector2i.ZERO
 @export var calm_theme: AudioStreamWAV ## Theme to play outside combat
 @export var battle_theme: AudioStreamWAV ## Theme to play in combat

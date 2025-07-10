@@ -78,7 +78,7 @@ func post_save()->void:
 
 ## Executes before loading data
 func pre_load()->void:
-	return
+	EventBus.broadcast("QUEST_TRACK_STOP", "NULLDATA")
 
 ## Executes after loading data
 func post_load()->void:
@@ -91,7 +91,6 @@ func post_load()->void:
 		quests[quest].activate()
 		if !quests[quest].quest_complete.is_connected(complete_quest):
 			quests[quest].quest_complete.connect(complete_quest)
-	EventBus.broadcast("QUEST_TRACK_STOP", "NULLDATA")
 	if tracked_id != "":
 		EventBus.broadcast("QUEST_TRACK", quests[tracked_id])
 	broadcast_quest_list()
