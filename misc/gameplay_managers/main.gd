@@ -48,7 +48,7 @@ func _ready() -> void:
 		EventBus.broadcast("QUEST_START", "AWAKENING")
 		load_map("res://maps/test_map.tscn")
 	else:
-		SaveLoad.load_data()
+		SaveLoad.load_data("", "save1")
 	prepped = true
 
 ## Resizes the gui when the screen resizes
@@ -207,7 +207,7 @@ func load_map(new_map: String, entrance_id: String = "")->void:
 	selection_cursor.activate()
 	selection_cursor.select(player)
 	map_to_load.prep_map()
-	SaveLoad.save_data(SaveLoad.slot, true)
+	SaveLoad.save_data("Autosave", SaveLoad.recent_slot, true)
 	if sound_manager.ost.stream != map_to_load.calm_theme:
 		EventBus.broadcast("SET_OST", map_to_load.calm_theme)
 	EventBus.broadcast("MAP_ENTERED", map_to_load.map_name)

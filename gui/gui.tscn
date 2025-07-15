@@ -31,17 +31,10 @@ script = ExtResource("3_l60ds")
 visible = false
 z_index = 2
 layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
 offset_left = -67.5
 offset_top = -64.0
 offset_right = 67.5
 offset_bottom = 64.0
-grow_horizontal = 2
-grow_vertical = 2
 
 [node name="PauseMenu" parent="." instance=ExtResource("4_dnklx")]
 unique_name_in_owner = true
@@ -215,8 +208,12 @@ process_mode = 1
 wait_time = 3.0
 one_shot = true
 
-[connection signal="closed" from="SaveMenu" to="PauseMenu" method="show"]
+[connection signal="closed_load" from="SaveMenu" to="PauseMenu" method="show"]
+[connection signal="closed_load" from="SaveMenu" to="PauseMenu" method="focus_load"]
+[connection signal="closed_save" from="SaveMenu" to="PauseMenu" method="show"]
+[connection signal="closed_save" from="SaveMenu" to="PauseMenu" method="focus_load"]
 [connection signal="opened" from="SaveMenu" to="PauseMenu" method="hide"]
+[connection signal="open_load" from="PauseMenu" to="SaveMenu" method="open_load_mode"]
 [connection signal="open_save" from="PauseMenu" to="SaveMenu" method="open_save_mode"]
 [connection signal="open_settings" from="PauseMenu" to="SettingsMenu" method="open_settings_menu"]
 [connection signal="pause_closed" from="PauseMenu" to="UtilityMenu" method="focus_pause"]
@@ -231,8 +228,8 @@ one_shot = true
 [connection signal="opened" from="QuestLog" to="UtilityMenu" method="hide_buttons"]
 [connection signal="opened" from="QuestLog" to="LogPanel" method="hide"]
 [connection signal="opened" from="QuestLog" to="Blur" method="show"]
-[connection signal="closed" from="WorldMap" to="UtilityMenu" method="focus_map"]
 [connection signal="closed" from="WorldMap" to="UtilityMenu" method="show_buttons"]
+[connection signal="closed" from="WorldMap" to="UtilityMenu" method="focus_map"]
 [connection signal="closed" from="WorldMap" to="Blur" method="hide"]
 [connection signal="opened" from="WorldMap" to="UtilityMenu" method="hide_buttons"]
 [connection signal="opened" from="WorldMap" to="LogPanel" method="hide"]

@@ -4,7 +4,7 @@ extends Node
 const save_file_folder: String = "user://saves/" ## Folder for save files
 const main_scene: PackedScene = preload("res://misc/gameplay_managers/main.tscn") ## Filepath of main scene
 var main: Node = null ## Main scene pointer
-var slot: String = "save1" ## Current save slot name
+var recent_slot: String = "save1" ## Most recent save slot name
 var loading: bool = false ## Whether the game is currently loading
 var saving: bool = false ## Whether the game is currently saving
 var in_combat: bool = false ## Whether the game is in a combat state
@@ -32,9 +32,9 @@ func is_slot_blank(check_slot: String)->bool:
 
 func _unhandled_input(event: InputEvent)->void:
 	if event.is_action_pressed("quicksave"):
-		save_data("Quicksave")
+		save_data("Quicksave", recent_slot)
 	if event.is_action_pressed("quickload"):
-		load_data("Quicksave")
+		load_data("Quicksave", recent_slot)
 
 #region Delete and Reset
 ## Gets the path of the latest save file
@@ -82,6 +82,16 @@ func delete_slot(remove_slot: String)->void:
 	loading = true
 	clear_dir(save_file_folder+remove_slot)
 	DirAccess.remove_absolute(save_file_folder+remove_slot)
+	saving = false
+	loading = false
+
+## Deletes the given save file
+func delete_file(save_name: String, slot: String)->void:
+	if !FileAccess.file_exists(save_file_folder+slot+'/'+save_name):
+		return
+	saving = true
+	loading = true
+	DirAccess.remove_absolute(save_file_folder+slot+'/'+save_name)
 	saving = false
 	loading = false
 
@@ -133,13 +143,14 @@ func load_save_dict(node: Node, dict: Dictionary[String, Variant])->void:
 	node.post_load()
 
 ## Saves the game, creating the necessary folders if missing
-func save_data(save_name: String = slot, quiet_save: bool = false)->void:
+func save_data(save_name: String, slot: String, quiet_save: bool = false)->void:
 	if saving || loading:
 		return
 	if in_combat:
 		EventBus.broadcast("PRINT_LOG", "Cannot Save When in Danger!")
 		return
 	saving = true
+	recent_slot = slot
 	if !DirAccess.dir_exists_absolute(save_file_folder):
 		DirAccess.make_dir_absolute(save_file_folder)
 	if !DirAccess.dir_exists_absolute(save_file_folder+slot):
@@ -166,7 +177,7 @@ func save_data(save_name: String = slot, quiet_save: bool = false)->void:
 	saving = false
 
 ## Loads the game
-func load_data(save_name: String = "")->void:
+func load_data(save_name: String, slot: String)->void:
 	if !DirAccess.dir_exists_absolute(save_file_folder+slot):
 		printerr("Save Folder Not Found")
 		return

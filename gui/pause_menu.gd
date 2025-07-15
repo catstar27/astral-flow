@@ -49,12 +49,10 @@ func close_pause_menu()->void:
 ## Saves the game; called when the save button is pressed
 func save_pressed()->void:
 	open_save.emit()
-	SaveLoad.save_data()
 
 ## Reloads the save; called when the load button is pressed
 func load_pressed()->void:
-	close_pause_menu()
-	SaveLoad.load_data()
+	open_load.emit()
 
 ## Opens the settings; called when settings button is pressed
 func settings_pressed()->void:
@@ -68,3 +66,11 @@ func quit_pressed()->void:
 ## Resets the save file; called when reset button is pressed
 func reset_pressed() -> void:
 	SaveLoad.reset_save(SaveLoad.slot)
+
+## Focuses the save button
+func focus_save()->void:
+	save_button.grab_focus()
+
+## Focuses the load button
+func focus_load()->void:
+	%Load.grab_focus()
