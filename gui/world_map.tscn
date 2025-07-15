@@ -1,60 +1,66 @@
-[gd_scene load_steps=14 format=3 uid="uid://qh5q0oumswup"]
+[gd_scene load_steps=13 format=3 uid="uid://qh5q0oumswup"]
 
 [ext_resource type="PackedScene" uid="uid://dleye7m8gjxs0" path="res://gui/components/control_display_button.tscn" id="1_7hl7v"]
 [ext_resource type="Script" uid="uid://dj4xbvn3alikc" path="res://gui/world_map.gd" id="1_7312b"]
 [ext_resource type="Material" uid="uid://dessed1x8jslv" path="res://materials/blur_material.tres" id="3_ro4xi"]
-[ext_resource type="Texture2D" uid="uid://ceeo5gnqb2rcr" path="res://textures/gui/foreground.png" id="4_rlpal"]
 
-[sub_resource type="InputEventKey" id="InputEventKey_7hl7v"]
+[sub_resource type="InputEventKey" id="InputEventKey_sw3kj"]
 device = -1
 physical_keycode = 4194305
 
-[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_7312b"]
+[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_frj83"]
 device = -1
 button_index = 1
 pressed = true
 
-[sub_resource type="Shortcut" id="Shortcut_ro4xi"]
-events = [SubResource("InputEventKey_7hl7v"), SubResource("InputEventJoypadButton_7312b")]
+[sub_resource type="Shortcut" id="Shortcut_6s7of"]
+events = [SubResource("InputEventKey_sw3kj"), SubResource("InputEventJoypadButton_frj83")]
 
-[sub_resource type="InputEventKey" id="InputEventKey_7312b"]
+[sub_resource type="InputEventKey" id="InputEventKey_ro4xi"]
 device = -1
 physical_keycode = 4194326
 
-[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_6s7of"]
+[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_rlpal"]
 device = -1
 button_index = 4
 pressed = true
 
-[sub_resource type="Shortcut" id="Shortcut_rlpal"]
-events = [SubResource("InputEventKey_7312b"), SubResource("InputEventJoypadButton_6s7of")]
+[sub_resource type="Shortcut" id="Shortcut_ro4xi"]
+events = [SubResource("InputEventKey_ro4xi"), SubResource("InputEventJoypadButton_rlpal")]
 
-[sub_resource type="InputEventKey" id="InputEventKey_6s7of"]
+[sub_resource type="InputEventKey" id="InputEventKey_6be65"]
 device = -1
 physical_keycode = 32
 unicode = 32
 
-[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_ro4xi"]
+[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_ngai7"]
 device = -1
 pressed = true
 
-[sub_resource type="Shortcut" id="Shortcut_pnn20"]
-events = [SubResource("InputEventKey_6s7of"), SubResource("InputEventJoypadButton_ro4xi")]
+[sub_resource type="Shortcut" id="Shortcut_rlpal"]
+events = [SubResource("InputEventKey_6be65"), SubResource("InputEventJoypadButton_ngai7")]
 
-[node name="WorldMap" type="VBoxContainer"]
+[node name="WorldMap" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+offset_top = 525.0
+offset_right = 677.0
+offset_bottom = 525.0
+script = ExtResource("1_7312b")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
 process_mode = 3
 offset_left = 6.0
 offset_top = 6.0
 offset_right = 683.0
 offset_bottom = 523.0
-script = ExtResource("1_7312b")
 
-[node name="PanelContainer" type="PanelContainer" parent="."]
+[node name="PanelContainer" type="PanelContainer" parent="VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 
-[node name="MapTileGrid" type="GridContainer" parent="PanelContainer"]
+[node name="MapTileGrid" type="GridContainer" parent="VBoxContainer/PanelContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
@@ -62,384 +68,393 @@ theme_override_constants/h_separation = 1
 theme_override_constants/v_separation = 1
 columns = 10
 
-[node name="ColorRect" type="ColorRect" parent="PanelContainer/MapTileGrid"]
+[node name="ColorRect" type="ColorRect" parent="VBoxContainer/PanelContainer/MapTileGrid"]
 custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
 color = Color(0.099986, 0.099986, 0.099986, 1)
 
-[node name="ColorRect2" type="ColorRect" parent="PanelContainer/MapTileGrid"]
+[node name="ColorRect2" type="ColorRect" parent="VBoxContainer/PanelContainer/MapTileGrid"]
 custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
 color = Color(0.099986, 0.099986, 0.099986, 1)
 
-[node name="ColorRect3" type="ColorRect" parent="PanelContainer/MapTileGrid"]
+[node name="ColorRect3" type="ColorRect" parent="VBoxContainer/PanelContainer/MapTileGrid"]
 custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
 color = Color(0.099986, 0.099986, 0.099986, 1)
 
-[node name="ColorRect4" type="ColorRect" parent="PanelContainer/MapTileGrid"]
+[node name="ColorRect4" type="ColorRect" parent="VBoxContainer/PanelContainer/MapTileGrid"]
 custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
 color = Color(0.099986, 0.099986, 0.099986, 1)
 
-[node name="ColorRect5" type="ColorRect" parent="PanelContainer/MapTileGrid"]
+[node name="ColorRect5" type="ColorRect" parent="VBoxContainer/PanelContainer/MapTileGrid"]
 custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
 color = Color(0.099986, 0.099986, 0.099986, 1)
 
-[node name="ColorRect6" type="ColorRect" parent="PanelContainer/MapTileGrid"]
+[node name="ColorRect6" type="ColorRect" parent="VBoxContainer/PanelContainer/MapTileGrid"]
 custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
 color = Color(0.099986, 0.099986, 0.099986, 1)
 
-[node name="ColorRect7" type="ColorRect" parent="PanelContainer/MapTileGrid"]
+[node name="ColorRect7" type="ColorRect" parent="VBoxContainer/PanelContainer/MapTileGrid"]
 custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
 color = Color(0.099986, 0.099986, 0.099986, 1)
 
-[node name="ColorRect8" type="ColorRect" parent="PanelContainer/MapTileGrid"]
+[node name="ColorRect8" type="ColorRect" parent="VBoxContainer/PanelContainer/MapTileGrid"]
 custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
 color = Color(0.099986, 0.099986, 0.099986, 1)
 
-[node name="ColorRect9" type="ColorRect" parent="PanelContainer/MapTileGrid"]
+[node name="ColorRect9" type="ColorRect" parent="VBoxContainer/PanelContainer/MapTileGrid"]
 custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
 color = Color(0.099986, 0.099986, 0.099986, 1)
 
-[node name="ColorRect10" type="ColorRect" parent="PanelContainer/MapTileGrid"]
+[node name="ColorRect10" type="ColorRect" parent="VBoxContainer/PanelContainer/MapTileGrid"]
 custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
 color = Color(0.099986, 0.099986, 0.099986, 1)
 
-[node name="ColorRect11" type="ColorRect" parent="PanelContainer/MapTileGrid"]
+[node name="ColorRect11" type="ColorRect" parent="VBoxContainer/PanelContainer/MapTileGrid"]
 custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
 color = Color(0.099986, 0.099986, 0.099986, 1)
 
-[node name="ColorRect12" type="ColorRect" parent="PanelContainer/MapTileGrid"]
+[node name="ColorRect12" type="ColorRect" parent="VBoxContainer/PanelContainer/MapTileGrid"]
 custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
 color = Color(0.099986, 0.099986, 0.099986, 1)
 
-[node name="ColorRect13" type="ColorRect" parent="PanelContainer/MapTileGrid"]
+[node name="ColorRect13" type="ColorRect" parent="VBoxContainer/PanelContainer/MapTileGrid"]
 custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
 color = Color(0.099986, 0.099986, 0.099986, 1)
 
-[node name="ColorRect14" type="ColorRect" parent="PanelContainer/MapTileGrid"]
+[node name="ColorRect14" type="ColorRect" parent="VBoxContainer/PanelContainer/MapTileGrid"]
 custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
 color = Color(0.099986, 0.099986, 0.099986, 1)
 
-[node name="ColorRect15" type="ColorRect" parent="PanelContainer/MapTileGrid"]
+[node name="ColorRect15" type="ColorRect" parent="VBoxContainer/PanelContainer/MapTileGrid"]
 custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
 color = Color(0.099986, 0.099986, 0.099986, 1)
 
-[node name="ColorRect16" type="ColorRect" parent="PanelContainer/MapTileGrid"]
+[node name="ColorRect16" type="ColorRect" parent="VBoxContainer/PanelContainer/MapTileGrid"]
 custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
 color = Color(0.099986, 0.099986, 0.099986, 1)
 
-[node name="ColorRect17" type="ColorRect" parent="PanelContainer/MapTileGrid"]
+[node name="ColorRect17" type="ColorRect" parent="VBoxContainer/PanelContainer/MapTileGrid"]
 custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
 color = Color(0.099986, 0.099986, 0.099986, 1)
 
-[node name="ColorRect18" type="ColorRect" parent="PanelContainer/MapTileGrid"]
+[node name="ColorRect18" type="ColorRect" parent="VBoxContainer/PanelContainer/MapTileGrid"]
 custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
 color = Color(0.099986, 0.099986, 0.099986, 1)
 
-[node name="ColorRect19" type="ColorRect" parent="PanelContainer/MapTileGrid"]
+[node name="ColorRect19" type="ColorRect" parent="VBoxContainer/PanelContainer/MapTileGrid"]
 custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
 color = Color(0.099986, 0.099986, 0.099986, 1)
 
-[node name="ColorRect20" type="ColorRect" parent="PanelContainer/MapTileGrid"]
+[node name="ColorRect20" type="ColorRect" parent="VBoxContainer/PanelContainer/MapTileGrid"]
 custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
 color = Color(0.099986, 0.099986, 0.099986, 1)
 
-[node name="ColorRect21" type="ColorRect" parent="PanelContainer/MapTileGrid"]
+[node name="ColorRect21" type="ColorRect" parent="VBoxContainer/PanelContainer/MapTileGrid"]
 custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
 color = Color(0.099986, 0.099986, 0.099986, 1)
 
-[node name="ColorRect22" type="ColorRect" parent="PanelContainer/MapTileGrid"]
+[node name="ColorRect22" type="ColorRect" parent="VBoxContainer/PanelContainer/MapTileGrid"]
 custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
 color = Color(0.099986, 0.099986, 0.099986, 1)
 
-[node name="ColorRect23" type="ColorRect" parent="PanelContainer/MapTileGrid"]
+[node name="ColorRect23" type="ColorRect" parent="VBoxContainer/PanelContainer/MapTileGrid"]
 custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
 color = Color(0.099986, 0.099986, 0.099986, 1)
 
-[node name="ColorRect24" type="ColorRect" parent="PanelContainer/MapTileGrid"]
+[node name="ColorRect24" type="ColorRect" parent="VBoxContainer/PanelContainer/MapTileGrid"]
 custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
 color = Color(0.099986, 0.099986, 0.099986, 1)
 
-[node name="ColorRect25" type="ColorRect" parent="PanelContainer/MapTileGrid"]
+[node name="ColorRect25" type="ColorRect" parent="VBoxContainer/PanelContainer/MapTileGrid"]
 custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
 color = Color(0.099986, 0.099986, 0.099986, 1)
 
-[node name="ColorRect26" type="ColorRect" parent="PanelContainer/MapTileGrid"]
+[node name="ColorRect26" type="ColorRect" parent="VBoxContainer/PanelContainer/MapTileGrid"]
 custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
 color = Color(0.099986, 0.099986, 0.099986, 1)
 
-[node name="ColorRect27" type="ColorRect" parent="PanelContainer/MapTileGrid"]
+[node name="ColorRect27" type="ColorRect" parent="VBoxContainer/PanelContainer/MapTileGrid"]
 custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
 color = Color(0.099986, 0.099986, 0.099986, 1)
 
-[node name="ColorRect28" type="ColorRect" parent="PanelContainer/MapTileGrid"]
+[node name="ColorRect28" type="ColorRect" parent="VBoxContainer/PanelContainer/MapTileGrid"]
 custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
 color = Color(0.099986, 0.099986, 0.099986, 1)
 
-[node name="ColorRect29" type="ColorRect" parent="PanelContainer/MapTileGrid"]
+[node name="ColorRect29" type="ColorRect" parent="VBoxContainer/PanelContainer/MapTileGrid"]
 custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
 color = Color(0.099986, 0.099986, 0.099986, 1)
 
-[node name="ColorRect30" type="ColorRect" parent="PanelContainer/MapTileGrid"]
+[node name="ColorRect30" type="ColorRect" parent="VBoxContainer/PanelContainer/MapTileGrid"]
 custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
 color = Color(0.099986, 0.099986, 0.099986, 1)
 
-[node name="ColorRect31" type="ColorRect" parent="PanelContainer/MapTileGrid"]
+[node name="ColorRect31" type="ColorRect" parent="VBoxContainer/PanelContainer/MapTileGrid"]
 custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
 color = Color(0.099986, 0.099986, 0.099986, 1)
 
-[node name="ColorRect32" type="ColorRect" parent="PanelContainer/MapTileGrid"]
+[node name="ColorRect32" type="ColorRect" parent="VBoxContainer/PanelContainer/MapTileGrid"]
 custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
 color = Color(0.099986, 0.099986, 0.099986, 1)
 
-[node name="ColorRect33" type="ColorRect" parent="PanelContainer/MapTileGrid"]
+[node name="ColorRect33" type="ColorRect" parent="VBoxContainer/PanelContainer/MapTileGrid"]
 custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
 color = Color(0.099986, 0.099986, 0.099986, 1)
 
-[node name="ColorRect34" type="ColorRect" parent="PanelContainer/MapTileGrid"]
+[node name="ColorRect34" type="ColorRect" parent="VBoxContainer/PanelContainer/MapTileGrid"]
 custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
 color = Color(0.099986, 0.099986, 0.099986, 1)
 
-[node name="ColorRect35" type="ColorRect" parent="PanelContainer/MapTileGrid"]
+[node name="ColorRect35" type="ColorRect" parent="VBoxContainer/PanelContainer/MapTileGrid"]
 custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
 color = Color(0.099986, 0.099986, 0.099986, 1)
 
-[node name="ColorRect36" type="ColorRect" parent="PanelContainer/MapTileGrid"]
+[node name="ColorRect36" type="ColorRect" parent="VBoxContainer/PanelContainer/MapTileGrid"]
 custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
 color = Color(0.099986, 0.099986, 0.099986, 1)
 
-[node name="ColorRect37" type="ColorRect" parent="PanelContainer/MapTileGrid"]
+[node name="ColorRect37" type="ColorRect" parent="VBoxContainer/PanelContainer/MapTileGrid"]
 custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
 color = Color(0.099986, 0.099986, 0.099986, 1)
 
-[node name="ColorRect38" type="ColorRect" parent="PanelContainer/MapTileGrid"]
+[node name="ColorRect38" type="ColorRect" parent="VBoxContainer/PanelContainer/MapTileGrid"]
 custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
 color = Color(0.099986, 0.099986, 0.099986, 1)
 
-[node name="ColorRect39" type="ColorRect" parent="PanelContainer/MapTileGrid"]
+[node name="ColorRect39" type="ColorRect" parent="VBoxContainer/PanelContainer/MapTileGrid"]
 custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
 color = Color(0.099986, 0.099986, 0.099986, 1)
 
-[node name="ColorRect40" type="ColorRect" parent="PanelContainer/MapTileGrid"]
+[node name="ColorRect40" type="ColorRect" parent="VBoxContainer/PanelContainer/MapTileGrid"]
 custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
 color = Color(0.099986, 0.099986, 0.099986, 1)
 
-[node name="ColorRect41" type="ColorRect" parent="PanelContainer/MapTileGrid"]
+[node name="ColorRect41" type="ColorRect" parent="VBoxContainer/PanelContainer/MapTileGrid"]
 custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
 color = Color(0.099986, 0.099986, 0.099986, 1)
 
-[node name="ColorRect42" type="ColorRect" parent="PanelContainer/MapTileGrid"]
+[node name="ColorRect42" type="ColorRect" parent="VBoxContainer/PanelContainer/MapTileGrid"]
 custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
 color = Color(0.099986, 0.099986, 0.099986, 1)
 
-[node name="ColorRect43" type="ColorRect" parent="PanelContainer/MapTileGrid"]
+[node name="ColorRect43" type="ColorRect" parent="VBoxContainer/PanelContainer/MapTileGrid"]
 custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
 color = Color(0.099986, 0.099986, 0.099986, 1)
 
-[node name="ColorRect44" type="ColorRect" parent="PanelContainer/MapTileGrid"]
+[node name="ColorRect44" type="ColorRect" parent="VBoxContainer/PanelContainer/MapTileGrid"]
 custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
 color = Color(0.099986, 0.099986, 0.099986, 1)
 
-[node name="ColorRect45" type="ColorRect" parent="PanelContainer/MapTileGrid"]
+[node name="ColorRect45" type="ColorRect" parent="VBoxContainer/PanelContainer/MapTileGrid"]
 custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
 color = Color(0.099986, 0.099986, 0.099986, 1)
 
-[node name="ColorRect46" type="ColorRect" parent="PanelContainer/MapTileGrid"]
+[node name="ColorRect46" type="ColorRect" parent="VBoxContainer/PanelContainer/MapTileGrid"]
 custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
 color = Color(0.099986, 0.099986, 0.099986, 1)
 
-[node name="ColorRect47" type="ColorRect" parent="PanelContainer/MapTileGrid"]
+[node name="ColorRect47" type="ColorRect" parent="VBoxContainer/PanelContainer/MapTileGrid"]
 custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
 color = Color(0.099986, 0.099986, 0.099986, 1)
 
-[node name="ColorRect48" type="ColorRect" parent="PanelContainer/MapTileGrid"]
+[node name="ColorRect48" type="ColorRect" parent="VBoxContainer/PanelContainer/MapTileGrid"]
 custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
 color = Color(0.099986, 0.099986, 0.099986, 1)
 
-[node name="ColorRect49" type="ColorRect" parent="PanelContainer/MapTileGrid"]
+[node name="ColorRect49" type="ColorRect" parent="VBoxContainer/PanelContainer/MapTileGrid"]
 custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
 color = Color(0.099986, 0.099986, 0.099986, 1)
 
-[node name="ColorRect50" type="ColorRect" parent="PanelContainer/MapTileGrid"]
+[node name="ColorRect50" type="ColorRect" parent="VBoxContainer/PanelContainer/MapTileGrid"]
 custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
 color = Color(0.099986, 0.099986, 0.099986, 1)
 
-[node name="ColorRect51" type="ColorRect" parent="PanelContainer/MapTileGrid"]
+[node name="ColorRect51" type="ColorRect" parent="VBoxContainer/PanelContainer/MapTileGrid"]
 custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
 color = Color(0.099986, 0.099986, 0.099986, 1)
 
-[node name="ColorRect52" type="ColorRect" parent="PanelContainer/MapTileGrid"]
+[node name="ColorRect52" type="ColorRect" parent="VBoxContainer/PanelContainer/MapTileGrid"]
 custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
 color = Color(0.099986, 0.099986, 0.099986, 1)
 
-[node name="ColorRect53" type="ColorRect" parent="PanelContainer/MapTileGrid"]
+[node name="ColorRect53" type="ColorRect" parent="VBoxContainer/PanelContainer/MapTileGrid"]
 custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
 color = Color(0.099986, 0.099986, 0.099986, 1)
 
-[node name="ColorRect54" type="ColorRect" parent="PanelContainer/MapTileGrid"]
+[node name="ColorRect54" type="ColorRect" parent="VBoxContainer/PanelContainer/MapTileGrid"]
 custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
 color = Color(0.099986, 0.099986, 0.099986, 1)
 
-[node name="ColorRect55" type="ColorRect" parent="PanelContainer/MapTileGrid"]
+[node name="ColorRect55" type="ColorRect" parent="VBoxContainer/PanelContainer/MapTileGrid"]
 custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
 color = Color(0.099986, 0.099986, 0.099986, 1)
 
-[node name="ColorRect56" type="ColorRect" parent="PanelContainer/MapTileGrid"]
+[node name="ColorRect56" type="ColorRect" parent="VBoxContainer/PanelContainer/MapTileGrid"]
 custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
 color = Color(0.099986, 0.099986, 0.099986, 1)
 
-[node name="ColorRect57" type="ColorRect" parent="PanelContainer/MapTileGrid"]
+[node name="ColorRect57" type="ColorRect" parent="VBoxContainer/PanelContainer/MapTileGrid"]
 custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
 color = Color(0.099986, 0.099986, 0.099986, 1)
 
-[node name="ColorRect58" type="ColorRect" parent="PanelContainer/MapTileGrid"]
+[node name="ColorRect58" type="ColorRect" parent="VBoxContainer/PanelContainer/MapTileGrid"]
 custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
 color = Color(0.099986, 0.099986, 0.099986, 1)
 
-[node name="ColorRect59" type="ColorRect" parent="PanelContainer/MapTileGrid"]
+[node name="ColorRect59" type="ColorRect" parent="VBoxContainer/PanelContainer/MapTileGrid"]
 custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
 color = Color(0.099986, 0.099986, 0.099986, 1)
 
-[node name="ColorRect60" type="ColorRect" parent="PanelContainer/MapTileGrid"]
+[node name="ColorRect60" type="ColorRect" parent="VBoxContainer/PanelContainer/MapTileGrid"]
 custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
 color = Color(0.099986, 0.099986, 0.099986, 1)
 
-[node name="ColorRect61" type="ColorRect" parent="PanelContainer/MapTileGrid"]
+[node name="ColorRect61" type="ColorRect" parent="VBoxContainer/PanelContainer/MapTileGrid"]
 custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
 color = Color(0.099986, 0.099986, 0.099986, 1)
 
-[node name="ColorRect62" type="ColorRect" parent="PanelContainer/MapTileGrid"]
+[node name="ColorRect62" type="ColorRect" parent="VBoxContainer/PanelContainer/MapTileGrid"]
 custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
 color = Color(0.099986, 0.099986, 0.099986, 1)
 
-[node name="ColorRect63" type="ColorRect" parent="PanelContainer/MapTileGrid"]
+[node name="ColorRect63" type="ColorRect" parent="VBoxContainer/PanelContainer/MapTileGrid"]
 custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
 color = Color(0.099986, 0.099986, 0.099986, 1)
 
-[node name="ColorRect64" type="ColorRect" parent="PanelContainer/MapTileGrid"]
+[node name="ColorRect64" type="ColorRect" parent="VBoxContainer/PanelContainer/MapTileGrid"]
 custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
 color = Color(0.099986, 0.099986, 0.099986, 1)
 
-[node name="ColorRect65" type="ColorRect" parent="PanelContainer/MapTileGrid"]
+[node name="ColorRect65" type="ColorRect" parent="VBoxContainer/PanelContainer/MapTileGrid"]
 custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
 color = Color(0.099986, 0.099986, 0.099986, 1)
 
-[node name="ColorRect66" type="ColorRect" parent="PanelContainer/MapTileGrid"]
+[node name="ColorRect66" type="ColorRect" parent="VBoxContainer/PanelContainer/MapTileGrid"]
 custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
 color = Color(0.099986, 0.099986, 0.099986, 1)
 
-[node name="ColorRect67" type="ColorRect" parent="PanelContainer/MapTileGrid"]
+[node name="ColorRect67" type="ColorRect" parent="VBoxContainer/PanelContainer/MapTileGrid"]
 custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
 color = Color(0.099986, 0.099986, 0.099986, 1)
 
-[node name="ColorRect68" type="ColorRect" parent="PanelContainer/MapTileGrid"]
+[node name="ColorRect68" type="ColorRect" parent="VBoxContainer/PanelContainer/MapTileGrid"]
 custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
 color = Color(0.099986, 0.099986, 0.099986, 1)
 
-[node name="ColorRect69" type="ColorRect" parent="PanelContainer/MapTileGrid"]
+[node name="ColorRect69" type="ColorRect" parent="VBoxContainer/PanelContainer/MapTileGrid"]
 custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
 color = Color(0.099986, 0.099986, 0.099986, 1)
 
-[node name="ColorRect70" type="ColorRect" parent="PanelContainer/MapTileGrid"]
+[node name="ColorRect70" type="ColorRect" parent="VBoxContainer/PanelContainer/MapTileGrid"]
 custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
 color = Color(0.099986, 0.099986, 0.099986, 1)
 
-[node name="HBoxContainer" type="HBoxContainer" parent="."]
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
 layout_mode = 2
 theme_override_constants/separation = 1
 alignment = 1
 
-[node name="BackButton" parent="HBoxContainer" instance=ExtResource("1_7hl7v")]
+[node name="BackButton" parent="VBoxContainer/HBoxContainer" instance=ExtResource("1_7hl7v")]
 layout_mode = 2
-shortcut = SubResource("Shortcut_ro4xi")
+shortcut = SubResource("Shortcut_6s7of")
 text = "Back"
 input_action_name = "menu_back"
 
-[node name="RecenterButton" parent="HBoxContainer" instance=ExtResource("1_7hl7v")]
+[node name="RecenterButton" parent="VBoxContainer/HBoxContainer" instance=ExtResource("1_7hl7v")]
 layout_mode = 2
-shortcut = SubResource("Shortcut_rlpal")
+shortcut = SubResource("Shortcut_ro4xi")
 text = "My Position"
 input_action_name = "info"
 
-[node name="ControlDisplayButton" parent="HBoxContainer" instance=ExtResource("1_7hl7v")]
+[node name="ControlDisplayButton" parent="VBoxContainer/HBoxContainer" instance=ExtResource("1_7hl7v")]
 layout_mode = 2
-shortcut = SubResource("Shortcut_pnn20")
+shortcut = SubResource("Shortcut_rlpal")
 text = "Start Travel"
 input_action_name = "interact"
 
-[node name="Blur" type="Sprite2D" parent="."]
+[node name="Blur" type="ColorRect" parent="."]
 z_index = -1
 material = ExtResource("3_ro4xi")
-position = Vector2(6, 6)
-scale = Vector2(10000, 10000)
-texture = ExtResource("4_rlpal")
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -49999.5
+offset_top = -49999.5
+offset_right = 49999.5
+offset_bottom = 49999.5
+grow_horizontal = 2
+grow_vertical = 2
 
-[connection signal="pressed" from="HBoxContainer/BackButton" to="." method="close"]
+[connection signal="pressed" from="VBoxContainer/HBoxContainer/BackButton" to="." method="close"]

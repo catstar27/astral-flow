@@ -1,88 +1,136 @@
-[gd_scene load_steps=6 format=3 uid="uid://blpc84uugpfvi"]
+[gd_scene load_steps=9 format=3 uid="uid://blpc84uugpfvi"]
 
 [ext_resource type="Script" uid="uid://4mrbb4gavqmq" path="res://gui/party_display.gd" id="1_8qkei"]
 [ext_resource type="PackedScene" uid="uid://376pccgciomv" path="res://gui/quick_info.tscn" id="2_lrwt7"]
 [ext_resource type="Theme" uid="uid://cxq4wi2s4byf1" path="res://textures/gui/themes/custom_theme_alt.tres" id="2_ti3u5"]
+[ext_resource type="PackedScene" uid="uid://dleye7m8gjxs0" path="res://gui/components/control_display_button.tscn" id="3_sw3kj"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_sw3kj"]
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_frj83"]
+[sub_resource type="InputEventKey" id="InputEventKey_sw3kj"]
+device = -1
+physical_keycode = 4194305
 
-[node name="PartyDisplay" type="VBoxContainer"]
+[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_frj83"]
+device = -1
+button_index = 1
+pressed = true
+
+[sub_resource type="Shortcut" id="Shortcut_sw3kj"]
+events = [SubResource("InputEventKey_sw3kj"), SubResource("InputEventJoypadButton_frj83")]
+
+[node name="PartyDisplay" type="Control" node_paths=PackedStringArray("party_quick_info")]
+layout_mode = 3
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -195.0
+offset_top = 49.0
+offset_right = -195.0
+offset_bottom = 49.0
+grow_horizontal = 0
+script = ExtResource("1_8qkei")
+party_quick_info = [NodePath("PartyButtonContainer/Party1/QuickInfo"), NodePath("PartyButtonContainer/Party2/QuickInfo"), NodePath("PartyButtonContainer/Party3/QuickInfo"), NodePath("PartyButtonContainer/Party4/QuickInfo")]
+
+[node name="PartyButtonContainer" type="VBoxContainer" parent="."]
+unique_name_in_owner = true
+layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
-theme_override_constants/separation = 1
-script = ExtResource("1_8qkei")
+alignment = 2
 
-[node name="Party1" type="Button" parent="."]
+[node name="Party1" type="Button" parent="PartyButtonContainer"]
 custom_minimum_size = Vector2(194, 98)
 layout_mode = 2
 size_flags_horizontal = 8
 theme = ExtResource("2_ti3u5")
 
-[node name="QuickInfo" parent="Party1" instance=ExtResource("2_lrwt7")]
+[node name="QuickInfo" parent="PartyButtonContainer/Party1" instance=ExtResource("2_lrwt7")]
 z_index = 0
 layout_mode = 0
 offset_left = 6.0
 offset_top = 6.0
 offset_right = 197.0
 offset_bottom = 104.0
+mouse_filter = 1
 theme_override_styles/panel = SubResource("StyleBoxEmpty_sw3kj")
 manage_position = false
 animated = false
 
-[node name="Party2" type="Button" parent="."]
+[node name="Party2" type="Button" parent="PartyButtonContainer"]
 custom_minimum_size = Vector2(194, 98)
 layout_mode = 2
 size_flags_horizontal = 8
 theme = ExtResource("2_ti3u5")
 
-[node name="QuickInfo" parent="Party2" instance=ExtResource("2_lrwt7")]
+[node name="QuickInfo" parent="PartyButtonContainer/Party2" instance=ExtResource("2_lrwt7")]
 z_index = 0
 layout_mode = 0
 offset_left = 6.0
 offset_top = 6.0
 offset_right = 197.0
 offset_bottom = 104.0
-theme_override_styles/panel = SubResource("StyleBoxEmpty_frj83")
+mouse_filter = 1
+theme_override_styles/panel = SubResource("StyleBoxEmpty_sw3kj")
 manage_position = false
 animated = false
 
-[node name="Party3" type="Button" parent="."]
+[node name="Party3" type="Button" parent="PartyButtonContainer"]
 custom_minimum_size = Vector2(194, 98)
 layout_mode = 2
 size_flags_horizontal = 8
 theme = ExtResource("2_ti3u5")
 
-[node name="QuickInfo" parent="Party3" instance=ExtResource("2_lrwt7")]
+[node name="QuickInfo" parent="PartyButtonContainer/Party3" instance=ExtResource("2_lrwt7")]
 z_index = 0
 layout_mode = 0
 offset_left = 6.0
 offset_top = 6.0
 offset_right = 197.0
 offset_bottom = 104.0
-theme_override_styles/panel = SubResource("StyleBoxEmpty_frj83")
+mouse_filter = 1
+theme_override_styles/panel = SubResource("StyleBoxEmpty_sw3kj")
 manage_position = false
 animated = false
 
-[node name="Party4" type="Button" parent="."]
+[node name="Party4" type="Button" parent="PartyButtonContainer"]
 custom_minimum_size = Vector2(194, 98)
 layout_mode = 2
 size_flags_horizontal = 8
 theme = ExtResource("2_ti3u5")
 
-[node name="QuickInfo" parent="Party4" instance=ExtResource("2_lrwt7")]
+[node name="QuickInfo" parent="PartyButtonContainer/Party4" instance=ExtResource("2_lrwt7")]
 z_index = 0
 layout_mode = 0
 offset_left = 6.0
 offset_top = 6.0
 offset_right = 197.0
 offset_bottom = 104.0
-theme_override_styles/panel = SubResource("StyleBoxEmpty_frj83")
+mouse_filter = 1
+theme_override_styles/panel = SubResource("StyleBoxEmpty_sw3kj")
 manage_position = false
 animated = false
 
-[connection signal="updated" from="Party1/QuickInfo" to="." method="update_display"]
-[connection signal="updated" from="Party2/QuickInfo" to="." method="update_display"]
-[connection signal="updated" from="Party3/QuickInfo" to="." method="update_display"]
-[connection signal="updated" from="Party4/QuickInfo" to="." method="update_display"]
+[node name="ExitMenuButton" parent="PartyButtonContainer" instance=ExtResource("3_sw3kj")]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 8
+focus_mode = 2
+theme = ExtResource("2_ti3u5")
+shortcut = SubResource("Shortcut_sw3kj")
+text = "Back"
+input_action_name = "menu_back"
+
+[connection signal="button_down" from="PartyButtonContainer/Party1" to="." method="_on_party_1_button_down"]
+[connection signal="button_up" from="PartyButtonContainer/Party1" to="." method="_on_party_1_button_up"]
+[connection signal="updated" from="PartyButtonContainer/Party1/QuickInfo" to="." method="update_display"]
+[connection signal="button_down" from="PartyButtonContainer/Party2" to="." method="_on_party_2_button_down"]
+[connection signal="button_up" from="PartyButtonContainer/Party2" to="." method="_on_party_2_button_up"]
+[connection signal="updated" from="PartyButtonContainer/Party2/QuickInfo" to="." method="update_display"]
+[connection signal="button_down" from="PartyButtonContainer/Party3" to="." method="_on_party_3_button_down"]
+[connection signal="button_up" from="PartyButtonContainer/Party3" to="." method="_on_party_3_button_up"]
+[connection signal="updated" from="PartyButtonContainer/Party3/QuickInfo" to="." method="update_display"]
+[connection signal="button_down" from="PartyButtonContainer/Party4" to="." method="_on_party_4_button_down"]
+[connection signal="button_up" from="PartyButtonContainer/Party4" to="." method="_on_party_4_button_up"]
+[connection signal="updated" from="PartyButtonContainer/Party4/QuickInfo" to="." method="update_display"]
+[connection signal="pressed" from="PartyButtonContainer/ExitMenuButton" to="." method="close_menu"]

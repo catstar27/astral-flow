@@ -1,75 +1,73 @@
-[gd_scene load_steps=9 format=3 uid="uid://bkt6ueeylogtc"]
+[gd_scene load_steps=8 format=3 uid="uid://bkt6ueeylogtc"]
 
 [ext_resource type="Script" uid="uid://1yju7cyvj754" path="res://gui/quests/quest_log.gd" id="1_47374"]
 [ext_resource type="PackedScene" uid="uid://dleye7m8gjxs0" path="res://gui/components/control_display_button.tscn" id="2_sxah1"]
 [ext_resource type="PackedScene" uid="uid://c6kh3esjn5743" path="res://gui/tab_menu.tscn" id="3_l4r7o"]
 [ext_resource type="Material" uid="uid://dessed1x8jslv" path="res://materials/blur_material.tres" id="5_2eb54"]
-[ext_resource type="Texture2D" uid="uid://ceeo5gnqb2rcr" path="res://textures/gui/foreground.png" id="6_l4r7o"]
 
-[sub_resource type="InputEventKey" id="InputEventKey_7hl7v"]
+[sub_resource type="InputEventKey" id="InputEventKey_sw3kj"]
 device = -1
 physical_keycode = 4194305
 
-[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_7312b"]
+[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_frj83"]
 device = -1
 button_index = 1
 pressed = true
 
-[sub_resource type="Shortcut" id="Shortcut_aa6ol"]
-events = [SubResource("InputEventKey_7hl7v"), SubResource("InputEventJoypadButton_7312b")]
+[sub_resource type="Shortcut" id="Shortcut_47374"]
+events = [SubResource("InputEventKey_sw3kj"), SubResource("InputEventJoypadButton_frj83")]
 
-[node name="QuestLog" type="PanelContainer"]
+[node name="QuestLog" type="Control"]
+layout_mode = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -336.0
+offset_top = -68.5
+offset_right = 336.0
+offset_bottom = 68.5
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_47374")
+
+[node name="Panel" type="PanelContainer" parent="."]
 process_mode = 3
 z_index = 2
 custom_minimum_size = Vector2(400, 0)
-offset_right = 40.0
-offset_bottom = 40.0
-script = ExtResource("1_47374")
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -342.0
+offset_top = -74.5
+offset_right = 342.0
+offset_bottom = 74.5
+grow_horizontal = 2
+grow_vertical = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="."]
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel"]
 layout_mode = 2
 alignment = 1
 
-[node name="QuestTrackerContainer" type="VBoxContainer" parent="HBoxContainer"]
-custom_minimum_size = Vector2(300, 0)
+[node name="QuestListContainer" type="VBoxContainer" parent="Panel/HBoxContainer"]
 layout_mode = 2
 
-[node name="NameIconContainer" type="HBoxContainer" parent="HBoxContainer/QuestTrackerContainer"]
-layout_mode = 2
-alignment = 1
-
-[node name="QuestIcon" type="TextureRect" parent="HBoxContainer/QuestTrackerContainer/NameIconContainer"]
-unique_name_in_owner = true
-layout_mode = 2
-
-[node name="QuestName" type="Label" parent="HBoxContainer/QuestTrackerContainer/NameIconContainer"]
-unique_name_in_owner = true
-layout_mode = 2
-text = "Quest Name"
-
-[node name="ObjectiveContainer" type="VBoxContainer" parent="HBoxContainer/QuestTrackerContainer"]
-unique_name_in_owner = true
-layout_mode = 2
-
-[node name="Divider" type="ColorRect" parent="HBoxContainer"]
-custom_minimum_size = Vector2(4, 0)
-layout_mode = 2
-color = Color(0.114897, 0.114897, 0.114897, 1)
-
-[node name="QuestListContainer" type="VBoxContainer" parent="HBoxContainer"]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="HBoxContainer/QuestListContainer"]
+[node name="Label" type="Label" parent="Panel/HBoxContainer/QuestListContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
 text = "Quests"
 
-[node name="TabMenu" parent="HBoxContainer/QuestListContainer" instance=ExtResource("3_l4r7o")]
+[node name="TabMenu" parent="Panel/HBoxContainer/QuestListContainer" instance=ExtResource("3_l4r7o")]
 custom_minimum_size = Vector2(360, 0)
 layout_mode = 2
 size_flags_horizontal = 4
+min_tabs = 3
 
-[node name="Active" type="ScrollContainer" parent="HBoxContainer/QuestListContainer/TabMenu"]
+[node name="Active" type="ScrollContainer" parent="Panel/HBoxContainer/QuestListContainer/TabMenu"]
 visible = false
 custom_minimum_size = Vector2(0, 252)
 layout_mode = 2
@@ -78,15 +76,15 @@ follow_focus = true
 horizontal_scroll_mode = 0
 vertical_scroll_mode = 4
 
-[node name="ActiveQuestList" type="VBoxContainer" parent="HBoxContainer/QuestListContainer/TabMenu/Active"]
+[node name="ActiveQuestList" type="VBoxContainer" parent="Panel/HBoxContainer/QuestListContainer/TabMenu/Active"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="HBoxContainer/QuestListContainer/TabMenu/Active/ActiveQuestList"]
+[node name="Label" type="Label" parent="Panel/HBoxContainer/QuestListContainer/TabMenu/Active/ActiveQuestList"]
 layout_mode = 2
 text = "
 No Active Quests"
 
-[node name="Complete" type="ScrollContainer" parent="HBoxContainer/QuestListContainer/TabMenu"]
+[node name="Complete" type="ScrollContainer" parent="Panel/HBoxContainer/QuestListContainer/TabMenu"]
 visible = false
 custom_minimum_size = Vector2(0, 252)
 layout_mode = 2
@@ -95,28 +93,63 @@ follow_focus = true
 horizontal_scroll_mode = 0
 vertical_scroll_mode = 4
 
-[node name="CompleteQuestList" type="VBoxContainer" parent="HBoxContainer/QuestListContainer/TabMenu/Complete"]
+[node name="CompleteQuestList" type="VBoxContainer" parent="Panel/HBoxContainer/QuestListContainer/TabMenu/Complete"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="HBoxContainer/QuestListContainer/TabMenu/Complete/CompleteQuestList"]
+[node name="Label" type="Label" parent="Panel/HBoxContainer/QuestListContainer/TabMenu/Complete/CompleteQuestList"]
 layout_mode = 2
 text = "
 No Complete Quests"
 
-[node name="ExitButton" parent="HBoxContainer/QuestListContainer" instance=ExtResource("2_sxah1")]
+[node name="ExitButton" parent="Panel/HBoxContainer/QuestListContainer" instance=ExtResource("2_sxah1")]
 layout_mode = 2
 size_flags_horizontal = 4
-shortcut = SubResource("Shortcut_aa6ol")
+focus_mode = 2
+shortcut = SubResource("Shortcut_47374")
 text = "Back"
 input_action_name = "menu_back"
 
-[node name="Blur" type="Sprite2D" parent="."]
+[node name="Divider" type="ColorRect" parent="Panel/HBoxContainer"]
+custom_minimum_size = Vector2(4, 0)
+layout_mode = 2
+color = Color(0.114897, 0.114897, 0.114897, 1)
+
+[node name="QuestTrackerContainer" type="VBoxContainer" parent="Panel/HBoxContainer"]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+
+[node name="NameIconContainer" type="HBoxContainer" parent="Panel/HBoxContainer/QuestTrackerContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="QuestIcon" type="TextureRect" parent="Panel/HBoxContainer/QuestTrackerContainer/NameIconContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="QuestName" type="Label" parent="Panel/HBoxContainer/QuestTrackerContainer/NameIconContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Quest Name"
+
+[node name="ObjectiveContainer" type="VBoxContainer" parent="Panel/HBoxContainer/QuestTrackerContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Blur" type="ColorRect" parent="."]
 z_index = -1
 material = ExtResource("5_2eb54")
-position = Vector2(6, 6)
-scale = Vector2(10000, 10000)
-texture = ExtResource("6_l4r7o")
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -49999.5
+offset_top = -49999.5
+offset_right = 49999.5
+offset_bottom = 49999.5
+grow_horizontal = 2
+grow_vertical = 2
 
-[connection signal="opened" from="." to="HBoxContainer/QuestListContainer/TabMenu" method="grab_focus_on_subtree"]
-[connection signal="tab_changed" from="HBoxContainer/QuestListContainer/TabMenu" to="." method="focus_current"]
-[connection signal="pressed" from="HBoxContainer/QuestListContainer/ExitButton" to="." method="close"]
+[connection signal="tab_changed" from="Panel/HBoxContainer/QuestListContainer/TabMenu" to="." method="focus_current"]
+[connection signal="pressed" from="Panel/HBoxContainer/QuestListContainer/ExitButton" to="." method="close"]

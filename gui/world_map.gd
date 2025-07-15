@@ -1,4 +1,4 @@
-extends VBoxContainer
+extends Control
 class_name WorldMap
 ## Represents the menu for the world map grid
 ##

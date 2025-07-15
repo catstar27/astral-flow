@@ -35,23 +35,6 @@ func change_info_box(requester: Control, origin: Vector2, text: String)->void:
 	info_box.position = origin
 	info_box.set_text(text)
 
-## Called when a submenu opens
-func submenu_opened()->void:
-	char_info.hide()
-	utility_menu.hide()
-	game_log.get_parent().hide()
-	sequence_display_visible = sequence_display.visible
-	sequence_display.hide()
-
-## Called when a submenu closes
-func submenu_closed()->void:
-	char_info.show()
-	utility_menu.show()
-	if log_timer.time_left > 0:
-		game_log.get_parent().show()
-	if sequence_display_visible:
-		sequence_display.show()
-
 ## Sets the character tracked by CharInfo display
 func set_char_info(selected: Node2D)->void:
 	if selected is not Character || selected == null:

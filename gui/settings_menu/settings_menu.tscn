@@ -1,10 +1,9 @@
-[gd_scene load_steps=22 format=3 uid="uid://djhm61nx72b66"]
+[gd_scene load_steps=21 format=3 uid="uid://djhm61nx72b66"]
 
 [ext_resource type="Theme" uid="uid://crcivs73grrf7" path="res://textures/gui/themes/custom_theme.tres" id="1_bfybv"]
 [ext_resource type="Material" uid="uid://dcq7n5qyt3hj0" path="res://materials/immaterial.tres" id="1_tvvdr"]
 [ext_resource type="Script" uid="uid://ml36010pk3w6" path="res://gui/settings_menu/settings_menu.gd" id="2_tpe0x"]
 [ext_resource type="Material" uid="uid://dessed1x8jslv" path="res://materials/blur_material.tres" id="3_xurln"]
-[ext_resource type="Texture2D" uid="uid://ceeo5gnqb2rcr" path="res://textures/gui/foreground.png" id="4_50f23"]
 [ext_resource type="PackedScene" uid="uid://dleye7m8gjxs0" path="res://gui/components/control_display_button.tscn" id="6_bo706"]
 [ext_resource type="PackedScene" uid="uid://c6kh3esjn5743" path="res://gui/tab_menu.tscn" id="6_y8bv3"]
 [ext_resource type="Texture2D" uid="uid://bxhwtcxdgtkx6" path="res://textures/gui/keyboard_key.png" id="7_jf5tn"]
@@ -38,17 +37,17 @@ pressed = true
 [sub_resource type="Shortcut" id="Shortcut_6q2hq"]
 events = [SubResource("InputEventKey_3v8ln"), SubResource("InputEventJoypadButton_nwud4")]
 
-[sub_resource type="InputEventKey" id="InputEventKey_gk0vu"]
+[sub_resource type="InputEventKey" id="InputEventKey_sw3kj"]
 device = -1
 physical_keycode = 4194305
 
-[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_3gu06"]
+[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_frj83"]
 device = -1
 button_index = 1
 pressed = true
 
 [sub_resource type="Shortcut" id="Shortcut_327te"]
-events = [SubResource("InputEventKey_gk0vu"), SubResource("InputEventJoypadButton_3gu06")]
+events = [SubResource("InputEventKey_sw3kj"), SubResource("InputEventJoypadButton_frj83")]
 
 [node name="SettingsMenu" type="Control"]
 material = ExtResource("1_tvvdr")
@@ -62,12 +61,6 @@ grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("1_bfybv")
 script = ExtResource("2_tpe0x")
-
-[node name="Blur" type="Sprite2D" parent="."]
-z_index = -1
-material = ExtResource("3_xurln")
-scale = Vector2(10000, 10000)
-texture = ExtResource("4_50f23")
 
 [node name="SettingsContainer" type="VBoxContainer" parent="."]
 use_parent_material = true
@@ -135,6 +128,22 @@ size_flags_horizontal = 3
 shortcut = SubResource("Shortcut_327te")
 text = "Cancel"
 input_action_name = "menu_back"
+
+[node name="Blur" type="ColorRect" parent="."]
+z_index = -1
+material = ExtResource("3_xurln")
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -49999.5
+offset_top = -49999.5
+offset_right = 49999.5
+offset_bottom = 49999.5
+grow_horizontal = 2
+grow_vertical = 2
 
 [connection signal="pressed" from="SettingsContainer/ConfirmButtons/ConfirmButton2" to="." method="close_settings_menu"]
 [connection signal="pressed" from="SettingsContainer/ConfirmButtons/DefaultButton2" to="." method="default_settings"]

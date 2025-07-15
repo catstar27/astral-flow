@@ -38,7 +38,6 @@ func _ready() -> void:
 	EventBus.subscribe("MAKE_TEXT_INDICATOR", self, "create_text_indicator")
 	EventBus.subscribe("LOAD_MAP", self, "load_map")
 	EventBus.subscribe("LOAD_MAP_AT_ENTRANCE", self, "load_map_at_entrance")
-	EventBus.subscribe("DELOAD", self, "queue_free")
 	EventBus.subscribe("PAUSE", self, "pause")
 	EventBus.subscribe("UNPAUSE", self, "unpause")
 	EventBus.subscribe("VIDEO_SETTINGS_CHANGED", self, "set_video_settings")

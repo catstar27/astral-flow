@@ -1,4 +1,4 @@
-extends PanelContainer
+extends Control
 class_name QuestLog
 ## GUI element containing all active and completed quests
 
@@ -16,8 +16,8 @@ signal closed ## Emitted when the menu closes
 func _ready() -> void:
 	EventBus.subscribe("QUEST_LIST_UPDATE", self, "update_quest_list")
 	EventBus.subscribe("QUEST_TRACK", self, "update_tracked_quest")
-	active_quest_list = get_node("HBoxContainer/QuestListContainer/TabMenu/Active/ActiveQuestList")
-	complete_quest_list = get_node("HBoxContainer/QuestListContainer/TabMenu/Complete/CompleteQuestList")
+	active_quest_list = get_node("Panel/HBoxContainer/QuestListContainer/TabMenu/Active/ActiveQuestList")
+	complete_quest_list = get_node("Panel/HBoxContainer/QuestListContainer/TabMenu/Complete/CompleteQuestList")
 
 ## Grabs focus on the current button if possible
 func focus_current()->void:
@@ -25,9 +25,9 @@ func focus_current()->void:
 		return
 	if cur_button != null && cur_button.is_visible_in_tree():
 		cur_button.grab_focus()
-	elif active_quest_list.is_visible_in_tree():
+	elif active_quest_list.is_visible_in_tree() && active_quest_list.get_child_count() > 1:
 		active_quest_list.get_child(0).grab_focus()
-	else:
+	elif complete_quest_list.get_child_count() > 1:
 		complete_quest_list.get_child(0).grab_focus()
 
 ## Makes an objective label and returns it

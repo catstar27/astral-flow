@@ -95,6 +95,10 @@ func inventory_pressed()->void:
 func pause_pressed()->void:
 	pause_button_pressed.emit()
 
+## Grabs focus on the party button
+func focus_party()->void:
+	%Party.grab_focus()
+
 ## Grabs focus on the journal button
 func focus_journal()->void:
 	%Journal.grab_focus()

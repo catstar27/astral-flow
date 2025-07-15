@@ -1,0 +1,91 @@
+[gd_scene load_steps=5 format=3 uid="uid://e46u6ucc1flk"]
+
+[ext_resource type="PackedScene" uid="uid://c6kh3esjn5743" path="res://gui/tab_menu.tscn" id="1_tjhau"]
+[ext_resource type="Material" uid="uid://dessed1x8jslv" path="res://materials/blur_material.tres" id="2_iutca"]
+[ext_resource type="Texture2D" uid="uid://b3jluv54rfg24" path="res://textures/character/generic_portrait.png" id="2_j877r"]
+[ext_resource type="Texture2D" uid="uid://ceeo5gnqb2rcr" path="res://textures/gui/foreground.png" id="3_j877r"]
+
+[node name="CharacterSheet" type="VBoxContainer"]
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="TabMenu" parent="." instance=ExtResource("1_tjhau")]
+layout_mode = 2
+
+[node name="Stats" type="PanelContainer" parent="TabMenu"]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="TabMenu/Stats"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="TabMenu/Stats/VBoxContainer"]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="TabMenu/Stats/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="TabMenu/Stats/VBoxContainer/HBoxContainer/VBoxContainer" groups=["CharacterIcons"]]
+layout_mode = 2
+size_flags_horizontal = 4
+texture = ExtResource("2_j877r")
+stretch_mode = 4
+
+[node name="NameLabel" type="Label" parent="TabMenu/Stats/VBoxContainer/HBoxContainer/VBoxContainer" groups=["NameLabels"]]
+layout_mode = 2
+text = "Name Here"
+horizontal_alignment = 1
+
+[node name="Bio" type="PanelContainer" parent="TabMenu"]
+visible = false
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="TabMenu/Bio"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="TabMenu/Bio/VBoxContainer"]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="TabMenu/Bio/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="TabMenu/Bio/VBoxContainer/HBoxContainer/VBoxContainer" groups=["CharacterIcons"]]
+layout_mode = 2
+size_flags_horizontal = 4
+texture = ExtResource("2_j877r")
+stretch_mode = 4
+
+[node name="NameLabel" type="Label" parent="TabMenu/Bio/VBoxContainer/HBoxContainer/VBoxContainer" groups=["NameLabels"]]
+layout_mode = 2
+text = "Name Here"
+horizontal_alignment = 1
+
+[node name="Skills" type="PanelContainer" parent="TabMenu"]
+visible = false
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="TabMenu/Skills"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="TabMenu/Skills/VBoxContainer"]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="TabMenu/Skills/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="TabMenu/Skills/VBoxContainer/HBoxContainer/VBoxContainer" groups=["CharacterIcons"]]
+layout_mode = 2
+size_flags_horizontal = 4
+texture = ExtResource("2_j877r")
+stretch_mode = 4
+
+[node name="NameLabel" type="Label" parent="TabMenu/Skills/VBoxContainer/HBoxContainer/VBoxContainer" groups=["NameLabels"]]
+layout_mode = 2
+text = "Name Here"
+horizontal_alignment = 1
+
+[node name="Blur" type="Sprite2D" parent="."]
+z_index = -1
+material = ExtResource("2_iutca")
+position = Vector2(6, 6)
+scale = Vector2(10000, 10000)
+texture = ExtResource("3_j877r")

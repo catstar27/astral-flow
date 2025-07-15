@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://cejp7bpbfmkw"]
+[gd_scene load_steps=10 format=3 uid="uid://cejp7bpbfmkw"]
 
 [ext_resource type="Script" uid="uid://btvo5nimkcrmi" path="res://gui/utility_menu.gd" id="1_db426"]
 [ext_resource type="Material" uid="uid://dcq7n5qyt3hj0" path="res://materials/immaterial.tres" id="1_jr21q"]
@@ -19,18 +19,6 @@ pressed = true
 
 [sub_resource type="Shortcut" id="Shortcut_f8scv"]
 events = [SubResource("InputEventKey_f8scv"), SubResource("InputEventJoypadButton_4y04n")]
-
-[sub_resource type="InputEventKey" id="InputEventKey_7hl7v"]
-device = -1
-physical_keycode = 4194305
-
-[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_7312b"]
-device = -1
-button_index = 1
-pressed = true
-
-[sub_resource type="Shortcut" id="Shortcut_4y04n"]
-events = [SubResource("InputEventKey_7hl7v"), SubResource("InputEventJoypadButton_7312b")]
 
 [node name="UtilityMenu" type="Control"]
 material = ExtResource("1_jr21q")
@@ -62,19 +50,9 @@ input_action_name = "menu_right"
 [node name="PartyDisplay" parent="." instance=ExtResource("6_f8scv")]
 visible = false
 layout_mode = 1
-offset_left = -196.0
-offset_top = 49.0
-offset_right = -2.0
-offset_bottom = 490.0
-
-[node name="BackButton" parent="PartyDisplay" instance=ExtResource("2_lco6t")]
-layout_mode = 2
-size_flags_horizontal = 8
-focus_mode = 2
-theme = ExtResource("3_v0p8v")
-shortcut = SubResource("Shortcut_4y04n")
-text = "Back"
-input_action_name = "menu_back"
+offset_left = -960.0
+offset_right = -766.0
+offset_bottom = 441.0
 
 [node name="Info" type="VBoxContainer" parent="."]
 unique_name_in_owner = true
@@ -141,16 +119,14 @@ focus_previous = NodePath("../Inventory")
 theme_override_font_sizes/font_size = 16
 text = "Pause"
 
-[connection signal="closed" from="." to="PartyDisplay" method="shift_right"]
+[connection signal="closed" from="." to="PartyDisplay" method="close_menu"]
 [connection signal="closed" from="." to="Info/Party" method="release_focus"]
 [connection signal="closed" from="." to="Info/Journal" method="release_focus"]
 [connection signal="closed" from="." to="Info/Map" method="release_focus"]
 [connection signal="closed" from="." to="Info/Inventory" method="release_focus"]
-[connection signal="opened" from="." to="PartyDisplay" method="shift_left"]
 [connection signal="pressed" from="MenuButton" to="." method="toggle_menu"]
-[connection signal="pressed" from="PartyDisplay/BackButton" to="PartyDisplay" method="hide"]
-[connection signal="pressed" from="PartyDisplay/BackButton" to="Info" method="show"]
-[connection signal="pressed" from="PartyDisplay/BackButton" to="Info/Party" method="grab_focus"]
+[connection signal="closed" from="PartyDisplay" to="." method="focus_party"]
+[connection signal="closed" from="PartyDisplay" to="Info" method="show"]
 [connection signal="pressed" from="Info/Party" to="PartyDisplay" method="open_menu"]
 [connection signal="pressed" from="Info/Party" to="Info" method="hide"]
 [connection signal="pressed" from="Info/Journal" to="." method="journal_pressed"]

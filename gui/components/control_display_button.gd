@@ -28,7 +28,11 @@ var last_device_name: String = "" ## Name of last detected input device
 signal display_updated ## Emitted when the button changes control schemes
 
 func _ready() -> void:
-	prep()
+	if !Engine.is_editor_hint():
+		get_parent().ready.connect(prep)
+	else:
+		prep()
+	get_parent().resized.connect(prep)
 
 ## Preps the button for display in editor
 func prep()->void:

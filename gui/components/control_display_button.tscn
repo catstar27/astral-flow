@@ -20,8 +20,9 @@ events = [SubResource("InputEventKey_r0g0u"), SubResource("InputEventJoypadButto
 [node name="ControlDisplayButton" type="Button"]
 material = ExtResource("1_np2p5")
 custom_minimum_size = Vector2(44, 44)
-offset_right = 32.0
-offset_bottom = 32.0
+offset_left = 1.0
+offset_right = 77.0
+offset_bottom = 44.0
 focus_mode = 0
 theme = ExtResource("1_vad1f")
 shortcut = SubResource("Shortcut_p1pqe")

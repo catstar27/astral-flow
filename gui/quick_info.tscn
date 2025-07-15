@@ -25,6 +25,7 @@ layout_mode = 2
 [node name="NameLabel" type="RichTextLabel" parent="HBox/CharacterContainer"]
 unique_name_in_owner = true
 layout_mode = 2
+mouse_filter = 1
 theme_override_font_sizes/bold_italics_font_size = 16
 theme_override_font_sizes/italics_font_size = 16
 theme_override_font_sizes/mono_font_size = 16
@@ -48,6 +49,7 @@ layout_mode = 2
 
 [node name="CategoryLabel" type="Label" parent="HBox/StatContainer"]
 layout_mode = 2
+mouse_filter = 1
 text = "Stats"
 label_settings = SubResource("LabelSettings_kwjdn")
 horizontal_alignment = 1
@@ -57,6 +59,7 @@ vertical_alignment = 1
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
+mouse_filter = 1
 theme_override_font_sizes/bold_italics_font_size = 16
 theme_override_font_sizes/italics_font_size = 16
 theme_override_font_sizes/mono_font_size = 16
@@ -76,6 +79,7 @@ theme_override_constants/separation = 0
 
 [node name="Label" type="Label" parent="HBox/StatusContainer"]
 layout_mode = 2
+mouse_filter = 1
 text = "Status"
 label_settings = SubResource("LabelSettings_ny3xg")
 horizontal_alignment = 1

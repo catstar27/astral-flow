@@ -3,6 +3,7 @@ extends Node
 
 const save_file_folder: String = "user://saves/" ## Folder for save files
 const main_scene: PackedScene = preload("res://misc/gameplay_managers/main.tscn") ## Filepath of main scene
+var main: Node = null ## Main scene pointer
 var slot: String = "save1" ## Current save slot name
 var loading: bool = false ## Whether the game is currently loading
 var saving: bool = false ## Whether the game is currently saving
@@ -11,6 +12,7 @@ var level_data: Dictionary[String, Dictionary] = {} ## Dictionary containing all
 var player_data: Dictionary[String, Dictionary] = {} ## Dictionary containing data of player characters
 
 func _ready() -> void:
+	main = get_tree().root.get_child(-1)
 	EventBus.subscribe("START_COMBAT", self, "started_combat")
 	EventBus.subscribe("COMBAT_ENDED", self, "ended_combat")
 
@@ -50,13 +52,15 @@ func get_latest_save(slot_to_check: String)->String:
 
 ## Removes all non-autoload nodes and makes a new main scene
 func reset_game()->Main:
-	EventBus.broadcast("DELOAD", "NULLDATA")
-	await get_tree().create_timer(.01).timeout
-	var main: Main = main_scene.instantiate()
-	get_tree().root.add_child(main)
-	while !main.prepped:
-		await main.ready
-	return main
+	while !get_tree().root.is_node_ready():
+		await get_tree().root.ready
+	main.queue_free()
+	await get_tree().process_frame
+	var new_main: Main = main_scene.instantiate()
+	get_tree().root.add_child(new_main)
+	while !new_main.prepped:
+		await new_main.ready
+	return new_main
 
 ## Resets the given save slot to new game state
 func reset_save(reset_slot: String)->void:
@@ -179,7 +183,7 @@ func load_data(save_name: String = "")->void:
 	else:
 		file = FileAccess.open(get_latest_save(slot), FileAccess.READ)
 	var cur_map: String = file.get_var()
-	var main: Node2D = await reset_game()
+	main = await reset_game()
 	var dialogic_vars: Dictionary[String, Variant] = file.get_var()
 	for variable in Dialogic.VAR.variables():
 		if variable in dialogic_vars:
