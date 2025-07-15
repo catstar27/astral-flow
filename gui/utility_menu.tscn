@@ -17,7 +17,7 @@ device = -1
 button_index = 10
 pressed = true
 
-[sub_resource type="Shortcut" id="Shortcut_f8scv"]
+[sub_resource type="Shortcut" id="Shortcut_au610"]
 events = [SubResource("InputEventKey_f8scv"), SubResource("InputEventJoypadButton_4y04n")]
 
 [node name="UtilityMenu" type="Control"]
@@ -42,7 +42,7 @@ offset_bottom = 48.0
 size_flags_horizontal = 8
 size_flags_vertical = 0
 theme = ExtResource("3_v0p8v")
-shortcut = SubResource("Shortcut_f8scv")
+shortcut = SubResource("Shortcut_au610")
 text = "←"
 icon = ExtResource("5_fubsc")
 input_action_name = "menu_right"

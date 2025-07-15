@@ -1,9 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://ddv2qool36rfh"]
+[gd_scene load_steps=4 format=3 uid="uid://ddv2qool36rfh"]
 
 [ext_resource type="Theme" uid="uid://crcivs73grrf7" path="res://textures/gui/themes/custom_theme.tres" id="1_6e4nb"]
 [ext_resource type="Material" uid="uid://dcq7n5qyt3hj0" path="res://materials/immaterial.tres" id="1_f4y02"]
 [ext_resource type="Script" uid="uid://ckmxsjnq11wio" path="res://gui/pause_menu.gd" id="1_i7qcp"]
-[ext_resource type="Material" uid="uid://dessed1x8jslv" path="res://materials/blur_material.tres" id="2_yt8ud"]
 
 [node name="PauseMenu" type="Control"]
 process_mode = 3
@@ -89,22 +88,6 @@ focus_neighbor_bottom = NodePath("../Resume")
 focus_next = NodePath("../Resume")
 focus_previous = NodePath("../Reset")
 text = "Quit"
-
-[node name="Blur" type="ColorRect" parent="."]
-z_index = -1
-material = ExtResource("2_yt8ud")
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -49999.5
-offset_top = -49999.5
-offset_right = 49999.5
-offset_bottom = 49999.5
-grow_horizontal = 2
-grow_vertical = 2
 
 [connection signal="pressed" from="VBoxContainer/Resume" to="." method="close_pause_menu"]
 [connection signal="pressed" from="VBoxContainer/Save" to="." method="save_pressed"]

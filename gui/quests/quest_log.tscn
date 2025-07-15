@@ -1,21 +1,20 @@
-[gd_scene load_steps=8 format=3 uid="uid://bkt6ueeylogtc"]
+[gd_scene load_steps=7 format=3 uid="uid://bkt6ueeylogtc"]
 
 [ext_resource type="Script" uid="uid://1yju7cyvj754" path="res://gui/quests/quest_log.gd" id="1_47374"]
 [ext_resource type="PackedScene" uid="uid://dleye7m8gjxs0" path="res://gui/components/control_display_button.tscn" id="2_sxah1"]
 [ext_resource type="PackedScene" uid="uid://c6kh3esjn5743" path="res://gui/tab_menu.tscn" id="3_l4r7o"]
-[ext_resource type="Material" uid="uid://dessed1x8jslv" path="res://materials/blur_material.tres" id="5_2eb54"]
 
-[sub_resource type="InputEventKey" id="InputEventKey_sw3kj"]
+[sub_resource type="InputEventKey" id="InputEventKey_7312b"]
 device = -1
 physical_keycode = 4194305
 
-[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_frj83"]
+[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_6s7of"]
 device = -1
 button_index = 1
 pressed = true
 
-[sub_resource type="Shortcut" id="Shortcut_47374"]
-events = [SubResource("InputEventKey_sw3kj"), SubResource("InputEventJoypadButton_frj83")]
+[sub_resource type="Shortcut" id="Shortcut_sxah1"]
+events = [SubResource("InputEventKey_7312b"), SubResource("InputEventJoypadButton_6s7of")]
 
 [node name="QuestLog" type="Control"]
 layout_mode = 3
@@ -105,7 +104,7 @@ No Complete Quests"
 layout_mode = 2
 size_flags_horizontal = 4
 focus_mode = 2
-shortcut = SubResource("Shortcut_47374")
+shortcut = SubResource("Shortcut_sxah1")
 text = "Back"
 input_action_name = "menu_back"
 
@@ -134,22 +133,6 @@ text = "Quest Name"
 [node name="ObjectiveContainer" type="VBoxContainer" parent="Panel/HBoxContainer/QuestTrackerContainer"]
 unique_name_in_owner = true
 layout_mode = 2
-
-[node name="Blur" type="ColorRect" parent="."]
-z_index = -1
-material = ExtResource("5_2eb54")
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -49999.5
-offset_top = -49999.5
-offset_right = 49999.5
-offset_bottom = 49999.5
-grow_horizontal = 2
-grow_vertical = 2
 
 [connection signal="tab_changed" from="Panel/HBoxContainer/QuestListContainer/TabMenu" to="." method="focus_current"]
 [connection signal="pressed" from="Panel/HBoxContainer/QuestListContainer/ExitButton" to="." method="close"]

@@ -1,7 +1,49 @@
-[gd_scene load_steps=3 format=3 uid="uid://dw2pdrq0d4psi"]
+[gd_scene load_steps=14 format=3 uid="uid://dw2pdrq0d4psi"]
 
 [ext_resource type="Script" uid="uid://biknfxxwsxseo" path="res://gui/save_menu.gd" id="1_hdwbn"]
-[ext_resource type="Material" uid="uid://dessed1x8jslv" path="res://materials/blur_material.tres" id="2_mv8u0"]
+[ext_resource type="PackedScene" uid="uid://dleye7m8gjxs0" path="res://gui/components/control_display_button.tscn" id="2_wj3tw"]
+[ext_resource type="Texture2D" uid="uid://bxhwtcxdgtkx6" path="res://textures/gui/keyboard_key.png" id="3_708xp"]
+
+[sub_resource type="InputEventKey" id="InputEventKey_708xp"]
+device = -1
+physical_keycode = 4194305
+
+[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_5v703"]
+device = -1
+button_index = 6
+pressed = true
+
+[sub_resource type="Shortcut" id="Shortcut_708xp"]
+events = [SubResource("InputEventKey_708xp"), SubResource("InputEventJoypadButton_5v703")]
+
+[sub_resource type="InputEventKey" id="InputEventKey_5v703"]
+device = -1
+physical_keycode = 81
+unicode = 113
+
+[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_55gbt"]
+device = -1
+button_index = 9
+pressed = true
+
+[sub_resource type="Shortcut" id="Shortcut_5v703"]
+events = [SubResource("InputEventKey_5v703"), SubResource("InputEventJoypadButton_55gbt")]
+
+[sub_resource type="Shortcut" id="Shortcut_55gbt"]
+events = [SubResource("InputEventKey_5v703"), SubResource("InputEventJoypadButton_55gbt")]
+
+[sub_resource type="InputEventKey" id="InputEventKey_f8scv"]
+device = -1
+physical_keycode = 69
+unicode = 101
+
+[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_4y04n"]
+device = -1
+button_index = 10
+pressed = true
+
+[sub_resource type="Shortcut" id="Shortcut_urlxi"]
+events = [SubResource("InputEventKey_f8scv"), SubResource("InputEventJoypadButton_4y04n")]
 
 [node name="SaveMenu" type="Control"]
 layout_mode = 3
@@ -13,15 +55,44 @@ offset_bottom = 134.0
 script = ExtResource("1_hdwbn")
 
 [node name="Panel" type="PanelContainer" parent="."]
-offset_right = 12.0
-offset_bottom = 12.0
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -249.0
+offset_top = -151.0
+offset_right = 249.0
+offset_bottom = 151.0
+grow_horizontal = 2
+grow_vertical = 2
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Panel"]
 layout_mode = 2
+size_flags_vertical = 4
 
-[node name="FilesContainer" type="VBoxContainer" parent="Panel/HBoxContainer"]
-unique_name_in_owner = true
+[node name="FileSectionContainer" type="VBoxContainer" parent="Panel/HBoxContainer"]
 layout_mode = 2
+size_flags_vertical = 0
+
+[node name="HeaderLabel" type="Label" parent="Panel/HBoxContainer/FileSectionContainer"]
+layout_mode = 2
+text = "Save Files"
+
+[node name="FileTree" type="Tree" parent="Panel/HBoxContainer/FileSectionContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(250, 200)
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+hide_root = true
+
+[node name="BackButton" parent="Panel/HBoxContainer/FileSectionContainer" instance=ExtResource("2_wj3tw")]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 10
+shortcut = SubResource("Shortcut_708xp")
+text = "Back"
 
 [node name="Divider" type="ColorRect" parent="Panel/HBoxContainer"]
 custom_minimum_size = Vector2(4, 0)
@@ -53,18 +124,39 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 24
 text = "Size: N/A"
 
-[node name="Blur" type="ColorRect" parent="."]
-z_index = -1
-material = ExtResource("2_mv8u0")
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -49999.5
-offset_top = -49999.5
-offset_right = 49999.5
-offset_bottom = 49999.5
-grow_horizontal = 2
-grow_vertical = 2
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel/HBoxContainer/InfoContainer"]
+layout_mode = 2
+size_flags_vertical = 10
+
+[node name="SaveButton" parent="Panel/HBoxContainer/InfoContainer/HBoxContainer" instance=ExtResource("2_wj3tw")]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 8
+theme_override_font_sizes/font_size = 24
+shortcut = SubResource("Shortcut_5v703")
+text = "Save"
+icon = ExtResource("3_708xp")
+input_action_name = "menu_left"
+
+[node name="LoadButton" parent="Panel/HBoxContainer/InfoContainer/HBoxContainer" instance=ExtResource("2_wj3tw")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+size_flags_vertical = 8
+theme_override_font_sizes/font_size = 24
+shortcut = SubResource("Shortcut_55gbt")
+text = "Load"
+icon = ExtResource("3_708xp")
+input_action_name = "menu_left"
+
+[node name="DeleteButton" parent="Panel/HBoxContainer/InfoContainer/HBoxContainer" instance=ExtResource("2_wj3tw")]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 8
+theme_override_font_sizes/font_size = 24
+shortcut = SubResource("Shortcut_urlxi")
+text = "Delete"
+icon = ExtResource("3_708xp")
+input_action_name = "menu_right"
+
+[connection signal="pressed" from="Panel/HBoxContainer/FileSectionContainer/BackButton" to="." method="close"]

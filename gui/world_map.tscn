@@ -1,44 +1,43 @@
-[gd_scene load_steps=13 format=3 uid="uid://qh5q0oumswup"]
+[gd_scene load_steps=12 format=3 uid="uid://qh5q0oumswup"]
 
 [ext_resource type="PackedScene" uid="uid://dleye7m8gjxs0" path="res://gui/components/control_display_button.tscn" id="1_7hl7v"]
 [ext_resource type="Script" uid="uid://dj4xbvn3alikc" path="res://gui/world_map.gd" id="1_7312b"]
-[ext_resource type="Material" uid="uid://dessed1x8jslv" path="res://materials/blur_material.tres" id="3_ro4xi"]
 
-[sub_resource type="InputEventKey" id="InputEventKey_sw3kj"]
+[sub_resource type="InputEventKey" id="InputEventKey_7312b"]
 device = -1
 physical_keycode = 4194305
 
-[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_frj83"]
+[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_6s7of"]
 device = -1
 button_index = 1
 pressed = true
 
-[sub_resource type="Shortcut" id="Shortcut_6s7of"]
-events = [SubResource("InputEventKey_sw3kj"), SubResource("InputEventJoypadButton_frj83")]
+[sub_resource type="Shortcut" id="Shortcut_ro4xi"]
+events = [SubResource("InputEventKey_7312b"), SubResource("InputEventJoypadButton_6s7of")]
 
-[sub_resource type="InputEventKey" id="InputEventKey_ro4xi"]
+[sub_resource type="InputEventKey" id="InputEventKey_rlpal"]
 device = -1
 physical_keycode = 4194326
 
-[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_rlpal"]
+[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_pnn20"]
 device = -1
 button_index = 4
 pressed = true
 
-[sub_resource type="Shortcut" id="Shortcut_ro4xi"]
-events = [SubResource("InputEventKey_ro4xi"), SubResource("InputEventJoypadButton_rlpal")]
+[sub_resource type="Shortcut" id="Shortcut_6be65"]
+events = [SubResource("InputEventKey_rlpal"), SubResource("InputEventJoypadButton_pnn20")]
 
-[sub_resource type="InputEventKey" id="InputEventKey_6be65"]
+[sub_resource type="InputEventKey" id="InputEventKey_ngai7"]
 device = -1
 physical_keycode = 32
 unicode = 32
 
-[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_ngai7"]
+[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_c5r7u"]
 device = -1
 pressed = true
 
-[sub_resource type="Shortcut" id="Shortcut_rlpal"]
-events = [SubResource("InputEventKey_6be65"), SubResource("InputEventJoypadButton_ngai7")]
+[sub_resource type="Shortcut" id="Shortcut_lyfn6"]
+events = [SubResource("InputEventKey_ngai7"), SubResource("InputEventJoypadButton_c5r7u")]
 
 [node name="WorldMap" type="Control"]
 layout_mode = 3
@@ -50,6 +49,7 @@ script = ExtResource("1_7312b")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 process_mode = 3
+layout_mode = 0
 offset_left = 6.0
 offset_top = 6.0
 offset_right = 683.0
@@ -425,36 +425,20 @@ alignment = 1
 
 [node name="BackButton" parent="VBoxContainer/HBoxContainer" instance=ExtResource("1_7hl7v")]
 layout_mode = 2
-shortcut = SubResource("Shortcut_6s7of")
+shortcut = SubResource("Shortcut_ro4xi")
 text = "Back"
 input_action_name = "menu_back"
 
 [node name="RecenterButton" parent="VBoxContainer/HBoxContainer" instance=ExtResource("1_7hl7v")]
 layout_mode = 2
-shortcut = SubResource("Shortcut_ro4xi")
+shortcut = SubResource("Shortcut_6be65")
 text = "My Position"
 input_action_name = "info"
 
 [node name="ControlDisplayButton" parent="VBoxContainer/HBoxContainer" instance=ExtResource("1_7hl7v")]
 layout_mode = 2
-shortcut = SubResource("Shortcut_rlpal")
+shortcut = SubResource("Shortcut_lyfn6")
 text = "Start Travel"
 input_action_name = "interact"
-
-[node name="Blur" type="ColorRect" parent="."]
-z_index = -1
-material = ExtResource("3_ro4xi")
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -49999.5
-offset_top = -49999.5
-offset_right = 49999.5
-offset_bottom = 49999.5
-grow_horizontal = 2
-grow_vertical = 2
 
 [connection signal="pressed" from="VBoxContainer/HBoxContainer/BackButton" to="." method="close"]

@@ -5,6 +5,8 @@ class_name PauseMenu
 @onready var resume_button: Button = %Resume ## Unpauses and closes the pause menu
 @onready var save_button: Button = %Save ## Saves the game
 var menu_open: bool = false ## Whether the menu is open
+signal open_save ## Emitted when save is pressed
+signal open_load ## Emitted when load is pressed
 signal open_settings ## Emitted when settings is opened
 signal pause_opened ## Emitted when the pause menu is opened
 signal pause_closed ## Emitted when the pause menu is closed
@@ -46,10 +48,8 @@ func close_pause_menu()->void:
 
 ## Saves the game; called when the save button is pressed
 func save_pressed()->void:
-	close_pause_menu()
+	open_save.emit()
 	SaveLoad.save_data()
-	open_pause_menu()
-	save_button.grab_focus()
 
 ## Reloads the save; called when the load button is pressed
 func load_pressed()->void:
