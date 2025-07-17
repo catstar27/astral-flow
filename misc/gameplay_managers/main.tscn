@@ -30,6 +30,8 @@ unique_name_in_owner = true
 [node name="QuestManager" parent="." instance=ExtResource("6_1f2dt")]
 
 [node name="SkillManager" parent="." instance=ExtResource("5_y3pxv")]
+skill_path = "res://characters/skills/"
+breakthrough_path = "res://characters/breakthroughs/"
 
 [node name="Background" type="Sprite2D" parent="."]
 process_mode = 1

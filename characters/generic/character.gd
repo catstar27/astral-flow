@@ -59,7 +59,7 @@ enum ai_types { ## Options for enemy ai
 @export var text_indicator_shift: Vector2 = Vector2.UP*32 ## Distance away from this to spawn text indicators
 @export_group("Initial Stuff")
 @export var starting_skills: Array[Skill] ## List of skills to start with
-@export var breakthroughs: Array[Breakthrough] ## List of breakthroughs
+@export var starting_breakthroughs: Array[Breakthrough] ## List of breakthroughs
 @export var export_abilities: Array[Ability] = [] ## Exported ability list for initial abilities
 @export var starting_statuses: Array[Status] ## List of statuses to start with
 @export_group("Combat") ## Exports related to combat ai and what this considers an enemy
@@ -84,6 +84,8 @@ const range_indicator_scene: PackedScene = preload("res://misc/selection_cursor/
 var skills: Array[Skill] ## Actual list of skills
 var skill_ids: Array[String] ## List of ids for skills
 var skill_effects: Array[SkillEffect] ## List of skill effects
+var breakthroughs: Array[Breakthrough] ## Actual list of breakthroughs
+var breakthrough_ids: Array[String] ## List of ids for breakthroughs
 var abilities: Array[Ability] ## Actual list of abilities
 var sequence: int ## Order of this character in the current combat and turn
 var in_combat: bool = false ## Whether this character is in combat
@@ -110,6 +112,7 @@ var to_save: Array[StringName] = [ ## Variables to save
 	"star_stats",
 	"base_stats",
 	"skill_ids",
+	"breakthrough_ids",
 	"skill_points",
 	"cur_hp",
 	"cur_ap",
@@ -178,6 +181,7 @@ func _setup()->void:
 	EventBus.subscribe("GAMEPLAY_SETTINGS_CHANGED", self, "set_outline_color")
 	init_schedule()
 	init_statuses()
+	init_skills()
 
 ## Duplicates the export abilities, copying them into the actual ability array
 func duplicate_export_abilities()->void:
@@ -401,11 +405,17 @@ func melee_safe()->void:
 	end_turn()
 #endregion
 
+#region Inventory
+## 
+#endregion
+
 #region Skills
 ## Initializes the skill list
 func init_skills()->void:
 	for skill in starting_skills:
 		EventBus.broadcast("ADD_SKILL", [self, skill.id])
+	for breakthrough in starting_breakthroughs:
+		EventBus.broadcast("ADD_BREAKTHROUGH", [self, breakthrough.id])
 
 ## Adds the given skill to this character
 func add_skill(skill: Skill)->void:
@@ -415,6 +425,13 @@ func add_skill(skill: Skill)->void:
 			skill_ids.append(skill.id)
 		for ability in skill.abilities:
 			add_ability(ability)
+
+## Adds the given breakthrough to this character
+func add_breakthrough(breakthrough: Breakthrough)->void:
+	if breakthrough not in breakthroughs:
+		breakthroughs.append(breakthrough)
+		if breakthrough.id not in breakthrough_ids:
+			breakthrough_ids.append(breakthrough.id)
 #endregion
 
 #region Abilities

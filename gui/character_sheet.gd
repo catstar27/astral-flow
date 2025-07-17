@@ -2,6 +2,8 @@ extends Control
 class_name CharacterSheet
 ## Class for a character sheet, which displays all character information
 
+@export var item_list: VBoxContainer ## Container for inventory items
+@export var feats_list: VBoxContainer ## Container for feat progress
 @export var star_stats_container: VBoxContainer ## Container for star stat labels
 @export var other_stats_container: VBoxContainer ## Container for all other stats
 @export var name_labels: Array[Label] ## Array containing all Labels showing character name
@@ -58,3 +60,22 @@ func close()->void:
 ## Requests opening the skill tree for the character this is tracking
 func request_skill_tree()->void:
 	skill_tree_requested.emit(character)
+
+func _on_tab_menu_tab_changed() -> void:
+	var tab_name: String
+	for tab in %TabMenu.get_children():
+		if tab.is_visible_in_tree():
+			tab_name = tab.name
+			break
+	if tab_name == "Inventory" && item_list.get_child_count() > 1:
+		item_list.get_child(0).hide()
+		item_list.get_child(1).grab_focus()
+	elif tab_name == "Feats" && feats_list.get_child_count() > 1:
+		feats_list.get_child(0).hide()
+		feats_list.get_child(1).grab_focus()
+	else:
+		item_list.get_child(0).show()
+		focus_mode = Control.FOCUS_ALL
+		grab_focus()
+		release_focus()
+		focus_mode = Control.FOCUS_NONE

@@ -32,7 +32,9 @@ func _ready() -> void:
 		get_parent().ready.connect(prep)
 	else:
 		prep()
-	get_parent().resized.connect(prep)
+	if get_parent().has_signal("resized"):
+		get_parent().resized.connect(prep)
+	resized.connect(prep)
 
 ## Preps the button for display in editor
 func prep()->void:

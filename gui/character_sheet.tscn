@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://e46u6ucc1flk"]
+[gd_scene load_steps=21 format=3 uid="uid://e46u6ucc1flk"]
 
 [ext_resource type="Script" uid="uid://dmwj4oq634f84" path="res://gui/character_sheet.gd" id="1_iutca"]
 [ext_resource type="PackedScene" uid="uid://c6kh3esjn5743" path="res://gui/tab_menu.tscn" id="1_tjhau"]
@@ -48,6 +48,9 @@ outline_color = Color(0.53138, 0.00237496, 0.792804, 1)
 [sub_resource type="LabelSettings" id="LabelSettings_xf32q"]
 font_size = 28
 
+[sub_resource type="LabelSettings" id="LabelSettings_p5ctj"]
+font_size = 24
+
 [sub_resource type="InputEventKey" id="InputEventKey_iutca"]
 device = -1
 physical_keycode = 4194326
@@ -57,7 +60,7 @@ device = -1
 button_index = 4
 pressed = true
 
-[sub_resource type="Shortcut" id="Shortcut_bqx8u"]
+[sub_resource type="Shortcut" id="Shortcut_iutca"]
 events = [SubResource("InputEventKey_iutca"), SubResource("InputEventJoypadButton_j877r")]
 
 [sub_resource type="InputEventKey" id="InputEventKey_x2dtq"]
@@ -69,10 +72,10 @@ device = -1
 button_index = 1
 pressed = true
 
-[sub_resource type="Shortcut" id="Shortcut_e03yn"]
+[sub_resource type="Shortcut" id="Shortcut_j877r"]
 events = [SubResource("InputEventKey_x2dtq"), SubResource("InputEventJoypadButton_olbgs")]
 
-[node name="CharacterSheet" type="Control" node_paths=PackedStringArray("star_stats_container", "other_stats_container", "name_labels", "portrait_displays", "pronoun_labels")]
+[node name="CharacterSheet" type="Control" node_paths=PackedStringArray("item_list", "feats_list", "star_stats_container", "other_stats_container", "name_labels", "portrait_displays", "pronoun_labels")]
 process_mode = 3
 z_index = 2
 layout_mode = 3
@@ -84,11 +87,13 @@ anchor_bottom = 0.5
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_iutca")
-star_stats_container = NodePath("ContainerContainer/TabMenu/Stats/HBoxContainer/VBoxContainer/StarStatsContainer")
+item_list = NodePath("ContainerContainer/TabMenu/Inventory/HBoxContainer/ItemList")
+feats_list = NodePath("ContainerContainer/TabMenu/Feats/HBoxContainer/FeatsList")
+star_stats_container = NodePath("ContainerContainer/TabMenu/Stats/HBoxContainer/LeftContainer/StarStatsContainer")
 other_stats_container = NodePath("ContainerContainer/TabMenu/Stats/HBoxContainer/OtherStatsContainer")
-name_labels = [NodePath("ContainerContainer/TabMenu/Stats/HBoxContainer/VBoxContainer/PortraitNamePronouns/NameLabel"), NodePath("ContainerContainer/TabMenu/Bio/HBoxContainer/VBoxContainer/PortraitNamePronouns/NameLabel"), NodePath("ContainerContainer/TabMenu/Feats/HBoxContainer/VBoxContainer/PortraitNamePronouns/NameLabel"), NodePath("ContainerContainer/TabMenu/Misc/HBoxContainer/VBoxContainer/PortraitNamePronouns/NameLabel")]
-portrait_displays = [NodePath("ContainerContainer/TabMenu/Stats/HBoxContainer/VBoxContainer/PortraitNamePronouns/PortraitDisplay"), NodePath("ContainerContainer/TabMenu/Bio/HBoxContainer/VBoxContainer/PortraitNamePronouns/PortraitDisplay"), NodePath("ContainerContainer/TabMenu/Feats/HBoxContainer/VBoxContainer/PortraitNamePronouns/PortraitDisplay"), NodePath("ContainerContainer/TabMenu/Misc/HBoxContainer/VBoxContainer/PortraitNamePronouns/PortraitDisplay")]
-pronoun_labels = [NodePath("ContainerContainer/TabMenu/Stats/HBoxContainer/VBoxContainer/PortraitNamePronouns/PronounLabel"), NodePath("ContainerContainer/TabMenu/Bio/HBoxContainer/VBoxContainer/PortraitNamePronouns/PronounLabel"), NodePath("ContainerContainer/TabMenu/Feats/HBoxContainer/VBoxContainer/PortraitNamePronouns/PronounLabel"), NodePath("ContainerContainer/TabMenu/Misc/HBoxContainer/VBoxContainer/PortraitNamePronouns/PronounLabel")]
+name_labels = [NodePath("ContainerContainer/TabMenu/Stats/HBoxContainer/LeftContainer/PortraitNamePronouns/NameLabel"), NodePath("ContainerContainer/TabMenu/Bio/HBoxContainer/VBoxContainer/PortraitNamePronouns/NameLabel"), NodePath("ContainerContainer/TabMenu/Feats/HBoxContainer/VBoxContainer/PortraitNamePronouns/NameLabel"), NodePath("ContainerContainer/TabMenu/Inventory/HBoxContainer/VBoxContainer/PortraitNamePronouns/NameLabel")]
+portrait_displays = [NodePath("ContainerContainer/TabMenu/Stats/HBoxContainer/LeftContainer/PortraitNamePronouns/PortraitDisplay"), NodePath("ContainerContainer/TabMenu/Bio/HBoxContainer/VBoxContainer/PortraitNamePronouns/PortraitDisplay"), NodePath("ContainerContainer/TabMenu/Feats/HBoxContainer/VBoxContainer/PortraitNamePronouns/PortraitDisplay"), NodePath("ContainerContainer/TabMenu/Inventory/HBoxContainer/VBoxContainer/PortraitNamePronouns/PortraitDisplay")]
+pronoun_labels = [NodePath("ContainerContainer/TabMenu/Stats/HBoxContainer/LeftContainer/PortraitNamePronouns/PronounLabel"), NodePath("ContainerContainer/TabMenu/Bio/HBoxContainer/VBoxContainer/PortraitNamePronouns/PronounLabel"), NodePath("ContainerContainer/TabMenu/Feats/HBoxContainer/VBoxContainer/PortraitNamePronouns/PronounLabel"), NodePath("ContainerContainer/TabMenu/Inventory/HBoxContainer/VBoxContainer/PortraitNamePronouns/PronounLabel")]
 
 [node name="ContainerContainer" type="VBoxContainer" parent="."]
 layout_mode = 1
@@ -105,79 +110,101 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="TabMenu" parent="ContainerContainer" instance=ExtResource("1_tjhau")]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(508, 0)
 layout_mode = 2
+min_tabs = 4
 
 [node name="Stats" type="PanelContainer" parent="ContainerContainer/TabMenu"]
+custom_minimum_size = Vector2(0, 320)
 layout_mode = 2
 
 [node name="HBoxContainer" type="HBoxContainer" parent="ContainerContainer/TabMenu/Stats"]
 layout_mode = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="ContainerContainer/TabMenu/Stats/HBoxContainer"]
+[node name="LeftContainer" type="VBoxContainer" parent="ContainerContainer/TabMenu/Stats/HBoxContainer"]
+custom_minimum_size = Vector2(170, 0)
 layout_mode = 2
 
-[node name="PortraitNamePronouns" type="VBoxContainer" parent="ContainerContainer/TabMenu/Stats/HBoxContainer/VBoxContainer"]
+[node name="PortraitNamePronouns" type="VBoxContainer" parent="ContainerContainer/TabMenu/Stats/HBoxContainer/LeftContainer"]
 layout_mode = 2
+size_flags_horizontal = 4
 
-[node name="PortraitDisplay" type="TextureRect" parent="ContainerContainer/TabMenu/Stats/HBoxContainer/VBoxContainer/PortraitNamePronouns"]
+[node name="PortraitDisplay" type="TextureRect" parent="ContainerContainer/TabMenu/Stats/HBoxContainer/LeftContainer/PortraitNamePronouns"]
 layout_mode = 2
 size_flags_horizontal = 4
 texture = ExtResource("2_j877r")
 stretch_mode = 4
 
-[node name="NameLabel" type="Label" parent="ContainerContainer/TabMenu/Stats/HBoxContainer/VBoxContainer/PortraitNamePronouns"]
+[node name="NameLabel" type="Label" parent="ContainerContainer/TabMenu/Stats/HBoxContainer/LeftContainer/PortraitNamePronouns"]
 layout_mode = 2
 text = "Name Here"
 label_settings = SubResource("LabelSettings_j877r")
 horizontal_alignment = 1
 
-[node name="PronounLabel" type="Label" parent="ContainerContainer/TabMenu/Stats/HBoxContainer/VBoxContainer/PortraitNamePronouns"]
+[node name="PronounLabel" type="Label" parent="ContainerContainer/TabMenu/Stats/HBoxContainer/LeftContainer/PortraitNamePronouns"]
 layout_mode = 2
 text = "Pronouns Here"
 label_settings = SubResource("LabelSettings_j877r")
 horizontal_alignment = 1
 
-[node name="StarStatsContainer" type="VBoxContainer" parent="ContainerContainer/TabMenu/Stats/HBoxContainer/VBoxContainer"]
+[node name="StarStatsContainer" type="VBoxContainer" parent="ContainerContainer/TabMenu/Stats/HBoxContainer/LeftContainer"]
 layout_mode = 2
+size_flags_horizontal = 4
+alignment = 1
 
-[node name="Strength" type="Label" parent="ContainerContainer/TabMenu/Stats/HBoxContainer/VBoxContainer/StarStatsContainer"]
+[node name="Strength" type="Label" parent="ContainerContainer/TabMenu/Stats/HBoxContainer/LeftContainer/StarStatsContainer"]
 layout_mode = 2
 text = "Strength: "
 label_settings = SubResource("LabelSettings_bqx8u")
+horizontal_alignment = 1
 
-[node name="Resolve" type="Label" parent="ContainerContainer/TabMenu/Stats/HBoxContainer/VBoxContainer/StarStatsContainer"]
+[node name="Resolve" type="Label" parent="ContainerContainer/TabMenu/Stats/HBoxContainer/LeftContainer/StarStatsContainer"]
 layout_mode = 2
 text = "Resolve: "
 label_settings = SubResource("LabelSettings_x2dtq")
+horizontal_alignment = 1
 
-[node name="Passion" type="Label" parent="ContainerContainer/TabMenu/Stats/HBoxContainer/VBoxContainer/StarStatsContainer"]
+[node name="Passion" type="Label" parent="ContainerContainer/TabMenu/Stats/HBoxContainer/LeftContainer/StarStatsContainer"]
 layout_mode = 2
 text = "Passion: "
 label_settings = SubResource("LabelSettings_olbgs")
+horizontal_alignment = 1
 
-[node name="Agility" type="Label" parent="ContainerContainer/TabMenu/Stats/HBoxContainer/VBoxContainer/StarStatsContainer"]
+[node name="Agility" type="Label" parent="ContainerContainer/TabMenu/Stats/HBoxContainer/LeftContainer/StarStatsContainer"]
 layout_mode = 2
 text = "Agility: "
 label_settings = SubResource("LabelSettings_e03yn")
+horizontal_alignment = 1
 
-[node name="Intelligence" type="Label" parent="ContainerContainer/TabMenu/Stats/HBoxContainer/VBoxContainer/StarStatsContainer"]
+[node name="Intelligence" type="Label" parent="ContainerContainer/TabMenu/Stats/HBoxContainer/LeftContainer/StarStatsContainer"]
 layout_mode = 2
 text = "Intelligence: "
 label_settings = SubResource("LabelSettings_iutca")
+horizontal_alignment = 1
 
-[node name="Endurance" type="Label" parent="ContainerContainer/TabMenu/Stats/HBoxContainer/VBoxContainer/StarStatsContainer"]
+[node name="Endurance" type="Label" parent="ContainerContainer/TabMenu/Stats/HBoxContainer/LeftContainer/StarStatsContainer"]
 layout_mode = 2
 text = "Endurance: "
 label_settings = SubResource("LabelSettings_6rsfj")
+horizontal_alignment = 1
 
-[node name="Charisma" type="Label" parent="ContainerContainer/TabMenu/Stats/HBoxContainer/VBoxContainer/StarStatsContainer"]
+[node name="Charisma" type="Label" parent="ContainerContainer/TabMenu/Stats/HBoxContainer/LeftContainer/StarStatsContainer"]
 layout_mode = 2
 text = "Charisma: "
 label_settings = SubResource("LabelSettings_clq0d")
+horizontal_alignment = 1
+
+[node name="Divider" type="ColorRect" parent="ContainerContainer/TabMenu/Stats/HBoxContainer"]
+custom_minimum_size = Vector2(4, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+color = Color(0.114897, 0.114897, 0.114897, 1)
 
 [node name="OtherStatsContainer" type="VBoxContainer" parent="ContainerContainer/TabMenu/Stats/HBoxContainer"]
 layout_mode = 2
-size_flags_horizontal = 10
+size_flags_horizontal = 6
+alignment = 1
 
 [node name="Max_HP" type="Label" parent="ContainerContainer/TabMenu/Stats/HBoxContainer/OtherStatsContainer"]
 layout_mode = 2
@@ -224,45 +251,63 @@ layout_mode = 2
 text = "Move Speed: "
 label_settings = SubResource("LabelSettings_xf32q")
 
-[node name="Bio" type="PanelContainer" parent="ContainerContainer/TabMenu"]
+[node name="Inventory" type="PanelContainer" parent="ContainerContainer/TabMenu"]
 visible = false
+custom_minimum_size = Vector2(0, 320)
 layout_mode = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="ContainerContainer/TabMenu/Bio"]
+[node name="HBoxContainer" type="HBoxContainer" parent="ContainerContainer/TabMenu/Inventory"]
 layout_mode = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="ContainerContainer/TabMenu/Bio/HBoxContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="ContainerContainer/TabMenu/Inventory/HBoxContainer"]
+custom_minimum_size = Vector2(170, 0)
 layout_mode = 2
 
-[node name="PortraitNamePronouns" type="VBoxContainer" parent="ContainerContainer/TabMenu/Bio/HBoxContainer/VBoxContainer"]
+[node name="PortraitNamePronouns" type="VBoxContainer" parent="ContainerContainer/TabMenu/Inventory/HBoxContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="PortraitDisplay" type="TextureRect" parent="ContainerContainer/TabMenu/Bio/HBoxContainer/VBoxContainer/PortraitNamePronouns"]
+[node name="PortraitDisplay" type="TextureRect" parent="ContainerContainer/TabMenu/Inventory/HBoxContainer/VBoxContainer/PortraitNamePronouns"]
 layout_mode = 2
 size_flags_horizontal = 4
 texture = ExtResource("2_j877r")
 stretch_mode = 4
 
-[node name="NameLabel" type="Label" parent="ContainerContainer/TabMenu/Bio/HBoxContainer/VBoxContainer/PortraitNamePronouns"]
+[node name="NameLabel" type="Label" parent="ContainerContainer/TabMenu/Inventory/HBoxContainer/VBoxContainer/PortraitNamePronouns"]
 layout_mode = 2
 text = "Name Here"
 label_settings = SubResource("LabelSettings_j877r")
 horizontal_alignment = 1
 
-[node name="PronounLabel" type="Label" parent="ContainerContainer/TabMenu/Bio/HBoxContainer/VBoxContainer/PortraitNamePronouns"]
+[node name="PronounLabel" type="Label" parent="ContainerContainer/TabMenu/Inventory/HBoxContainer/VBoxContainer/PortraitNamePronouns"]
 layout_mode = 2
 text = "Pronouns Here"
 label_settings = SubResource("LabelSettings_j877r")
 horizontal_alignment = 1
 
+[node name="Divider" type="ColorRect" parent="ContainerContainer/TabMenu/Inventory/HBoxContainer"]
+custom_minimum_size = Vector2(4, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+color = Color(0.114897, 0.114897, 0.114897, 1)
+
+[node name="ItemList" type="VBoxContainer" parent="ContainerContainer/TabMenu/Inventory/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 6
+
+[node name="Label" type="Label" parent="ContainerContainer/TabMenu/Inventory/HBoxContainer/ItemList"]
+layout_mode = 2
+text = "Inventory Empty"
+
 [node name="Feats" type="PanelContainer" parent="ContainerContainer/TabMenu"]
 visible = false
+custom_minimum_size = Vector2(0, 320)
 layout_mode = 2
 
 [node name="HBoxContainer" type="HBoxContainer" parent="ContainerContainer/TabMenu/Feats"]
 layout_mode = 2
 
 [node name="VBoxContainer" type="VBoxContainer" parent="ContainerContainer/TabMenu/Feats/HBoxContainer"]
+custom_minimum_size = Vector2(170, 0)
 layout_mode = 2
 
 [node name="PortraitNamePronouns" type="VBoxContainer" parent="ContainerContainer/TabMenu/Feats/HBoxContainer/VBoxContainer"]
@@ -286,36 +331,69 @@ text = "Pronouns Here"
 label_settings = SubResource("LabelSettings_j877r")
 horizontal_alignment = 1
 
-[node name="Misc" type="PanelContainer" parent="ContainerContainer/TabMenu"]
+[node name="Divider" type="ColorRect" parent="ContainerContainer/TabMenu/Feats/HBoxContainer"]
+custom_minimum_size = Vector2(4, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+color = Color(0.114897, 0.114897, 0.114897, 1)
+
+[node name="FeatsList" type="VBoxContainer" parent="ContainerContainer/TabMenu/Feats/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 6
+
+[node name="Label" type="Label" parent="ContainerContainer/TabMenu/Feats/HBoxContainer/FeatsList"]
+layout_mode = 2
+text = "No Feats Gained"
+
+[node name="Bio" type="PanelContainer" parent="ContainerContainer/TabMenu"]
 visible = false
+custom_minimum_size = Vector2(0, 320)
 layout_mode = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="ContainerContainer/TabMenu/Misc"]
+[node name="HBoxContainer" type="HBoxContainer" parent="ContainerContainer/TabMenu/Bio"]
 layout_mode = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="ContainerContainer/TabMenu/Misc/HBoxContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="ContainerContainer/TabMenu/Bio/HBoxContainer"]
+custom_minimum_size = Vector2(170, 0)
 layout_mode = 2
 
-[node name="PortraitNamePronouns" type="VBoxContainer" parent="ContainerContainer/TabMenu/Misc/HBoxContainer/VBoxContainer"]
+[node name="PortraitNamePronouns" type="VBoxContainer" parent="ContainerContainer/TabMenu/Bio/HBoxContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="PortraitDisplay" type="TextureRect" parent="ContainerContainer/TabMenu/Misc/HBoxContainer/VBoxContainer/PortraitNamePronouns"]
+[node name="PortraitDisplay" type="TextureRect" parent="ContainerContainer/TabMenu/Bio/HBoxContainer/VBoxContainer/PortraitNamePronouns"]
 layout_mode = 2
 size_flags_horizontal = 4
 texture = ExtResource("2_j877r")
 stretch_mode = 4
 
-[node name="NameLabel" type="Label" parent="ContainerContainer/TabMenu/Misc/HBoxContainer/VBoxContainer/PortraitNamePronouns"]
+[node name="NameLabel" type="Label" parent="ContainerContainer/TabMenu/Bio/HBoxContainer/VBoxContainer/PortraitNamePronouns"]
 layout_mode = 2
 text = "Name Here"
 label_settings = SubResource("LabelSettings_j877r")
 horizontal_alignment = 1
 
-[node name="PronounLabel" type="Label" parent="ContainerContainer/TabMenu/Misc/HBoxContainer/VBoxContainer/PortraitNamePronouns"]
+[node name="PronounLabel" type="Label" parent="ContainerContainer/TabMenu/Bio/HBoxContainer/VBoxContainer/PortraitNamePronouns"]
 layout_mode = 2
 text = "Pronouns Here"
 label_settings = SubResource("LabelSettings_j877r")
 horizontal_alignment = 1
+
+[node name="Divider" type="ColorRect" parent="ContainerContainer/TabMenu/Bio/HBoxContainer"]
+custom_minimum_size = Vector2(4, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+color = Color(0.114897, 0.114897, 0.114897, 1)
+
+[node name="BioContainer" type="VBoxContainer" parent="ContainerContainer/TabMenu/Bio/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="BioLabel" type="Label" parent="ContainerContainer/TabMenu/Bio/HBoxContainer/BioContainer"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+text = "Bio: Character bio goes here; this is where we will show lore info of npcs and the custom bio of the player character."
+label_settings = SubResource("LabelSettings_p5ctj")
+autowrap_mode = 2
 
 [node name="HBoxContainer" type="HBoxContainer" parent="ContainerContainer"]
 layout_mode = 2
@@ -323,15 +401,16 @@ alignment = 1
 
 [node name="SkillTreeButton" parent="ContainerContainer/HBoxContainer" instance=ExtResource("4_iutca")]
 layout_mode = 2
-shortcut = SubResource("Shortcut_bqx8u")
+shortcut = SubResource("Shortcut_iutca")
 text = "Skill Tree"
 input_action_name = "info"
 
 [node name="BackButton" parent="ContainerContainer/HBoxContainer" instance=ExtResource("4_iutca")]
 layout_mode = 2
-shortcut = SubResource("Shortcut_e03yn")
+shortcut = SubResource("Shortcut_j877r")
 text = "Back"
 input_action_name = "menu_back"
 
+[connection signal="tab_changed" from="ContainerContainer/TabMenu" to="." method="_on_tab_menu_tab_changed"]
 [connection signal="pressed" from="ContainerContainer/HBoxContainer/SkillTreeButton" to="." method="request_skill_tree"]
 [connection signal="pressed" from="ContainerContainer/HBoxContainer/BackButton" to="." method="close"]
