@@ -7,18 +7,18 @@
 [ext_resource type="Texture2D" uid="uid://bxhwtcxdgtkx6" path="res://textures/gui/keyboard_key.png" id="5_fubsc"]
 [ext_resource type="PackedScene" uid="uid://blpc84uugpfvi" path="res://gui/party_display.tscn" id="6_f8scv"]
 
-[sub_resource type="InputEventKey" id="InputEventKey_f8scv"]
+[sub_resource type="InputEventKey" id="InputEventKey_tbgit"]
 device = -1
 physical_keycode = 69
 unicode = 101
 
-[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_4y04n"]
+[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_sxgyi"]
 device = -1
 button_index = 10
 pressed = true
 
-[sub_resource type="Shortcut" id="Shortcut_au610"]
-events = [SubResource("InputEventKey_f8scv"), SubResource("InputEventJoypadButton_4y04n")]
+[sub_resource type="Shortcut" id="Shortcut_f8scv"]
+events = [SubResource("InputEventKey_tbgit"), SubResource("InputEventJoypadButton_sxgyi")]
 
 [node name="UtilityMenu" type="Control"]
 material = ExtResource("1_jr21q")
@@ -42,7 +42,7 @@ offset_bottom = 48.0
 size_flags_horizontal = 8
 size_flags_vertical = 0
 theme = ExtResource("3_v0p8v")
-shortcut = SubResource("Shortcut_au610")
+shortcut = SubResource("Shortcut_f8scv")
 text = "←"
 icon = ExtResource("5_fubsc")
 input_action_name = "menu_right"
@@ -127,6 +127,7 @@ text = "Pause"
 [connection signal="pressed" from="MenuButton" to="." method="toggle_menu"]
 [connection signal="closed" from="PartyDisplay" to="." method="focus_party"]
 [connection signal="closed" from="PartyDisplay" to="Info" method="show"]
+[connection signal="request_open_character_sheet" from="PartyDisplay" to="." method="request_open_character_sheet"]
 [connection signal="pressed" from="Info/Party" to="PartyDisplay" method="open_menu"]
 [connection signal="pressed" from="Info/Party" to="Info" method="hide"]
 [connection signal="pressed" from="Info/Journal" to="." method="journal_pressed"]

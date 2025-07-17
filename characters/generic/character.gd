@@ -52,7 +52,8 @@ enum ai_types { ## Options for enemy ai
 	melee_safe ## Safe melee attacker that tries to stay alive but still deal damage
 }
 @export var display_name: String = "Name Here" ## Name displayed in gui and logs
-@export var portrait: Texture2D ## Character's portrait
+@export var portrait: Texture2D = preload("uid://b3jluv54rfg24") ## Character's portrait
+@export var pronouns: String = "They/Them" ## Character's pronouns in gui and logs
 @export var dialogues: Array[DialogicTimeline] ## Dialogues for the NPC to enter when interacted
 @export var signal_dialogues: Dictionary[String, DialogicTimeline] ## Second set of dialogue for triggering through signals
 @export var text_indicator_shift: Vector2 = Vector2.UP*32 ## Distance away from this to spawn text indicators

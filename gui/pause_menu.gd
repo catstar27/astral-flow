@@ -67,6 +67,10 @@ func quit_pressed()->void:
 func reset_pressed() -> void:
 	SaveLoad.reset_save(SaveLoad.slot)
 
+## Focuses the settings button
+func focus_settings()->void:
+	%Settings.grab_focus()
+
 ## Focuses the save button
 func focus_save()->void:
 	save_button.grab_focus()

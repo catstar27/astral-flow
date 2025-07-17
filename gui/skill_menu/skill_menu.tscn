@@ -1,41 +1,78 @@
-[gd_scene load_steps=3 format=3 uid="uid://bp3kviw2dmw1c"]
+[gd_scene load_steps=8 format=3 uid="uid://bp3kviw2dmw1c"]
 
 [ext_resource type="Texture2D" uid="uid://c86rddiynhvpb" path="res://textures/gui/backgrounds.png" id="1_vjr7l"]
+[ext_resource type="Script" uid="uid://f7npi380faxk" path="res://gui/skill_menu/skill_menu.gd" id="1_vvfok"]
 [ext_resource type="PackedScene" uid="uid://c6kh3esjn5743" path="res://gui/tab_menu.tscn" id="2_3b158"]
+[ext_resource type="PackedScene" uid="uid://dleye7m8gjxs0" path="res://gui/components/control_display_button.tscn" id="3_s5afe"]
+
+[sub_resource type="InputEventKey" id="InputEventKey_olbgs"]
+device = -1
+physical_keycode = 4194305
+
+[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_e03yn"]
+device = -1
+button_index = 1
+pressed = true
+
+[sub_resource type="Shortcut" id="Shortcut_s5afe"]
+events = [SubResource("InputEventKey_olbgs"), SubResource("InputEventJoypadButton_e03yn")]
 
 [node name="SkillMenu" type="MarginContainer"]
+process_mode = 3
+z_index = 3
 custom_minimum_size = Vector2(960, 540)
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -480.0
+offset_top = -270.0
+offset_right = 480.0
+offset_bottom = 270.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_vvfok")
 
 [node name="Background" type="TextureRect" parent="."]
 layout_mode = 2
 texture = ExtResource("1_vjr7l")
 expand_mode = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="."]
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 2
 alignment = 1
 
-[node name="TabMenu" parent="HBoxContainer" instance=ExtResource("2_3b158")]
+[node name="TabMenu" parent="VBoxContainer" instance=ExtResource("2_3b158")]
 custom_minimum_size = Vector2(960, 0)
 layout_mode = 2
+size_flags_vertical = 3
 
-[node name="Body" type="Control" parent="HBoxContainer/TabMenu"]
+[node name="Body" type="Control" parent="VBoxContainer/TabMenu"]
 visible = false
 layout_mode = 2
 
-[node name="Mind" type="Control" parent="HBoxContainer/TabMenu"]
+[node name="Mind" type="Control" parent="VBoxContainer/TabMenu"]
 visible = false
 layout_mode = 2
 
-[node name="Soul" type="Control" parent="HBoxContainer/TabMenu"]
+[node name="Soul" type="Control" parent="VBoxContainer/TabMenu"]
 visible = false
 layout_mode = 2
 
-[node name="Survivalism" type="Control" parent="HBoxContainer/TabMenu"]
+[node name="Survivalism" type="Control" parent="VBoxContainer/TabMenu"]
 visible = false
 layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 8
+alignment = 1
+
+[node name="BackButton" parent="VBoxContainer/HBoxContainer" instance=ExtResource("3_s5afe")]
+layout_mode = 2
+shortcut = SubResource("Shortcut_s5afe")
+text = "Back"
+input_action_name = "menu_back"
+
+[connection signal="pressed" from="VBoxContainer/HBoxContainer/BackButton" to="." method="close"]

@@ -18,6 +18,7 @@ signal journal_button_pressed ## Emitted when the journal button is pressed
 signal map_button_pressed ## Emitted when the map button is pressed
 signal inventory_button_pressed ## Emitted when the inventory button is pressed
 signal pause_button_pressed ## Emitted when the pause button is pressed
+signal character_sheet_requested(character: Character) ## Emitted to open a character sheet
 
 func _ready() -> void:
 	menu_button.display_updated.connect(update_menu_button)
@@ -122,3 +123,6 @@ func hide_buttons()->void:
 ## Shows the menu buttons
 func show_buttons()->void:
 	info_container.show()
+
+func request_open_character_sheet(character: Character) -> void:
+	character_sheet_requested.emit(character)

@@ -6,43 +6,43 @@
 [ext_resource type="PackedScene" uid="uid://depd563y28yi7" path="res://gui/confirm_menu.tscn" id="4_708xp"]
 [ext_resource type="PackedScene" uid="uid://dkgpv5vlu04j8" path="res://gui/text_entry_menu.tscn" id="5_5v703"]
 
-[sub_resource type="InputEventKey" id="InputEventKey_wj3tw"]
+[sub_resource type="InputEventKey" id="InputEventKey_5v703"]
 device = -1
 physical_keycode = 4194305
 
-[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_708xp"]
+[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_55gbt"]
 device = -1
 button_index = 6
 pressed = true
 
 [sub_resource type="Shortcut" id="Shortcut_urlxi"]
-events = [SubResource("InputEventKey_wj3tw"), SubResource("InputEventJoypadButton_708xp")]
+events = [SubResource("InputEventKey_5v703"), SubResource("InputEventJoypadButton_55gbt")]
 
-[sub_resource type="InputEventKey" id="InputEventKey_55gbt"]
+[sub_resource type="InputEventKey" id="InputEventKey_uh0os"]
 device = -1
 physical_keycode = 81
 unicode = 113
 
-[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_urlxi"]
+[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_unlwm"]
 device = -1
 button_index = 9
 pressed = true
 
-[sub_resource type="Shortcut" id="Shortcut_uh0os"]
-events = [SubResource("InputEventKey_55gbt"), SubResource("InputEventJoypadButton_urlxi")]
+[sub_resource type="Shortcut" id="Shortcut_gj2p6"]
+events = [SubResource("InputEventKey_uh0os"), SubResource("InputEventJoypadButton_unlwm")]
 
-[sub_resource type="InputEventKey" id="InputEventKey_gj2p6"]
+[sub_resource type="InputEventKey" id="InputEventKey_tbgit"]
 device = -1
 physical_keycode = 69
 unicode = 101
 
-[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_tbgit"]
+[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_sxgyi"]
 device = -1
 button_index = 10
 pressed = true
 
-[sub_resource type="Shortcut" id="Shortcut_unlwm"]
-events = [SubResource("InputEventKey_gj2p6"), SubResource("InputEventJoypadButton_tbgit")]
+[sub_resource type="Shortcut" id="Shortcut_i48ie"]
+events = [SubResource("InputEventKey_tbgit"), SubResource("InputEventJoypadButton_sxgyi")]
 
 [node name="SaveMenu" type="Control"]
 layout_mode = 3
@@ -135,7 +135,7 @@ size_flags_vertical = 10
 [node name="RenameButton" parent="Menu/HBoxContainer/InfoContainer/HBoxContainer" instance=ExtResource("2_wj3tw")]
 unique_name_in_owner = true
 layout_mode = 2
-shortcut = SubResource("Shortcut_uh0os")
+shortcut = SubResource("Shortcut_gj2p6")
 text = "Rename"
 icon = ExtResource("3_708xp")
 input_action_name = "menu_left"
@@ -146,7 +146,7 @@ layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 10
 theme_override_font_sizes/font_size = 24
-shortcut = SubResource("Shortcut_unlwm")
+shortcut = SubResource("Shortcut_i48ie")
 text = "Delete"
 icon = ExtResource("3_708xp")
 input_action_name = "menu_right"

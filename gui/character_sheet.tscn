@@ -1,91 +1,198 @@
-[gd_scene load_steps=5 format=3 uid="uid://e46u6ucc1flk"]
+[gd_scene load_steps=11 format=3 uid="uid://e46u6ucc1flk"]
 
+[ext_resource type="Script" uid="uid://dmwj4oq634f84" path="res://gui/character_sheet.gd" id="1_iutca"]
 [ext_resource type="PackedScene" uid="uid://c6kh3esjn5743" path="res://gui/tab_menu.tscn" id="1_tjhau"]
-[ext_resource type="Material" uid="uid://dessed1x8jslv" path="res://materials/blur_material.tres" id="2_iutca"]
 [ext_resource type="Texture2D" uid="uid://b3jluv54rfg24" path="res://textures/character/generic_portrait.png" id="2_j877r"]
-[ext_resource type="Texture2D" uid="uid://ceeo5gnqb2rcr" path="res://textures/gui/foreground.png" id="3_j877r"]
+[ext_resource type="PackedScene" uid="uid://dleye7m8gjxs0" path="res://gui/components/control_display_button.tscn" id="4_iutca"]
 
-[node name="CharacterSheet" type="VBoxContainer"]
-offset_right = 40.0
-offset_bottom = 40.0
+[sub_resource type="InputEventKey" id="InputEventKey_j877r"]
+device = -1
+physical_keycode = 4194326
 
-[node name="TabMenu" parent="." instance=ExtResource("1_tjhau")]
+[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_bqx8u"]
+device = -1
+button_index = 4
+pressed = true
+
+[sub_resource type="Shortcut" id="Shortcut_x2dtq"]
+events = [SubResource("InputEventKey_j877r"), SubResource("InputEventJoypadButton_bqx8u")]
+
+[sub_resource type="InputEventKey" id="InputEventKey_olbgs"]
+device = -1
+physical_keycode = 4194305
+
+[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_e03yn"]
+device = -1
+button_index = 1
+pressed = true
+
+[sub_resource type="Shortcut" id="Shortcut_clq0d"]
+events = [SubResource("InputEventKey_olbgs"), SubResource("InputEventJoypadButton_e03yn")]
+
+[node name="CharacterSheet" type="Control" node_paths=PackedStringArray("name_labels", "portrait_displays", "pronoun_labels")]
+process_mode = 3
+z_index = 2
+layout_mode = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_iutca")
+name_labels = [NodePath("ContainerContainer/TabMenu/Stats/VBoxContainer/HBoxContainer/VBoxContainer/NameLabel"), NodePath("ContainerContainer/TabMenu/Bio/VBoxContainer/HBoxContainer/VBoxContainer/NameLabel"), NodePath("ContainerContainer/TabMenu/Feats/VBoxContainer/HBoxContainer/VBoxContainer/NameLabel"), NodePath("ContainerContainer/TabMenu/Misc/VBoxContainer/HBoxContainer/VBoxContainer/NameLabel")]
+portrait_displays = [NodePath("ContainerContainer/TabMenu/Stats/VBoxContainer/HBoxContainer/VBoxContainer/PortraitDisplay"), NodePath("ContainerContainer/TabMenu/Bio/VBoxContainer/HBoxContainer/VBoxContainer/PortraitDisplay"), NodePath("ContainerContainer/TabMenu/Feats/VBoxContainer/HBoxContainer/VBoxContainer/PortraitDisplay"), NodePath("ContainerContainer/TabMenu/Misc/VBoxContainer/HBoxContainer/VBoxContainer/PortraitDisplay")]
+pronoun_labels = [NodePath("ContainerContainer/TabMenu/Stats/VBoxContainer/HBoxContainer/VBoxContainer/PronounLabel"), NodePath("ContainerContainer/TabMenu/Bio/VBoxContainer/HBoxContainer/VBoxContainer/PronounLabel"), NodePath("ContainerContainer/TabMenu/Feats/VBoxContainer/HBoxContainer/VBoxContainer/PronounLabel"), NodePath("ContainerContainer/TabMenu/Misc/VBoxContainer/HBoxContainer/VBoxContainer/PronounLabel")]
+
+[node name="ContainerContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -240.0
+offset_top = -49.0
+offset_right = 240.0
+offset_bottom = 49.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TabMenu" parent="ContainerContainer" instance=ExtResource("1_tjhau")]
 layout_mode = 2
 
-[node name="Stats" type="PanelContainer" parent="TabMenu"]
-layout_mode = 2
-
-[node name="VBoxContainer" type="VBoxContainer" parent="TabMenu/Stats"]
-layout_mode = 2
-
-[node name="HBoxContainer" type="HBoxContainer" parent="TabMenu/Stats/VBoxContainer"]
-layout_mode = 2
-
-[node name="VBoxContainer" type="VBoxContainer" parent="TabMenu/Stats/VBoxContainer/HBoxContainer"]
-layout_mode = 2
-
-[node name="TextureRect" type="TextureRect" parent="TabMenu/Stats/VBoxContainer/HBoxContainer/VBoxContainer" groups=["CharacterIcons"]]
-layout_mode = 2
-size_flags_horizontal = 4
-texture = ExtResource("2_j877r")
-stretch_mode = 4
-
-[node name="NameLabel" type="Label" parent="TabMenu/Stats/VBoxContainer/HBoxContainer/VBoxContainer" groups=["NameLabels"]]
-layout_mode = 2
-text = "Name Here"
-horizontal_alignment = 1
-
-[node name="Bio" type="PanelContainer" parent="TabMenu"]
+[node name="Stats" type="PanelContainer" parent="ContainerContainer/TabMenu"]
 visible = false
 layout_mode = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="TabMenu/Bio"]
+[node name="VBoxContainer" type="VBoxContainer" parent="ContainerContainer/TabMenu/Stats"]
 layout_mode = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="TabMenu/Bio/VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="ContainerContainer/TabMenu/Stats/VBoxContainer"]
 layout_mode = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="TabMenu/Bio/VBoxContainer/HBoxContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="ContainerContainer/TabMenu/Stats/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 
-[node name="TextureRect" type="TextureRect" parent="TabMenu/Bio/VBoxContainer/HBoxContainer/VBoxContainer" groups=["CharacterIcons"]]
+[node name="PortraitDisplay" type="TextureRect" parent="ContainerContainer/TabMenu/Stats/VBoxContainer/HBoxContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
 texture = ExtResource("2_j877r")
 stretch_mode = 4
 
-[node name="NameLabel" type="Label" parent="TabMenu/Bio/VBoxContainer/HBoxContainer/VBoxContainer" groups=["NameLabels"]]
+[node name="NameLabel" type="Label" parent="ContainerContainer/TabMenu/Stats/VBoxContainer/HBoxContainer/VBoxContainer"]
 layout_mode = 2
 text = "Name Here"
 horizontal_alignment = 1
 
-[node name="Skills" type="PanelContainer" parent="TabMenu"]
+[node name="PronounLabel" type="Label" parent="ContainerContainer/TabMenu/Stats/VBoxContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "Pronouns Here"
+horizontal_alignment = 1
+
+[node name="Bio" type="PanelContainer" parent="ContainerContainer/TabMenu"]
 visible = false
 layout_mode = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="TabMenu/Skills"]
+[node name="VBoxContainer" type="VBoxContainer" parent="ContainerContainer/TabMenu/Bio"]
 layout_mode = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="TabMenu/Skills/VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="ContainerContainer/TabMenu/Bio/VBoxContainer"]
 layout_mode = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="TabMenu/Skills/VBoxContainer/HBoxContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="ContainerContainer/TabMenu/Bio/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 
-[node name="TextureRect" type="TextureRect" parent="TabMenu/Skills/VBoxContainer/HBoxContainer/VBoxContainer" groups=["CharacterIcons"]]
+[node name="PortraitDisplay" type="TextureRect" parent="ContainerContainer/TabMenu/Bio/VBoxContainer/HBoxContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
 texture = ExtResource("2_j877r")
 stretch_mode = 4
 
-[node name="NameLabel" type="Label" parent="TabMenu/Skills/VBoxContainer/HBoxContainer/VBoxContainer" groups=["NameLabels"]]
+[node name="NameLabel" type="Label" parent="ContainerContainer/TabMenu/Bio/VBoxContainer/HBoxContainer/VBoxContainer"]
 layout_mode = 2
 text = "Name Here"
 horizontal_alignment = 1
 
-[node name="Blur" type="Sprite2D" parent="."]
-z_index = -1
-material = ExtResource("2_iutca")
-position = Vector2(6, 6)
-scale = Vector2(10000, 10000)
-texture = ExtResource("3_j877r")
+[node name="PronounLabel" type="Label" parent="ContainerContainer/TabMenu/Bio/VBoxContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "Pronouns Here"
+horizontal_alignment = 1
+
+[node name="Feats" type="PanelContainer" parent="ContainerContainer/TabMenu"]
+visible = false
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ContainerContainer/TabMenu/Feats"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="ContainerContainer/TabMenu/Feats/VBoxContainer"]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ContainerContainer/TabMenu/Feats/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+
+[node name="PortraitDisplay" type="TextureRect" parent="ContainerContainer/TabMenu/Feats/VBoxContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+texture = ExtResource("2_j877r")
+stretch_mode = 4
+
+[node name="NameLabel" type="Label" parent="ContainerContainer/TabMenu/Feats/VBoxContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "Name Here"
+horizontal_alignment = 1
+
+[node name="PronounLabel" type="Label" parent="ContainerContainer/TabMenu/Feats/VBoxContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "Pronouns Here"
+horizontal_alignment = 1
+
+[node name="Misc" type="PanelContainer" parent="ContainerContainer/TabMenu"]
+visible = false
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ContainerContainer/TabMenu/Misc"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="ContainerContainer/TabMenu/Misc/VBoxContainer"]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ContainerContainer/TabMenu/Misc/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+
+[node name="PortraitDisplay" type="TextureRect" parent="ContainerContainer/TabMenu/Misc/VBoxContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+texture = ExtResource("2_j877r")
+stretch_mode = 4
+
+[node name="NameLabel" type="Label" parent="ContainerContainer/TabMenu/Misc/VBoxContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "Name Here"
+horizontal_alignment = 1
+
+[node name="PronounLabel" type="Label" parent="ContainerContainer/TabMenu/Misc/VBoxContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "Pronouns Here"
+horizontal_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="ContainerContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="SkillTreeButton" parent="ContainerContainer/HBoxContainer" instance=ExtResource("4_iutca")]
+layout_mode = 2
+shortcut = SubResource("Shortcut_x2dtq")
+text = "Skill Tree"
+input_action_name = "info"
+
+[node name="BackButton" parent="ContainerContainer/HBoxContainer" instance=ExtResource("4_iutca")]
+layout_mode = 2
+shortcut = SubResource("Shortcut_clq0d")
+text = "Back"
+input_action_name = "menu_back"
+
+[connection signal="pressed" from="ContainerContainer/HBoxContainer/SkillTreeButton" to="." method="request_skill_tree"]
+[connection signal="pressed" from="ContainerContainer/HBoxContainer/BackButton" to="." method="close"]

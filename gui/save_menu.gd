@@ -11,6 +11,7 @@ class_name SaveMenu
 @onready var text_entry_menu: TextEntryMenu = %TextEntryMenu ## Menu for text entries
 var save_mode: bool = true ## Whether this is in save or load mode
 var file_tree_prepped: bool = false ## Whether the file tree has been prepared
+var selecting: bool = false ## Whether this is currently selecting a file/folder
 signal opened ## Emitted when opened
 signal closed_save ## Emitted when closed in save mode
 signal closed_load ## Emitted when closed in load mode
@@ -18,10 +19,14 @@ signal closed_load ## Emitted when closed in load mode
 func _unhandled_input(event: InputEvent) -> void:
 	if !file_tree_prepped:
 		return
-	if event.is_action_pressed("down"):
-		select_next()
-	elif event.is_action_pressed("up"):
-		select_prev()
+	if Input.is_action_just_pressed("down"):
+		select_next(false)
+	elif Input.is_action_pressed("down"):
+		select_next(true)
+	elif Input.is_action_just_pressed("up"):
+		select_prev(false)
+	elif Input.is_action_pressed("up"):
+		select_prev(true)
 	elif event.is_action_pressed("interact"):
 		if file_tree.get_selected().get_child_count() > 0:
 			file_tree.get_selected().collapsed = !file_tree.get_selected().collapsed
@@ -29,7 +34,10 @@ func _unhandled_input(event: InputEvent) -> void:
 			file_tree.button_clicked.emit(file_tree.get_selected(), 0, 0, 0)
 
 ## Selects the next file or folder in the tree
-func select_next()->void:
+func select_next(timed: bool = false)->void:
+	if selecting:
+		return
+	selecting = true
 	var next: TreeItem = file_tree.get_selected().get_next()
 	if file_tree.get_selected().get_child_count() > 0:
 		next = file_tree.get_selected().get_child(0)
@@ -37,10 +45,16 @@ func select_next()->void:
 		next = file_tree.get_selected().get_parent().get_next()
 	if next != null:
 		next.select(0)
-	file_tree.scroll_to_item(next)
+		file_tree.scroll_to_item(next)
+		if timed:
+			await get_tree().create_timer(.1).timeout
+	selecting = false
 
 ## Selects the previous file or folder in the tree
-func select_prev()->void:
+func select_prev(timed: bool = false)->void:
+	if selecting:
+		return
+	selecting = true
 	var prev: TreeItem = file_tree.get_selected().get_prev()
 	if prev != null && prev.get_child_count() > 0:
 		prev = prev.get_child(-1)
@@ -48,7 +62,10 @@ func select_prev()->void:
 		prev = file_tree.get_selected().get_parent()
 	if prev != null:
 		prev.select(0)
-	file_tree.scroll_to_item(prev)
+		file_tree.scroll_to_item(prev)
+		if timed:
+			await get_tree().create_timer(.1).timeout
+	selecting = false
 
 ## Opens the menu in save mode
 func open_save_mode()->void:
@@ -108,11 +125,9 @@ func prep_file_tree()->void:
 		if save_mode:
 			var new_file_item: TreeItem = file_tree.create_item(dir_item)
 			new_file_item.set_text(0, "New File")
-			new_file_item.add_button(0, Texture2D.new())
 	if save_mode:
 		var new_save_item: TreeItem = file_tree.create_item(root)
 		new_save_item.set_text(0, "New Folder")
-		new_save_item.add_button(0, Texture2D.new())
 	file_tree_prepped = true
 
 ## Process a file tree button being pressed
@@ -131,8 +146,9 @@ func process_file_tree_button_press(item: TreeItem, column: int, _id: int, _mous
 			new_item.set_text(0, data[1])
 			var new_file_item: TreeItem = file_tree.create_item(new_item)
 			new_file_item.set_text(0, "New File")
-			new_file_item.add_button(0, Texture2D.new())
 			DirAccess.make_dir_absolute(SaveLoad.save_file_folder+data[1])
+			select_prev()
+			select_prev()
 	elif button_text == "New File":
 		text_entry_menu.info_label.text = "Enter New File Name"
 		text_entry_menu.open()
@@ -144,8 +160,8 @@ func process_file_tree_button_press(item: TreeItem, column: int, _id: int, _mous
 					return
 			var new_item: TreeItem = item.get_parent().create_child(item.get_index())
 			new_item.set_text(0, data[1]+".dat")
-			new_item.add_button(0, Texture2D.new())
 			SaveLoad.save_data(data[1], item.get_parent().get_text(0))
+			select_prev()
 	else:
 		if save_mode:
 			SaveLoad.save_data(button_text.left(-4), item.get_parent().get_text(0))
