@@ -13,7 +13,7 @@ class_name Status
 	"avoidance": 0, ## Ability to Dodge
 	"crit_range": 0, ## Ability to Crit
 	"defense": 0, ## Reduces damage taken if below threshold
-	"damage_threshold": 0, ## Threshold at which defense is no longer factored
+	"dt": 0, ## Threshold at which defense is no longer factored
 	"sequence": 0, ## Likeliness of moving earlier in combat
 	"move_speed": 0 ## Determines amount of tiles moved for each action point
 }

@@ -8,17 +8,19 @@ script = ExtResource("1_mv7by")
 stat_mods = Dictionary[String, int]({
 "avoidance": 0,
 "crit_range": 0,
-"damage_threshold": 2,
 "defense": 2,
+"dt": 2,
 "max_ap": 0,
 "max_hp": 0,
 "max_mp": 0,
+"move_speed": 0,
 "sequence": 0
 })
 clear_conditions = Dictionary[String, bool]({
 "move": false,
 "rest": false,
-"take_damage": true
+"take_damage": true,
+"triggered": false
 })
 damage = 0
 time_choice = 1

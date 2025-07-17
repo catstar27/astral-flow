@@ -30,7 +30,7 @@ var base_stats: Dictionary[String, int] = { ## Base stats calculated from star s
 	"avoidance": 0,
 	"crit_range": 1,
 	"defense": 0,
-	"damage_threshold": 10,
+	"dt": 10,
 	"sequence": 0,
 	"move_speed": 1
 }
@@ -41,7 +41,7 @@ var stat_mods: Dictionary[String, int] = { ## Stat modifiers from statuses, etc.
 	"avoidance": 0,
 	"crit_range": 0,
 	"defense": 0,
-	"damage_threshold": 0,
+	"dt": 0,
 	"sequence": 0,
 	"move_speed": 0
 }
@@ -350,7 +350,7 @@ func on_defeated()->void:
 ## Damages the character for a given amount
 func damage(source: Node, amount: int, _damage_type: Ability.damage_type_options, ignore_defense: bool = false)->void:
 	var text_ind_pos: Vector2 = text_indicator_shift+global_position
-	if amount >= base_stats.damage_threshold+stat_mods.damage_threshold || ignore_defense:
+	if amount >= base_stats.dt+stat_mods.dt || ignore_defense:
 		cur_hp -= amount
 		EventBus.broadcast("MAKE_TEXT_INDICATOR", [str(-amount), text_ind_pos])
 	else:

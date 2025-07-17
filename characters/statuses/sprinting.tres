@@ -7,8 +7,8 @@ script = ExtResource("1_o6jp1")
 stat_mods = Dictionary[String, int]({
 "avoidance": 0,
 "crit_range": 0,
-"damage_threshold": 0,
 "defense": 0,
+"dt": 0,
 "max_ap": 0,
 "max_hp": 0,
 "max_mp": 0,

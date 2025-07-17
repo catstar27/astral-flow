@@ -141,6 +141,7 @@ star_stats = Dictionary[String, int]({
 "strength": 12
 })
 display_name = "Kalin"
+pronouns = "He/Him"
 export_abilities = Array[ExtResource("2_6rrl0")]([ExtResource("3_6rrl0"), ExtResource("4_eus45")])
 
 [node name="Sprite" type="Sprite2D" parent="."]

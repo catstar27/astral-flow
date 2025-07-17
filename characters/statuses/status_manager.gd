@@ -12,7 +12,7 @@ var stat_mods: Dictionary = { ## Current total stat modification from statuses
 	"avoidance": 0,
 	"crit_range": 0,
 	"defense": 0,
-	"damage_threshold": 0,
+	"dt": 0,
 	"sequence": 0,
 	"move_speed": 0
 }
