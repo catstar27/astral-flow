@@ -15,6 +15,7 @@ const tab_button_scn: PackedScene = preload("uid://cayiahrutslld") ## Tab button
 @onready var tab_button_container: HBoxContainer = %TabButtonContainer ## Container for tab buttons
 var tab_buttons: Dictionary[Node, TabButton] ## Stores key/value pairs of button names and buttons
 var cur_tab: Node ## The currently shown tab
+var exiting_tree: bool = false ## Whether this is exiting the tree
 signal tab_changed ## Emitted when changing tabs
 
 func _ready() -> void:
@@ -41,6 +42,14 @@ func set_children(children: Array[Node])->void:
 	cur_tab = get_child(1)
 	tab_buttons[cur_tab].button_pressed = true
 
+## Sets exiting_tree to false
+func on_tree_enter()->void:
+	exiting_tree = false
+
+## Sets exiting_tree to true
+func on_tree_exit()->void:
+	exiting_tree = true
+
 ## Creates and returns a tab button
 func get_tab_button(node: Control)->TabButton:
 	var button: TabButton = tab_button_scn.instantiate()
@@ -59,8 +68,10 @@ func reorder()->void:
 
 ## Removes a tab button when the tab is removed from the scene
 func remove_tab(node: Node)->void:
-	if node is Control && is_node_ready():
+	if node is Control && is_node_ready() && !exiting_tree:
 		if node in tab_buttons:
+			while node.is_inside_tree():
+				await node.tree_exited
 			tab_button_container.remove_child(tab_buttons[node])
 			tab_buttons[node].queue_free()
 			tab_buttons.erase(node)
@@ -68,10 +79,12 @@ func remove_tab(node: Node)->void:
 
 ## Adds a tab button when a tab is added to the scene
 func add_tab(node: Node)->void:
-	if !is_node_ready():
+	if !is_node_ready() || exiting_tree:
 		return
 	if node is Control && node.name != "TabButtonContainer":
 		if node not in tab_buttons:
+			while !node.is_inside_tree():
+				await node.tree_entered
 			tab_buttons[node] = get_tab_button(node)
 			tab_button_container.add_child(tab_buttons[node])
 			tab_buttons[node].set_owner(self)
@@ -157,9 +170,9 @@ func crunch_tabs()->void:
 	ellipse_left.hide()
 	ellipse_right.hide()
 	if get_tab_buttons_width() > custom_minimum_size.x:
-		var left: int = 1
-		var right: int = get_child_count()-1
-		var mid: int = cur_tab.get_index()
+		var left: int = 2
+		var right: int = tab_button_container.get_child_count()-3
+		var mid: int = cur_tab.get_index()+1
 		while get_tab_buttons_width() > custom_minimum_size.x && visible_tab_button_count() > min_tabs:
 			if right <= left || left >= right:
 				printerr("Out of bounds in tab menu")
@@ -167,11 +180,11 @@ func crunch_tabs()->void:
 			var left_distance: int = mid-left
 			var right_distance: int = right-mid
 			if left_distance > right_distance:
-				tab_button_container.get_child(left+1).hide()
+				tab_button_container.get_child(left).hide()
 				ellipse_left.show()
 				left += 1
 			else:
-				tab_button_container.get_child(right+1).hide()
+				tab_button_container.get_child(right).hide()
 				ellipse_right.show()
 				right -= 1
 

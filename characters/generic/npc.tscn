@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://bxbk83doy5d81"]
+[gd_scene load_steps=19 format=3 uid="uid://bxbk83doy5d81"]
 
 [ext_resource type="Script" uid="uid://bukxn4fr7eh2h" path="res://characters/generic/character.gd" id="1_kbq0t"]
 [ext_resource type="Texture2D" uid="uid://bxary7ep8tnbo" path="res://textures/character/nilak_spritesheet.png" id="3_irndy"]
@@ -11,6 +11,7 @@
 [ext_resource type="Texture2D" uid="uid://dcna26emu8eso" path="res://textures/character/nilak_silhouette_spritesheet.png" id="5_xb2yg"]
 [ext_resource type="PackedScene" uid="uid://c87v4rbl0fr7" path="res://characters/states/idle.tscn" id="6_mou4c"]
 [ext_resource type="PackedScene" uid="uid://d1oj7ptthilej" path="res://characters/states/interact.tscn" id="7_30kjh"]
+[ext_resource type="PackedScene" uid="uid://bdwm3cok11264" path="res://characters/items/item_manager.tscn" id="8_a0s2v"]
 [ext_resource type="PackedScene" uid="uid://brlpvcs48fhyc" path="res://characters/states/activate_ability.tscn" id="9_xkqqq"]
 
 [sub_resource type="CanvasTexture" id="CanvasTexture_wftwt"]
@@ -164,6 +165,9 @@ scale = Vector2(2, 2)
 shape = SubResource("RectangleShape2D_23jct")
 
 [node name="StatusManager" parent="." instance=ExtResource("4_vh4ik")]
+unique_name_in_owner = true
+
+[node name="ItemManager" parent="." instance=ExtResource("8_a0s2v")]
 unique_name_in_owner = true
 
 [node name="StateMachine" parent="." node_paths=PackedStringArray("user") instance=ExtResource("4_rutmc")]

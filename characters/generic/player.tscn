@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=3 uid="uid://qjb7sn1qkk44"]
+[gd_scene load_steps=22 format=3 uid="uid://qjb7sn1qkk44"]
 
 [ext_resource type="Script" uid="uid://duk342kn2rflp" path="res://characters/generic/player.gd" id="1_so47p"]
 [ext_resource type="Script" uid="uid://b0xbk38jyra5a" path="res://characters/abilities/ability.gd" id="2_6rrl0"]
@@ -15,6 +15,7 @@
 [ext_resource type="Texture2D" uid="uid://dqh4naxgo2grg" path="res://textures/character/kalin_silhouette_spritesheet.png" id="9_ahu5m"]
 [ext_resource type="PackedScene" uid="uid://d1oj7ptthilej" path="res://characters/states/interact.tscn" id="9_cg4mf"]
 [ext_resource type="PackedScene" uid="uid://brlpvcs48fhyc" path="res://characters/states/activate_ability.tscn" id="11_0xkjr"]
+[ext_resource type="PackedScene" uid="uid://bdwm3cok11264" path="res://characters/items/item_manager.tscn" id="11_ahu5m"]
 
 [sub_resource type="CanvasTexture" id="CanvasTexture_tvd7q"]
 diffuse_texture = ExtResource("3_rhuoj")
@@ -179,6 +180,9 @@ scale = Vector2(2, 2)
 shape = SubResource("RectangleShape2D_g7ocv")
 
 [node name="StatusManager" parent="." instance=ExtResource("6_5iydw")]
+unique_name_in_owner = true
+
+[node name="ItemManager" parent="." instance=ExtResource("11_ahu5m")]
 unique_name_in_owner = true
 
 [node name="StateMachine" parent="." node_paths=PackedStringArray("user") instance=ExtResource("6_g6tfj")]

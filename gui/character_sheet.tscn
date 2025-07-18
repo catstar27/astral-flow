@@ -63,17 +63,17 @@ pressed = true
 [sub_resource type="Shortcut" id="Shortcut_iutca"]
 events = [SubResource("InputEventKey_iutca"), SubResource("InputEventJoypadButton_j877r")]
 
-[sub_resource type="InputEventKey" id="InputEventKey_x2dtq"]
+[sub_resource type="InputEventKey" id="InputEventKey_vvfok"]
 device = -1
 physical_keycode = 4194305
 
-[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_olbgs"]
+[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_r02yt"]
 device = -1
 button_index = 1
 pressed = true
 
 [sub_resource type="Shortcut" id="Shortcut_j877r"]
-events = [SubResource("InputEventKey_x2dtq"), SubResource("InputEventJoypadButton_olbgs")]
+events = [SubResource("InputEventKey_vvfok"), SubResource("InputEventJoypadButton_r02yt")]
 
 [node name="CharacterSheet" type="Control" node_paths=PackedStringArray("item_list", "feats_list", "star_stats_container", "other_stats_container", "name_labels", "portrait_displays", "pronoun_labels")]
 process_mode = 3
@@ -116,6 +116,7 @@ layout_mode = 2
 min_tabs = 4
 
 [node name="Stats" type="PanelContainer" parent="ContainerContainer/TabMenu"]
+visible = false
 custom_minimum_size = Vector2(0, 320)
 layout_mode = 2
 

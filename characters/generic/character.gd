@@ -62,6 +62,7 @@ enum ai_types { ## Options for enemy ai
 @export var starting_breakthroughs: Array[Breakthrough] ## List of breakthroughs
 @export var export_abilities: Array[Ability] = [] ## Exported ability list for initial abilities
 @export var starting_statuses: Array[Status] ## List of statuses to start with
+@export var starting_items: Array[Item] ## List of items to start with
 @export_group("Combat") ## Exports related to combat ai and what this considers an enemy
 @export var ai_type: ai_types ## This enemy's ai type
 @export var allies: Array[Character] = [] ## List of allies to bring into combat alongside this character
@@ -79,6 +80,7 @@ const range_indicator_scene: PackedScene = preload("res://misc/selection_cursor/
 @onready var anim_player: AnimationPlayer = %AnimationPlayer ## Animation Player for this character
 @onready var state_machine: StateMachine = %StateMachine ## State Machine for this character
 @onready var status_manager: StatusManager = %StatusManager ## Status Manager for this character
+@onready var item_manager: ItemManager = %ItemManager ## Item Manager for this character
 @onready var combat_trigger: Area2D = %CombatTrigger ## Area that tracks other characters for combat
 @onready var collision: CollisionShape2D = %Collision ## Collision of the character
 var skills: Array[Skill] ## Actual list of skills
@@ -107,6 +109,7 @@ var combat_target: Character = null ## The character this is attempting to attac
 var watching: Dictionary[Node2D, RayCast2D] = {} ## Character/raycast pairs for characters in combat trigger
 var speed_remainder: int = 0 ## Amount of unused free movement
 var status_data: Dictionary[String, Variant] ## Save data for the status manager
+var item_data: Dictionary[String, int] ## Save data holding item ids and amounts
 var to_save: Array[StringName] = [ ## Variables to save
 	"position",
 	"star_stats",
@@ -123,7 +126,8 @@ var to_save: Array[StringName] = [ ## Variables to save
 	"current_schedule_task_index",
 	"schedule_index",
 	"dialogue_index",
-	"status_data"
+	"status_data",
+	"item_data"
 ]
 #endregion
 #region Signals

@@ -17,18 +17,18 @@ pressed = true
 [sub_resource type="Shortcut" id="Shortcut_lm0uq"]
 events = [SubResource("InputEventKey_lhxtm"), SubResource("InputEventJoypadButton_66o3j")]
 
-[sub_resource type="InputEventKey" id="InputEventKey_f8scv"]
+[sub_resource type="InputEventKey" id="InputEventKey_voutk"]
 device = -1
 physical_keycode = 69
 unicode = 101
 
-[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_4y04n"]
+[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_lvmhk"]
 device = -1
 button_index = 10
 pressed = true
 
-[sub_resource type="Shortcut" id="Shortcut_voutk"]
-events = [SubResource("InputEventKey_f8scv"), SubResource("InputEventJoypadButton_4y04n")]
+[sub_resource type="Shortcut" id="Shortcut_2snqf"]
+events = [SubResource("InputEventKey_voutk"), SubResource("InputEventJoypadButton_lvmhk")]
 
 [node name="TabMenu" type="VBoxContainer"]
 custom_minimum_size = Vector2(480, 0)
@@ -65,12 +65,14 @@ text = "..."
 [node name="NextButton" parent="TabButtonContainer" instance=ExtResource("2_lhxtm")]
 unique_name_in_owner = true
 layout_mode = 2
-shortcut = SubResource("Shortcut_voutk")
+shortcut = SubResource("Shortcut_2snqf")
 icon = ExtResource("3_66o3j")
 input_action_name = "menu_right"
 
 [connection signal="child_entered_tree" from="." to="." method="add_tab"]
 [connection signal="child_exiting_tree" from="." to="." method="remove_tab"]
 [connection signal="child_order_changed" from="." to="." method="reorder"]
+[connection signal="tree_entered" from="." to="." method="on_tree_enter"]
+[connection signal="tree_exiting" from="." to="." method="on_tree_exit"]
 [connection signal="pressed" from="TabButtonContainer/PrevButton" to="." method="prev_tab"]
 [connection signal="pressed" from="TabButtonContainer/NextButton" to="." method="next_tab"]
