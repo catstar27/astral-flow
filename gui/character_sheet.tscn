@@ -1,9 +1,10 @@
-[gd_scene load_steps=21 format=3 uid="uid://e46u6ucc1flk"]
+[gd_scene load_steps=22 format=3 uid="uid://e46u6ucc1flk"]
 
 [ext_resource type="Script" uid="uid://dmwj4oq634f84" path="res://gui/character_sheet.gd" id="1_iutca"]
 [ext_resource type="PackedScene" uid="uid://c6kh3esjn5743" path="res://gui/tab_menu.tscn" id="1_tjhau"]
 [ext_resource type="Texture2D" uid="uid://b3jluv54rfg24" path="res://textures/character/generic_portrait.png" id="2_j877r"]
 [ext_resource type="PackedScene" uid="uid://dleye7m8gjxs0" path="res://gui/components/control_display_button.tscn" id="4_iutca"]
+[ext_resource type="Theme" uid="uid://dehvu01nlqvsf" path="res://textures/gui/themes/info_box_theme.tres" id="4_j877r"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_j877r"]
 font_size = 24
@@ -60,22 +61,22 @@ device = -1
 button_index = 4
 pressed = true
 
-[sub_resource type="Shortcut" id="Shortcut_iutca"]
+[sub_resource type="Shortcut" id="Shortcut_bqx8u"]
 events = [SubResource("InputEventKey_iutca"), SubResource("InputEventJoypadButton_j877r")]
 
-[sub_resource type="InputEventKey" id="InputEventKey_vvfok"]
+[sub_resource type="InputEventKey" id="InputEventKey_x2dtq"]
 device = -1
 physical_keycode = 4194305
 
-[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_r02yt"]
+[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_olbgs"]
 device = -1
 button_index = 1
 pressed = true
 
-[sub_resource type="Shortcut" id="Shortcut_j877r"]
-events = [SubResource("InputEventKey_vvfok"), SubResource("InputEventJoypadButton_r02yt")]
+[sub_resource type="Shortcut" id="Shortcut_x2dtq"]
+events = [SubResource("InputEventKey_x2dtq"), SubResource("InputEventJoypadButton_olbgs")]
 
-[node name="CharacterSheet" type="Control" node_paths=PackedStringArray("item_list", "feats_list", "star_stats_container", "other_stats_container", "name_labels", "portrait_displays", "pronoun_labels")]
+[node name="CharacterSheet" type="Control" node_paths=PackedStringArray("item_list", "item_description_box", "breakthroughs_list", "star_stats_container", "other_stats_container", "name_labels", "portrait_displays", "pronoun_labels")]
 process_mode = 3
 z_index = 2
 layout_mode = 3
@@ -88,12 +89,13 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_iutca")
 item_list = NodePath("ContainerContainer/TabMenu/Inventory/HBoxContainer/ItemList")
-feats_list = NodePath("ContainerContainer/TabMenu/Feats/HBoxContainer/FeatsList")
+item_description_box = NodePath("ContainerContainer/TabMenu/Inventory/HBoxContainer/ItemList/Description")
+breakthroughs_list = NodePath("ContainerContainer/TabMenu/Breakthroughs/HBoxContainer/BreakthroughsList")
 star_stats_container = NodePath("ContainerContainer/TabMenu/Stats/HBoxContainer/LeftContainer/StarStatsContainer")
 other_stats_container = NodePath("ContainerContainer/TabMenu/Stats/HBoxContainer/OtherStatsContainer")
-name_labels = [NodePath("ContainerContainer/TabMenu/Stats/HBoxContainer/LeftContainer/PortraitNamePronouns/NameLabel"), NodePath("ContainerContainer/TabMenu/Bio/HBoxContainer/VBoxContainer/PortraitNamePronouns/NameLabel"), NodePath("ContainerContainer/TabMenu/Feats/HBoxContainer/VBoxContainer/PortraitNamePronouns/NameLabel"), NodePath("ContainerContainer/TabMenu/Inventory/HBoxContainer/VBoxContainer/PortraitNamePronouns/NameLabel")]
-portrait_displays = [NodePath("ContainerContainer/TabMenu/Stats/HBoxContainer/LeftContainer/PortraitNamePronouns/PortraitDisplay"), NodePath("ContainerContainer/TabMenu/Bio/HBoxContainer/VBoxContainer/PortraitNamePronouns/PortraitDisplay"), NodePath("ContainerContainer/TabMenu/Feats/HBoxContainer/VBoxContainer/PortraitNamePronouns/PortraitDisplay"), NodePath("ContainerContainer/TabMenu/Inventory/HBoxContainer/VBoxContainer/PortraitNamePronouns/PortraitDisplay")]
-pronoun_labels = [NodePath("ContainerContainer/TabMenu/Stats/HBoxContainer/LeftContainer/PortraitNamePronouns/PronounLabel"), NodePath("ContainerContainer/TabMenu/Bio/HBoxContainer/VBoxContainer/PortraitNamePronouns/PronounLabel"), NodePath("ContainerContainer/TabMenu/Feats/HBoxContainer/VBoxContainer/PortraitNamePronouns/PronounLabel"), NodePath("ContainerContainer/TabMenu/Inventory/HBoxContainer/VBoxContainer/PortraitNamePronouns/PronounLabel")]
+name_labels = [NodePath("ContainerContainer/TabMenu/Stats/HBoxContainer/LeftContainer/PortraitNamePronouns/NameLabel"), NodePath("ContainerContainer/TabMenu/Bio/HBoxContainer/VBoxContainer/PortraitNamePronouns/NameLabel"), NodePath("ContainerContainer/TabMenu/Breakthroughs/HBoxContainer/VBoxContainer/PortraitNamePronouns/NameLabel"), NodePath("ContainerContainer/TabMenu/Inventory/HBoxContainer/VBoxContainer/PortraitNamePronouns/NameLabel")]
+portrait_displays = [NodePath("ContainerContainer/TabMenu/Stats/HBoxContainer/LeftContainer/PortraitNamePronouns/PortraitDisplay"), NodePath("ContainerContainer/TabMenu/Bio/HBoxContainer/VBoxContainer/PortraitNamePronouns/PortraitDisplay"), NodePath("ContainerContainer/TabMenu/Breakthroughs/HBoxContainer/VBoxContainer/PortraitNamePronouns/PortraitDisplay"), NodePath("ContainerContainer/TabMenu/Inventory/HBoxContainer/VBoxContainer/PortraitNamePronouns/PortraitDisplay")]
+pronoun_labels = [NodePath("ContainerContainer/TabMenu/Stats/HBoxContainer/LeftContainer/PortraitNamePronouns/PronounLabel"), NodePath("ContainerContainer/TabMenu/Bio/HBoxContainer/VBoxContainer/PortraitNamePronouns/PronounLabel"), NodePath("ContainerContainer/TabMenu/Breakthroughs/HBoxContainer/VBoxContainer/PortraitNamePronouns/PronounLabel"), NodePath("ContainerContainer/TabMenu/Inventory/HBoxContainer/VBoxContainer/PortraitNamePronouns/PronounLabel")]
 
 [node name="ContainerContainer" type="VBoxContainer" parent="."]
 layout_mode = 1
@@ -293,56 +295,67 @@ color = Color(0.114897, 0.114897, 0.114897, 1)
 
 [node name="ItemList" type="VBoxContainer" parent="ContainerContainer/TabMenu/Inventory/HBoxContainer"]
 layout_mode = 2
-size_flags_horizontal = 6
+size_flags_horizontal = 3
+alignment = 1
 
-[node name="Label" type="Label" parent="ContainerContainer/TabMenu/Inventory/HBoxContainer/ItemList"]
+[node name="EmptyLabel" type="Label" parent="ContainerContainer/TabMenu/Inventory/HBoxContainer/ItemList"]
 layout_mode = 2
 text = "Inventory Empty"
+horizontal_alignment = 1
 
-[node name="Feats" type="PanelContainer" parent="ContainerContainer/TabMenu"]
+[node name="Description" type="PanelContainer" parent="ContainerContainer/TabMenu/Inventory/HBoxContainer/ItemList"]
+visible = false
+layout_mode = 2
+size_flags_vertical = 10
+theme = ExtResource("4_j877r")
+
+[node name="DescriptionLabel" type="Label" parent="ContainerContainer/TabMenu/Inventory/HBoxContainer/ItemList/Description"]
+layout_mode = 2
+
+[node name="Breakthroughs" type="PanelContainer" parent="ContainerContainer/TabMenu"]
 visible = false
 custom_minimum_size = Vector2(0, 320)
 layout_mode = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="ContainerContainer/TabMenu/Feats"]
+[node name="HBoxContainer" type="HBoxContainer" parent="ContainerContainer/TabMenu/Breakthroughs"]
 layout_mode = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="ContainerContainer/TabMenu/Feats/HBoxContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="ContainerContainer/TabMenu/Breakthroughs/HBoxContainer"]
 custom_minimum_size = Vector2(170, 0)
 layout_mode = 2
 
-[node name="PortraitNamePronouns" type="VBoxContainer" parent="ContainerContainer/TabMenu/Feats/HBoxContainer/VBoxContainer"]
+[node name="PortraitNamePronouns" type="VBoxContainer" parent="ContainerContainer/TabMenu/Breakthroughs/HBoxContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="PortraitDisplay" type="TextureRect" parent="ContainerContainer/TabMenu/Feats/HBoxContainer/VBoxContainer/PortraitNamePronouns"]
+[node name="PortraitDisplay" type="TextureRect" parent="ContainerContainer/TabMenu/Breakthroughs/HBoxContainer/VBoxContainer/PortraitNamePronouns"]
 layout_mode = 2
 size_flags_horizontal = 4
 texture = ExtResource("2_j877r")
 stretch_mode = 4
 
-[node name="NameLabel" type="Label" parent="ContainerContainer/TabMenu/Feats/HBoxContainer/VBoxContainer/PortraitNamePronouns"]
+[node name="NameLabel" type="Label" parent="ContainerContainer/TabMenu/Breakthroughs/HBoxContainer/VBoxContainer/PortraitNamePronouns"]
 layout_mode = 2
 text = "Name Here"
 label_settings = SubResource("LabelSettings_j877r")
 horizontal_alignment = 1
 
-[node name="PronounLabel" type="Label" parent="ContainerContainer/TabMenu/Feats/HBoxContainer/VBoxContainer/PortraitNamePronouns"]
+[node name="PronounLabel" type="Label" parent="ContainerContainer/TabMenu/Breakthroughs/HBoxContainer/VBoxContainer/PortraitNamePronouns"]
 layout_mode = 2
 text = "Pronouns Here"
 label_settings = SubResource("LabelSettings_j877r")
 horizontal_alignment = 1
 
-[node name="Divider" type="ColorRect" parent="ContainerContainer/TabMenu/Feats/HBoxContainer"]
+[node name="Divider" type="ColorRect" parent="ContainerContainer/TabMenu/Breakthroughs/HBoxContainer"]
 custom_minimum_size = Vector2(4, 0)
 layout_mode = 2
 size_flags_horizontal = 4
 color = Color(0.114897, 0.114897, 0.114897, 1)
 
-[node name="FeatsList" type="VBoxContainer" parent="ContainerContainer/TabMenu/Feats/HBoxContainer"]
+[node name="BreakthroughsList" type="VBoxContainer" parent="ContainerContainer/TabMenu/Breakthroughs/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 6
 
-[node name="Label" type="Label" parent="ContainerContainer/TabMenu/Feats/HBoxContainer/FeatsList"]
+[node name="Label" type="Label" parent="ContainerContainer/TabMenu/Breakthroughs/HBoxContainer/BreakthroughsList"]
 layout_mode = 2
 text = "No Feats Gained"
 
@@ -402,13 +415,13 @@ alignment = 1
 
 [node name="SkillTreeButton" parent="ContainerContainer/HBoxContainer" instance=ExtResource("4_iutca")]
 layout_mode = 2
-shortcut = SubResource("Shortcut_iutca")
+shortcut = SubResource("Shortcut_bqx8u")
 text = "Skill Tree"
 input_action_name = "info"
 
 [node name="BackButton" parent="ContainerContainer/HBoxContainer" instance=ExtResource("4_iutca")]
 layout_mode = 2
-shortcut = SubResource("Shortcut_j877r")
+shortcut = SubResource("Shortcut_x2dtq")
 text = "Back"
 input_action_name = "menu_back"
 

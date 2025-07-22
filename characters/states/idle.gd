@@ -1,7 +1,7 @@
 extends State
 ## Idle state that does nothing but moves to other states
 
-func enter_state(_data, _data2 = null)->void:
+func enter_state(_data, _data2 = null, _data3 = null)->void:
 	state_machine.user.move_order.connect(start_move)
 	state_machine.user.interact_order.connect(start_interact)
 	state_machine.user.ability_order.connect(start_ability)

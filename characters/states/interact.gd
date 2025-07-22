@@ -1,7 +1,7 @@
 extends State
 ## State that attempts to make the user interact with a given object
 
-func enter_state(target: Node2D, _data2 = null)->void:
+func enter_state(target: Node2D, _data2 = null, _data3 = null)->void:
 	if target is Interactive:
 		for pos in target.occupied_positions:
 			var x_dist: float = abs(state_machine.user.position.x-pos.x)

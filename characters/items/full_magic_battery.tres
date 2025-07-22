@@ -1,0 +1,36 @@
+[gd_resource type="Resource" script_class="Item" load_steps=7 format=3 uid="uid://fquqxexxf8h3"]
+
+[ext_resource type="Resource" uid="uid://dkwrxqk3xf5q5" path="res://characters/items/empty_magic_battery.tres" id="1_sj6g2"]
+[ext_resource type="Script" uid="uid://cnjkw62smi3mo" path="res://characters/skills/skill.gd" id="1_tfgor"]
+[ext_resource type="Script" uid="uid://b0xbk38jyra5a" path="res://characters/abilities/ability.gd" id="2_6qt3h"]
+[ext_resource type="Script" uid="uid://d36ma0hji5vxf" path="res://characters/items/item.gd" id="2_sj6g2"]
+[ext_resource type="Script" uid="uid://dxv7e1j21poh5" path="res://characters/statuses/status.gd" id="3_bfwlb"]
+
+[sub_resource type="Resource" id="Resource_2w1d7"]
+script = ExtResource("2_6qt3h")
+display_name = "Discharge Magic Battery"
+description = "Discharges the magic battery and absorbs its energy."
+ap_cost = 0
+mp_cost = -5
+ability_range = 1
+target_type = 0
+activation_type = 2
+animation_override = &"RESET"
+base_damage = 0
+ignore_defense = false
+damage_type = 0
+skill_used = 0
+statuses = Dictionary[ExtResource("3_bfwlb"), int]({})
+metadata/_custom_type_script = "uid://b0xbk38jyra5a"
+
+[resource]
+script = ExtResource("2_sj6g2")
+display_name = "Magic Energy Battery (Full)"
+description = "A battery full of magical energy."
+id = "MAGIC_BATTERY_FULL"
+name_color = Color(0, 0.584314, 1, 1)
+is_consumed = true
+byproduct_item = ExtResource("1_sj6g2")
+item_ability = SubResource("Resource_2w1d7")
+required_skills = Array[ExtResource("1_tfgor")]([])
+metadata/_custom_type_script = "uid://d36ma0hji5vxf"

@@ -4,7 +4,7 @@ extends State
 var stop_movement: bool = false ## At each step, determines whether to stop movement or not
 var target: Vector2 ## Position this is trying to move the user to
 
-func enter_state(data: Vector2, _data2 = null)->void:
+func enter_state(data: Vector2, _data2 = null, _data3 = null)->void:
 	stop_movement = false
 	state_machine.user.move_order.connect(new_move_order)
 	state_machine.user.stop_move_order.connect(stop)

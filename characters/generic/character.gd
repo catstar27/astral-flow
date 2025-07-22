@@ -62,7 +62,7 @@ enum ai_types { ## Options for enemy ai
 @export var starting_breakthroughs: Array[Breakthrough] ## List of breakthroughs
 @export var export_abilities: Array[Ability] = [] ## Exported ability list for initial abilities
 @export var starting_statuses: Array[Status] ## List of statuses to start with
-@export var starting_items: Array[Item] ## List of items to start with
+@export var starting_items: Dictionary[Item, int] ## List of items to start with and their numbers
 @export_group("Combat") ## Exports related to combat ai and what this considers an enemy
 @export var ai_type: ai_types ## This enemy's ai type
 @export var allies: Array[Character] = [] ## List of allies to bring into combat alongside this character
@@ -134,7 +134,7 @@ var to_save: Array[StringName] = [ ## Variables to save
 signal move_order(pos: Vector2) ## Emitted when the character attempts to move
 signal stop_move_order ## Emitted to halt character movement
 signal interact_order(target: Node2D) ## Emitted when character tries interacting
-signal ability_order(ability: Ability, destination: Vector2) ## Emitted when character tries using ability
+signal ability_order(ability: Ability, destination: Vector2, play_anim: bool) ## Emitted when character tries using ability
 signal pos_changed(character: Character) ## Emitted when the character's position changes
 signal ended_turn(character: Character) ## Emitted when the character's turn ends
 signal stats_changed ## Emitted when the character's stats change
@@ -186,6 +186,7 @@ func _setup()->void:
 	init_schedule()
 	init_statuses()
 	init_skills()
+	init_items()
 
 ## Duplicates the export abilities, copying them into the actual ability array
 func duplicate_export_abilities()->void:
@@ -410,7 +411,10 @@ func melee_safe()->void:
 #endregion
 
 #region Inventory
-## 
+## Initializes inventory
+func init_items()->void:
+	for item in starting_items:
+		item_manager.add_item(item, starting_items[item])
 #endregion
 
 #region Skills

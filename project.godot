@@ -40,6 +40,7 @@ directories/dch_directory={
 "nilak": "res://dialogue/nilak.dch"
 }
 directories/dtl_directory={
+"empty_magic_battery": "res://dialogue/empty_magic_battery.dtl",
 "locked": "res://dialogue/locked.dtl",
 "tesla_coil_active": "res://dialogue/tesla_coil_active.dtl",
 "tesla_coil_inactive": "res://dialogue/tesla_coil_inactive.dtl",

@@ -46,7 +46,7 @@ var user: Character = null ## Character using the ability
 @export var ability_range: int = 1 ## Number of tiles away from the user this can target
 @export var target_type: target_type_options = target_type_options.all ## The type of target this can be used on
 @export var activation_type: activation_type_options = activation_type_options.melee ## The activation method
-@export var animation_override: Animation = null ## Overrides the generic animation
+@export var animation_override: StringName = "" ## Overrides the generic animation
 @export var projectile_scene: PackedScene = null ## Scene of projectile to use if this is projectile-based
 @export_group("Effects")
 @export var base_damage: int = 0 ## Unmodified damage of the ability
@@ -201,17 +201,29 @@ func activation_projectile(destination: Vector2)->void:
 	var projectile: Projectile = projectile_scene.instantiate()
 	projectile.ability = self
 	user.add_child(projectile)
+	if animation_override != "" && user.anim_player.has_animation(animation_override):
+		user.anim_player.play(animation_override)
+		while user.anim_player.is_playing():
+			await user.anim_player.animation_finished
 	await projectile.shoot(destination)
 
 ## Activates with melee animations (WIP)
 func activation_melee(_destination: Vector2)->void:
-	user.anim_player.play("Character/melee")
-	await user.anim_player.animation_finished
+	if animation_override != "" && user.anim_player.has_animation(animation_override):
+		user.anim_player.play(animation_override)
+	else:
+		user.anim_player.play("Character/melee")
+	while user.anim_player.is_playing():
+		await user.anim_player.animation_finished
 
 ## Activates with casting animations (WIP)
 func activation_summon(_destination: Vector2)->void:
-	user.anim_player.play("Character/melee")
-	await user.anim_player.animation_finished
+	if animation_override != "" && user.anim_player.has_animation(animation_override):
+		user.anim_player.play(animation_override)
+	else:
+		user.anim_player.play("Character/melee")
+	while user.anim_player.is_playing():
+		await user.anim_player.animation_finished
 
 ## Plays the ability's activation sound
 func play_sound()->void:

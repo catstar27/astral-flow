@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3 uid="uid://cavlvpuhv8qc7"]
+
+[ext_resource type="Script" uid="uid://cyv34mm4c2j6w" path="res://gui/components/resource_button.gd" id="1_nmygs"]
+
+[node name="ResourceButton" type="Button"]
+offset_right = 12.0
+offset_bottom = 12.0
+script = ExtResource("1_nmygs")
+
+[connection signal="pressed" from="." to="." method="_on_pressed"]

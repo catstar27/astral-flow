@@ -2,8 +2,10 @@ extends Control
 class_name CharacterSheet
 ## Class for a character sheet, which displays all character information
 
+const res_button: PackedScene = preload("uid://cavlvpuhv8qc7")
 @export var item_list: VBoxContainer ## Container for inventory items
-@export var feats_list: VBoxContainer ## Container for feat progress
+@export var item_description_box: PanelContainer ## PanelContainer showing item description
+@export var breakthroughs_list: VBoxContainer ## Container for breakthrough progress
 @export var star_stats_container: VBoxContainer ## Container for star stat labels
 @export var other_stats_container: VBoxContainer ## Container for all other stats
 @export var name_labels: Array[Label] ## Array containing all Labels showing character name
@@ -48,6 +50,7 @@ func open()->void:
 			label.text += " (+"+str(character.stat_mods[label.name.to_lower()])+")"
 		elif character.stat_mods[label.name.to_lower()] < 0:
 			label.text += " ("+str(character.stat_mods[label.name.to_lower()])+")"
+	populate_item_box()
 	show()
 	opened.emit()
 
@@ -61,20 +64,46 @@ func close()->void:
 func request_skill_tree()->void:
 	skill_tree_requested.emit(character)
 
+## Fills the item box
+func populate_item_box()->void:
+	for child in item_list.get_children():
+		if child is ResourceButton:
+			item_list.remove_child(child)
+			child.queue_free()
+	for item in character.item_manager.item_dict.keys():
+		var button: ResourceButton = res_button.instantiate()
+		button.resource = item
+		button.text = item.display_name
+		button.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+		button.pressed_resource.connect(use_item)
+		item_list.add_child(button)
+	item_list.move_child(item_description_box, -1)
+	if item_list.get_child_count() > 2:
+		item_description_box.show()
+		item_list.get_child(0).hide()
+		if item_list.is_visible_in_tree():
+			item_list.get_child(1).grab_focus()
+	else:
+		item_description_box.hide()
+		item_list.get_child(0).show()
+
+## Attempts to use an item
+func use_item(item: Item)->void:
+	character.item_manager.activate_item(item)
+	populate_item_box()
+
 func _on_tab_menu_tab_changed() -> void:
 	var tab_name: String
 	for tab in %TabMenu.get_children():
-		if tab.is_visible_in_tree():
+		if tab.is_visible_in_tree() && tab.name != "TabButtonContainer":
 			tab_name = tab.name
 			break
-	if tab_name == "Inventory" && item_list.get_child_count() > 1:
-		item_list.get_child(0).hide()
+	if tab_name == "Inventory" && item_list.get_child_count() > 2:
 		item_list.get_child(1).grab_focus()
-	elif tab_name == "Feats" && feats_list.get_child_count() > 1:
-		feats_list.get_child(0).hide()
-		feats_list.get_child(1).grab_focus()
+	elif tab_name == "Breakthroughs" && breakthroughs_list.get_child_count() > 1:
+		breakthroughs_list.get_child(0).hide()
+		breakthroughs_list.get_child(1).grab_focus()
 	else:
-		item_list.get_child(0).show()
 		focus_mode = Control.FOCUS_ALL
 		grab_focus()
 		release_focus()

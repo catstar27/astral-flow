@@ -51,7 +51,7 @@ texture = ExtResource("3_khi6w")
 
 [node name="HUDLayer" type="CanvasLayer" parent="."]
 unique_name_in_owner = true
-layer = 100
+layer = 99
 
 [node name="GUI" parent="HUDLayer" instance=ExtResource("9_5e0hy")]
 unique_name_in_owner = true

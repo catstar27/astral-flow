@@ -8,8 +8,10 @@ class_name Item
 @export var icon: Texture2D ## Icon of this item
 @export var name_color: Color = Color.WHITE ## Color of this item's name
 @export var is_consumed: bool = false ## Whether this item is destroyed on use
+@export var byproduct_item: Item ## Item to create when this is consumed
 @export var item_ability: Ability ## The ability that is activated when this item is used
 @export var item_dialogue: DialogicTimeline ## Dialogue triggered when this item is used
+@export var required_skills: Array[Skill] ## Skills needed to activate this item
 
 ## Prepares the item resource
 func setup()->void:

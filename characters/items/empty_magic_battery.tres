@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="Item" load_steps=4 format=3 uid="uid://dkwrxqk3xf5q5"]
+
+[ext_resource type="Resource" uid="uid://cjlyuos5t1xrh" path="res://dialogue/empty_magic_battery.dtl" id="1_1p1ef"]
+[ext_resource type="Script" uid="uid://cnjkw62smi3mo" path="res://characters/skills/skill.gd" id="1_vf6yk"]
+[ext_resource type="Script" uid="uid://d36ma0hji5vxf" path="res://characters/items/item.gd" id="2_1p1ef"]
+
+[resource]
+script = ExtResource("2_1p1ef")
+display_name = "Magic Energy Battery (Empty)"
+description = "A battery that can hold magical energy. Currently empty."
+id = "EMPTY_MAGIC_BATTERY"
+name_color = Color(0.423651, 0.423651, 0.423651, 1)
+is_consumed = false
+item_dialogue = ExtResource("1_1p1ef")
+required_skills = Array[ExtResource("1_vf6yk")]([])
+metadata/_custom_type_script = "uid://d36ma0hji5vxf"
