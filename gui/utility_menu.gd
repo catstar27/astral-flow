@@ -20,6 +20,22 @@ signal inventory_button_pressed ## Emitted when the inventory button is pressed
 signal pause_button_pressed ## Emitted when the pause button is pressed
 signal character_sheet_requested(character: Character) ## Emitted to open a character sheet
 
+## Disables focus and mouse detection
+func disable()->void:
+	menu_button.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	%PartyDisplay.disable()
+	for button in info_container.get_children():
+		button.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		button.focus_mode = Control.FOCUS_NONE
+
+## Enables focus and mouse detection
+func enable()->void:
+	menu_button.mouse_filter = Control.MOUSE_FILTER_STOP
+	%PartyDisplay.enable()
+	for button in info_container.get_children():
+		button.mouse_filter = Control.MOUSE_FILTER_STOP
+		button.focus_mode = Control.FOCUS_ALL
+
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("menu") && state == states.open:
 		get_viewport().set_input_as_handled()
@@ -47,6 +63,14 @@ func get_open_position()->Vector2:
 	else:
 		largest_width = info_container.size.x
 	return Vector2(-largest_width-2, info_container.position.y)
+
+## Disables the menu button
+func disable_menu()->void:
+	menu_button.disabled = true
+
+## Enables the menu button
+func enable_menu()->void:
+	menu_button.disabled = false
 
 ## Opens the menu
 func open_menu()->void:
@@ -103,22 +127,31 @@ func pause_pressed()->void:
 
 ## Grabs focus on the party button
 func focus_party()->void:
+	%Party.focus_mode = FocusMode.FOCUS_ALL
 	%Party.grab_focus()
+
+## Grabs focus on the party menu
+func focus_party_menu()->void:
+	%PartyDisplay.focus_first()
 
 ## Grabs focus on the journal button
 func focus_journal()->void:
+	%Journal.focus_mode = FocusMode.FOCUS_ALL
 	%Journal.grab_focus()
 
 ## Grabs focus on the map button
 func focus_map()->void:
+	%Map.focus_mode = FocusMode.FOCUS_ALL
 	%Map.grab_focus()
 
 ## Grabs focus on the inventory button
 func focus_inventory()->void:
+	%Inventory.focus_mode = FocusMode.FOCUS_ALL
 	%Inventory.grab_focus()
 
 ## Grabs focus on the pause button
 func focus_pause()->void:
+	%Pause.focus_mode = FocusMode.FOCUS_ALL
 	%Pause.grab_focus()
 
 ## Hides the menu buttons while keeping the menu open

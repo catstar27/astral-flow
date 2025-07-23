@@ -7,18 +7,18 @@
 [ext_resource type="Texture2D" uid="uid://bxhwtcxdgtkx6" path="res://textures/gui/keyboard_key.png" id="5_fubsc"]
 [ext_resource type="PackedScene" uid="uid://blpc84uugpfvi" path="res://gui/party_display.tscn" id="6_f8scv"]
 
-[sub_resource type="InputEventKey" id="InputEventKey_tbgit"]
+[sub_resource type="InputEventKey" id="InputEventKey_f8scv"]
 device = -1
 physical_keycode = 69
 unicode = 101
 
-[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_sxgyi"]
+[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_4y04n"]
 device = -1
 button_index = 10
 pressed = true
 
 [sub_resource type="Shortcut" id="Shortcut_f8scv"]
-events = [SubResource("InputEventKey_tbgit"), SubResource("InputEventJoypadButton_sxgyi")]
+events = [SubResource("InputEventKey_f8scv"), SubResource("InputEventJoypadButton_4y04n")]
 
 [node name="UtilityMenu" type="Control"]
 material = ExtResource("1_jr21q")
@@ -48,6 +48,7 @@ icon = ExtResource("5_fubsc")
 input_action_name = "menu_right"
 
 [node name="PartyDisplay" parent="." instance=ExtResource("6_f8scv")]
+unique_name_in_owner = true
 visible = false
 layout_mode = 1
 offset_left = -960.0

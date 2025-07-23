@@ -23,15 +23,12 @@ func _ready() -> void:
 		return
 	if get_child_count() > 1:
 		cur_tab = get_children()[1]
-	var children: Array[Node] = get_children()
 	for node in get_children():
 		if node != tab_button_container:
-			remove_child(node)
-	for child in tab_button_container.get_children():
-		if child is TabButton:
-			tab_button_container.remove_child(child)
-			child.queue_free()
-	set_children(children)
+			remove_tab(node)
+			add_tab(node)
+	cur_tab = get_child(1)
+	tab_buttons[cur_tab].button_pressed = true
 
 ## Initializes the menu by re-adding the children after the node is ready
 func set_children(children: Array[Node])->void:

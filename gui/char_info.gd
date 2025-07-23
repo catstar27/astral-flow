@@ -32,6 +32,24 @@ func _unhandled_input(event: InputEvent) -> void:
 		get_viewport().set_input_as_handled()
 		close_menu()
 
+## Disables focus and mouse detection
+func disable()->void:
+	menu_button.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	end_turn_button.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	end_turn_button.focus_mode = Control.FOCUS_NONE
+	for button in ability_buttons:
+		button.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		button.focus_mode = Control.FOCUS_NONE
+
+## Enables focus and mouse detection
+func enable()->void:
+	menu_button.mouse_filter = Control.MOUSE_FILTER_STOP
+	end_turn_button.mouse_filter = Control.MOUSE_FILTER_STOP
+	end_turn_button.focus_mode = Control.FOCUS_ALL
+	for button in ability_buttons:
+		button.mouse_filter = Control.MOUSE_FILTER_STOP
+		button.focus_mode = Control.FOCUS_ALL
+
 #region Setup
 func _ready() -> void:
 	menu_button.disabled = true
@@ -78,6 +96,14 @@ func get_closed_position()->Vector2:
 	else:
 		largest_width = info_container.size.x
 	return Vector2(-largest_width, info_container.position.y)
+
+## Disables the menu button
+func disable_menu()->void:
+	menu_button.disabled = true
+
+## Enables the menu button
+func enable_menu()->void:
+	menu_button.disabled = false
 
 ## Opens the menu
 func open_menu()->void:

@@ -9,6 +9,23 @@ signal request_open_character_sheet(character: Character) ## Signal emitted to o
 signal opened ## Emitted when opened
 signal closed ## Emitted when closed
 
+## Disables focus and mouse detection
+func disable()->void:
+	for button in %PartyButtonContainer.get_children():
+		button.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		button.focus_mode = Control.FOCUS_NONE
+
+## Enables focus and mouse detection
+func enable()->void:
+	for button in %PartyButtonContainer.get_children():
+		button.mouse_filter = Control.MOUSE_FILTER_STOP
+		button.focus_mode = Control.FOCUS_ALL
+
+## Focuses the first available party member
+func focus_first()->void:
+	party_quick_info[0].get_parent().focus_mode = Control.FOCUS_ALL
+	party_quick_info[0].get_parent().grab_focus()
+
 ## Updates the party display by removing and adding QuickInfos
 func update_display()->void:
 	var index: int = 0
@@ -38,16 +55,9 @@ func open_menu()->void:
 
 ## Closes the menu
 func close_menu()->void:
-	#await create_tween().tween_property(self, "position", Vector2(0,position.y), .5).finished
-	party_buttons_exited()
+	await create_tween().tween_property(self, "position", Vector2(0,position.y), .2).finished
 	hide()
 	closed.emit()
-
-## Called when closing buttons menu
-func party_buttons_exited()->void:
-	for quick_info in party_quick_info:
-		quick_info.get_parent().disabled = false
-	party_quick_info[0].get_parent().grab_focus()
 
 func _on_party_1_button_down() -> void:
 	request_open_character_sheet.emit(party_quick_info[0].character)

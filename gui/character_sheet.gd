@@ -3,11 +3,11 @@ class_name CharacterSheet
 ## Class for a character sheet, which displays all character information
 
 const res_button: PackedScene = preload("uid://cavlvpuhv8qc7")
-@export var item_list: VBoxContainer ## Container for inventory items
-@export var item_description_box: PanelContainer ## PanelContainer showing item description
-@export var breakthroughs_list: VBoxContainer ## Container for breakthrough progress
-@export var star_stats_container: VBoxContainer ## Container for star stat labels
-@export var other_stats_container: VBoxContainer ## Container for all other stats
+@onready var item_list: VBoxContainer = %ItemList ## Container for inventory items
+@onready var item_description_box: PanelContainer = %Description ## PanelContainer showing item description
+@onready var breakthroughs_list: VBoxContainer = %BreakthroughsList ## Container for breakthrough progress
+@onready var star_stats_container: VBoxContainer = %StarStatsContainer ## Container for star stat labels
+@onready var other_stats_container: VBoxContainer = %OtherStatsContainer ## Container for all other stats
 @export var name_labels: Array[Label] ## Array containing all Labels showing character name
 @export var portrait_displays: Array[TextureRect] ## Array containing all TextureRects showing character portrait
 @export var pronoun_labels: Array[Label] ## Array containing all Labels showing character pronouns
@@ -69,25 +69,27 @@ func request_skill_tree()->void:
 ## Fills the item box
 func populate_item_box()->void:
 	for child in item_list.get_children():
-		if child is ResourceButton:
-			item_list.remove_child(child)
-			child.queue_free()
+		item_list.remove_child(child)
+		child.queue_free()
 	for item in character.item_manager.item_dict.keys():
 		var button: ResourceButton = res_button.instantiate()
 		button.resource = item
-		button.text = item.display_name
+		button.text = item.display_name + " x" + str(character.item_manager.item_dict[item])
+		button.add_theme_font_size_override("font_size", 24)
 		button.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 		button.pressed_resource.connect(use_item)
+		button.focused_resource.connect(update_description)
 		item_list.add_child(button)
-	item_list.move_child(item_description_box, -1)
-	if item_list.get_child_count() > 2:
+	if item_list.get_child_count() > 0:
 		item_description_box.show()
-		item_list.get_child(0).hide()
+		item_list.show()
+		item_list.get_parent().get_parent().get_child(0).hide()
 		if item_list.is_visible_in_tree():
-			item_list.get_child(1).grab_focus()
+			item_list.get_child(0).grab_focus()
 	else:
+		item_list.hide()
 		item_description_box.hide()
-		item_list.get_child(0).show()
+		item_list.get_parent().get_parent().get_child(0).show()
 
 ## Attempts to use an item
 func use_item(item: Item)->void:
@@ -97,8 +99,12 @@ func use_item(item: Item)->void:
 	open("Inventory")
 	while Dialogic.current_timeline != null:
 		await Dialogic.timeline_ended
-	if item_list.get_child_count() > 2 && item_list.is_visible_in_tree():
-		item_list.get_child(1).grab_focus()
+	if item_list.get_child_count() > 0 && item_list.is_visible_in_tree():
+		item_list.get_child(0).grab_focus()
+
+## Updates the decription based on focused item
+func update_description(item: Item)->void:
+	item_description_box.get_child(0).text = item.description
 
 func _on_tab_menu_tab_changed() -> void:
 	var tab_name: String
@@ -106,8 +112,8 @@ func _on_tab_menu_tab_changed() -> void:
 		if tab.is_visible_in_tree() && tab.name != "TabButtonContainer":
 			tab_name = tab.name
 			break
-	if tab_name == "Inventory" && item_list.get_child_count() > 2:
-		item_list.get_child(1).grab_focus()
+	if tab_name == "Inventory" && item_list.get_child_count() > 0:
+		item_list.get_child(0).grab_focus()
 	elif tab_name == "Breakthroughs" && breakthroughs_list.get_child_count() > 1:
 		breakthroughs_list.get_child(0).hide()
 		breakthroughs_list.get_child(1).grab_focus()

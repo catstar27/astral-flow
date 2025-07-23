@@ -61,7 +61,7 @@ device = -1
 button_index = 4
 pressed = true
 
-[sub_resource type="Shortcut" id="Shortcut_j877r"]
+[sub_resource type="Shortcut" id="Shortcut_x2dtq"]
 events = [SubResource("InputEventKey_j877r"), SubResource("InputEventJoypadButton_bqx8u")]
 
 [sub_resource type="InputEventKey" id="InputEventKey_olbgs"]
@@ -73,10 +73,10 @@ device = -1
 button_index = 1
 pressed = true
 
-[sub_resource type="Shortcut" id="Shortcut_bqx8u"]
+[sub_resource type="Shortcut" id="Shortcut_clq0d"]
 events = [SubResource("InputEventKey_olbgs"), SubResource("InputEventJoypadButton_e03yn")]
 
-[node name="CharacterSheet" type="Control" node_paths=PackedStringArray("item_list", "item_description_box", "breakthroughs_list", "star_stats_container", "other_stats_container", "name_labels", "portrait_displays", "pronoun_labels")]
+[node name="CharacterSheet" type="Control" node_paths=PackedStringArray("name_labels", "portrait_displays", "pronoun_labels")]
 process_mode = 3
 z_index = 2
 layout_mode = 3
@@ -88,11 +88,6 @@ anchor_bottom = 0.5
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_iutca")
-item_list = NodePath("ContainerContainer/TabMenu/Inventory/HBoxContainer/ItemList")
-item_description_box = NodePath("ContainerContainer/TabMenu/Inventory/HBoxContainer/ItemList/Description")
-breakthroughs_list = NodePath("ContainerContainer/TabMenu/Breakthroughs/HBoxContainer/BreakthroughsList")
-star_stats_container = NodePath("ContainerContainer/TabMenu/Stats/HBoxContainer/LeftContainer/StarStatsContainer")
-other_stats_container = NodePath("ContainerContainer/TabMenu/Stats/HBoxContainer/OtherStatsContainer")
 name_labels = [NodePath("ContainerContainer/TabMenu/Stats/HBoxContainer/LeftContainer/PortraitNamePronouns/NameLabel"), NodePath("ContainerContainer/TabMenu/Bio/HBoxContainer/VBoxContainer/PortraitNamePronouns/NameLabel"), NodePath("ContainerContainer/TabMenu/Breakthroughs/HBoxContainer/VBoxContainer/PortraitNamePronouns/NameLabel"), NodePath("ContainerContainer/TabMenu/Inventory/HBoxContainer/VBoxContainer/PortraitNamePronouns/NameLabel")]
 portrait_displays = [NodePath("ContainerContainer/TabMenu/Stats/HBoxContainer/LeftContainer/PortraitNamePronouns/PortraitDisplay"), NodePath("ContainerContainer/TabMenu/Bio/HBoxContainer/VBoxContainer/PortraitNamePronouns/PortraitDisplay"), NodePath("ContainerContainer/TabMenu/Breakthroughs/HBoxContainer/VBoxContainer/PortraitNamePronouns/PortraitDisplay"), NodePath("ContainerContainer/TabMenu/Inventory/HBoxContainer/VBoxContainer/PortraitNamePronouns/PortraitDisplay")]
 pronoun_labels = [NodePath("ContainerContainer/TabMenu/Stats/HBoxContainer/LeftContainer/PortraitNamePronouns/PronounLabel"), NodePath("ContainerContainer/TabMenu/Bio/HBoxContainer/VBoxContainer/PortraitNamePronouns/PronounLabel"), NodePath("ContainerContainer/TabMenu/Breakthroughs/HBoxContainer/VBoxContainer/PortraitNamePronouns/PronounLabel"), NodePath("ContainerContainer/TabMenu/Inventory/HBoxContainer/VBoxContainer/PortraitNamePronouns/PronounLabel")]
@@ -152,6 +147,7 @@ label_settings = SubResource("LabelSettings_j877r")
 horizontal_alignment = 1
 
 [node name="StarStatsContainer" type="VBoxContainer" parent="ContainerContainer/TabMenu/Stats/HBoxContainer/LeftContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
 alignment = 1
@@ -205,6 +201,7 @@ size_flags_horizontal = 4
 color = Color(0.114897, 0.114897, 0.114897, 1)
 
 [node name="OtherStatsContainer" type="VBoxContainer" parent="ContainerContainer/TabMenu/Stats/HBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 6
 alignment = 1
@@ -293,24 +290,37 @@ layout_mode = 2
 size_flags_horizontal = 4
 color = Color(0.114897, 0.114897, 0.114897, 1)
 
-[node name="ItemList" type="VBoxContainer" parent="ContainerContainer/TabMenu/Inventory/HBoxContainer"]
+[node name="ItemSection" type="VBoxContainer" parent="ContainerContainer/TabMenu/Inventory/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 alignment = 1
 
-[node name="EmptyLabel" type="Label" parent="ContainerContainer/TabMenu/Inventory/HBoxContainer/ItemList"]
+[node name="EmptyLabel" type="Label" parent="ContainerContainer/TabMenu/Inventory/HBoxContainer/ItemSection"]
 layout_mode = 2
+size_flags_vertical = 6
 text = "Inventory Empty"
 horizontal_alignment = 1
 
-[node name="Description" type="PanelContainer" parent="ContainerContainer/TabMenu/Inventory/HBoxContainer/ItemList"]
-visible = false
+[node name="ItemContainer" type="ScrollContainer" parent="ContainerContainer/TabMenu/Inventory/HBoxContainer/ItemSection"]
+custom_minimum_size = Vector2(452, 180)
+layout_mode = 2
+
+[node name="ItemList" type="VBoxContainer" parent="ContainerContainer/TabMenu/Inventory/HBoxContainer/ItemSection/ItemContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Description" type="PanelContainer" parent="ContainerContainer/TabMenu/Inventory/HBoxContainer/ItemSection"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 10
 theme = ExtResource("4_j877r")
 
-[node name="DescriptionLabel" type="Label" parent="ContainerContainer/TabMenu/Inventory/HBoxContainer/ItemList/Description"]
+[node name="DescriptionLabel" type="Label" parent="ContainerContainer/TabMenu/Inventory/HBoxContainer/ItemSection/Description"]
+custom_minimum_size = Vector2(450, 80)
 layout_mode = 2
+autowrap_mode = 2
 
 [node name="Breakthroughs" type="PanelContainer" parent="ContainerContainer/TabMenu"]
 visible = false
@@ -351,13 +361,20 @@ layout_mode = 2
 size_flags_horizontal = 4
 color = Color(0.114897, 0.114897, 0.114897, 1)
 
-[node name="BreakthroughsList" type="VBoxContainer" parent="ContainerContainer/TabMenu/Breakthroughs/HBoxContainer"]
+[node name="BreakthroughsSection" type="VBoxContainer" parent="ContainerContainer/TabMenu/Breakthroughs/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 6
 
-[node name="Label" type="Label" parent="ContainerContainer/TabMenu/Breakthroughs/HBoxContainer/BreakthroughsList"]
+[node name="Label" type="Label" parent="ContainerContainer/TabMenu/Breakthroughs/HBoxContainer/BreakthroughsSection"]
 layout_mode = 2
 text = "No Feats Gained"
+
+[node name="ScrollContainer" type="ScrollContainer" parent="ContainerContainer/TabMenu/Breakthroughs/HBoxContainer/BreakthroughsSection"]
+layout_mode = 2
+
+[node name="BreakthroughsList" type="VBoxContainer" parent="ContainerContainer/TabMenu/Breakthroughs/HBoxContainer/BreakthroughsSection/ScrollContainer"]
+unique_name_in_owner = true
+layout_mode = 2
 
 [node name="Bio" type="PanelContainer" parent="ContainerContainer/TabMenu"]
 visible = false
@@ -415,13 +432,13 @@ alignment = 1
 
 [node name="SkillTreeButton" parent="ContainerContainer/HBoxContainer" instance=ExtResource("4_iutca")]
 layout_mode = 2
-shortcut = SubResource("Shortcut_j877r")
+shortcut = SubResource("Shortcut_x2dtq")
 text = "Skill Tree"
 input_action_name = "info"
 
 [node name="BackButton" parent="ContainerContainer/HBoxContainer" instance=ExtResource("4_iutca")]
 layout_mode = 2
-shortcut = SubResource("Shortcut_bqx8u")
+shortcut = SubResource("Shortcut_clq0d")
 text = "Back"
 input_action_name = "menu_back"
 
