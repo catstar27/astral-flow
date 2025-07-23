@@ -28,8 +28,10 @@ func track_character(new_character: Character)->void:
 	open()
 
 ## Opens the character sheet
-func open()->void:
+func open(starting_tab: String = "Stats")->void:
 	EventBus.broadcast("PAUSE", "NULLDATA")
+	while %TabMenu.cur_tab.name != starting_tab:
+		%TabMenu.next_tab()
 	for label in star_stats_container.get_children():
 		label.text = label.name.replace('_', ' ')+": "
 		label.text += str(character.star_stats[label.name.to_lower()]+character.star_stat_mods[label.name.to_lower()])
@@ -89,8 +91,14 @@ func populate_item_box()->void:
 
 ## Attempts to use an item
 func use_item(item: Item)->void:
+	close()
 	character.item_manager.activate_item(item)
-	populate_item_box()
+	await get_tree().process_frame
+	open("Inventory")
+	while Dialogic.current_timeline != null:
+		await Dialogic.timeline_ended
+	if item_list.get_child_count() > 2 && item_list.is_visible_in_tree():
+		item_list.get_child(1).grab_focus()
 
 func _on_tab_menu_tab_changed() -> void:
 	var tab_name: String

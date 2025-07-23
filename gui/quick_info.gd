@@ -7,6 +7,7 @@ class_name QuickInfo
 @export var manage_position: bool = true ## Whether this QuickInfo should manage its position or not
 @export var animated: bool = true ## Whether this QuickInfo should play the pop in animation
 @export var generic_portrait: Texture2D ## Generic character portrait for backup
+@export var hide_in_dialogue: bool = true ## Whether this should hide in dialogue
 @onready var name_label: RichTextLabel = %NameLabel ## Label for character's name
 @onready var stats_label: RichTextLabel = %StatsLabel ## Label for character's stats
 @onready var portrait: TextureRect = %Portrait ## Character Portrait
@@ -21,13 +22,18 @@ signal updated ## Emitted when the display changes
 func _ready() -> void:
 	EventBus.subscribe("SHOW_QUICK_INFO", self, "track_character")
 	EventBus.subscribe("HIDE_QUICK_INFO", self, "stop_tracking")
-	EventBus.subscribe("DIALOGUE_ENTERED", self, "hide")
+	EventBus.subscribe("DIALOGUE_ENTERED", self, "check_and_hide")
 	EventBus.subscribe("DIALOGUE_EXITED", self, "check_and_show")
 
 ## Checks if this tracking, and shows it if so
 func check_and_show()->void:
 	if character != null:
 		show()
+
+## Checks if this should hide, and hides if yes
+func check_and_hide()->void:
+	if hide_in_dialogue:
+		hide()
 
 ## Starts tracking the given character
 func track_character(to_track: Character)->void:

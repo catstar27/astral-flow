@@ -38,7 +38,8 @@ func get_save_data()->Dictionary[String, int]:
 	return dict
 
 ## Loads the status effects from given data
-func load_save_data(data: Dictionary[String, Variant])->void:
+func load_save_data(data: Dictionary[String, int])->void:
+	item_dict.clear()
 	for value in data:
 		add_item(load(value), data[value])
 #endregion

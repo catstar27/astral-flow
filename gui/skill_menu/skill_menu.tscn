@@ -5,17 +5,17 @@
 [ext_resource type="PackedScene" uid="uid://c6kh3esjn5743" path="res://gui/tab_menu.tscn" id="2_3b158"]
 [ext_resource type="PackedScene" uid="uid://dleye7m8gjxs0" path="res://gui/components/control_display_button.tscn" id="3_s5afe"]
 
-[sub_resource type="InputEventKey" id="InputEventKey_x2dtq"]
+[sub_resource type="InputEventKey" id="InputEventKey_olbgs"]
 device = -1
 physical_keycode = 4194305
 
-[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_olbgs"]
+[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_e03yn"]
 device = -1
 button_index = 1
 pressed = true
 
 [sub_resource type="Shortcut" id="Shortcut_vvfok"]
-events = [SubResource("InputEventKey_x2dtq"), SubResource("InputEventJoypadButton_olbgs")]
+events = [SubResource("InputEventKey_olbgs"), SubResource("InputEventJoypadButton_e03yn")]
 
 [node name="SkillMenu" type="MarginContainer"]
 process_mode = 3

@@ -7,6 +7,7 @@ class_name Main
 @onready var selection_cursor: SelectionCursor = %SelectionCursor ## The selection cursor
 @onready var foreground: Sprite2D = %Foreground ## Foreground for fade to black or shaders
 @onready var sound_manager: SoundManager = %SoundManager ## Sound manager node
+var num_paused: int = 0 ## Sources causing the game to be paused
 var in_dialogue: bool = false ## Whether the game has dialogue running
 var player: Player = null ## The player node
 var map: GameMap = null ## The currently loaded map node
@@ -65,12 +66,17 @@ func global_timer_timeout()->void:
 
 ## Pauses the game
 func pause()->void:
+	num_paused += 1
 	selection_cursor.move_dir = Vector2.ZERO
 	get_tree().paused = true
 
 ## Unpauses the game
 func unpause()->void:
-	get_tree().paused = false
+	num_paused -= 1
+	if num_paused < 0:
+		num_paused = 0
+	if num_paused == 0:
+		get_tree().paused = false
 
 #region Dialogue
 ## Enters dialogue and pauses the game

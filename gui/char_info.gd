@@ -27,6 +27,11 @@ signal info_box_closed ## Emitted when the info box is no longer needed
 signal opened ## Emitted when this menu opens
 signal closed ## Emitted when this menu closes
 
+func _unhandled_input(event: InputEvent) -> void:
+	if event.is_action_pressed("menu") && state == states.open:
+		get_viewport().set_input_as_handled()
+		close_menu()
+
 #region Setup
 func _ready() -> void:
 	menu_button.disabled = true

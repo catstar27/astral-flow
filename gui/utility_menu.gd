@@ -20,6 +20,11 @@ signal inventory_button_pressed ## Emitted when the inventory button is pressed
 signal pause_button_pressed ## Emitted when the pause button is pressed
 signal character_sheet_requested(character: Character) ## Emitted to open a character sheet
 
+func _unhandled_input(event: InputEvent) -> void:
+	if event.is_action_pressed("menu") && state == states.open:
+		get_viewport().set_input_as_handled()
+		close_menu()
+
 func _ready() -> void:
 	menu_button.display_updated.connect(update_menu_button)
 

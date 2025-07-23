@@ -52,29 +52,29 @@ font_size = 28
 [sub_resource type="LabelSettings" id="LabelSettings_p5ctj"]
 font_size = 24
 
-[sub_resource type="InputEventKey" id="InputEventKey_iutca"]
+[sub_resource type="InputEventKey" id="InputEventKey_j877r"]
 device = -1
 physical_keycode = 4194326
 
-[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_j877r"]
+[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_bqx8u"]
 device = -1
 button_index = 4
 pressed = true
 
-[sub_resource type="Shortcut" id="Shortcut_bqx8u"]
-events = [SubResource("InputEventKey_iutca"), SubResource("InputEventJoypadButton_j877r")]
+[sub_resource type="Shortcut" id="Shortcut_j877r"]
+events = [SubResource("InputEventKey_j877r"), SubResource("InputEventJoypadButton_bqx8u")]
 
-[sub_resource type="InputEventKey" id="InputEventKey_x2dtq"]
+[sub_resource type="InputEventKey" id="InputEventKey_olbgs"]
 device = -1
 physical_keycode = 4194305
 
-[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_olbgs"]
+[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_e03yn"]
 device = -1
 button_index = 1
 pressed = true
 
-[sub_resource type="Shortcut" id="Shortcut_x2dtq"]
-events = [SubResource("InputEventKey_x2dtq"), SubResource("InputEventJoypadButton_olbgs")]
+[sub_resource type="Shortcut" id="Shortcut_bqx8u"]
+events = [SubResource("InputEventKey_olbgs"), SubResource("InputEventJoypadButton_e03yn")]
 
 [node name="CharacterSheet" type="Control" node_paths=PackedStringArray("item_list", "item_description_box", "breakthroughs_list", "star_stats_container", "other_stats_container", "name_labels", "portrait_displays", "pronoun_labels")]
 process_mode = 3
@@ -415,13 +415,13 @@ alignment = 1
 
 [node name="SkillTreeButton" parent="ContainerContainer/HBoxContainer" instance=ExtResource("4_iutca")]
 layout_mode = 2
-shortcut = SubResource("Shortcut_bqx8u")
+shortcut = SubResource("Shortcut_j877r")
 text = "Skill Tree"
 input_action_name = "info"
 
 [node name="BackButton" parent="ContainerContainer/HBoxContainer" instance=ExtResource("4_iutca")]
 layout_mode = 2
-shortcut = SubResource("Shortcut_x2dtq")
+shortcut = SubResource("Shortcut_bqx8u")
 text = "Back"
 input_action_name = "menu_back"
 

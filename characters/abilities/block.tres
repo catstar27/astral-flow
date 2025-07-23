@@ -19,6 +19,7 @@ mp_cost = 0
 ability_range = 0
 target_type = 0
 activation_type = 2
+animation_override = &""
 base_damage = 0
 ignore_defense = false
 damage_type = 2

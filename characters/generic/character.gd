@@ -623,6 +623,7 @@ func pre_save()->void:
 		current_schedule_looping = schedules[schedule_index].loop_schedule
 		current_schedule_task_index = schedules[schedule_index].task_index
 	status_data = status_manager.get_save_data()
+	item_data = item_manager.get_save_data()
 
 ## Executes after making the save dict
 func post_save()->void:
@@ -641,6 +642,7 @@ func post_load()->void:
 		schedules[schedule_index].task_index = current_schedule_task_index
 	init_statuses()
 	status_manager.load_save_data(status_data)
+	item_manager.load_save_data(item_data)
 	for id in skill_ids:
 		EventBus.broadcast("ADD_SKILL", [self, id])
 	load_extra()

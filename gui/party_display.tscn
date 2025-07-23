@@ -7,17 +7,17 @@
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_sw3kj"]
 
-[sub_resource type="InputEventKey" id="InputEventKey_sw3kj"]
+[sub_resource type="InputEventKey" id="InputEventKey_olbgs"]
 device = -1
 physical_keycode = 4194305
 
-[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_frj83"]
+[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_e03yn"]
 device = -1
 button_index = 1
 pressed = true
 
 [sub_resource type="Shortcut" id="Shortcut_sw3kj"]
-events = [SubResource("InputEventKey_sw3kj"), SubResource("InputEventJoypadButton_frj83")]
+events = [SubResource("InputEventKey_olbgs"), SubResource("InputEventJoypadButton_e03yn")]
 
 [node name="PartyDisplay" type="Control" node_paths=PackedStringArray("party_quick_info")]
 layout_mode = 3
@@ -56,6 +56,7 @@ mouse_filter = 1
 theme_override_styles/panel = SubResource("StyleBoxEmpty_sw3kj")
 manage_position = false
 animated = false
+hide_in_dialogue = false
 
 [node name="Party2" type="Button" parent="PartyButtonContainer"]
 custom_minimum_size = Vector2(194, 98)
@@ -74,6 +75,7 @@ mouse_filter = 1
 theme_override_styles/panel = SubResource("StyleBoxEmpty_sw3kj")
 manage_position = false
 animated = false
+hide_in_dialogue = false
 
 [node name="Party3" type="Button" parent="PartyButtonContainer"]
 custom_minimum_size = Vector2(194, 98)
@@ -92,6 +94,7 @@ mouse_filter = 1
 theme_override_styles/panel = SubResource("StyleBoxEmpty_sw3kj")
 manage_position = false
 animated = false
+hide_in_dialogue = false
 
 [node name="Party4" type="Button" parent="PartyButtonContainer"]
 custom_minimum_size = Vector2(194, 98)
@@ -110,6 +113,7 @@ mouse_filter = 1
 theme_override_styles/panel = SubResource("StyleBoxEmpty_sw3kj")
 manage_position = false
 animated = false
+hide_in_dialogue = false
 
 [node name="ExitMenuButton" parent="PartyButtonContainer" instance=ExtResource("3_sw3kj")]
 unique_name_in_owner = true
