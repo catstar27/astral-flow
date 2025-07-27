@@ -1,21 +1,19 @@
-[gd_scene load_steps=8 format=3 uid="uid://bp3kviw2dmw1c"]
+[gd_scene load_steps=6 format=3 uid="uid://bp3kviw2dmw1c"]
 
-[ext_resource type="Texture2D" uid="uid://c86rddiynhvpb" path="res://textures/gui/backgrounds.png" id="1_vjr7l"]
 [ext_resource type="Script" uid="uid://f7npi380faxk" path="res://gui/skill_menu/skill_menu.gd" id="1_vvfok"]
-[ext_resource type="PackedScene" uid="uid://c6kh3esjn5743" path="res://gui/tab_menu.tscn" id="2_3b158"]
 [ext_resource type="PackedScene" uid="uid://dleye7m8gjxs0" path="res://gui/components/control_display_button.tscn" id="3_s5afe"]
 
-[sub_resource type="InputEventKey" id="InputEventKey_olbgs"]
+[sub_resource type="InputEventKey" id="InputEventKey_3b158"]
 device = -1
 physical_keycode = 4194305
 
-[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_e03yn"]
+[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_s5afe"]
 device = -1
 button_index = 1
 pressed = true
 
 [sub_resource type="Shortcut" id="Shortcut_vvfok"]
-events = [SubResource("InputEventKey_olbgs"), SubResource("InputEventJoypadButton_e03yn")]
+events = [SubResource("InputEventKey_3b158"), SubResource("InputEventJoypadButton_s5afe")]
 
 [node name="SkillMenu" type="MarginContainer"]
 process_mode = 3
@@ -34,100 +32,16 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_vvfok")
 
-[node name="Background" type="TextureRect" parent="."]
+[node name="Background" type="ColorRect" parent="."]
 layout_mode = 2
-texture = ExtResource("1_vjr7l")
-expand_mode = 2
+color = Color(0.712129, 0.712129, 0.712129, 1)
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
-layout_mode = 2
-alignment = 1
-
-[node name="TabMenu" parent="VBoxContainer" instance=ExtResource("2_3b158")]
-custom_minimum_size = Vector2(960, 0)
-layout_mode = 2
-size_flags_vertical = 3
-min_tabs = 3
-
-[node name="Core" type="Control" parent="VBoxContainer/TabMenu"]
-visible = false
-custom_minimum_size = Vector2(960, 0)
+[node name="BackButton" parent="." instance=ExtResource("3_s5afe")]
 layout_mode = 2
 size_flags_horizontal = 4
-size_flags_vertical = 3
-
-[node name="Shooting" type="Control" parent="VBoxContainer/TabMenu"]
-visible = false
-custom_minimum_size = Vector2(960, 0)
-layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 3
-
-[node name="Brawling" type="Control" parent="VBoxContainer/TabMenu"]
-visible = false
-custom_minimum_size = Vector2(960, 0)
-layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 3
-
-[node name="Survivalism" type="Control" parent="VBoxContainer/TabMenu"]
-visible = false
-custom_minimum_size = Vector2(960, 0)
-layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 3
-
-[node name="Science" type="Control" parent="VBoxContainer/TabMenu"]
-visible = false
-custom_minimum_size = Vector2(960, 0)
-layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 3
-
-[node name="Pyromancy" type="Control" parent="VBoxContainer/TabMenu"]
-visible = false
-custom_minimum_size = Vector2(960, 0)
-layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 3
-
-[node name="Hydromancy" type="Control" parent="VBoxContainer/TabMenu"]
-visible = false
-custom_minimum_size = Vector2(960, 0)
-layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 3
-
-[node name="Cryomancy" type="Control" parent="VBoxContainer/TabMenu"]
-visible = false
-custom_minimum_size = Vector2(960, 0)
-layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 3
-
-[node name="Electromancy" type="Control" parent="VBoxContainer/TabMenu"]
-visible = false
-custom_minimum_size = Vector2(960, 0)
-layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 3
-
-[node name="Geomancy" type="Control" parent="VBoxContainer/TabMenu"]
-visible = false
-custom_minimum_size = Vector2(960, 0)
-layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 3
-
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
-layout_mode = 2
-size_flags_vertical = 8
-alignment = 1
-
-[node name="BackButton" parent="VBoxContainer/HBoxContainer" instance=ExtResource("3_s5afe")]
-layout_mode = 2
+size_flags_vertical = 4
 shortcut = SubResource("Shortcut_vvfok")
 text = "Back"
 input_action_name = "menu_back"
 
-[connection signal="pressed" from="VBoxContainer/HBoxContainer/BackButton" to="." method="close"]
+[connection signal="pressed" from="BackButton" to="." method="close"]
