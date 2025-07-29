@@ -1,6 +1,7 @@
 set {random} = randi()%10
 if {random} == 0:
 	Run
+	[signal arg_type="dict" arg="{"RunSign":"emit_update_tiles"}"]
 else:
 	This is a sign.
 [end_timeline]

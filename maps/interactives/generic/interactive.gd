@@ -24,6 +24,15 @@ class_name Interactive
 @export_group("Dialogic") ## Variables related to dialogue
 @export var dialogue: DialogicTimeline ## Dialogue to play when this is interacted with
 @export var pause_music: bool = false ## Whether this pauses music in dialogue
+@export_group("Tile Manipulation") ## Variables related to changing tiles in the map
+@export_storage var tile_changes_terrain: Dictionary[String, Array] ## Collects same terrain sets together
+@export var tile_range: Array[Vector2i] ## Range of tiles to add to tile_changes
+@export var range_terrain: String ## Terrain to use for this range
+@export_tool_button("Add Range") var add_range_fn = add_range ## Adds the current ranges
+@export var tile_changes: Dictionary[Vector2i, String] = {}: ## Tiles to change when interacted with
+	set(new_tc):
+		tile_changes = new_tc
+		update_tile_changes()
 @onready var sprite: Sprite2D = %Sprite ## Sprite of the interactive
 @onready var collision: CollisionShape2D = %Collision ## Collision of the interactive
 var collision_active: bool = true ## Whether the collision is active
@@ -31,6 +40,7 @@ var occupied_positions: Array[Vector2] ## Positions occupied by the interactive
 var dialogue_timeline: DialogicTimeline = null ## Timeline of dialogue loaded during setup
 var allow_dialogue: bool = true ## Whether the dialogue should be played when interacted
 signal interacted ## Emitted when interacted with
+signal update_tiles(tiles: Array, terrain: String) ## Updates game map with terrains and position
 
 ## Sets up the interactive, scaling it properly and setting its position
 func setup()->void:
@@ -80,6 +90,43 @@ func _interacted(character: Character)->void:
 	_interact_extra(character)
 	interacted.emit()
 
+## Emits the update_tiles signal
+func emit_update_tiles()->void:
+	for terrain in tile_changes_terrain:
+		update_tiles.emit(tile_changes_terrain[terrain], terrain)
+
 ## Called after the base class interact function
 func _interact_extra(_character: Character)->void:
 	return
+
+## Updates tile_changes_terrains
+func update_tile_changes()->void:
+	tile_changes_terrain.clear()
+	for tile in tile_changes:
+		if tile_changes[tile] not in tile_changes_terrain:
+			tile_changes_terrain[tile_changes[tile]] = []
+		tile_changes_terrain[tile_changes[tile]].append(tile)
+
+## Adds the range into tile updates
+func add_range()->void:
+	var i1: int = 0
+	var i2: int = 1
+	while i2 < tile_range.size():
+		var x_start: int = tile_range[i1].x
+		var x_end: int = tile_range[i2].x
+		var y_start: int = tile_range[i1].y
+		var y_end: int = tile_range[i2].y
+		if tile_range[i1].x > tile_range[i2].x:
+			x_start = tile_range[i2].x
+			x_end = tile_range[i1].x
+		if tile_range[i1].y > tile_range[i2].y:
+			y_start = tile_range[i2].y
+			y_end = tile_range[i1].y
+		for x in range(x_start, x_end+1):
+			for y in range(y_start, y_end+1):
+				tile_changes[Vector2i(x,y)] = range_terrain
+		i1 += 1
+		i2 += 1
+	range_terrain = ""
+	tile_range.clear()
+	notify_property_list_changed()

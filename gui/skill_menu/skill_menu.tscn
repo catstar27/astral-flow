@@ -3,17 +3,17 @@
 [ext_resource type="Script" uid="uid://f7npi380faxk" path="res://gui/skill_menu/skill_menu.gd" id="1_vvfok"]
 [ext_resource type="PackedScene" uid="uid://dleye7m8gjxs0" path="res://gui/components/control_display_button.tscn" id="3_s5afe"]
 
-[sub_resource type="InputEventKey" id="InputEventKey_3b158"]
+[sub_resource type="InputEventKey" id="InputEventKey_olbgs"]
 device = -1
 physical_keycode = 4194305
 
-[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_s5afe"]
+[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_e03yn"]
 device = -1
 button_index = 1
 pressed = true
 
-[sub_resource type="Shortcut" id="Shortcut_vvfok"]
-events = [SubResource("InputEventKey_3b158"), SubResource("InputEventJoypadButton_s5afe")]
+[sub_resource type="Shortcut" id="Shortcut_3b158"]
+events = [SubResource("InputEventKey_olbgs"), SubResource("InputEventJoypadButton_e03yn")]
 
 [node name="SkillMenu" type="MarginContainer"]
 process_mode = 3
@@ -40,7 +40,7 @@ color = Color(0.712129, 0.712129, 0.712129, 1)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
-shortcut = SubResource("Shortcut_vvfok")
+shortcut = SubResource("Shortcut_3b158")
 text = "Back"
 input_action_name = "menu_back"
 

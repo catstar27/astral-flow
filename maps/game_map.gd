@@ -12,12 +12,14 @@ class_name GameMap
 @export var map_name: String ## Display name of map
 @onready var astar: AStarGrid2D ## Astar pathfinding grid
 @onready var light_modulator: CanvasModulate = %LightingModulate ## Modulator for lighting
+var modified_tiles: Dictionary[String, Array] ## Dictionary with terrain/position array pairs for updating tilemap
 var loading: bool = false ## Whether the map is loading
 var occupied_tiles: Dictionary[Vector2i, Node2D] ## Tiles being occupied by an interactive or character
 var last_player_pos: Dictionary[String, Vector2] ## Last saved position of player on this map
 var to_save: Array[StringName] = [ ## Map variables to save
 	"player_start_pos",
 	"last_player_pos",
+	"modified_tiles",
 ]
 signal map_saved ## Emitted when the entire map is saved
 signal map_loaded ## Emitted when the entire map is loaded
@@ -42,6 +44,7 @@ func prep_map()->void:
 	for child in get_children():
 		if child is Interactive:
 			child.setup()
+			child.update_tiles.connect(set_terrain)
 			if child.collision_active:
 				for pos in child.occupied_positions:
 					set_pos_occupied([pos, child])
@@ -65,17 +68,19 @@ func _astar_setup()->void:
 ## Sets all tiles not marked as traversible to solid
 func _set_astar_tiles()->void:
 	for cell in get_used_cells():
-		if !get_cell_tile_data(cell).get_custom_data("traversible"):
-			astar.set_point_solid(cell)
+		astar.set_point_solid(cell, !get_cell_tile_data(cell).get_custom_data("traversible"))
 #endregion
 
 #region Child Manipulation
 ## Processes dialogue signals
 func process_dialogue_signal(arg)->void:
 	if arg is Dictionary:
-		for target_name in arg.keys():
+		for target_name in arg:
 			for child in get_children():
 				if child is Character && child.display_name == target_name && child.active:
+					if arg[target_name] is String && child.has_method(arg[target_name]):
+						child.call_deferred(arg[target_name])
+				if child is Interactive && child.id == target_name:
 					if arg[target_name] is String && child.has_method(arg[target_name]):
 						child.call_deferred(arg[target_name])
 #endregion
@@ -169,6 +174,23 @@ func is_in_bounds(pos: Vector2)->bool:
 	return true
 #endregion
 
+#region Tile Manipulation
+## Updates the tiles with given terrain
+func set_terrain(cells: Array, terrain: String)->void:
+	var terrain_idx: int = -1
+	for n in range(0, tile_set.get_terrains_count(0)):
+		if tile_set.get_terrain_name(0, n) == terrain:
+			terrain_idx = n
+			break
+	if terrain_idx == -1:
+		printerr("Invalid Terrain "+terrain)
+		return
+	set_cells_terrain_connect(cells, 0, terrain_idx)
+	for cell in cells:
+		astar.set_point_solid(cell, !get_cell_tile_data(cell).get_custom_data("traversible"))
+	modified_tiles[terrain] = cells
+#endregion
+
 #region Save and Load
 ## Gets save data for this map and all its saved children
 func get_save_data()->Dictionary[String, Dictionary]:
@@ -201,6 +223,8 @@ func load_save_data(dict: Dictionary[String, Dictionary])->void:
 		var self_dict: Dictionary[String, Variant] = dict[name]
 		for value in self_dict:
 			set(value, self_dict[value])
+	for terrain in modified_tiles:
+		set_terrain(modified_tiles[terrain], terrain)
 	for node in get_children():
 		if node.is_in_group("LevelSave") && node.name in dict:
 			var node_dict: Dictionary[String, Variant] = dict[node.name]
