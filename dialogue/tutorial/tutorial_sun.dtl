@@ -1,0 +1,7 @@
+This thing looks a bit like the sun. For some reason, it does not actually emit light.
+- Poke
+	It isn't hot... and it seemed to make a clicking sound...
+	[signal arg="tutorial_sun_click"]
+	[end_timeline]
+- Leave
+	[end_timeline]

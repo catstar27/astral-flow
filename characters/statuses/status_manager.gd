@@ -5,6 +5,15 @@ class_name StatusManager
 ## Contains all methods necessary to interface status effects with characters
 
 #region Variables and Signals
+var star_stat_mods: Dictionary[String, int] = { ## Stats modified on the stat star
+	"intelligence": 0,
+	"agility": 0,
+	"strength": 0,
+	"endurance": 0,
+	"charisma": 0,
+	"resolve": 0,
+	"passion": 0
+}
 var stat_mods: Dictionary = { ## Current total stat modification from statuses
 	"max_ap": 0,
 	"max_mp": 0,
@@ -20,6 +29,7 @@ var status_list: Dictionary[Status, Array] ## Current active statuses and an arr
 var damage: int = 0 ## Total damage dealt per tick by statuses
 var processing_conditionals: bool = false ## Whether conditional statuses are being processed currently
 signal status_damage_ticked(amount: int) ## Statuses applied this amount of total damage
+signal status_star_stat_mod_changed(stat_mod: String, amount: int) ## The modification to star stats has changed
 signal status_stat_mod_changed(stat_mod: String, amount: int) ## The modification to stats has changed
 signal status_action_occurred(action: Callable, args: Array) ## A status has attempted to call a callable
 signal conditionals_processed ## Emitted when done processing conditional statuses
@@ -66,6 +76,9 @@ func tick_status()->void:
 
 ## Removes modifications from a given status
 func remove_status_mod(status: Status)->void:
+	for stat in star_stat_mods:
+		star_stat_mods[stat] -= status.star_stat_mods[stat]
+		status_star_stat_mod_changed.emit(stat, -status.star_stat_mods[stat])
 	for stat in status.stat_mods:
 		stat_mods[stat] -= status.stat_mods[stat]
 		status_stat_mod_changed.emit(stat, -status.stat_mods[stat])
@@ -132,6 +145,9 @@ func trigger_on_death()->void:
 				var action_args: Array = status.get_status_action_args().duplicate()
 				status_action_occurred.emit(action, action_args)
 			else:
+				for stat in status.star_stat_mods:
+					star_stat_mods[stat] += status.star_stat_mods[stat]
+					status_star_stat_mod_changed.emit(stat, status.star_stat_mods[stat])
 				for stat in status.stat_mods:
 					stat_mods[stat] += status.stat_mods[stat]
 					status_stat_mod_changed.emit(stat, status.stat_mods[stat])

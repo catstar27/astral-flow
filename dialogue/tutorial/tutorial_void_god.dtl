@@ -1,0 +1,22 @@
+join void_god left [animation="Bounce In" wait="true"]
+[music path="res://music/carefree_carousel.wav" fade="0.0" volume="0.0"]
+if {learned_zap} == true:
+	jump go_exit
+void_god: Whew! You put up a good fight!
+void_god: I'll admit, I'm impressed. I think you have potential.
+void_god: So, as a reward for a job well done, I will teach you some electric magic tricks!
+You Learned the Zap Ability!
+set {void_god_name} = "Nilak"
+void_god: The name's Nilak, by the way. You better remember it!
+set {learned_zap} = true
+[signal arg="test_room_zap_learned"]
+- Thanks!
+	void_god: Don't worry about it! I'm happy to teach. Maybe now you can escape this place?
+	label go_exit
+	void_god: You should go find the exit!
+- You're just a figment of my imagination.
+	void_god: Heh... you may doubt me now, but believe me. You WILL see me again.
+	void_god: I could even be your best friend if you play your cards right.
+- (Leave)
+	void_god: Uh, goodbye then?
+[end_timeline]

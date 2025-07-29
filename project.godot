@@ -34,37 +34,38 @@ shapes/collision/shape_color=Color(0, 0.6, 0.701961, 0.243137)
 [dialogic]
 
 directories/dch_directory={
-"dog": "res://dialogue/dog.dch",
-"generic_npc": "res://dialogue/generic_npc.dch",
-"kalin": "res://dialogue/kalin.dch",
-"nilak": "res://dialogue/nilak.dch"
+"dog": "res://dialogue/characters/dog.dch",
+"generic_npc": "res://dialogue/characters/generic_npc.dch",
+"kalin": "res://dialogue/characters/kalin.dch",
+"void_god": "res://dialogue/characters/void_god.dch"
 }
 directories/dtl_directory={
-"empty_magic_battery": "res://dialogue/empty_magic_battery.dtl",
-"locked": "res://dialogue/locked.dtl",
-"tesla_coil_active": "res://dialogue/tesla_coil_active.dtl",
-"tesla_coil_inactive": "res://dialogue/tesla_coil_inactive.dtl",
-"tutorial_completion": "res://dialogue/tutorial_completion.dtl",
-"tutorial_couch": "res://dialogue/tutorial_couch.dtl",
-"tutorial_dog": "res://dialogue/tutorial_dog.dtl",
-"tutorial_duel": "res://dialogue/tutorial_duel.dtl",
-"tutorial_grapes": "res://dialogue/tutorial_grapes.dtl",
-"tutorial_help_sign": "res://dialogue/tutorial_help_sign.dtl",
-"tutorial_nilak": "res://dialogue/tutorial_npc.dtl",
-"tutorial_nilak_revived": "res://dialogue/tutorial_nilak_revived.dtl",
-"tutorial_run_sign": "res://dialogue/tutorial_run_sign.dtl",
-"tutorial_sun": "res://dialogue/tutorial_sun.dtl"
+"empty_magic_battery": "res://dialogue/generic_interactives/empty_magic_battery.dtl",
+"locked": "res://dialogue/generic_interactives/locked.dtl",
+"tesla_coil_active": "res://dialogue/generic_interactives/tesla_coil_active.dtl",
+"tesla_coil_inactive": "res://dialogue/generic_interactives/tesla_coil_inactive.dtl",
+"tutorial_completion": "res://dialogue/tutorial/tutorial_completion.dtl",
+"tutorial_couch": "res://dialogue/tutorial/tutorial_couch.dtl",
+"tutorial_dog": "res://dialogue/tutorial/tutorial_dog.dtl",
+"tutorial_duel": "res://dialogue/tutorial/tutorial_duel.dtl",
+"tutorial_grapes": "res://dialogue/tutorial/tutorial_grapes.dtl",
+"tutorial_help_sign": "res://dialogue/tutorial/tutorial_help_sign.dtl",
+"tutorial_run_sign": "res://dialogue/tutorial/tutorial_run_sign.dtl",
+"tutorial_sun": "res://dialogue/tutorial/tutorial_sun.dtl",
+"tutorial_void_god": "res://dialogue/tutorial/tutorial_void_god.dtl",
+"tutorial_void_god_forgives": "res://dialogue/tutorial/tutorial_void_god_forgives.dtl",
+"tutorial_void_god_revived": "res://dialogue/tutorial/tutorial_void_god_revived.dtl"
 }
 glossary/default_case_sensitive=true
 variables={
 "learned_zap": false,
-"nilak_name": "???",
 "random": 0,
 "tutorial_npc_revived": 0,
-"tutorial_puzzle_index": 0
+"tutorial_puzzle_index": 0,
+"void_god_name": "???"
 }
-layout/style_list=["res://dialogue/dialogue_style.tres"]
-layout/default_style="res://dialogue/dialogue_style.tres"
+layout/style_list=[""]
+layout/default_style=""
 extensions_folder="res://addons/dialogic_additions"
 text/letter_speed=0.01
 text/initial_text_reveal_skippable=true

@@ -1,0 +1,9 @@
+The grapes are moldy... how long have they been here?
+- Poke
+	Ew... one of the grapes was hardened... it made a clicking noise...
+	[signal arg="tutorial_grapes_click"]
+	if {tutorial_puzzle_index} == 4.0:
+		The gate made a clicking noise!
+	[end_timeline]
+- Leave
+	[end_timeline]

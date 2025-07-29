@@ -47,6 +47,7 @@ var to_save: Array[StringName] = [ ## Variables to save
 signal saved(node: Interactive) ## Emitted when saved
 signal loaded(node: Interactive) ## Emitted when loaded
 signal interacted ## Emitted when interacted with
+signal interacted_id(id: String) ## Emitted when interacted with, with id as arg
 signal update_tiles(tiles: Array, terrain: String) ## Updates game map with terrains and position
 signal updated_tiles ## Emitted when update_tiles is, does not contain args
 signal updated_tiles_named(id: String) ## Emitted when update_tiles is, giving the id of this
@@ -98,6 +99,7 @@ func _interacted(character: Character)->void:
 		EventBus.broadcast("ENTER_DIALOGUE", [dialogue_timeline, pause_music])
 	_interact_extra(character)
 	interacted.emit()
+	interacted_id.emit(id)
 
 ## Activates the interactive
 func activate()->void:

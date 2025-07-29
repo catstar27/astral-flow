@@ -54,8 +54,6 @@ enum ai_types { ## Options for enemy ai
 @export var display_name: String = "Name Here" ## Name displayed in gui and logs
 @export var portrait: Texture2D = preload("uid://b3jluv54rfg24") ## Character's portrait
 @export var pronouns: String = "They/Them" ## Character's pronouns in gui and logs
-@export var dialogues: Array[DialogicTimeline] ## Dialogues for the NPC to enter when interacted
-@export var signal_dialogues: Dictionary[String, DialogicTimeline] ## Second set of dialogue for triggering through signals
 @export var text_indicator_shift: Vector2 = Vector2.UP*32 ## Distance away from this to spawn text indicators
 @export_group("Initial Stuff")
 @export var starting_skills: Array[Skill] ## List of skills to start with
@@ -68,12 +66,17 @@ enum ai_types { ## Options for enemy ai
 @export var allies: Array[Character] = [] ## List of allies to bring into combat alongside this character
 @export var enemies: Array[Character] = [] ## List of enemies to watch for
 @export var hostile_to_player: bool = false ## Whether this character attacks the player on sight
+@export_group("Dialogue") ## Category controlling dialogue
+@export var initial_dialogue: String = "" ## Initial dialogue timeline
+@export var interact_dialogues: Dictionary[String, DialogicTimeline] ## interact_dialogues for the NPC to enter when interacted
+@export var signal_dialogues: Dictionary[String, DialogicTimeline] ## Second set of dialogue for triggering through signals
 @export_group("Schedule") ## Exports related to this character's schedule. Do not use for the player
 @export var schedules: Dictionary[String, Schedule] ## List of tasks for the character to carry out
 @export var initial_schedule: String = "" ## Schedule to start with
 @export var surrendered_schedule: String = "" ## Schedule to switch to when defeated
-@export_group("Activation") ## Exports related to character's active state
+@export_group("Misc") ## Misc Exports
 @export var active: bool = true ## Whether the character is active in the game map or disabled
+@export var signal_statuses: Dictionary[String, Status] ## Statuses to activate when receiving signal with string arg
 #endregion
 #region Vars
 const range_indicator_scene: PackedScene = preload("res://misc/selection_cursor/range_indicator.tscn")
@@ -100,7 +103,7 @@ var skill_points: int ## Characters unused points for learning skills
 var cur_ap: int ## Character's current action points
 var cur_mp: int ## Character's current health points
 var cur_hp: int ## Character's current magic points
-var dialogue_index: int = 0 ## Current index of dialogue scene to play
+var dialogue_id: String = "" ## Current id of dialogue scene to play
 var cur_schedule_name: String = "" ## Current name of the schedule being executed
 var current_schedule_executed: bool = false ## Whether the current schedule has been finished at least once
 var current_schedule_looping: bool = false ## Whether the current schedule is looping
@@ -127,7 +130,7 @@ var to_save: Array[StringName] = [ ## Variables to save
 	"current_schedule_looping",
 	"current_schedule_task_index",
 	"cur_schedule_name",
-	"dialogue_index",
+	"dialogue_id",
 	"status_data",
 	"item_data"
 ]
@@ -171,6 +174,7 @@ func _setup()->void:
 	EventBus.subscribe("GLOBAL_TIMER_TIMEOUT", self, "refresh")
 	EventBus.subscribe("REST", self, "rest")
 	status_manager.status_damage_ticked.connect(damage)
+	status_manager.status_star_stat_mod_changed.connect(update_star_stat_mod)
 	status_manager.status_stat_mod_changed.connect(update_stat_mod)
 	status_manager.status_action_occurred.connect(process_status_action)
 	pos_changed.connect(status_manager.process_move)
@@ -179,6 +183,7 @@ func _setup()->void:
 	damaged.connect(on_damaged)
 	duplicate_export_abilities()
 	calc_base_stats()
+	dialogue_id = initial_dialogue
 	cur_schedule_name = initial_schedule
 	cur_hp = base_stats.max_hp+stat_mods.max_hp
 	cur_ap = base_stats.max_ap+stat_mods.max_ap
@@ -212,6 +217,18 @@ func update_stat_mod(stat_mod_name: String, amount: int)->void:
 		printerr("Attempted to change stat mod "+stat_mod_name+" not in stat_mods")
 	else:
 		stat_mods[stat_mod_name] += amount
+		if stat_mod_name == "max_hp":
+			cur_hp += amount
+		elif stat_mod_name == "max_mp":
+			cur_mp += amount
+
+## Updates star stat modifiers based on given args
+func update_star_stat_mod(stat_mod_name: String, amount: int)->void:
+	if stat_mod_name not in stat_mods:
+		printerr("Attempted to change stat mod "+stat_mod_name+" not in stat_mods")
+	else:
+		star_stat_mods[stat_mod_name] += amount
+		calc_base_stats()
 
 ## Refreshes the character; called either when a combat round starts or time ticks
 func refresh()->void:
@@ -402,7 +419,7 @@ func melee_aggressive()->void:
 		while state_machine.current_state.state_id != "IDLE":
 			await state_machine.state_changed
 	if abilities[0].is_tile_valid(combat_target.position):
-		while cur_ap>=abilities[0].ap_cost:
+		while cur_ap>=abilities[0].ap_cost && combat_target.active:
 			activate_ability(abilities[0], combat_target.position)
 			while state_machine.current_state.state_id != "IDLE":
 				await state_machine.state_changed
@@ -506,6 +523,13 @@ func process_status_action(action: Callable, args: Array)->void:
 	await action.call(args)
 	if position != prev_pos:
 		pos_changed.emit(self)
+
+## Adds statuses based on signal
+func add_status_signal(id: String)->void:
+	if id not in signal_statuses:
+		printerr("Missing Status for id "+id+" in character "+display_name)
+		return
+	add_status(signal_statuses[id], self)
 #endregion
 
 #region Detection
@@ -568,16 +592,16 @@ func try_combat(character: Character)->void:
 func _interacted(interactor: Character)->void:
 	if interactor is Player:
 		EventBus.broadcast("QUEST_EVENT", "interact_with:"+display_name)
-		if dialogue_index < dialogues.size() && !hostile_to_player:
-			EventBus.broadcast("ENTER_DIALOGUE", [dialogues[dialogue_index], true])
+		if dialogue_id in interact_dialogues && !hostile_to_player:
+			EventBus.broadcast("ENTER_DIALOGUE", [interact_dialogues[dialogue_id], true])
 
 func activate_signal_dialogue(signal_name: String)->void:
 	if signal_name in signal_dialogues.keys():
 		EventBus.broadcast("ENTER_DIALOGUE", [signal_dialogues[signal_name], true])
 
-## Increments the dialogue index
-func next_dialogue()->void:
-	dialogue_index += 1
+## Sets the dialogue id for interacting
+func set_dialogue(id: String)->void:
+	dialogue_id = id
 
 ## Sets the color of the character's outline
 func set_outline_color()->void:

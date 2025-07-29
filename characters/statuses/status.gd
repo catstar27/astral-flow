@@ -5,6 +5,16 @@ class_name Status
 ## Can apply a variety of effects, 
 ## all of which are configured through exports
 
+## Determines modifiers applied to star stats when this is active
+@export var star_stat_mods: Dictionary[String, int] = {
+	"intelligence": 0,
+	"agility": 0,
+	"strength": 0,
+	"endurance": 0,
+	"charisma": 0,
+	"resolve": 0,
+	"passion": 0
+}
 ## Determines modifier applied to stats when this is active
 @export var stat_mods: Dictionary[String, int] = {
 	"max_ap": 0, ## Maximum Action Points

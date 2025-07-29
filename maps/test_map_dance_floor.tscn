@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=4 uid="uid://dyy0oxkboq8t1"]
+[gd_scene load_steps=16 format=4 uid="uid://dyy0oxkboq8t1"]
 
 [ext_resource type="TileSet" uid="uid://dpajsxeb15k7l" path="res://maps/tilesets/dungeon.tres" id="1_i0d10"]
 [ext_resource type="Script" uid="uid://b8kw4ghpy3r8t" path="res://maps/game_map.gd" id="2_vpgb5"]
@@ -6,16 +6,15 @@
 [ext_resource type="PackedScene" uid="uid://8hplcp22i5re" path="res://maps/interactives/lights/wall_light.tscn" id="3_lpqw6"]
 [ext_resource type="PackedScene" uid="uid://iwh84j268tml" path="res://maps/interactives/generic/interactive.tscn" id="4_njv6h"]
 [ext_resource type="AudioStream" uid="uid://dqghmnw6mpids" path="res://music/carefree_carousel.wav" id="4_to652"]
-[ext_resource type="Resource" uid="uid://bfqfriuuyo85e" path="res://dialogue/tutorial_completion.dtl" id="5_pmpyx"]
+[ext_resource type="Resource" uid="uid://bfqfriuuyo85e" path="res://dialogue/tutorial/tutorial_completion.dtl" id="5_pmpyx"]
 [ext_resource type="PackedScene" uid="uid://cexm0cxkxol76" path="res://maps/interactives/generic/travel_point.tscn" id="7_3ojlr"]
 [ext_resource type="Texture2D" uid="uid://c52i6qxjfvprb" path="res://textures/interactive/exit_stairs.tres" id="7_lm3pf"]
 [ext_resource type="PackedScene" uid="uid://bxbk83doy5d81" path="res://characters/generic/npc.tscn" id="10_ll2lb"]
 [ext_resource type="Script" uid="uid://eg2p4dq2kutt" path="res://characters/tasks/schedule.gd" id="11_lm3pf"]
 [ext_resource type="Script" uid="uid://cuvk331ioveg" path="res://characters/tasks/task.gd" id="12_ptbar"]
 [ext_resource type="Script" uid="uid://cexcibkkds3yt" path="res://characters/tasks/task_types/wander.gd" id="13_4riad"]
-[ext_resource type="Script" uid="uid://cvn861203hxla" path="res://characters/tasks/task_types/wait.gd" id="14_j0wbn"]
 
-[sub_resource type="Resource" id="Resource_valx8"]
+[sub_resource type="Resource" id="Resource_re4in"]
 script = ExtResource("13_4riad")
 wander_home = Vector2(160, -288)
 wander_max_tiles = Vector2i(3, 3)
@@ -25,18 +24,9 @@ minute_start = 0
 minute_end = 0
 metadata/_custom_type_script = "uid://cexcibkkds3yt"
 
-[sub_resource type="Resource" id="Resource_pl4or"]
-script = ExtResource("14_j0wbn")
-wait_time = 1.0
-hour_start = 0
-hour_end = 0
-minute_start = 0
-minute_end = 0
-metadata/_custom_type_script = "uid://cvn861203hxla"
-
-[sub_resource type="Resource" id="Resource_ugsv5"]
+[sub_resource type="Resource" id="Resource_lm3pf"]
 script = ExtResource("11_lm3pf")
-tasks = Array[ExtResource("12_ptbar")]([SubResource("Resource_valx8"), SubResource("Resource_pl4or")])
+tasks = Array[ExtResource("12_ptbar")]([SubResource("Resource_re4in")])
 loop_schedule = true
 use_timed_schedule = false
 metadata/_custom_type_script = "uid://eg2p4dq2kutt"
@@ -72,6 +62,15 @@ rotation = 3.14159
 position = Vector2(160, -544)
 rotation = 1.5708
 
+[node name="SecretStairs" parent="." instance=ExtResource("7_3ojlr")]
+position = Vector2(160, -288)
+rotation = 1.5708
+exit_direction = 1
+entrance_id = "dance_party_secret"
+target_entrance_id = "tutorial_secret"
+new_map = "res://maps/test_map.tscn"
+texture = ExtResource("7_lm3pf")
+
 [node name="ExitStairs" parent="." instance=ExtResource("4_njv6h")]
 position = Vector2(352, 32)
 rotation = 3.14159
@@ -87,61 +86,85 @@ new_map = "res://maps/test_map.tscn"
 texture = ExtResource("7_lm3pf")
 
 [node name="NPC" parent="." instance=ExtResource("10_ll2lb")]
-visible = false
 position = Vector2(-96, -96)
-schedules = Array[ExtResource("11_lm3pf")]([SubResource("Resource_ugsv5")])
+schedules = Dictionary[String, ExtResource("11_lm3pf")]({
+"Init": SubResource("Resource_lm3pf")
+})
+initial_schedule = "Init"
 
 [node name="NPC2" parent="." instance=ExtResource("10_ll2lb")]
-visible = false
 position = Vector2(-96, -224)
-schedules = Array[ExtResource("11_lm3pf")]([SubResource("Resource_ugsv5")])
+schedules = Dictionary[String, ExtResource("11_lm3pf")]({
+"Init": SubResource("Resource_lm3pf")
+})
+initial_schedule = "Init"
 
 [node name="NPC3" parent="." instance=ExtResource("10_ll2lb")]
-visible = false
 position = Vector2(-96, -352)
-schedules = Array[ExtResource("11_lm3pf")]([SubResource("Resource_ugsv5")])
+schedules = Dictionary[String, ExtResource("11_lm3pf")]({
+"Init": SubResource("Resource_lm3pf")
+})
+initial_schedule = "Init"
 
 [node name="NPC4" parent="." instance=ExtResource("10_ll2lb")]
-visible = false
 position = Vector2(-96, -480)
-schedules = Array[ExtResource("11_lm3pf")]([SubResource("Resource_ugsv5")])
+schedules = Dictionary[String, ExtResource("11_lm3pf")]({
+"Init": SubResource("Resource_lm3pf")
+})
+initial_schedule = "Init"
 
 [node name="NPC5" parent="." instance=ExtResource("10_ll2lb")]
-visible = false
 position = Vector2(-32, -544)
-schedules = Array[ExtResource("11_lm3pf")]([SubResource("Resource_ugsv5")])
+schedules = Dictionary[String, ExtResource("11_lm3pf")]({
+"Init": SubResource("Resource_lm3pf")
+})
+initial_schedule = "Init"
 
 [node name="NPC6" parent="." instance=ExtResource("10_ll2lb")]
-visible = false
 position = Vector2(96, -544)
-schedules = Array[ExtResource("11_lm3pf")]([SubResource("Resource_ugsv5")])
+schedules = Dictionary[String, ExtResource("11_lm3pf")]({
+"Init": SubResource("Resource_lm3pf")
+})
+initial_schedule = "Init"
 
 [node name="NPC7" parent="." instance=ExtResource("10_ll2lb")]
-visible = false
 position = Vector2(224, -544)
-schedules = Array[ExtResource("11_lm3pf")]([SubResource("Resource_ugsv5")])
+schedules = Dictionary[String, ExtResource("11_lm3pf")]({
+"Init": SubResource("Resource_lm3pf")
+})
+initial_schedule = "Init"
 
 [node name="NPC8" parent="." instance=ExtResource("10_ll2lb")]
-visible = false
 position = Vector2(352, -544)
-schedules = Array[ExtResource("11_lm3pf")]([SubResource("Resource_ugsv5")])
+schedules = Dictionary[String, ExtResource("11_lm3pf")]({
+"Init": SubResource("Resource_lm3pf")
+})
+initial_schedule = "Init"
 
 [node name="NPC9" parent="." instance=ExtResource("10_ll2lb")]
-visible = false
 position = Vector2(416, -480)
-schedules = Array[ExtResource("11_lm3pf")]([SubResource("Resource_ugsv5")])
+schedules = Dictionary[String, ExtResource("11_lm3pf")]({
+"Init": SubResource("Resource_lm3pf")
+})
+initial_schedule = "Init"
 
 [node name="NPC10" parent="." instance=ExtResource("10_ll2lb")]
-visible = false
 position = Vector2(416, -352)
-schedules = Array[ExtResource("11_lm3pf")]([SubResource("Resource_ugsv5")])
+schedules = Dictionary[String, ExtResource("11_lm3pf")]({
+"Init": SubResource("Resource_lm3pf")
+})
+initial_schedule = "Init"
 
 [node name="NPC11" parent="." instance=ExtResource("10_ll2lb")]
-visible = false
 position = Vector2(416, -224)
-schedules = Array[ExtResource("11_lm3pf")]([SubResource("Resource_ugsv5")])
+schedules = Dictionary[String, ExtResource("11_lm3pf")]({
+"Init": SubResource("Resource_lm3pf")
+})
+initial_schedule = "Init"
 
 [node name="NPC12" parent="." instance=ExtResource("10_ll2lb")]
-visible = false
 position = Vector2(416, -96)
-schedules = Array[ExtResource("11_lm3pf")]([SubResource("Resource_ugsv5")])
+schedules = Dictionary[String, ExtResource("11_lm3pf")]({
+"Init": SubResource("Resource_lm3pf")
+})
+initial_schedule = "Init"

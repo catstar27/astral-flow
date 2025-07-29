@@ -1,0 +1,23 @@
+join void_god center [animation="Slide In Down" wait="true"]
+void_god: Decided to come back, huh?
+void_god: Don't worry, I forgive you. You need friends, especially now. I can be that for you.
+void_god: It's true, that this place is like a dream... but I promise, I am real. I'm just paying a visit.
+void_god: In the real world? Your unconscious body is trapped beneath a rockslide.
+void_god: You'll need this spell to awaken.
+You Learned the Zap Ability!
+set {void_god_name} = "Nilak"
+void_god: The name's Nilak, by the way. I already know yours.
+set {learned_zap} = true
+[signal arg="test_room_zap_learned"]
+void_god: Now, why don't you take my hand? I can save you. You will die without help.
+void_god: Perhaps we could even form a bond? You know, of the magical variety.
+void_god: *They offer their hand*
+- *Take Their Hand*
+	As you reach out, suddenly the stranger's eyes widen and their body jolts
+- *Decline*
+	void_god: Really? You would decline my lifeline? That's... really too bad.
+	void_god: *They Shrug*
+	void_god: Oh well. Hopefully if you survive you will be less rude to me in the future.
+	void_god: *They snap their fingers, and disappear in a flash of magical energy*
+[signal arg_type="dict" arg="{"???":"deactivate"}"]
+Suddenly, they are gone, no trace left...

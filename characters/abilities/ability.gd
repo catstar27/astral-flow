@@ -154,10 +154,15 @@ func get_targeting_color()->Color:
 ## Deals damage to a target if accuracy is good enough
 func deal_damage(target: Node2D)->void:
 	if target != null:
+		@warning_ignore("integer_division")
+		var total_damage: int = base_damage+(user.star_stats[skill_used_options.keys()[skill_used]]/2)
+		@warning_ignore("integer_division")
+		total_damage += (user.star_stat_mods[skill_used_options.keys()[skill_used]]/2)
 		if target is Character:
 			var accuracy: int = randi_range(1, 20) + user.star_stats[skill_used_options.keys()[skill_used]]
+			accuracy += user.star_stat_mods[skill_used_options.keys()[skill_used]]
 			if accuracy >= (target.base_stats.avoidance+target.stat_mods.avoidance):
-				target.call_deferred("damage", user, base_damage, damage_type, ignore_defense)
+				target.call_deferred("damage", user, total_damage, damage_type, ignore_defense)
 				for status in statuses:
 					if statuses[status] == status_effect_conditions.on_hit:
 						inflict_status(target, status)
@@ -165,7 +170,7 @@ func deal_damage(target: Node2D)->void:
 				var text_ind_pos: Vector2 = target.text_indicator_shift+target.global_position
 				EventBus.broadcast("MAKE_TEXT_INDICATOR", ["Miss!", text_ind_pos])
 		elif target.has_method("damage"):
-			target.call_deferred("damage", user, base_damage, damage_type)
+			target.call_deferred("damage", user, total_damage, damage_type)
 
 ## Inflicts a status on a target
 func inflict_status(target: Node2D, status: Status)->void:

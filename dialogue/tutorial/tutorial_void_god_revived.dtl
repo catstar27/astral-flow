@@ -1,0 +1,41 @@
+join void_god center
+if {tutorial_npc_revived} < 7.0:
+	[music path="res://music/carefree_carousel.wav" fade="0.0" volume="0.0"]
+if {tutorial_npc_revived} == 0:
+	void_god: Excellent fight! Now, let me unlock the door. I'll be waiting in the next room!
+elif {tutorial_npc_revived} == 1:
+	void_god: I'm immortal, you know. You can't kill me.
+elif {tutorial_npc_revived} == 2:
+	void_god: I'm sure this is really funny to watch but stop it.
+elif {tutorial_npc_revived} == 3:
+	void_god: This is getting annoying.
+elif {tutorial_npc_revived} == 4:
+	void_god: This is just a waste of everyone's time!
+elif {tutorial_npc_revived} == 5:
+	void_god: STOP. KILLING. ME.
+elif {tutorial_npc_revived} == 6:
+	void_god: ARGHGHGRHGGG!!!!
+elif {tutorial_npc_revived} == 7:
+	void_god: ...
+elif {tutorial_npc_revived} == 8:
+	void_god: I'm immortal, you know. You can't kill me.
+elif {tutorial_npc_revived} == 9:
+	void_god: ...
+	void_god: Didn't fall for the old "this dialogue is just looping now" trick, huh?
+elif {tutorial_npc_revived} == 10:
+	void_god: I guess I really should congratulate your persistence...
+elif {tutorial_npc_revived} == 11:
+	void_god: But seriously. Do you want to know what it is like when I'm REALLY mad?
+elif {tutorial_npc_revived} == 12:
+	void_god: Because if you keep this up, I might just show you.
+elif {tutorial_npc_revived} == 13:
+	void_god: There are untold horrors trapped within me, and I may just release them.
+elif {tutorial_npc_revived} == 14:
+	The ground starts shaking...
+elif {tutorial_npc_revived} == 15:
+	void_god: Feel that? That's your demise. You have one more chance.
+else:
+	void_god: That's it. Goodbye. You won't see another day.
+	[signal arg="crash_game"]
+set {tutorial_npc_revived} += 1
+[end_timeline]

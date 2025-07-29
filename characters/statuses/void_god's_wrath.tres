@@ -1,0 +1,43 @@
+[gd_resource type="Resource" script_class="Status" load_steps=2 format=3 uid="uid://cqchaqbhpu0cq"]
+
+[ext_resource type="Script" uid="uid://dxv7e1j21poh5" path="res://characters/statuses/status.gd" id="1_3wqoi"]
+
+[resource]
+script = ExtResource("1_3wqoi")
+star_stat_mods = Dictionary[String, int]({
+"agility": 10,
+"charisma": -5,
+"endurance": 10,
+"intelligence": -5,
+"passion": 10,
+"resolve": -5,
+"strength": 10
+})
+stat_mods = Dictionary[String, int]({
+"avoidance": 0,
+"crit_range": 9,
+"defense": 0,
+"dt": 0,
+"max_ap": 10,
+"max_hp": 10,
+"max_mp": 10,
+"move_speed": 4,
+"sequence": 999
+})
+clear_conditions = Dictionary[String, bool]({
+"move": false,
+"rest": false,
+"take_damage": false,
+"triggered": false
+})
+damage = 0
+time_choice = 0
+duration = 1
+stacking = false
+stacks = 1
+condition = 0
+action_name = ""
+status_color = Color(0.632225, 1.9493e-06, 3.36915e-07, 1)
+id = "VOID_GOD_WRATH"
+display_name = "Void God's Wrath"
+metadata/_custom_type_script = "uid://dxv7e1j21poh5"
