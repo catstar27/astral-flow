@@ -69,7 +69,9 @@ enum ai_types { ## Options for enemy ai
 @export var enemies: Array[Character] = [] ## List of enemies to watch for
 @export var hostile_to_player: bool = false ## Whether this character attacks the player on sight
 @export_group("Schedule") ## Exports related to this character's schedule. Do not use for the player
-@export var schedules: Array[Schedule] ## List of tasks for the character to carry out
+@export var schedules: Dictionary[String, Schedule] ## List of tasks for the character to carry out
+@export var initial_schedule: String = "" ## Schedule to start with
+@export var surrendered_schedule: String = "" ## Schedule to switch to when defeated
 @export_group("Activation") ## Exports related to character's active state
 @export var active: bool = true ## Whether the character is active in the game map or disabled
 #endregion
@@ -99,7 +101,7 @@ var cur_ap: int ## Character's current action points
 var cur_mp: int ## Character's current health points
 var cur_hp: int ## Character's current magic points
 var dialogue_index: int = 0 ## Current index of dialogue scene to play
-var schedule_index: int = 0 ## Current index of the schedule being executed
+var cur_schedule_name: String = "" ## Current name of the schedule being executed
 var current_schedule_executed: bool = false ## Whether the current schedule has been finished at least once
 var current_schedule_looping: bool = false ## Whether the current schedule is looping
 var current_schedule_task_index: int = 0 ## Index of current schedule's current task
@@ -124,7 +126,7 @@ var to_save: Array[StringName] = [ ## Variables to save
 	"current_schedule_executed",
 	"current_schedule_looping",
 	"current_schedule_task_index",
-	"schedule_index",
+	"cur_schedule_name",
 	"dialogue_index",
 	"status_data",
 	"item_data"
@@ -177,6 +179,7 @@ func _setup()->void:
 	damaged.connect(on_damaged)
 	duplicate_export_abilities()
 	calc_base_stats()
+	cur_schedule_name = initial_schedule
 	cur_hp = base_stats.max_hp+stat_mods.max_hp
 	cur_ap = base_stats.max_ap+stat_mods.max_ap
 	cur_mp = base_stats.max_mp+stat_mods.max_mp
@@ -227,34 +230,34 @@ func rest()->void:
 #region Schedule
 ## Initializes the schedule by setting the user of all tasks and copying the tasks
 func init_schedule()->void:
-	var new_schedules: Array[Schedule]
-	for schedule in schedules:
-		var new_schedule: Schedule = schedule.duplicate_schedule()
-		new_schedules.append(new_schedule)
+	var new_schedules: Dictionary[String, Schedule]
+	for schedule_name in schedules:
+		var new_schedule: Schedule = schedules[schedule_name].duplicate_schedule()
+		new_schedules[schedule_name] = new_schedule
 		new_schedule.user = self
 		new_schedule.init_schedule()
 	schedules = new_schedules
 
 ## Starts executing the next schedule in the array
-func next_schedule()->void:
-	if schedule_index == schedules.size()-1:
-		printerr("Attempted to change to nonexistent schedule in character "+display_name)
+func start_schedule(schedule_name: String)->void:
+	if schedule_name not in schedules:
+		printerr("Attempted to change to nonexistent schedule [" + schedule_name + "] in character "+display_name)
 		return
 	stop_looping()
-	schedules[schedule_index].pause.emit()
-	schedule_index += 1
-	schedules[schedule_index].task_index = 0
-	schedules[schedule_index].process_schedule()
+	schedules[cur_schedule_name].pause.emit()
+	cur_schedule_name = schedule_name
+	schedules[cur_schedule_name].task_index = 0
+	schedules[cur_schedule_name].process_schedule()
 
 ## Stops the schedule from looping
 func stop_looping()->void:
-	schedules[schedule_index].loop_schedule = false
+	schedules[cur_schedule_name].loop_schedule = false
 
 ## Starts looping the schedule
 func start_looping()->void:
-	if !schedules[schedule_index].loop_schedule && schedules[schedule_index].schedule_executed && schedules.size() > 0:
-		schedules[schedule_index].loop_schedule = true
-		schedules[schedule_index].process_schedule()
+	if !schedules[cur_schedule_name].loop_schedule && schedules[cur_schedule_name].schedule_executed && schedules.size() > 0:
+		schedules[cur_schedule_name].loop_schedule = true
+		schedules[cur_schedule_name].process_schedule()
 #endregion
 
 #region Orders
@@ -293,7 +296,7 @@ func exit_combat()->void:
 	in_combat = false
 	combat_exited.emit()
 	if schedules.size() > 0:
-		schedules[schedule_index].process_schedule()
+		schedules[cur_schedule_name].process_schedule()
 
 ## Returns an array showing ap required for moving on a path of given length
 func get_ap_for_path(path_length: int, use_ap: bool = true)->Array[Array]:
@@ -329,6 +332,8 @@ func surrender()->void:
 	surrendered.emit()
 	surrendered_named.emit(display_name)
 	surrendered_node.emit(self)
+	if surrendered_schedule != "":
+		start_schedule(surrendered_schedule)
 	if taking_turn:
 		ended_turn.emit(self)
 
@@ -599,8 +604,8 @@ func activate(pos: Vector2)->void:
 	position = pos
 	EventBus.broadcast("TILE_OCCUPIED", [pos, self])
 	show()
-	if !schedule_processing && schedules.size() > 0:
-		schedules[schedule_index].process_schedule()
+	if !schedule_processing && cur_schedule_name in schedules:
+		schedules[cur_schedule_name].process_schedule()
 
 ## Deactivates the character
 func deactivate()->void:
@@ -619,9 +624,9 @@ func on_damaged(_source: Node)->void:
 ## Executes before making the save dict
 func pre_save()->void:
 	if schedules.size() > 0:
-		current_schedule_executed = schedules[schedule_index].schedule_executed
-		current_schedule_looping = schedules[schedule_index].loop_schedule
-		current_schedule_task_index = schedules[schedule_index].task_index
+		current_schedule_executed = schedules[cur_schedule_name].schedule_executed
+		current_schedule_looping = schedules[cur_schedule_name].loop_schedule
+		current_schedule_task_index = schedules[cur_schedule_name].task_index
 	status_data = status_manager.get_save_data()
 	item_data = item_manager.get_save_data()
 
@@ -637,9 +642,9 @@ func pre_load()->void:
 func post_load()->void:
 	position = NavMaster.map.map_to_local(NavMaster.map.local_to_map(position))
 	if schedules.size() > 0:
-		schedules[schedule_index].schedule_executed = current_schedule_executed
-		schedules[schedule_index].loop_schedule = current_schedule_looping
-		schedules[schedule_index].task_index = current_schedule_task_index
+		schedules[cur_schedule_name].schedule_executed = current_schedule_executed
+		schedules[cur_schedule_name].loop_schedule = current_schedule_looping
+		schedules[cur_schedule_name].task_index = current_schedule_task_index
 	init_statuses()
 	status_manager.load_save_data(status_data)
 	item_manager.load_save_data(item_data)

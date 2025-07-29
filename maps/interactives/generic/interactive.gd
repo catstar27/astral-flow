@@ -33,14 +33,23 @@ class_name Interactive
 	set(new_tc):
 		tile_changes = new_tc
 		update_tile_changes()
+@export_group("Activation")
+@export var active: bool = true ## Whether this interactive is part of the game map currently
 @onready var sprite: Sprite2D = %Sprite ## Sprite of the interactive
 @onready var collision: CollisionShape2D = %Collision ## Collision of the interactive
 var collision_active: bool = true ## Whether the collision is active
 var occupied_positions: Array[Vector2] ## Positions occupied by the interactive
 var dialogue_timeline: DialogicTimeline = null ## Timeline of dialogue loaded during setup
 var allow_dialogue: bool = true ## Whether the dialogue should be played when interacted
+var to_save: Array[StringName] = [ ## Variables to save
+	"active",
+]
+signal saved(node: Interactive) ## Emitted when saved
+signal loaded(node: Interactive) ## Emitted when loaded
 signal interacted ## Emitted when interacted with
 signal update_tiles(tiles: Array, terrain: String) ## Updates game map with terrains and position
+signal updated_tiles ## Emitted when update_tiles is, does not contain args
+signal updated_tiles_named(id: String) ## Emitted when update_tiles is, giving the id of this
 
 ## Sets up the interactive, scaling it properly and setting its position
 func setup()->void:
@@ -90,10 +99,28 @@ func _interacted(character: Character)->void:
 	_interact_extra(character)
 	interacted.emit()
 
+## Activates the interactive
+func activate()->void:
+	calc_size_properties()
+	active = true
+	collision.set_deferred("disabled", !collision_active)
+	if collision_active:
+		EventBus.broadcast("TILE_OCCUPIED", [position, self])
+	show()
+
+## Deactivates the interactive
+func deactivate()->void:
+	active = false
+	collision.set_deferred("disabled", true)
+	EventBus.broadcast("TILE_UNOCCUPIED", position)
+	hide()
+
 ## Emits the update_tiles signal
 func emit_update_tiles()->void:
 	for terrain in tile_changes_terrain:
 		update_tiles.emit(tile_changes_terrain[terrain], terrain)
+	updated_tiles.emit()
+	updated_tiles_named.emit(id)
 
 ## Called after the base class interact function
 func _interact_extra(_character: Character)->void:
@@ -130,3 +157,25 @@ func add_range()->void:
 	range_terrain = ""
 	tile_range.clear()
 	notify_property_list_changed()
+
+#region Save and Load
+## Executes before making the save dict
+func pre_save()->void:
+	return
+
+## Executes after making the save dict
+func post_save()->void:
+	saved.emit(self)
+
+## Executes before loading data
+func pre_load()->void:
+	return
+
+## Executes after loading data
+func post_load()->void:
+	if active:
+		activate()
+	else:
+		deactivate()
+	loaded.emit(self)
+#endregion

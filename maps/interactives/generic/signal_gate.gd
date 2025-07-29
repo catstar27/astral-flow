@@ -10,6 +10,13 @@ class_name SignalGate
 @export var signals_needed: Array[String] = [] ## Signals needed for the gate to open
 @export var auto_open: bool = false ## Whether the gate opens automatically when unlocked
 @export var ordered: bool = false ## Whether the signals need to happen in the same order
+@export var start_open: bool = false: ## Whether the gate starts open
+	set(new_start):
+		start_open = new_start
+		if start_open:
+			open(true)
+		else:
+			close()
 @export_group("Dialogic") ## Variables relating to dialogic
 @export var is_dialogic: bool = false ## Whether this gate uses dialogic signals
 @export var dialogic_var: String ## Variable for this interactive's state stored in dialogic
@@ -19,15 +26,13 @@ enum state { ## States the gate can be in
 	unlocked, ## The gate is closed but not locked
 	open ## The gate is open
 }
-var cur_state: state = state.locked ## Current state of the gate
-var to_save: Array[StringName] = [ ## Variables to save
-	"cur_state"
-]
+@export_storage var cur_state: state = state.locked ## Current state of the gate
 signal unlocked ## Emitted when unlocked
 signal opened ## Emitted when opened
 signal closed ## Emitted when closed
-signal saved(node: SignalGate) ## Emitted when saved
-signal loaded(node: SignalGate) ## Emitted when loaded
+
+func _init() -> void:
+	to_save.append("cur_state")
 
 func setup_extra()->void:
 	if cur_state != state.open:
@@ -43,27 +48,33 @@ func _interact_extra(_character: Character)->void:
 
 ## Opens the gate, disabling its collision and opening the tile; can be done with or without sound
 func open(quiet_open: bool = false)->void:
+	while !is_node_ready():
+		await ready
 	cur_state = state.open
 	allow_dialogue = false
 	sprite.texture = open_texture
 	collision.set_deferred("disabled", true)
-	if !quiet_open:
+	if !quiet_open && !Engine.is_editor_hint():
 		EventBus.broadcast("PLAY_SOUND", [open_sound, "positional", global_position])
-	for pos in occupied_positions:
-		EventBus.broadcast("TILE_UNOCCUPIED", pos)
-	EventBus.broadcast("QUEST_EVENT", "open_door:"+id)
+	if !Engine.is_editor_hint():
+		for pos in occupied_positions:
+			EventBus.broadcast("TILE_UNOCCUPIED", pos)
+		EventBus.broadcast("QUEST_EVENT", "open_door:"+id)
 	opened.emit()
 	collision_active = false
 
 ## Closes the gate, even if the signals are fulfilled
 func close()->void:
+	while !is_node_ready():
+		await ready
 	cur_state = state.locked
 	allow_dialogue = true
 	sprite.texture = texture
 	collision.set_deferred("disabled", false)
-	EventBus.broadcast("PLAY_SOUND", [open_sound, "positional", global_position])
-	for pos in occupied_positions:
-		EventBus.broadcast("TILE_OCCUPIED", [pos, self])
+	if !Engine.is_editor_hint():
+		EventBus.broadcast("PLAY_SOUND", [open_sound, "positional", global_position])
+		for pos in occupied_positions:
+			EventBus.broadcast("TILE_OCCUPIED", [pos, self])
 	closed.emit()
 	collision_active = true
 
@@ -101,30 +112,7 @@ func pre_load()->void:
 
 ## Executes after loading data
 func post_load()->void:
-	if cur_state == state.open:
-		open(true)
-	elif cur_state == state.unlocked:
-		allow_dialogue = false
-	loaded.emit(self)
-
-## Saves the gate's data
-func save_data(dir: String)->void:
-	var file: FileAccess = FileAccess.open(dir+name+".dat", FileAccess.WRITE)
-	for var_name in to_save:
-		file.store_var(var_name)
-		file.store_var(get(var_name))
-	file.store_var("END")
-	file.close()
-	saved.emit(self)
-
-## Loads the gate's data
-func load_data(dir: String)->void:
-	var file: FileAccess = FileAccess.open(dir+name+".dat", FileAccess.READ)
-	var var_name: String = file.get_var()
-	while var_name != "END":
-		set(var_name, file.get_var())
-		var_name = file.get_var()
-	file.close()
+	super.post_load()
 	if cur_state == state.open:
 		open(true)
 	elif cur_state == state.unlocked:

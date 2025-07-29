@@ -43,11 +43,12 @@ func prep_map()->void:
 	_astar_setup()
 	for child in get_children():
 		if child is Interactive:
-			child.setup()
-			child.update_tiles.connect(set_terrain)
-			if child.collision_active:
-				for pos in child.occupied_positions:
-					set_pos_occupied([pos, child])
+			if child.active:
+				child.setup()
+				child.update_tiles.connect(set_terrain)
+				if child.collision_active:
+					for pos in child.occupied_positions:
+						set_pos_occupied([pos, child])
 		elif child is Character:
 			if child.active:
 				set_pos_occupied([child.position, child])
@@ -77,12 +78,14 @@ func process_dialogue_signal(arg)->void:
 	if arg is Dictionary:
 		for target_name in arg:
 			for child in get_children():
-				if child is Character && child.display_name == target_name && child.active:
-					if arg[target_name] is String && child.has_method(arg[target_name]):
-						child.call_deferred(arg[target_name])
+				if child is Character && child.display_name == target_name:
+					if child.active || arg[target_name] == "activate":
+						if arg[target_name] is String && child.has_method(arg[target_name]):
+							child.call_deferred(arg[target_name])
 				if child is Interactive && child.id == target_name:
-					if arg[target_name] is String && child.has_method(arg[target_name]):
-						child.call_deferred(arg[target_name])
+					if child.active || arg[target_name] == "activate":
+						if arg[target_name] is String && child.has_method(arg[target_name]):
+							child.call_deferred(arg[target_name])
 #endregion
 
 #region Combat

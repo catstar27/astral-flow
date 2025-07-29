@@ -180,6 +180,8 @@ func load_map(new_map: String, entrance_id: String = "")->void:
 	gui.hide()
 	await custom_fade_out(.5)
 	selection_cursor.hide()
+	if player != null && player.in_combat:
+		%CombatManager.end_combat()
 	await unload_map()
 	selection_cursor.deactivate()
 	var map_to_load: GameMap = load(new_map).instantiate()

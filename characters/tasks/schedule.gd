@@ -59,7 +59,7 @@ func task_done()->void:
 	if (task_index == 0 && !loop_schedule) || !user.active:
 		if task_index == 0:
 			schedule_executed = true
-			if user.schedules[user.schedule_index] == self:
+			if user.schedules[user.cur_schedule_name] == self:
 				user.current_schedule_executed = true
 		return
 	process_schedule()

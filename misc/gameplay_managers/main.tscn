@@ -26,6 +26,7 @@ autostart = true
 unique_name_in_owner = true
 
 [node name="CombatManager" parent="." instance=ExtResource("5_xm8nu")]
+unique_name_in_owner = true
 
 [node name="QuestManager" parent="." instance=ExtResource("6_1f2dt")]
 
