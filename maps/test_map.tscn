@@ -373,7 +373,7 @@ signal_statuses = Dictionary[String, ExtResource("37_cjebi")]({
 [connection signal="updated_tiles" from="RunSign" to="VoidGod" method="set_player_enemy"]
 [connection signal="updated_tiles_named" from="RunSign" to="VoidGod" method="add_status_signal"]
 [connection signal="updated_tiles_named" from="RunSign" to="VoidGod" method="start_schedule"]
-[connection signal="updated_tiles_named" from="SecretTravelPoint" to="VoidGod" method="set_dialogue"]
+[connection signal="interacted_id" from="SecretTravelPoint" to="VoidGod" method="set_dialogue"]
 [connection signal="unlocked" from="InteractPuzzleGate" to="VoidGod" method="stop_looping"]
 [connection signal="unlocked" from="TeslaCoil" to="TeslaGate" method="advance_unlock"]
 [connection signal="unlocked" from="TeslaCoil2" to="TeslaGate" method="advance_unlock"]

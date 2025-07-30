@@ -65,7 +65,7 @@ func quit_pressed()->void:
 
 ## Resets the save file; called when reset button is pressed
 func reset_pressed() -> void:
-	SaveLoad.reset_save(SaveLoad.slot)
+	SaveLoad.reset_save(SaveLoad.recent_slot)
 
 ## Focuses the settings button
 func focus_settings()->void:
