@@ -2,6 +2,7 @@ extends DialogicSubsystem
 
 ## Subsystem that allows entering and leaving an animation state.
 
+signal started
 signal finished
 signal animation_interrupted
 
@@ -24,6 +25,7 @@ func start_animating() -> void:
 	prev_state = dialogic.current_state
 	dialogic.current_state = dialogic.States.ANIMATING
 	_is_animating = true
+	started.emit()
 
 
 func animation_finished(_arg := "") -> void:

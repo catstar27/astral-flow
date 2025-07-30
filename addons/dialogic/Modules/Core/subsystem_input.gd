@@ -66,7 +66,7 @@ func post_install() -> void:
 func handle_input() -> void:
 	if dialogic.paused or is_input_blocked():
 		return
-
+	
 	if not action_was_consumed:
 		# We want to stop auto-advancing that cancels on user inputs.
 		if (auto_advance.is_enabled()

@@ -39,6 +39,9 @@ extends DialogicLayoutLayer
 @export_file("*.wav", "*.ogg", "*.mp3") var sounds_hover: String = "res://addons/dialogic/ExampleAssets/sound-effects/typing2.wav"
 @export_file("*.wav", "*.ogg", "*.mp3") var sounds_focus: String = "res://addons/dialogic/ExampleAssets/sound-effects/typing4.wav"
 
+func _ready() -> void:
+	DialogicUtil.autoload().get(&'Animations').started.connect(animate)
+
 func get_choices() -> VBoxContainer:
 	if %Choices != null:
 		return %Choices
@@ -122,3 +125,9 @@ func _apply_export_overrides() -> void:
 	button_sound.sound_pressed = load(sounds_pressed)
 	button_sound.sound_hover = load(sounds_hover)
 	button_sound.sound_focus = load(sounds_focus)
+
+func animate()->void:
+	if %AnimationRoot.modulate == Color.TRANSPARENT:
+		%AnimationPlayer.play("slide_right")
+	else:
+		%AnimationPlayer.play_backwards("slide_right")

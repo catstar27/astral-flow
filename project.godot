@@ -64,7 +64,7 @@ variables={
 "tutorial_puzzle_index": 0,
 "void_god_name": "???"
 }
-layout/style_list=["res://dialogue/assets/dialogue_style.tres", "res://dialogue/assets/astral_dialogue.tres"]
+layout/style_list=["res://dialogue/assets/astral_dialogue.tres"]
 layout/default_style="res://dialogue/assets/astral_dialogue.tres"
 extensions_folder="res://addons/dialogic_additions"
 text/letter_speed=0.01

@@ -21,8 +21,8 @@ extends DialogicLayoutLayer
 
 enum Alignments {LEFT, CENTER, RIGHT}
 
-enum AnimationsIn {NONE, POP_IN, FADE_UP}
-enum AnimationsOut {NONE, POP_OUT, FADE_DOWN}
+enum AnimationsIn {NONE, POP_IN, FADE_UP, SLIDE_LEFT}
+enum AnimationsOut {NONE, POP_OUT, FADE_DOWN, SLIDE_RIGHT}
 enum AnimationsNewText {NONE, WIGGLE}
 
 @export_group("Text")
