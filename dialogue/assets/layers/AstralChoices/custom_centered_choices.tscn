@@ -1,0 +1,268 @@
+[gd_scene load_steps=9 format=3 uid="uid://cn0wvw1606gxm"]
+
+[ext_resource type="Script" uid="uid://dtsm1734x1k7e" path="res://addons/dialogic/Modules/DefaultLayoutParts/Layer_VN_Choices/vn_choice_layer.gd" id="1_kurgw"]
+[ext_resource type="Script" uid="uid://de42lvmr450xr" path="res://addons/dialogic/Modules/Choice/node_choice_button.gd" id="1_w632k"]
+[ext_resource type="Script" uid="uid://dta3bi67pnjj5" path="res://addons/dialogic/Modules/Choice/node_button_sound.gd" id="2_mgko6"]
+[ext_resource type="Theme" uid="uid://dehvu01nlqvsf" path="res://textures/gui/themes/info_box_theme.tres" id="2_xyas1"]
+[ext_resource type="StyleBox" uid="uid://cds0eavj8u3ht" path="res://textures/gui/themes/dialogue_stylebox_base.tres" id="3_h8y27"]
+[ext_resource type="AudioStream" uid="uid://b6c1p14bc20p1" path="res://addons/dialogic/ExampleAssets/sound-effects/typing1.wav" id="3_mql8i"]
+[ext_resource type="AudioStream" uid="uid://c2viukvbub6v6" path="res://addons/dialogic/ExampleAssets/sound-effects/typing4.wav" id="4_420fr"]
+
+[sub_resource type="AudioStream" id="AudioStream_pe27w"]
+
+[node name="VN_ChoiceLayer" type="Control"]
+z_index = 1
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_kurgw")
+
+[node name="PanelContainer" type="PanelContainer" parent="."]
+custom_minimum_size = Vector2(480, 0)
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -180.0
+offset_right = 480.0
+grow_vertical = 0
+theme = ExtResource("2_xyas1")
+
+[node name="ScrollContainer" type="ScrollContainer" parent="PanelContainer"]
+custom_minimum_size = Vector2(300, 150)
+layout_direction = 3
+layout_mode = 2
+mouse_filter = 2
+follow_focus = true
+horizontal_scroll_mode = 0
+vertical_scroll_mode = 4
+metadata/_edit_layout_mode = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/ScrollContainer"]
+layout_mode = 2
+
+[node name="Control" type="Control" parent="PanelContainer/ScrollContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 25)
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Choices" type="VBoxContainer" parent="PanelContainer/ScrollContainer/VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 10
+
+[node name="DialogicNode_ChoiceButton1" type="Button" parent="PanelContainer/ScrollContainer/VBoxContainer/HBoxContainer/Choices"]
+layout_mode = 2
+size_flags_horizontal = 9
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = ExtResource("3_h8y27")
+text = "Some text"
+script = ExtResource("1_w632k")
+
+[node name="DialogicNode_ChoiceButton2" type="Button" parent="PanelContainer/ScrollContainer/VBoxContainer/HBoxContainer/Choices"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = ExtResource("3_h8y27")
+text = "Some text"
+script = ExtResource("1_w632k")
+
+[node name="DialogicNode_ChoiceButton3" type="Button" parent="PanelContainer/ScrollContainer/VBoxContainer/HBoxContainer/Choices"]
+layout_mode = 2
+size_flags_horizontal = 9
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = ExtResource("3_h8y27")
+text = "Some text"
+script = ExtResource("1_w632k")
+
+[node name="DialogicNode_ChoiceButton4" type="Button" parent="PanelContainer/ScrollContainer/VBoxContainer/HBoxContainer/Choices"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = ExtResource("3_h8y27")
+text = "Some text"
+script = ExtResource("1_w632k")
+
+[node name="DialogicNode_ChoiceButton5" type="Button" parent="PanelContainer/ScrollContainer/VBoxContainer/HBoxContainer/Choices"]
+layout_mode = 2
+size_flags_horizontal = 9
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = ExtResource("3_h8y27")
+text = "Some text"
+script = ExtResource("1_w632k")
+
+[node name="DialogicNode_ChoiceButton6" type="Button" parent="PanelContainer/ScrollContainer/VBoxContainer/HBoxContainer/Choices"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = ExtResource("3_h8y27")
+text = "Some text"
+script = ExtResource("1_w632k")
+
+[node name="DialogicNode_ChoiceButton7" type="Button" parent="PanelContainer/ScrollContainer/VBoxContainer/HBoxContainer/Choices"]
+layout_mode = 2
+size_flags_horizontal = 9
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = ExtResource("3_h8y27")
+text = "Some text"
+script = ExtResource("1_w632k")
+
+[node name="DialogicNode_ChoiceButton8" type="Button" parent="PanelContainer/ScrollContainer/VBoxContainer/HBoxContainer/Choices"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = ExtResource("3_h8y27")
+text = "Some text"
+script = ExtResource("1_w632k")
+
+[node name="DialogicNode_ChoiceButton9" type="Button" parent="PanelContainer/ScrollContainer/VBoxContainer/HBoxContainer/Choices"]
+layout_mode = 2
+size_flags_horizontal = 9
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = ExtResource("3_h8y27")
+text = "Some text"
+script = ExtResource("1_w632k")
+
+[node name="DialogicNode_ChoiceButton10" type="Button" parent="PanelContainer/ScrollContainer/VBoxContainer/HBoxContainer/Choices"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = ExtResource("3_h8y27")
+text = "Some text"
+script = ExtResource("1_w632k")
+
+[node name="DialogicNode_ChoiceButton11" type="Button" parent="PanelContainer/ScrollContainer/VBoxContainer/HBoxContainer/Choices"]
+layout_mode = 2
+size_flags_horizontal = 9
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = ExtResource("3_h8y27")
+text = "Some text"
+script = ExtResource("1_w632k")
+
+[node name="DialogicNode_ChoiceButton12" type="Button" parent="PanelContainer/ScrollContainer/VBoxContainer/HBoxContainer/Choices"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = ExtResource("3_h8y27")
+text = "Some text"
+script = ExtResource("1_w632k")
+
+[node name="DialogicNode_ButtonSound" type="AudioStreamPlayer" parent="PanelContainer/ScrollContainer/VBoxContainer/HBoxContainer/Choices"]
+unique_name_in_owner = true
+script = ExtResource("2_mgko6")
+sound_pressed = ExtResource("3_mql8i")
+sound_hover = ExtResource("4_420fr")
+sound_focus = SubResource("AudioStream_pe27w")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/ScrollContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+
+[node name="Label1" type="Label" parent="PanelContainer/ScrollContainer/VBoxContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "1."
+
+[node name="Label2" type="Label" parent="PanelContainer/ScrollContainer/VBoxContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "2."
+
+[node name="Label3" type="Label" parent="PanelContainer/ScrollContainer/VBoxContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "3."
+
+[node name="Label4" type="Label" parent="PanelContainer/ScrollContainer/VBoxContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "4."
+
+[node name="Label5" type="Label" parent="PanelContainer/ScrollContainer/VBoxContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "5."
+
+[node name="Label6" type="Label" parent="PanelContainer/ScrollContainer/VBoxContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "6."
+
+[node name="Label7" type="Label" parent="PanelContainer/ScrollContainer/VBoxContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "7."
+
+[node name="Label8" type="Label" parent="PanelContainer/ScrollContainer/VBoxContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "8."
+
+[node name="Label9" type="Label" parent="PanelContainer/ScrollContainer/VBoxContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "9."
+
+[node name="Label10" type="Label" parent="PanelContainer/ScrollContainer/VBoxContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "10."
+
+[node name="Label11" type="Label" parent="PanelContainer/ScrollContainer/VBoxContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "11."
+
+[node name="Label12" type="Label" parent="PanelContainer/ScrollContainer/VBoxContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "12."
+
+[node name="Control" type="Control" parent="."]
+custom_minimum_size = Vector2(480, 180)
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -40.0
+offset_right = 40.0
+grow_vertical = 0
+
+[node name="PanelContainer2" type="PanelContainer" parent="Control"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -92.0
+offset_bottom = 27.0
+grow_horizontal = 0
+theme = ExtResource("2_xyas1")
+
+[node name="MyName" type="Label" parent="Control/PanelContainer2"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "Responses"
+
+[connection signal="draw" from="PanelContainer/ScrollContainer/VBoxContainer/HBoxContainer/Choices/DialogicNode_ChoiceButton1" to="PanelContainer/ScrollContainer/VBoxContainer/HBoxContainer/VBoxContainer/Label1" method="show"]
+[connection signal="hidden" from="PanelContainer/ScrollContainer/VBoxContainer/HBoxContainer/Choices/DialogicNode_ChoiceButton1" to="PanelContainer/ScrollContainer/VBoxContainer/HBoxContainer/VBoxContainer/Label1" method="hide"]
+[connection signal="draw" from="PanelContainer/ScrollContainer/VBoxContainer/HBoxContainer/Choices/DialogicNode_ChoiceButton2" to="PanelContainer/ScrollContainer/VBoxContainer/HBoxContainer/VBoxContainer/Label2" method="show"]
+[connection signal="hidden" from="PanelContainer/ScrollContainer/VBoxContainer/HBoxContainer/Choices/DialogicNode_ChoiceButton2" to="PanelContainer/ScrollContainer/VBoxContainer/HBoxContainer/VBoxContainer/Label2" method="hide"]
+[connection signal="draw" from="PanelContainer/ScrollContainer/VBoxContainer/HBoxContainer/Choices/DialogicNode_ChoiceButton3" to="PanelContainer/ScrollContainer/VBoxContainer/HBoxContainer/VBoxContainer/Label3" method="show"]
+[connection signal="hidden" from="PanelContainer/ScrollContainer/VBoxContainer/HBoxContainer/Choices/DialogicNode_ChoiceButton3" to="PanelContainer/ScrollContainer/VBoxContainer/HBoxContainer/VBoxContainer/Label3" method="hide"]
+[connection signal="draw" from="PanelContainer/ScrollContainer/VBoxContainer/HBoxContainer/Choices/DialogicNode_ChoiceButton4" to="PanelContainer/ScrollContainer/VBoxContainer/HBoxContainer/VBoxContainer/Label4" method="show"]
+[connection signal="hidden" from="PanelContainer/ScrollContainer/VBoxContainer/HBoxContainer/Choices/DialogicNode_ChoiceButton4" to="PanelContainer/ScrollContainer/VBoxContainer/HBoxContainer/VBoxContainer/Label4" method="hide"]
+[connection signal="draw" from="PanelContainer/ScrollContainer/VBoxContainer/HBoxContainer/Choices/DialogicNode_ChoiceButton5" to="PanelContainer/ScrollContainer/VBoxContainer/HBoxContainer/VBoxContainer/Label5" method="show"]
+[connection signal="hidden" from="PanelContainer/ScrollContainer/VBoxContainer/HBoxContainer/Choices/DialogicNode_ChoiceButton5" to="PanelContainer/ScrollContainer/VBoxContainer/HBoxContainer/VBoxContainer/Label5" method="hide"]
+[connection signal="draw" from="PanelContainer/ScrollContainer/VBoxContainer/HBoxContainer/Choices/DialogicNode_ChoiceButton6" to="PanelContainer/ScrollContainer/VBoxContainer/HBoxContainer/VBoxContainer/Label6" method="show"]
+[connection signal="hidden" from="PanelContainer/ScrollContainer/VBoxContainer/HBoxContainer/Choices/DialogicNode_ChoiceButton6" to="PanelContainer/ScrollContainer/VBoxContainer/HBoxContainer/VBoxContainer/Label6" method="hide"]
+[connection signal="draw" from="PanelContainer/ScrollContainer/VBoxContainer/HBoxContainer/Choices/DialogicNode_ChoiceButton7" to="PanelContainer/ScrollContainer/VBoxContainer/HBoxContainer/VBoxContainer/Label7" method="show"]
+[connection signal="hidden" from="PanelContainer/ScrollContainer/VBoxContainer/HBoxContainer/Choices/DialogicNode_ChoiceButton7" to="PanelContainer/ScrollContainer/VBoxContainer/HBoxContainer/VBoxContainer/Label7" method="hide"]
+[connection signal="draw" from="PanelContainer/ScrollContainer/VBoxContainer/HBoxContainer/Choices/DialogicNode_ChoiceButton8" to="PanelContainer/ScrollContainer/VBoxContainer/HBoxContainer/VBoxContainer/Label8" method="show"]
+[connection signal="hidden" from="PanelContainer/ScrollContainer/VBoxContainer/HBoxContainer/Choices/DialogicNode_ChoiceButton8" to="PanelContainer/ScrollContainer/VBoxContainer/HBoxContainer/VBoxContainer/Label8" method="hide"]
+[connection signal="draw" from="PanelContainer/ScrollContainer/VBoxContainer/HBoxContainer/Choices/DialogicNode_ChoiceButton9" to="PanelContainer/ScrollContainer/VBoxContainer/HBoxContainer/VBoxContainer/Label9" method="show"]
+[connection signal="hidden" from="PanelContainer/ScrollContainer/VBoxContainer/HBoxContainer/Choices/DialogicNode_ChoiceButton9" to="PanelContainer/ScrollContainer/VBoxContainer/HBoxContainer/VBoxContainer/Label9" method="hide"]
+[connection signal="draw" from="PanelContainer/ScrollContainer/VBoxContainer/HBoxContainer/Choices/DialogicNode_ChoiceButton10" to="PanelContainer/ScrollContainer/VBoxContainer/HBoxContainer/VBoxContainer/Label10" method="show"]
+[connection signal="hidden" from="PanelContainer/ScrollContainer/VBoxContainer/HBoxContainer/Choices/DialogicNode_ChoiceButton10" to="PanelContainer/ScrollContainer/VBoxContainer/HBoxContainer/VBoxContainer/Label10" method="hide"]
+[connection signal="draw" from="PanelContainer/ScrollContainer/VBoxContainer/HBoxContainer/Choices/DialogicNode_ChoiceButton11" to="PanelContainer/ScrollContainer/VBoxContainer/HBoxContainer/VBoxContainer/Label11" method="show"]
+[connection signal="hidden" from="PanelContainer/ScrollContainer/VBoxContainer/HBoxContainer/Choices/DialogicNode_ChoiceButton11" to="PanelContainer/ScrollContainer/VBoxContainer/HBoxContainer/VBoxContainer/Label11" method="hide"]
+[connection signal="draw" from="PanelContainer/ScrollContainer/VBoxContainer/HBoxContainer/Choices/DialogicNode_ChoiceButton12" to="PanelContainer/ScrollContainer/VBoxContainer/HBoxContainer/VBoxContainer/Label12" method="show"]
+[connection signal="hidden" from="PanelContainer/ScrollContainer/VBoxContainer/HBoxContainer/Choices/DialogicNode_ChoiceButton12" to="PanelContainer/ScrollContainer/VBoxContainer/HBoxContainer/VBoxContainer/Label12" method="hide"]

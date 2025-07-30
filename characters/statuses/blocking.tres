@@ -5,6 +5,15 @@
 
 [resource]
 script = ExtResource("1_mv7by")
+star_stat_mods = Dictionary[String, int]({
+"agility": 0,
+"charisma": 0,
+"endurance": 0,
+"intelligence": 0,
+"passion": 0,
+"resolve": 0,
+"strength": 0
+})
 stat_mods = Dictionary[String, int]({
 "avoidance": 0,
 "crit_range": 0,

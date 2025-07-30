@@ -1,0 +1,94 @@
+[gd_resource type="Resource" script_class="DialogicStyle" load_steps=20 format=3 uid="uid://bl05vnugru32a"]
+
+[ext_resource type="Script" uid="uid://cai036hqhwrx8" path="res://addons/dialogic/Resources/dialogic_style_layer.gd" id="1_bsu76"]
+[ext_resource type="PackedScene" uid="uid://cn0wvw1606gxm" path="res://dialogue/assets/layers/AstralChoices/custom_centered_choices.tscn" id="2_wsvu0"]
+[ext_resource type="Script" uid="uid://4mfms3buwpug" path="res://addons/dialogic/Resources/dialogic_style.gd" id="2_yls3h"]
+[ext_resource type="PackedScene" uid="uid://cgpe3cd4r2ahb" path="res://dialogue/assets/layers/AstralTextbox/VisualNovelTextbox/custom_visual_novel_textbox.tscn" id="3_116ca"]
+[ext_resource type="PackedScene" uid="uid://cxnkryt0bjdrl" path="res://dialogue/assets/layers/AstralPortraits/custom_5_portraits.tscn" id="4_116ca"]
+[ext_resource type="PackedScene" uid="uid://cn674foxwedqu" path="res://addons/dialogic/Modules/DefaultLayoutParts/Layer_Input/full_advance_input_layer.tscn" id="5_dxs8y"]
+[ext_resource type="PackedScene" uid="uid://c1k5m0w3r40xf" path="res://addons/dialogic/Modules/DefaultLayoutParts/Layer_FullBackground/full_background_layer.tscn" id="6_qxfun"]
+[ext_resource type="PackedScene" uid="uid://lx24i8fl6uo" path="res://addons/dialogic/Modules/DefaultLayoutParts/Layer_History/history_layer.tscn" id="7_tcrv4"]
+[ext_resource type="PackedScene" uid="uid://dsbwnp5hegnu3" path="res://addons/dialogic/Modules/DefaultLayoutParts/Layer_Glossary/glossary_popup_layer.tscn" id="8_a6whk"]
+[ext_resource type="PackedScene" uid="uid://cvgf4c6gg0tsy" path="res://addons/dialogic/Modules/DefaultLayoutParts/Layer_TextInput/text_input_layer.tscn" id="9_116ca"]
+
+[sub_resource type="Resource" id="Resource_wsvu0"]
+script = ExtResource("1_bsu76")
+overrides = {
+"canvas_layer": "100.0",
+"global_bg_color": "Color(1, 1, 1, 1)"
+}
+
+[sub_resource type="Resource" id="Resource_nsmqi"]
+script = ExtResource("1_bsu76")
+scene = ExtResource("2_wsvu0")
+overrides = {
+"boxes_stylebox_focused": "\"res://textures/gui/themes/dialogue_stylebox_light.tres\"",
+"boxes_stylebox_hovered": "\"res://textures/gui/themes/dialogue_stylebox_light.tres\"",
+"boxes_stylebox_normal": "\"res://textures/gui/themes/dialogue_stylebox_base.tres\"",
+"boxes_v_separation": "4.0"
+}
+
+[sub_resource type="Resource" id="Resource_dxs8y"]
+script = ExtResource("1_bsu76")
+scene = ExtResource("3_116ca")
+overrides = {
+"autoadvance_progressbar": "false",
+"box_animation_in": "0",
+"box_animation_out": "0",
+"box_color_custom": "Color(1, 1, 1, 1)",
+"box_margin_bottom": "0.0",
+"box_panel": "\"res://textures/gui/themes/info_box.tres\"",
+"box_size": "Vector2(480, 180)",
+"name_label_box_modulate": "Color(1, 1, 1, 1)",
+"name_label_box_panel": "\"res://textures/gui/themes/info_box.tres\"",
+"next_indicator_animation": "1"
+}
+
+[sub_resource type="Resource" id="Resource_qxfun"]
+script = ExtResource("1_bsu76")
+scene = ExtResource("4_116ca")
+overrides = {}
+
+[sub_resource type="Resource" id="Resource_tcrv4"]
+script = ExtResource("1_bsu76")
+scene = ExtResource("5_dxs8y")
+overrides = {}
+
+[sub_resource type="Resource" id="Resource_a6whk"]
+script = ExtResource("1_bsu76")
+scene = ExtResource("6_qxfun")
+overrides = {}
+
+[sub_resource type="Resource" id="Resource_116ca"]
+script = ExtResource("1_bsu76")
+scene = ExtResource("7_tcrv4")
+overrides = {}
+
+[sub_resource type="Resource" id="Resource_uyj3i"]
+script = ExtResource("1_bsu76")
+scene = ExtResource("8_a6whk")
+overrides = {}
+
+[sub_resource type="Resource" id="Resource_barfw"]
+script = ExtResource("1_bsu76")
+scene = ExtResource("9_116ca")
+overrides = {}
+
+[resource]
+script = ExtResource("2_yls3h")
+name = "astral_dialogue"
+layer_list = Array[String](["10", "11", "12", "13", "14", "15", "16", "17"])
+layer_info = {
+"": SubResource("Resource_wsvu0"),
+"10": SubResource("Resource_nsmqi"),
+"11": SubResource("Resource_dxs8y"),
+"12": SubResource("Resource_qxfun"),
+"13": SubResource("Resource_tcrv4"),
+"14": SubResource("Resource_a6whk"),
+"15": SubResource("Resource_116ca"),
+"16": SubResource("Resource_uyj3i"),
+"17": SubResource("Resource_barfw")
+}
+base_overrides = {}
+layers = Array[ExtResource("1_bsu76")]([])
+metadata/_latest_layer = "11"

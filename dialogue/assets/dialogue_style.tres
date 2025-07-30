@@ -11,63 +11,46 @@
 [ext_resource type="PackedScene" uid="uid://lx24i8fl6uo" path="res://addons/dialogic/Modules/DefaultLayoutParts/Layer_History/history_layer.tscn" id="9_dr7fj"]
 [ext_resource type="Script" uid="uid://4mfms3buwpug" path="res://addons/dialogic/Resources/dialogic_style.gd" id="10_ijftx"]
 
-[sub_resource type="Resource" id="Resource_nx01v"]
+[sub_resource type="Resource" id="Resource_3dffq"]
 script = ExtResource("1_1pn7v")
-overrides = {
-"canvas_layer": "100.0",
-"global_bg_color": "Color(0, 0.694118, 0.372549, 0.92549)"
-}
+overrides = {}
 
-[sub_resource type="Resource" id="Resource_ej4ok"]
+[sub_resource type="Resource" id="Resource_g58bh"]
 script = ExtResource("1_1pn7v")
 scene = ExtResource("2_gxvwl")
 overrides = {}
 
-[sub_resource type="Resource" id="Resource_xqdo1"]
+[sub_resource type="Resource" id="Resource_7xryu"]
 script = ExtResource("1_1pn7v")
 scene = ExtResource("3_77n76")
 overrides = {}
 
-[sub_resource type="Resource" id="Resource_c12kw"]
+[sub_resource type="Resource" id="Resource_mult8"]
 script = ExtResource("1_1pn7v")
 scene = ExtResource("4_8400y")
 overrides = {}
 
-[sub_resource type="Resource" id="Resource_uh4ce"]
+[sub_resource type="Resource" id="Resource_6qwg6"]
 script = ExtResource("1_1pn7v")
 scene = ExtResource("5_66ky7")
-overrides = {
-"box_color_custom": "Color(1, 1, 1, 1)",
-"box_color_use_global": "false",
-"box_panel": "\"res://textures/gui/themes/stylebox_base.tres\"",
-"name_label_box_modulate": "Color(1, 1, 1, 1)",
-"name_label_box_offset": "Vector2(0, -8)",
-"name_label_box_panel": "\"res://textures/gui/themes/stylebox_base.tres\"",
-"name_label_box_use_global_color": "false"
-}
+overrides = {}
 
-[sub_resource type="Resource" id="Resource_qjjmi"]
+[sub_resource type="Resource" id="Resource_yd1vo"]
 script = ExtResource("1_1pn7v")
 scene = ExtResource("6_2rmfy")
 overrides = {}
 
-[sub_resource type="Resource" id="Resource_1syf8"]
+[sub_resource type="Resource" id="Resource_24n5w"]
 script = ExtResource("1_1pn7v")
 scene = ExtResource("7_djiqp")
-overrides = {
-"boxes_stylebox_disabled": "\"res://textures/gui/themes/stylebox_disabled.tres\"",
-"boxes_stylebox_focused": "\"res://textures/gui/themes/stylebox_selected_border.tres\"",
-"boxes_stylebox_hovered": "\"res://textures/gui/themes/stylebox_light.tres\"",
-"boxes_stylebox_normal": "\"res://textures/gui/themes/stylebox_base.tres\"",
-"boxes_stylebox_pressed": "\"res://textures/gui/themes/stylebox_dark.tres\""
-}
+overrides = {}
 
-[sub_resource type="Resource" id="Resource_1pmuj"]
+[sub_resource type="Resource" id="Resource_y7qo5"]
 script = ExtResource("1_1pn7v")
 scene = ExtResource("8_p3gkx")
 overrides = {}
 
-[sub_resource type="Resource" id="Resource_mhyn0"]
+[sub_resource type="Resource" id="Resource_5c73h"]
 script = ExtResource("1_1pn7v")
 scene = ExtResource("9_dr7fj")
 overrides = {}
@@ -77,15 +60,15 @@ script = ExtResource("10_ijftx")
 name = "dialogue_style"
 layer_list = Array[String](["10", "11", "12", "13", "14", "15", "16", "17"])
 layer_info = {
-"": SubResource("Resource_nx01v"),
-"10": SubResource("Resource_ej4ok"),
-"11": SubResource("Resource_xqdo1"),
-"12": SubResource("Resource_c12kw"),
-"13": SubResource("Resource_uh4ce"),
-"14": SubResource("Resource_qjjmi"),
-"15": SubResource("Resource_1syf8"),
-"16": SubResource("Resource_1pmuj"),
-"17": SubResource("Resource_mhyn0")
+"": SubResource("Resource_3dffq"),
+"10": SubResource("Resource_g58bh"),
+"11": SubResource("Resource_7xryu"),
+"12": SubResource("Resource_mult8"),
+"13": SubResource("Resource_6qwg6"),
+"14": SubResource("Resource_yd1vo"),
+"15": SubResource("Resource_24n5w"),
+"16": SubResource("Resource_y7qo5"),
+"17": SubResource("Resource_5c73h")
 }
 base_overrides = {}
 layers = Array[ExtResource("1_1pn7v")]([])

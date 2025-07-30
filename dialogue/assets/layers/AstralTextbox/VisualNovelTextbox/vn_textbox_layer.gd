@@ -157,9 +157,9 @@ func _apply_box_settings() -> void:
 	else:
 		dialog_text_panel.self_modulate = box_color_custom
 
-	#var sizer: Control = %Sizer
-	#sizer.size = box_size
-	#sizer.position = box_size * Vector2(-0.5, -1)+Vector2(0, -box_margin_bottom)
+	var sizer: Control = %Sizer
+	sizer.size = box_size
+	sizer.position = box_size * Vector2(-0.5, -1)+Vector2(0, -box_margin_bottom)
 
 
 ## Applies box animations settings to the scene.
@@ -202,13 +202,13 @@ func _apply_name_label_settings() -> void:
 	else:
 		name_label_panel.self_modulate = name_label_box_modulate
 	var dialog_text_panel: PanelContainer = %DialogTextPanel
-	#name_label_panel.position = name_label_box_offset+Vector2(0, -40)
-	#name_label_panel.position -= Vector2(
-		#dialog_text_panel.get_theme_stylebox(&'panel', &'PanelContainer').content_margin_left,
-		#dialog_text_panel.get_theme_stylebox(&'panel', &'PanelContainer').content_margin_top)
-	#name_label_panel.anchor_left = name_label_alignment/2.0
-	#name_label_panel.anchor_right = name_label_alignment/2.0
-	#name_label_panel.grow_horizontal = [1, 2, 0][name_label_alignment]
+	name_label_panel.position = name_label_box_offset+Vector2(0, -40)
+	name_label_panel.position -= Vector2(
+		dialog_text_panel.get_theme_stylebox(&'panel', &'PanelContainer').content_margin_left,
+		dialog_text_panel.get_theme_stylebox(&'panel', &'PanelContainer').content_margin_top)
+	name_label_panel.anchor_left = name_label_alignment/2.0
+	name_label_panel.anchor_right = name_label_alignment/2.0
+	name_label_panel.grow_horizontal = [1, 2, 0][name_label_alignment]
 
 
 ## Applies all text settings to the scene.

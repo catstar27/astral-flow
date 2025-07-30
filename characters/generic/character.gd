@@ -224,8 +224,8 @@ func update_stat_mod(stat_mod_name: String, amount: int)->void:
 
 ## Updates star stat modifiers based on given args
 func update_star_stat_mod(stat_mod_name: String, amount: int)->void:
-	if stat_mod_name not in stat_mods:
-		printerr("Attempted to change stat mod "+stat_mod_name+" not in stat_mods")
+	if stat_mod_name not in star_stat_mods:
+		printerr("Attempted to change stat mod "+stat_mod_name+" not in star_stat_mods")
 	else:
 		star_stat_mods[stat_mod_name] += amount
 		calc_base_stats()

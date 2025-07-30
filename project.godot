@@ -64,8 +64,8 @@ variables={
 "tutorial_puzzle_index": 0,
 "void_god_name": "???"
 }
-layout/style_list=[""]
-layout/default_style=""
+layout/style_list=["res://dialogue/assets/dialogue_style.tres", "res://dialogue/assets/astral_dialogue.tres"]
+layout/default_style="res://dialogue/assets/astral_dialogue.tres"
 extensions_folder="res://addons/dialogic_additions"
 text/letter_speed=0.01
 text/initial_text_reveal_skippable=true
@@ -89,6 +89,8 @@ choices/def_false_behaviour=0
 audio/max_channels=4.0
 audio/type_sound_bus="Dialogue"
 timer/process_in_physics=false
+portraits/default_portrait=""
+portraits/position_suggestion_names="left_l, left_m, left_r, mid_l, mid_r, right_l, right_m, right_r"
 
 [display]
 

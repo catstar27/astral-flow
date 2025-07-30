@@ -1,4 +1,5 @@
-join void_god left [animation="Bounce In" wait="true"]
+join void_god right_l [animation="Bounce In" wait="true" mirrored="true"]
+join kalin left_r [animation="Instant In" length="0.0"]
 [music path="res://music/carefree_carousel.wav" fade="0.0" volume="0.0"]
 if {learned_zap} == true:
 	jump go_exit

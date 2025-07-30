@@ -1,4 +1,5 @@
-join void_god center [animation="Slide In Down" wait="true"]
+join kalin left_r [animation="Instant In" length="0.0"]
+join void_god right_l [animation="Slide In Down" wait="true" mirrored="true"]
 void_god: Decided to come back, huh?
 void_god: Don't worry, I forgive you. You need friends, especially now. I can be that for you.
 void_god: It's true, that this place is like a dream... but I promise, I am real. I'm just paying a visit.
@@ -14,10 +15,12 @@ void_god: Perhaps we could even form a bond? You know, of the magical variety.
 void_god: *They offer their hand*
 - *Take Their Hand*
 	As you reach out, suddenly the stranger's eyes widen and their body jolts
+	leave void_god [animation="Fade Out" wait="true"]
 - *Decline*
 	void_god: Really? You would decline my lifeline? That's... really too bad.
 	void_god: *They Shrug*
 	void_god: Oh well. Hopefully if you survive you will be less rude to me in the future.
 	void_god: *They snap their fingers, and disappear in a flash of magical energy*
+	leave void_god [animation="Slide Out Up" wait="true"]
 [signal arg_type="dict" arg="{"???":"deactivate"}"]
 Suddenly, they are gone, no trace left...

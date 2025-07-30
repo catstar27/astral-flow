@@ -5,6 +5,7 @@ class_name DialogicNode_NameLabel
 
 # If true, the label will be hidden if no character speaks.
 @export var hide_when_empty := true
+@export var empty_text := ""
 @export var name_label_root: Node = self
 @export var use_character_color := true
 
@@ -20,6 +21,8 @@ func _set(property, what):
 		text = what
 		if hide_when_empty:
 			name_label_root.visible = !what.is_empty()
+		elif what.is_empty():
+			text = empty_text
 		else:
 			name_label_root.show()
 		return true

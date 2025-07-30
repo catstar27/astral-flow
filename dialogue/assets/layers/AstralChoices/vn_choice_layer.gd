@@ -40,8 +40,6 @@ extends DialogicLayoutLayer
 @export_file("*.wav", "*.ogg", "*.mp3") var sounds_focus: String = "res://addons/dialogic/ExampleAssets/sound-effects/typing4.wav"
 
 func get_choices() -> VBoxContainer:
-	if %Choices != null:
-		return %Choices
 	return $Choices
 
 

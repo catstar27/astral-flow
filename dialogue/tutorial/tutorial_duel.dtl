@@ -1,5 +1,5 @@
-join kalin left [animation="Instant In" length="0.0"]
-join void_god right [animation="Slide In Left" wait="true" mirrored="true"]
+join kalin left_r [animation="Instant In" length="0.0"]
+join void_god right_l [animation="Slide In Left" wait="true" mirrored="true"]
 void_god: Hi!
 [signal arg="start_quest:UNCANNY_VALLEY"]
 - Who are you?

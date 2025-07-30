@@ -22,7 +22,7 @@ stat_mods = Dictionary[String, int]({
 "max_hp": 10,
 "max_mp": 10,
 "move_speed": 4,
-"sequence": 999
+"sequence": -999
 })
 clear_conditions = Dictionary[String, bool]({
 "move": false,

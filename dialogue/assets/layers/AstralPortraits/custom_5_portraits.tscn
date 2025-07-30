@@ -1,0 +1,121 @@
+[gd_scene load_steps=3 format=3 uid="uid://cxnkryt0bjdrl"]
+
+[ext_resource type="Script" uid="uid://cigmjo1p2sw3u" path="res://addons/dialogic/Modules/DefaultLayoutParts/Layer_VN_Portraits/vn_portrait_layer.gd" id="1_5iyl2"]
+[ext_resource type="Script" uid="uid://jp01m6nmukrc" path="res://addons/dialogic/Modules/Character/node_portrait_container.gd" id="2_0es0g"]
+
+[node name="VN_PortraitLayer" type="Control"]
+z_index = -1
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_5iyl2")
+
+[node name="Portraits" type="Control" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="DialogicNode_PortraitContainer1" type="Control" parent="Portraits"]
+layout_mode = 2
+anchors_preset = 0
+offset_left = 58.0
+offset_right = 58.0
+offset_bottom = 360.0
+size_flags_horizontal = 6
+mouse_filter = 2
+script = ExtResource("2_0es0g")
+container_ids = PackedStringArray("left_l", "0")
+metadata/_edit_use_anchors_ = true
+
+[node name="DialogicNode_PortraitContainer2" type="Control" parent="Portraits"]
+layout_mode = 2
+anchors_preset = 0
+offset_left = 178.0
+offset_right = 178.0
+offset_bottom = 360.0
+size_flags_horizontal = 6
+mouse_filter = 2
+script = ExtResource("2_0es0g")
+container_ids = PackedStringArray("left_m", "1")
+metadata/_edit_use_anchors_ = true
+
+[node name="DialogicNode_PortraitContainer3" type="Control" parent="Portraits"]
+layout_mode = 2
+anchors_preset = 0
+offset_left = 299.0
+offset_right = 299.0
+offset_bottom = 360.0
+size_flags_horizontal = 6
+mouse_filter = 2
+script = ExtResource("2_0es0g")
+container_ids = PackedStringArray("left_r", "2")
+metadata/_edit_use_anchors_ = true
+
+[node name="DialogicNode_PortraitContainer4" type="Control" parent="Portraits"]
+layout_mode = 2
+anchors_preset = 0
+offset_left = 419.0
+offset_right = 419.0
+offset_bottom = 360.0
+size_flags_horizontal = 6
+mouse_filter = 2
+script = ExtResource("2_0es0g")
+container_ids = PackedStringArray("mid_l", "3")
+metadata/_edit_use_anchors_ = true
+
+[node name="DialogicNode_PortraitContainer5" type="Control" parent="Portraits"]
+layout_mode = 2
+anchors_preset = 0
+offset_left = 540.0
+offset_right = 540.0
+offset_bottom = 360.0
+size_flags_horizontal = 6
+mouse_filter = 2
+script = ExtResource("2_0es0g")
+container_ids = PackedStringArray("mid_r", "4")
+metadata/_edit_use_anchors_ = true
+
+[node name="DialogicNode_PortraitContainer6" type="Control" parent="Portraits"]
+layout_mode = 2
+anchors_preset = 0
+offset_left = 660.0
+offset_right = 660.0
+offset_bottom = 360.0
+size_flags_horizontal = 6
+mouse_filter = 2
+script = ExtResource("2_0es0g")
+container_ids = PackedStringArray("right_l", "5")
+metadata/_edit_use_anchors_ = true
+
+[node name="DialogicNode_PortraitContainer7" type="Control" parent="Portraits"]
+layout_mode = 2
+anchors_preset = 0
+offset_left = 781.0
+offset_right = 781.0
+offset_bottom = 360.0
+size_flags_horizontal = 6
+mouse_filter = 2
+script = ExtResource("2_0es0g")
+container_ids = PackedStringArray("right_m", "6")
+metadata/_edit_use_anchors_ = true
+
+[node name="DialogicNode_PortraitContainer8" type="Control" parent="Portraits"]
+layout_mode = 2
+anchors_preset = 0
+offset_left = 901.0
+offset_right = 901.0
+offset_bottom = 360.0
+size_flags_horizontal = 6
+mouse_filter = 2
+script = ExtResource("2_0es0g")
+container_ids = PackedStringArray("right_r", "7")
+metadata/_edit_use_anchors_ = true
