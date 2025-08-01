@@ -254,7 +254,7 @@ func _selection_area_exited(body: Node2D) -> void:
 func check_quick_info(_data = null) -> void:
 	if moving:
 		return
-	if hovering != null && hovering is Character && hovering.in_combat:
+	if hovering != null && hovering is Character && hovering.in_combat && deactivate_requests <= 0:
 		if selected == null:
 			EventBus.broadcast("SHOW_QUICK_INFO", hovering)
 		elif selected.state_machine.current_state.state_id == "IDLE" && selected.selected_ability == null:

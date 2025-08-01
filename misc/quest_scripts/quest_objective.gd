@@ -16,14 +16,20 @@ enum event_type_choices {
 	enter_map, ## Triggers when entering a map
 	exit_map ## Triggers when exiting a map
 }
+@export var id: String ## ID of this objective
 @export var description: String ## Objective explanation that is displayed to player
 @export var event_type: event_type_choices ## Type of quest even to watch for
 @export var event_emitter_name: String ## ID of node that triggers the objective
 @export var total_count: int ## Amount of times the quest objective needs to receive the signal
+@export var is_secret: bool = false ## Whether this objective should be shown in the tracker/log before completed
+@export var is_optional: bool = false ## Whether this objective is needed to complete the stage
 var current_count: int ## Number counting current progress towards this objective's completion
 var complete: bool = false ## Whether this objective has been completed
 signal objective_completed(objective: QuestObjective) ## Emitted when the objective is completed
 signal objective_updated(objective: QuestObjective) ## Emitted when the objective's count updates
+
+func _to_string() -> String:
+	return id
 
 ## Checks if this objective is complete, and emits the signal if so
 func check_completion()->void:
@@ -52,15 +58,3 @@ func set_count(count: int)->void:
 	if current_count >= maxi(1, total_count):
 		complete = true
 		objective_completed.emit(self)
-
-#region Save and Load
-## Saves the objective's current count
-func save_data(file: FileAccess)->void:
-	file.store_var(current_count)
-	file.store_var(complete)
-
-## Loads the objective's current count
-func load_data(file: FileAccess)->void:
-	current_count = file.get_var()
-	complete = file.get_var()
-#endregion

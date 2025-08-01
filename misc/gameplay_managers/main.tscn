@@ -32,7 +32,6 @@ unique_name_in_owner = true
 
 [node name="SkillManager" parent="." instance=ExtResource("5_y3pxv")]
 skill_path = "res://characters/skills/"
-breakthrough_path = "res://characters/breakthroughs/"
 
 [node name="Background" type="Sprite2D" parent="."]
 process_mode = 1

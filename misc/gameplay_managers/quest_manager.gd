@@ -38,10 +38,12 @@ func start_quest(id: String)->void:
 ## Processes incoming quest events, broadcasting them to the necessary quests
 func process_quest_event(id: String)->void:
 	for quest in active_quests:
-		for objective in quests[quest].get_current_stage().get_stage_objectives():
-			if !objective.complete:
-				if id == objective.event_type_choices.keys()[objective.event_type]+":"+objective.event_emitter_name:
-					objective.update_objective(id)
+		for stage in quests[quest].get_current_stages():
+			for stage_path in stage.get_stage_paths():
+				for objective in stage_path.path_objectives:
+					if !objective.complete:
+						if id == objective.event_type_choices.keys()[objective.event_type]+":"+objective.event_emitter_name:
+							objective.update_objective(id)
 
 ## Called when the specified quest is completed
 func complete_quest(quest: QuestInfo)->void:

@@ -32,7 +32,7 @@ func change_quest(quest: QuestInfo)->void:
 		tracked_quest.stage_started.disconnect(build_labels)
 	starting_tracking = true
 	tracked_quest = quest
-	for objective in objective_labels.keys():
+	for objective in objective_labels:
 		objective_labels[objective].queue_free()
 		objective_labels.erase(objective)
 	quest.quest_complete.connect(complete_quest)
@@ -77,6 +77,8 @@ func update_objective(objective: QuestObjective, play_anim: bool = false)->void:
 	if play_anim:
 		objective_labels[objective].modulate = Color.TRANSPARENT
 	objective_labels[objective].text = ""
+	if objective.is_optional:
+		objective_labels[objective].text = "[color=sky_blue]"
 	objective_labels[objective].text += objective.description
 	if objective.total_count > 0:
 		objective_labels[objective].text += " ("+str(objective.current_count)+"/"+str(objective.total_count)+")"
@@ -102,21 +104,59 @@ func update_objective(objective: QuestObjective, play_anim: bool = false)->void:
 
 ## Updates the quest tracker information
 func build_labels(_stage: Resource = null)->void:
-	var objectives: Array[QuestObjective] = tracked_quest.get_tracked_objectives()
-	for objective in objective_labels.keys():
-		if objective not in objectives:
-			objective_labels[objective].queue_free()
-			objective_labels.erase(objective)
-	for objective in objectives:
-		if !objective.objective_updated.is_connected(update_objective):
-			objective.objective_updated.connect(update_objective)
-		if !objective.objective_completed.is_connected(update_objective):
-			objective.objective_completed.connect(update_objective)
-		if objective not in objective_labels.keys():
+	for objective in objective_labels:
+		objective.objective_updated.disconnect(update_objective)
+		objective.objective_completed.disconnect(update_objective)
+		objective_labels[objective].queue_free()
+	objective_labels.clear()
+	for child in objective_container.get_children():
+		child.queue_free()
+	var paths: Dictionary[QuestPath, Array] = tracked_quest.get_tracked_paths()
+	for quest_path in tracked_quest.quest_paths:
+		if paths.size() > 1:
+			var quest_path_label: RichTextLabel = get_objective_label()
+			quest_path_label.add_theme_font_size_override("bold_font_size", 20)
+			quest_path_label.text = "[b]"+quest_path.id+"[/b]"
+			objective_container.add_child(quest_path_label)
+		var stages: Array[QuestStage]
+		var index: int = quest_path.current_stage
+		var cur_stage: QuestStage = quest_path.path_stages[quest_path.current_stage]
+		stages.append(cur_stage)
+		while cur_stage.show_prev_stage && index > 0:
+			index -= 1
+			cur_stage = quest_path.path_stages[index]
+			stages.append(cur_stage)
+		stages.reverse()
+		for stage in stages:
+			build_stage_labels(stage)
+		if paths.size() > 1 && quest_path != tracked_quest.quest_paths[-1]:
+			var quest_path_label: RichTextLabel = get_objective_label()
+			quest_path_label.add_theme_font_size_override("bold_font_size", 20)
+			quest_path_label.text = "[b][color=goldenrod]  --OR--  [/color][/b]"
+			objective_container.add_child(quest_path_label)
+
+## Builds labels for a stage
+func build_stage_labels(stage: QuestStage)->void:
+	for path in stage.stage_paths:
+		if stage.stage_paths.size() > 1:
+			var stage_path_label: RichTextLabel = get_objective_label()
+			stage_path_label.text = "[b]"+path.id+"[/b]"
+			objective_container.add_child(stage_path_label)
+		for objective in path.path_objectives:
+			if objective.is_secret:
+				continue
 			var new_label: RichTextLabel = get_objective_label()
 			objective_container.add_child(new_label)
 			objective_labels[objective] = new_label
 			update_objective(objective, true)
+			if !objective.objective_updated.is_connected(update_objective):
+				objective.objective_updated.connect(update_objective)
+			if !objective.objective_completed.is_connected(update_objective):
+				objective.objective_completed.connect(update_objective)
+		if stage.stage_paths.size() > 1 && path != stage.stage_paths[-1]:
+			var stage_path_label: RichTextLabel = get_objective_label()
+			stage_path_label.text = "[b][color=goldenrod]  --OR--  [/color][/b]"
+			objective_container.add_child(stage_path_label)
 
 ## Makes an objective label and returns it
 func get_objective_label()->RichTextLabel:

@@ -2,18 +2,16 @@ extends Resource
 class_name QuestInfo
 ## Main quest class; made up of stages
 ##
-## Works much like quest stages, but instead
-## of monitoring objectives, it monitors a list
-## of quest stages. It also holds more general
-## quest information such as name and id.
+## Works much like quest stages, but instead of monitoring objectives, it monitors a list of quest stages
+## It also holds more general quest information such as name and id.
 
 @export var quest_name: String ## Display name of the quest
 @export var quest_id: String ## Internal name of the quest
 @export var quest_description: String ## Description of the quest in journal
 @export var quest_icon: Texture2D ## Icon of quest in journal
-@export var quest_stages: Array[QuestStage] ## Array of stages in quest
+@export var quest_paths: Array[QuestPath] ## Quest paths in quest
 var active: bool = false ## Whether the quest is active
-var current_stage: int = 0 ## Current index of the quest stage
+var complete_path: QuestPath ## The path that was completed in this quest
 var complete: bool = false ## Whether the quest is complete
 signal quest_complete(quest: QuestInfo) ## Emitted when the quest is completed
 signal stage_started(stage: QuestStage) ## Emitted when the current stage is completed
@@ -23,29 +21,39 @@ signal objective_completed(objective: QuestObjective) ## Emitted when an active 
 ## Activates this quest and its first stage
 func activate()->void:
 	active = true
-	for stage in quest_stages:
-		if !stage.stage_completed.is_connected(quest_stage_complete):
-			stage.stage_completed.connect(quest_stage_complete)
-		if !stage.objective_updated.is_connected(update_quest):
-			stage.objective_updated.connect(update_quest)
-	quest_stages[current_stage].activate()
-	quest_stages[current_stage].check_completion()
+	for path in quest_paths:
+		for stage in path.path_stages:
+			if !stage.stage_completed.is_connected(quest_stage_complete):
+				stage.stage_completed.connect(quest_stage_complete)
+			if !stage.objective_updated.is_connected(update_quest):
+				stage.objective_updated.connect(update_quest)
+		path.path_stages[path.current_stage].activate()
+		path.path_stages[path.current_stage].check_completion()
 
-## Gets the currently active quest stage
-func get_current_stage()->QuestStage:
-	return quest_stages[current_stage]
+## Gets the currently active quest stages
+func get_current_stages()->Array[QuestStage]:
+	var arr: Array[QuestStage]
+	for path in quest_paths:
+		arr.append(path.path_stages[path.current_stage])
+	return arr
 
 ## Called when the current quest stage completes, moving the quest to the next stage
 func quest_stage_complete(stage: QuestStage)->void:
 	stage.stage_completed.disconnect(quest_stage_complete)
 	stage.objective_updated.disconnect(update_quest)
-	current_stage += 1
-	if current_stage == quest_stages.size():
+	var cur_path: QuestPath = null
+	for path in quest_paths:
+		if stage == path.path_stages[path.current_stage]:
+			path.current_stage += 1
+			cur_path = path
+			break
+	if cur_path.current_stage == cur_path.path_stages.size():
 		complete = true
+		complete_path = cur_path
 		quest_complete.emit(self)
 	else:
-		stage_started.emit(quest_stages[current_stage])
-		quest_stages[current_stage].activate()
+		stage_started.emit(cur_path.path_stages[cur_path.current_stage])
+		cur_path.path_stages[cur_path.current_stage].activate()
 
 ## Called when
 func quest_objective_complete(objective: QuestObjective)->void:
@@ -60,52 +68,46 @@ func set_complete()->void:
 	complete = true
 
 ## Gets a list of quest objectives that should be tracked
-func get_tracked_objectives()->Array[QuestObjective]:
-	var end_stage: int = current_stage
-	var start_stage: int = current_stage
-	while quest_stages[start_stage].show_prev_stage && start_stage > 0:
-		start_stage -= 1
-	var objectives: Array[QuestObjective] = []
-	for index in range(start_stage, end_stage+1):
-		objectives.append_array(quest_stages[index].get_stage_objectives())
-	return objectives
+func get_tracked_paths()->Dictionary[QuestPath, Array]:
+	var paths: Dictionary[QuestPath, Array]
+	for path in quest_paths:
+		var end_stage: int = path.current_stage
+		var start_stage: int = path.current_stage
+		while path.path_stages[start_stage].show_prev_stage && start_stage > 0:
+			start_stage -= 1
+		for index in range(start_stage, end_stage+1):
+			paths[path] = path.path_stages[index].get_stage_paths()
+	return paths
 
 #region Save and Load
 ## Duplicates this quest and returns the duplicate
 func duplicate_quest()->QuestInfo:
 	var new_quest: QuestInfo = duplicate(true)
-	new_quest.quest_stages = []
-	for stage in quest_stages:
-		new_quest.quest_stages.append(stage.duplicate_stage())
+	new_quest.quest_paths.clear()
+	for path in quest_paths:
+		new_quest.quest_paths.append(path.duplicate_path())
 	return new_quest
 
 ## Gets the save data for this quest
-func get_save_data()->Array[Dictionary]:
-	var arr: Array[Dictionary]
-	for stage in quest_stages:
-		arr.append(stage.get_save_data())
+func get_save_data()->Array[Array]:
+	var arr: Array[Array]
+	var index: int = -1
+	for path in quest_paths:
+		arr.append([])
+		index += 1
+		for stage in path.path_stages:
+			arr[index].append(stage.get_save_data())
 	return arr
 
 ## Loads the save data for this quest
-func load_save_data(data: Array[Dictionary])->void:
-	for index in range(0, quest_stages.size()):
-		quest_stages[index].load_save_data(data[index])
-
-## Saves the quest's data
-func save_data(file: FileAccess)->void:
-	for index in range(0, quest_stages.size()):
-		file.store_var(str(index))
-		quest_stages[index].save_data(file)
-	file.store_var("END")
-
-## Loads the quest's data
-func load_data(file: FileAccess)->void:
-	var index: String = file.get_var()
-	while index != "END":
-		if index.to_int() >= quest_stages.size():
-			var dummy_stage: QuestStage = QuestStage.new()
-			dummy_stage.load_data(file)
-		else:
-			quest_stages[index.to_int()].load_data(file)
-		index = file.get_var()
+func load_save_data(data: Array[Array])->void:
+	var i: int = -1
+	for path in data:
+		i += 1
+		var j: int = -1
+		for count in data[i]:
+			j += 1
+			if i > quest_paths.size() || j > quest_paths[i].path_stages.size():
+				continue
+			quest_paths[i].path_stages[j].load_save_data(data[i][j])
 #endregion

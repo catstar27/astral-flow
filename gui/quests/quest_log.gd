@@ -61,19 +61,66 @@ func display_quest(quest: QuestInfo)->void:
 	quest_name.text = quest.quest_name
 	for child in objective_conainer.get_children():
 		child.queue_free()
-	for stage in quest.quest_stages:
-		if stage.active || stage.complete || quest.complete:
-			for objective in stage.quest_objectives.values():
+	if quest.complete:
+		for quest_path in quest.quest_paths:
+			var quest_path_label: RichTextLabel = get_objective_label()
+			quest_path_label.add_theme_font_size_override("bold_font_size", 20)
+			quest_path_label.text = "[b]"+quest_path.id+"[/b]"
+			objective_conainer.add_child(quest_path_label)
+			if quest_path != quest.complete_path:
 				var label: RichTextLabel = get_objective_label()
-				label.text = ""
-				label.text += objective.description
-				if objective.total_count > 0:
-					label.text += " ("+str(objective.current_count)+"/"+str(objective.total_count)+")"
-				label.text += " ["
-				if objective.complete || quest.complete:
-					label.text += "✓"
-				label.text += "]"
+				label.text = "[b]Skipped![/b]"
 				objective_conainer.add_child(label)
+		display_quest_path(quest.complete_path, quest.complete)
+	else:
+		for quest_path in quest.quest_paths:
+			if quest.quest_paths.size() > 1:
+				var quest_path_label: RichTextLabel = get_objective_label()
+				quest_path_label.add_theme_font_size_override("bold_font_size", 20)
+				quest_path_label.text = "[b]"+quest_path.id+"[/b]"
+				objective_conainer.add_child(quest_path_label)
+			display_quest_path(quest_path, quest.complete)
+			if quest.quest_paths.size() > 1 && quest_path != quest.quest_paths[-1]:
+				var quest_path_label: RichTextLabel = get_objective_label()
+				quest_path_label.add_theme_font_size_override("bold_font_size", 20)
+				quest_path_label.text = "[b][color=goldenrod] --OR--  [/color][/b]"
+				objective_conainer.add_child(quest_path_label)
+
+## Displays a quest path
+func display_quest_path(quest_path: QuestPath, complete: bool)->void:
+	for stage in quest_path.path_stages:
+		if stage.active || stage.complete || complete:
+			if stage.complete:
+				for objective in stage.completed_path.path_objectives:
+					display_objective(objective)
+			else:
+				for path in stage.stage_paths:
+					if !stage.complete && stage.stage_paths.size() > 1:
+						var label: RichTextLabel = get_objective_label()
+						label.text = "[b]"+path.id+"[/b]"
+						objective_conainer.add_child(label)
+					for objective in path.path_objectives:
+						display_objective(objective)
+					if !stage.complete && stage.stage_paths.size() > 1 && path != stage.stage_paths[-1]:
+						var label: RichTextLabel = get_objective_label()
+						label.text = "[b][color=goldenrod]  --OR--  [/color][/b]"
+						objective_conainer.add_child(label)
+
+func display_objective(objective: QuestObjective)->void:
+	if objective.is_secret && !objective.complete:
+		return
+	var label: RichTextLabel = get_objective_label()
+	label.text = ""
+	if objective.is_optional:
+		label.text = "[color=sky_blue]"
+	label.text += objective.description
+	if objective.total_count > 0:
+		label.text += " ("+str(objective.current_count)+"/"+str(objective.total_count)+")"
+	label.text += " ["
+	if objective.complete:# || quest.complete:
+		label.text += "✓"
+	label.text += "]"
+	objective_conainer.add_child(label)
 
 ## Tracks the given quest in the QuestTracker
 func track_quest(button: QuestButton, quest: QuestInfo)->void:
