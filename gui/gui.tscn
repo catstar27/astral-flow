@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://t1lqjxny1int"]
+[gd_scene load_steps=19 format=3 uid="uid://t1lqjxny1int"]
 
 [ext_resource type="Material" uid="uid://dcq7n5qyt3hj0" path="res://materials/immaterial.tres" id="1_cnh4v"]
 [ext_resource type="Theme" uid="uid://crcivs73grrf7" path="res://textures/gui/themes/custom_theme.tres" id="2_stc6v"]
@@ -16,6 +16,7 @@
 [ext_resource type="PackedScene" uid="uid://cjbkwr8dsdqvq" path="res://gui/info_box.tscn" id="10_stc6v"]
 [ext_resource type="PackedScene" uid="uid://376pccgciomv" path="res://gui/quick_info.tscn" id="11_s1h2m"]
 [ext_resource type="PackedScene" uid="uid://qh5q0oumswup" path="res://gui/world_map.tscn" id="13_qv6l0"]
+[ext_resource type="PackedScene" uid="uid://ckp5bahw1tuvn" path="res://gui/selection_menu.tscn" id="15_ayqg5"]
 [ext_resource type="Material" uid="uid://dessed1x8jslv" path="res://materials/blur_material.tres" id="15_j4srl"]
 
 [node name="GUI" type="Control"]
@@ -150,6 +151,12 @@ grow_horizontal = 2
 theme_override_font_sizes/font_size = 16
 text = "00:00"
 
+[node name="SelectionMenu" parent="." instance=ExtResource("15_ayqg5")]
+visible = false
+layout_mode = 1
+offset_top = -105.0
+offset_bottom = 105.0
+
 [node name="QuickInfo" parent="." instance=ExtResource("11_s1h2m")]
 visible = false
 layout_mode = 1
@@ -247,8 +254,8 @@ one_shot = true
 [connection signal="pause_closed" from="PauseMenu" to="Blur" method="hide"]
 [connection signal="pause_opened" from="PauseMenu" to="LogPanel" method="hide"]
 [connection signal="pause_opened" from="PauseMenu" to="Blur" method="show"]
-[connection signal="settings_closed" from="SettingsMenu" to="PauseMenu" method="focus_settings"]
 [connection signal="settings_closed" from="SettingsMenu" to="PauseMenu" method="open_pause_menu"]
+[connection signal="settings_closed" from="SettingsMenu" to="PauseMenu" method="focus_settings"]
 [connection signal="settings_opened" from="SettingsMenu" to="LogPanel" method="hide"]
 [connection signal="settings_opened" from="SettingsMenu" to="Blur" method="show"]
 [connection signal="closed" from="QuestLog" to="UtilityMenu" method="focus_journal"]
@@ -271,6 +278,10 @@ one_shot = true
 [connection signal="map_button_pressed" from="UtilityMenu" to="WorldMap" method="open"]
 [connection signal="opened" from="UtilityMenu" to="CharInfo" method="disable_menu"]
 [connection signal="pause_button_pressed" from="UtilityMenu" to="PauseMenu" method="open_pause_menu"]
+[connection signal="closed" from="SelectionMenu" to="CharInfo" method="enable"]
+[connection signal="closed" from="SelectionMenu" to="UtilityMenu" method="enable"]
+[connection signal="opened" from="SelectionMenu" to="CharInfo" method="disable"]
+[connection signal="opened" from="SelectionMenu" to="UtilityMenu" method="disable"]
 [connection signal="draw" from="Blur" to="CharInfo" method="disable"]
 [connection signal="draw" from="Blur" to="UtilityMenu" method="disable"]
 [connection signal="hidden" from="Blur" to="CharInfo" method="enable"]

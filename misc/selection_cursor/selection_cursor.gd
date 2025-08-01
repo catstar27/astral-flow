@@ -28,7 +28,7 @@ func _ready() -> void:
 	EventBus.subscribe("COMBAT_STARTED", self, "check_quick_info")
 	EventBus.subscribe("ABILITY_BUTTON_PRESSED", self, "select_ability")
 	EventBus.subscribe("GAMEPLAY_SETTINGS_CHANGED", self, "update_color")
-	await get_tree().create_timer(1).timeout
+	EventBus.subscribe("SELECTION_CURSOR_ACTION", self, "do_action")
 	check_quick_info()
 
 ## Updates the color of the cursor and its markers
@@ -151,18 +151,37 @@ func move(dir: Vector2)->void:
 	move_stopped.emit()
 	check_quick_info()
 
+## Does something based on given string
+func do_action(action: String)->void:
+	match action:
+		"Interact":
+			selected_interact(position)
+		"Loot":
+			printerr("IMPLEMENT LOOT BUTTON")
+		"Sheet":
+			EventBus.broadcast("OPEN_CHARACTER_SHEET", hovering)
+			return
+		"Select":
+			select(hovering)
+		"Deselect":
+			deselect()
+		"Move":
+			selected.move(position)
+		"":
+			pass
+		_:
+			if action.left(8) == "Ability:":
+				selected.activate_ability(selected.selected_ability, position)
+				return
+	activate()
+
 ## Performs an action at given position based on current state
 func act_on_pos(pos: Vector2i)->void:
-	if hovering is Player && selected == null:
-		select(hovering)
-	elif selected == null:
-		return
-	elif selected.selected_ability != null:
+	if selected != null && selected.selected_ability != null:
 		selected.activate_ability(selected.selected_ability, pos)
-	elif hovering == null || hovering is GameMap:
-		selected.move(pos)
-	elif hovering is Interactive || (hovering is Character && hovering != selected):
-		await selected_interact(pos)
+	else:
+		deactivate()
+		EventBus.broadcast("SHOW_SELECTION_MENU", [hovering, selected])
 
 ## Makes the selected character interact with the target
 func selected_interact(pos: Vector2)->void:

@@ -103,6 +103,7 @@ var skill_points: int ## Characters unused points for learning skills
 var cur_ap: int ## Character's current action points
 var cur_mp: int ## Character's current health points
 var cur_hp: int ## Character's current magic points
+var alive: bool = true ## Whether the character is alive
 var dialogue_id: String = "" ## Current id of dialogue scene to play
 var cur_schedule_name: String = "" ## Current name of the schedule being executed
 var current_schedule_executed: bool = false ## Whether the current schedule has been finished at least once
@@ -202,6 +203,7 @@ func duplicate_export_abilities()->void:
 		var copy: Ability = ability.duplicate_ability()
 		copy.user = self
 		abilities.append(copy)
+		copy.setup()
 
 ## Calculates base stats based on star stats
 func calc_base_stats()->void:
@@ -469,6 +471,8 @@ func add_breakthrough(breakthrough: Breakthrough)->void:
 func select_ability(ability: Ability)->void:
 	while state_machine.current_state.state_id == "MOVE":
 		await state_machine.state_changed
+	if selected_ability != null:
+		deselect_ability()
 	selected_ability = ability
 	place_range_indicators(ability)
 	ability_selected.emit()
@@ -485,7 +489,9 @@ func add_ability(ability: Ability)->void:
 	ability = ability.duplicate_ability(true)
 	abilities.append(ability)
 	ability.user = self
+	stats_changed.connect(ability.setup)
 	abilities_changed.emit()
+	ability.setup()
 
 ## Places indicators showing range for a given ability
 func place_range_indicators(ability: Ability)->void:

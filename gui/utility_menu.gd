@@ -22,6 +22,7 @@ signal character_sheet_requested(character: Character) ## Emitted to open a char
 
 ## Disables focus and mouse detection
 func disable()->void:
+	disable_menu()
 	menu_button.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	%PartyDisplay.disable()
 	for button in info_container.get_children():
@@ -30,6 +31,7 @@ func disable()->void:
 
 ## Enables focus and mouse detection
 func enable()->void:
+	enable_menu()
 	menu_button.mouse_filter = Control.MOUSE_FILTER_STOP
 	%PartyDisplay.enable()
 	for button in info_container.get_children():
@@ -132,7 +134,8 @@ func focus_party()->void:
 
 ## Grabs focus on the party menu
 func focus_party_menu()->void:
-	%PartyDisplay.focus_first()
+	if %PartyDisplay.is_visible_in_tree():
+		%PartyDisplay.focus_first()
 
 ## Grabs focus on the journal button
 func focus_journal()->void:

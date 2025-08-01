@@ -34,6 +34,7 @@ func _unhandled_input(event: InputEvent) -> void:
 
 ## Disables focus and mouse detection
 func disable()->void:
+	disable_menu()
 	menu_button.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	end_turn_button.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	end_turn_button.focus_mode = Control.FOCUS_NONE
@@ -43,6 +44,7 @@ func disable()->void:
 
 ## Enables focus and mouse detection
 func enable()->void:
+	enable_menu()
 	menu_button.mouse_filter = Control.MOUSE_FILTER_STOP
 	end_turn_button.mouse_filter = Control.MOUSE_FILTER_STOP
 	end_turn_button.focus_mode = Control.FOCUS_ALL
@@ -68,7 +70,7 @@ func request_ability_info()->void:
 			if button.ability != null:
 				var text: String = button.ability.display_name
 				text += '\n'
-				text += button.ability.description
+				text += button.ability.ingame_description
 				var origin: Vector2 = button.position+Vector2.RIGHT*(button.size.x+4)
 				origin += info_container.position+ability_list.position
 				origin += Vector2.RIGHT*((button.size.x+2)*(2-(index%3)))

@@ -16,6 +16,9 @@ signal opened ## Emitted when the sheet is opened
 signal closed ## Emitted when the sheet is closed
 signal skill_tree_requested(character: Character) ## Emitted to request opening a skill tree for tracked character
 
+func _ready() -> void:
+	EventBus.subscribe("OPEN_CHARACTER_SHEET", self, "track_character")
+
 ## Tracks given character with this sheet
 func track_character(new_character: Character)->void:
 	character = new_character

@@ -8,8 +8,7 @@
 [resource]
 script = ExtResource("1_5qlae")
 display_name = "Strike"
-description = "Strike a target with a melee weapon or limb.
-Deals 2 damage."
+description = "Strike a target with a melee weapon or limb."
 icon = ExtResource("1_ve81p")
 sound = ExtResource("2_ve81p")
 ap_cost = 2
@@ -17,7 +16,8 @@ mp_cost = 0
 ability_range = 1
 target_type = 3
 activation_type = 0
-base_damage = 2
+animation_override = &""
+base_damage = 1
 ignore_defense = false
 damage_type = 0
 skill_used = 2

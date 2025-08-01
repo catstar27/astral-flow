@@ -3,7 +3,11 @@ extends Button
 class_name AbilityButton
 ## Button that holds an ability makes the user select it when pressed
 
-@export var ability: Ability ## Ability to be held
+@export var ability: Ability: ## Ability to be held
+	set(new_ability):
+		ability = new_ability
+		if ability != null:
+			icon = ability.icon
 
 ## Sets the button's ability and updates the text
 func set_ability(new_ability: Ability)->void:

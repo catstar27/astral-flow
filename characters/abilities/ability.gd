@@ -54,18 +54,22 @@ var user: Character = null ## Character using the ability
 @export var damage_type: damage_type_options = damage_type_options.blunt ## The type of damage this deals, for resistances
 @export var skill_used: skill_used_options = skill_used_options.strength ## The user skill this checks, for accuracy and damage modifier
 @export var statuses: Dictionary[Status, status_effect_conditions] ## List of statuses paired with the conditions for them to be applied
+var ingame_description: String = "" ## Description as it appears in game
 signal activated ## Sent when the ability is activated
 #endregion
 
 #region Setup
 func setup() -> void:
-	description += "\nAP Cost: "+str(ap_cost)+"\nMP Cost: "+str(mp_cost)+"\nRange: "
+	ingame_description = description+"\n"
+	if base_damage > 0:
+		ingame_description += str(await get_damage())+" Damage\n"
+	ingame_description += "AP Cost: "+str(ap_cost)+"\nMP Cost: "+str(mp_cost)+"\nRange: "
 	if target_type == target_type_options.user:
-		description += "Self"
+		ingame_description += "Self"
 	elif ability_range == 1:
-		description += "Melee"
+		ingame_description += "Melee"
 	else:
-		description += str(ability_range)+" Tiles"
+		ingame_description += str(ability_range)+" Tiles"
 
 ## Special version of duplicate for abilities
 func duplicate_ability(subresources: bool = false)->Ability:
@@ -154,15 +158,11 @@ func get_targeting_color()->Color:
 ## Deals damage to a target if accuracy is good enough
 func deal_damage(target: Node2D)->void:
 	if target != null:
-		@warning_ignore("integer_division")
-		var total_damage: int = base_damage+(user.star_stats[skill_used_options.keys()[skill_used]]/2)
-		@warning_ignore("integer_division")
-		total_damage += (user.star_stat_mods[skill_used_options.keys()[skill_used]]/2)
 		if target is Character:
 			var accuracy: int = randi_range(1, 20) + user.star_stats[skill_used_options.keys()[skill_used]]
 			accuracy += user.star_stat_mods[skill_used_options.keys()[skill_used]]
 			if accuracy >= (target.base_stats.avoidance+target.stat_mods.avoidance):
-				target.call_deferred("damage", user, total_damage, damage_type, ignore_defense)
+				target.call_deferred("damage", user, await get_damage(), damage_type, ignore_defense)
 				for status in statuses:
 					if statuses[status] == status_effect_conditions.on_hit:
 						inflict_status(target, status)
@@ -170,7 +170,20 @@ func deal_damage(target: Node2D)->void:
 				var text_ind_pos: Vector2 = target.text_indicator_shift+target.global_position
 				EventBus.broadcast("MAKE_TEXT_INDICATOR", ["Miss!", text_ind_pos])
 		elif target.has_method("damage"):
-			target.call_deferred("damage", user, total_damage, damage_type)
+			target.call_deferred("damage", user, await get_damage(), damage_type)
+
+## Gets damage of this ability
+func get_damage()->int:
+	if user == null:
+		return 0
+	while !user.is_node_ready():
+		await user.ready
+	var star_stat_mod: int = user.star_stats[skill_used_options.keys()[skill_used]]
+	star_stat_mod += user.star_stat_mods[skill_used_options.keys()[skill_used]]
+	star_stat_mod -= 10
+	@warning_ignore("integer_division")
+	star_stat_mod /= 2
+	return base_damage+star_stat_mod
 
 ## Inflicts a status on a target
 func inflict_status(target: Node2D, status: Status)->void:
@@ -236,8 +249,4 @@ func play_sound()->void:
 		EventBus.broadcast("PLAY_SOUND", [sound, "positional", user.global_position])
 	else:
 		printerr("Empty Sound for Ability: "+display_name)
-#endregion
-
-#region Status Functions
-
 #endregion

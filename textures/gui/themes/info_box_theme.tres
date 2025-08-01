@@ -1,8 +1,15 @@
-[gd_resource type="Theme" load_steps=2 format=3 uid="uid://dehvu01nlqvsf"]
+[gd_resource type="Theme" load_steps=5 format=3 uid="uid://dehvu01nlqvsf"]
 
+[ext_resource type="StyleBox" uid="uid://mys4u51agdxw" path="res://textures/gui/themes/dialogue_stylebox_disabled.tres" id="1_tw8my"]
 [ext_resource type="StyleBox" uid="uid://0ufgxeweprdh" path="res://textures/gui/themes/info_box.tres" id="1_wooaw"]
+[ext_resource type="StyleBox" uid="uid://di4v6tnd6kmf3" path="res://textures/gui/themes/dialogue_stylebox_light.tres" id="1_x5err"]
+[ext_resource type="StyleBox" uid="uid://cds0eavj8u3ht" path="res://textures/gui/themes/dialogue_stylebox_base.tres" id="2_tw8my"]
 
 [resource]
-Button/styles/normal = null
+Button/styles/disabled = ExtResource("1_tw8my")
+Button/styles/focus = ExtResource("1_x5err")
+Button/styles/hover = ExtResource("1_x5err")
+Button/styles/normal = ExtResource("2_tw8my")
+Button/styles/pressed = null
 Panel/styles/panel = ExtResource("1_wooaw")
 PanelContainer/styles/panel = ExtResource("1_wooaw")

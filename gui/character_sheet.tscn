@@ -61,7 +61,7 @@ device = -1
 button_index = 4
 pressed = true
 
-[sub_resource type="Shortcut" id="Shortcut_x2dtq"]
+[sub_resource type="Shortcut" id="Shortcut_j877r"]
 events = [SubResource("InputEventKey_j877r"), SubResource("InputEventJoypadButton_bqx8u")]
 
 [sub_resource type="InputEventKey" id="InputEventKey_olbgs"]
@@ -73,7 +73,7 @@ device = -1
 button_index = 1
 pressed = true
 
-[sub_resource type="Shortcut" id="Shortcut_clq0d"]
+[sub_resource type="Shortcut" id="Shortcut_bqx8u"]
 events = [SubResource("InputEventKey_olbgs"), SubResource("InputEventJoypadButton_e03yn")]
 
 [node name="CharacterSheet" type="Control" node_paths=PackedStringArray("name_labels", "portrait_displays", "pronoun_labels")]
@@ -432,13 +432,13 @@ alignment = 1
 
 [node name="SkillTreeButton" parent="ContainerContainer/HBoxContainer" instance=ExtResource("4_iutca")]
 layout_mode = 2
-shortcut = SubResource("Shortcut_x2dtq")
+shortcut = SubResource("Shortcut_j877r")
 text = "Skill Tree"
 input_action_name = "info"
 
 [node name="BackButton" parent="ContainerContainer/HBoxContainer" instance=ExtResource("4_iutca")]
 layout_mode = 2
-shortcut = SubResource("Shortcut_clq0d")
+shortcut = SubResource("Shortcut_bqx8u")
 text = "Back"
 input_action_name = "menu_back"
 
