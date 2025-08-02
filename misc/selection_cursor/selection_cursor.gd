@@ -29,6 +29,8 @@ func _ready() -> void:
 	EventBus.subscribe("ABILITY_BUTTON_PRESSED", self, "select_ability")
 	EventBus.subscribe("GAMEPLAY_SETTINGS_CHANGED", self, "update_color")
 	EventBus.subscribe("SELECTION_CURSOR_ACTION", self, "do_action")
+	EventBus.subscribe("CUTSCENE_STARTED", self, "deactivate")
+	EventBus.subscribe("CUTSCENE_ENDED", self, "activate")
 	check_quick_info()
 
 ## Updates the color of the cursor and its markers
@@ -67,7 +69,7 @@ func _physics_process(_delta: float) -> void:
 #region Movement Arrow
 ## Makes a path of arrow pieces to display the projected path of movement
 func update_move_arrows(character: Character)->void:
-	if character == null || character.selected_ability != null:
+	if character == null || character.selected_ability != null || deactivate_requests > 0:
 		clear_move_arrows()
 		return
 	if NavMaster.is_pos_occupied(position) && position.distance_to(character.position) <= NavMaster.tile_size:

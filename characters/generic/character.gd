@@ -160,6 +160,7 @@ signal combat_entered ## Emitted when the character enters combat
 signal combat_exited ## Emitted when the character exits combat
 signal ability_selected ## Emitted when the character selects an ability
 signal ability_deselected ## Emitted when the character deselects their ability
+signal cutscene_event_processed(source: Character) ## Emitted when the character finished processing a cutscene event
 signal saved(node: Character) ## Emitted when the character saves data
 signal loaded(node: Character) ## Emitted when the character loads data
 #endregion
@@ -594,6 +595,24 @@ func try_combat(character: Character)->void:
 #endregion
 
 #region Misc
+## Carries out a CharacterCutsceneEvent
+func process_cutscene_event(event: CharacterCutsceneEvent, interact_target: Node2D = null)->void:
+	match event.type:
+		event.event_type.MOVE:
+			move(event.pos)
+		event.event_type.INTERACT:
+			interact(interact_target)
+		event.event_type.ABILITY:
+			for ability in abilities:
+				if ability.display_name == event.ability.display_name:
+					activate_ability(ability, event.pos)
+					break
+		event.event_type.ACTIVATE:
+			activate(event.pos)
+	while state_machine.current_state.state_id != "IDLE":
+		await state_machine.state_changed
+	cutscene_event_processed.emit(self)
+
 ## Called when interacted with
 func _interacted(interactor: Character)->void:
 	if interactor is Player:
@@ -653,7 +672,7 @@ func on_damaged(_source: Node)->void:
 #region Saving and Loading
 ## Executes before making the save dict
 func pre_save()->void:
-	if schedules.size() > 0:
+	if schedules.size() > 0 && cur_schedule_name != "":
 		current_schedule_executed = schedules[cur_schedule_name].schedule_executed
 		current_schedule_looping = schedules[cur_schedule_name].loop_schedule
 		current_schedule_task_index = schedules[cur_schedule_name].task_index
@@ -671,7 +690,7 @@ func pre_load()->void:
 ## Executes after loading data
 func post_load()->void:
 	position = NavMaster.map.map_to_local(NavMaster.map.local_to_map(position))
-	if schedules.size() > 0:
+	if schedules.size() > 0 && cur_schedule_name != "":
 		schedules[cur_schedule_name].schedule_executed = current_schedule_executed
 		schedules[cur_schedule_name].loop_schedule = current_schedule_looping
 		schedules[cur_schedule_name].task_index = current_schedule_task_index

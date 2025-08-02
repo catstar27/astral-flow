@@ -11,18 +11,23 @@ class_name GameMap
 @export var battle_theme: AudioStreamWAV ## Theme to play in combat
 @export var map_name: String ## Display name of map
 @export_group("Cutscenes")
-@export var cutscene_dict: Dictionary[String, CharacterSchedule]
+@export var cutscenes: Dictionary[String, Cutscene] ## Dictionary of cutscenes and their names
+@export var entry_cutscene_name: String ## Cutscene to play when the map is entered the first time
 @onready var astar: AStarGrid2D ## Astar pathfinding grid
 @onready var light_modulator: CanvasModulate = %LightingModulate ## Modulator for lighting
 var modified_tiles: Dictionary[String, Array] ## Dictionary with terrain/position array pairs for updating tilemap
 var loading: bool = false ## Whether the map is loading
 var occupied_tiles: Dictionary[Vector2i, Node2D] ## Tiles being occupied by an interactive or character
 var last_player_pos: Dictionary[String, Vector2] ## Last saved position of player on this map
+var entry_cutscene_played: bool = false ## Whether the entry cutscene has played
+var cutscene_event_count: int = 0 ## Number of cutscene events being processed
 var to_save: Array[StringName] = [ ## Map variables to save
 	"player_start_pos",
 	"last_player_pos",
 	"modified_tiles",
+	"entry_cutscene_played",
 ]
+signal cutscene_event_count_lowered ## Emitted when a character finishes a cutscene event
 signal map_saved ## Emitted when the entire map is saved
 signal map_loaded ## Emitted when the entire map is loaded
 signal saved(node: GameMap) ## Emitted when the map's variables are saved
@@ -34,6 +39,7 @@ func _ready()->void:
 	EventBus.subscribe("TILE_UNOCCUPIED", self, "set_pos_unoccupied")
 	EventBus.subscribe("COMBAT_STARTED", self, "start_combat")
 	EventBus.subscribe("COMBAT_ENDED", self, "end_combat")
+	EventBus.subscribe("MAP_ENTERED", self, "play_entry_cutscene")
 	Dialogic.signal_event.connect(process_dialogue_signal)
 	_astar_setup()
 
@@ -177,6 +183,51 @@ func is_in_bounds(pos: Vector2)->bool:
 	if get_cell_tile_data(tile) == null:
 		return false
 	return true
+#endregion
+
+#region Cutscenes
+## Plays the entry cutscene
+func play_entry_cutscene(_map: String = "")->void:
+	if !entry_cutscene_played:
+		play_cutscene(entry_cutscene_name)
+
+## Plays the cutscene with the given name
+func play_cutscene(cutscene_name: String)->void:
+	if cutscene_name not in cutscenes:
+		return
+	EventBus.broadcast("CUTSCENE_STARTED", "NULLDATA")
+	var cutscene: Cutscene = cutscenes[cutscene_name]
+	for stage in cutscene.cutscene_stages:
+		for event in stage.cutscene_events:
+			if event is CursorCutsceneEvent:
+				find_child("SelectionCursor").position = event.position
+			elif event is CharacterCutsceneEvent:
+				var target: Character = find_child(event.target_name, true, false)
+				if target == null:
+					printerr("Missing Cutscene Target '"+event.target_name+"'")
+					continue
+				target.cutscene_event_processed.connect(cutscene_event_count_decrease)
+				cutscene_event_count += 1
+				target.process_cutscene_event(event)
+			elif event is WaitCutsceneEvent:
+				cutscene_event_count += 1
+				await get_tree().create_timer(event.time).timeout
+				cutscene_event_count_decrease(null)
+			elif event is DialogueCutsceneEvent:
+				cutscene_event_count += 1
+				EventBus.broadcast("ENTER_DIALOGUE", [event.dialogue, event.pause_music])
+				await Dialogic.timeline_ended
+				cutscene_event_count_decrease(null)
+		while cutscene_event_count != 0:
+			await cutscene_event_count_lowered
+	EventBus.broadcast("CUTSCENE_ENDED", "NULLDATA")
+
+## Decrements cutscene_event_count
+func cutscene_event_count_decrease(source: Character)->void:
+	cutscene_event_count -= 1
+	if source != null:
+		source.cutscene_event_processed.disconnect(cutscene_event_count_decrease)
+	cutscene_event_count_lowered.emit()
 #endregion
 
 #region Tile Manipulation

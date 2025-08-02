@@ -52,15 +52,18 @@ directories/dtl_directory={
 "tutorial_grapes": "res://dialogue/tutorial/tutorial_grapes.dtl",
 "tutorial_help_sign": "res://dialogue/tutorial/tutorial_help_sign.dtl",
 "tutorial_run_sign": "res://dialogue/tutorial/tutorial_run_sign.dtl",
+"tutorial_spawn": "res://dialogue/tutorial/tutorial_spawn.dtl",
 "tutorial_sun": "res://dialogue/tutorial/tutorial_sun.dtl",
 "tutorial_void_god": "res://dialogue/tutorial/tutorial_void_god.dtl",
 "tutorial_void_god_forgives": "res://dialogue/tutorial/tutorial_void_god_forgives.dtl",
+"tutorial_void_god_intro": "res://dialogue/tutorial/tutorial_void_god_intro.dtl",
 "tutorial_void_god_revived": "res://dialogue/tutorial/tutorial_void_god_revived.dtl"
 }
 glossary/default_case_sensitive=true
 variables={
 "learned_zap": false,
 "random": 0,
+"temp": 0,
 "tutorial_npc_revived": 0,
 "tutorial_puzzle_index": 0,
 "void_god_name": "???"
@@ -92,6 +95,7 @@ audio/type_sound_bus="Dialogue"
 timer/process_in_physics=false
 portraits/default_portrait=""
 portraits/position_suggestion_names="left_l, left_m, left_r, mid_l, mid_r, right_l, right_m, right_r"
+history/visited_event_history_enabled=true
 
 [display]
 

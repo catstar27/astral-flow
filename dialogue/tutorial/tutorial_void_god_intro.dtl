@@ -1,0 +1,20 @@
+join kalin left_r [animation="Instant In" length="0.0"]
+join void_god right_l [animation="Slide In Down" mirrored="true"]
+void_god: Hi! Decided I'd pop in!
+label choice1
+if {temp} == 2.0:
+	jump choice_end
+- Who are you? | [if {temp} < 2.0] [only_once="true"]
+	void_god: A friend, of the helping variety. A powerful one, at that!
+	void_god: Ah, but you want a name, don't you?
+	void_god: Don't worry, I'll tell you! But only once you've earned it!
+	set {temp} += 1.0
+	jump choice1
+- Where am I? | [if {temp} < 2.0] [only_once="true"]
+	void_god: Your own mind! This is, in fact, a dream... sort of.
+	set {temp} += 1.0
+	jump choice1
+label choice_end
+void_god: You seem to be in a bit of a... sorry state.
+void_god: I'll leave you to get your bearings, but if you want to get out of here, just talk to me!
+[end_timeline]

@@ -94,6 +94,7 @@ func enter_dialogue(info: Array)->void:
 func exit_dialogue()->void:
 	in_dialogue = false
 	unpause()
+	Dialogic.VAR.set_variable("temp", 0)
 	Dialogic.process_mode = Node.PROCESS_MODE_PAUSABLE
 	current_timeline.process_mode = Node.PROCESS_MODE_PAUSABLE
 	current_timeline = null

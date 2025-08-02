@@ -1,12 +1,12 @@
 [gd_scene load_steps=12 format=3 uid="uid://cn0wvw1606gxm"]
 
 [ext_resource type="Script" uid="uid://dtsm1734x1k7e" path="res://addons/dialogic/Modules/DefaultLayoutParts/Layer_VN_Choices/vn_choice_layer.gd" id="1_kurgw"]
-[ext_resource type="Script" uid="uid://de42lvmr450xr" path="res://addons/dialogic/Modules/Choice/node_choice_button.gd" id="1_w632k"]
 [ext_resource type="Script" uid="uid://dta3bi67pnjj5" path="res://addons/dialogic/Modules/Choice/node_button_sound.gd" id="2_mgko6"]
 [ext_resource type="Theme" uid="uid://dehvu01nlqvsf" path="res://textures/gui/themes/info_box_theme.tres" id="2_xyas1"]
 [ext_resource type="StyleBox" uid="uid://cds0eavj8u3ht" path="res://textures/gui/themes/dialogue_stylebox_base.tres" id="3_h8y27"]
 [ext_resource type="AudioStream" uid="uid://b6c1p14bc20p1" path="res://addons/dialogic/ExampleAssets/sound-effects/typing1.wav" id="3_mql8i"]
 [ext_resource type="AudioStream" uid="uid://c2viukvbub6v6" path="res://addons/dialogic/ExampleAssets/sound-effects/typing4.wav" id="4_420fr"]
+[ext_resource type="Script" uid="uid://bnijencbjq07c" path="res://dialogue/assets/layers/AstralChoices/choice_button.gd" id="4_h8y27"]
 
 [sub_resource type="Animation" id="Animation_0nsvo"]
 length = 0.001
@@ -187,14 +187,14 @@ size_flags_horizontal = 9
 theme_override_font_sizes/font_size = 18
 theme_override_styles/normal = ExtResource("3_h8y27")
 text = "Some text"
-script = ExtResource("1_w632k")
+script = ExtResource("4_h8y27")
 
 [node name="DialogicNode_ChoiceButton2" type="Button" parent="AnimationRoot/PanelContainer/ScrollContainer/VBoxContainer/HBoxContainer/Choices"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 18
 theme_override_styles/normal = ExtResource("3_h8y27")
 text = "Some text"
-script = ExtResource("1_w632k")
+script = ExtResource("4_h8y27")
 
 [node name="DialogicNode_ChoiceButton3" type="Button" parent="AnimationRoot/PanelContainer/ScrollContainer/VBoxContainer/HBoxContainer/Choices"]
 layout_mode = 2
@@ -202,14 +202,14 @@ size_flags_horizontal = 9
 theme_override_font_sizes/font_size = 18
 theme_override_styles/normal = ExtResource("3_h8y27")
 text = "Some text"
-script = ExtResource("1_w632k")
+script = ExtResource("4_h8y27")
 
 [node name="DialogicNode_ChoiceButton4" type="Button" parent="AnimationRoot/PanelContainer/ScrollContainer/VBoxContainer/HBoxContainer/Choices"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 18
 theme_override_styles/normal = ExtResource("3_h8y27")
 text = "Some text"
-script = ExtResource("1_w632k")
+script = ExtResource("4_h8y27")
 
 [node name="DialogicNode_ChoiceButton5" type="Button" parent="AnimationRoot/PanelContainer/ScrollContainer/VBoxContainer/HBoxContainer/Choices"]
 layout_mode = 2
@@ -217,14 +217,14 @@ size_flags_horizontal = 9
 theme_override_font_sizes/font_size = 18
 theme_override_styles/normal = ExtResource("3_h8y27")
 text = "Some text"
-script = ExtResource("1_w632k")
+script = ExtResource("4_h8y27")
 
 [node name="DialogicNode_ChoiceButton6" type="Button" parent="AnimationRoot/PanelContainer/ScrollContainer/VBoxContainer/HBoxContainer/Choices"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 18
 theme_override_styles/normal = ExtResource("3_h8y27")
 text = "Some text"
-script = ExtResource("1_w632k")
+script = ExtResource("4_h8y27")
 
 [node name="DialogicNode_ChoiceButton7" type="Button" parent="AnimationRoot/PanelContainer/ScrollContainer/VBoxContainer/HBoxContainer/Choices"]
 layout_mode = 2
@@ -232,14 +232,14 @@ size_flags_horizontal = 9
 theme_override_font_sizes/font_size = 18
 theme_override_styles/normal = ExtResource("3_h8y27")
 text = "Some text"
-script = ExtResource("1_w632k")
+script = ExtResource("4_h8y27")
 
 [node name="DialogicNode_ChoiceButton8" type="Button" parent="AnimationRoot/PanelContainer/ScrollContainer/VBoxContainer/HBoxContainer/Choices"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 18
 theme_override_styles/normal = ExtResource("3_h8y27")
 text = "Some text"
-script = ExtResource("1_w632k")
+script = ExtResource("4_h8y27")
 
 [node name="DialogicNode_ChoiceButton9" type="Button" parent="AnimationRoot/PanelContainer/ScrollContainer/VBoxContainer/HBoxContainer/Choices"]
 layout_mode = 2
@@ -247,14 +247,14 @@ size_flags_horizontal = 9
 theme_override_font_sizes/font_size = 18
 theme_override_styles/normal = ExtResource("3_h8y27")
 text = "Some text"
-script = ExtResource("1_w632k")
+script = ExtResource("4_h8y27")
 
 [node name="DialogicNode_ChoiceButton10" type="Button" parent="AnimationRoot/PanelContainer/ScrollContainer/VBoxContainer/HBoxContainer/Choices"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 18
 theme_override_styles/normal = ExtResource("3_h8y27")
 text = "Some text"
-script = ExtResource("1_w632k")
+script = ExtResource("4_h8y27")
 
 [node name="DialogicNode_ChoiceButton11" type="Button" parent="AnimationRoot/PanelContainer/ScrollContainer/VBoxContainer/HBoxContainer/Choices"]
 layout_mode = 2
@@ -262,14 +262,14 @@ size_flags_horizontal = 9
 theme_override_font_sizes/font_size = 18
 theme_override_styles/normal = ExtResource("3_h8y27")
 text = "Some text"
-script = ExtResource("1_w632k")
+script = ExtResource("4_h8y27")
 
 [node name="DialogicNode_ChoiceButton12" type="Button" parent="AnimationRoot/PanelContainer/ScrollContainer/VBoxContainer/HBoxContainer/Choices"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 18
 theme_override_styles/normal = ExtResource("3_h8y27")
 text = "Some text"
-script = ExtResource("1_w632k")
+script = ExtResource("4_h8y27")
 
 [node name="DialogicNode_ButtonSound" type="AudioStreamPlayer" parent="AnimationRoot/PanelContainer/ScrollContainer/VBoxContainer/HBoxContainer/Choices"]
 unique_name_in_owner = true

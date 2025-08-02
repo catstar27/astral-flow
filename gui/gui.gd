@@ -14,12 +14,16 @@ class_name GUI
 @onready var info_box: InfoBox = %InfoBox ## Box containing context-sensitive info
 var sequence_display_visible: bool = false ## Whether the sequence display is visible
 var info_box_requester: Control ## Node that is currently displaying the info box
+signal cutscene_started ## Emitted when a cutscene starts
+signal cutscene_ended ## Emitted when a cutscene ends
 
 func _ready()->void:
 	EventBus.subscribe("ENTER_DIALOGUE", self, "enter_dialogue")
 	EventBus.subscribe("PRINT_LOG", self, "print_log")
 	EventBus.subscribe("SELECTION_CHANGED", self, "set_char_info")
 	EventBus.subscribe("TIME_CHANGED", self, "set_time_label")
+	EventBus.subscribe("CUTSCENE_STARTED", self, "start_cutscene")
+	EventBus.subscribe("CUTSCENE_ENDED", self, "end_cutscene")
 	log_timer.timeout.connect(game_log.get_parent().hide)
 	for child in get_children():
 		if child.has_signal("info_box_requested"):
@@ -67,3 +71,11 @@ func set_time_label(time: Array)->void:
 ## Hides certain elements when dialogue starts
 func enter_dialogue(_info: Array)->void:
 	game_log.get_parent().hide()
+
+## Disables gui elements that should not function in a cutscene
+func start_cutscene()->void:
+	cutscene_started.emit()
+
+## Enables disabled gui elements that should not function in a cutscene
+func end_cutscene()->void:
+	cutscene_ended.emit()

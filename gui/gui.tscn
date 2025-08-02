@@ -229,6 +229,15 @@ process_mode = 1
 wait_time = 3.0
 one_shot = true
 
+[connection signal="cutscene_ended" from="." to="CharInfo" method="show"]
+[connection signal="cutscene_ended" from="." to="UtilityMenu" method="show"]
+[connection signal="cutscene_ended" from="." to="QuestTracker" method="show_if_tracking"]
+[connection signal="cutscene_ended" from="." to="TimeLabel" method="show"]
+[connection signal="cutscene_started" from="." to="CharInfo" method="hide"]
+[connection signal="cutscene_started" from="." to="UtilityMenu" method="hide"]
+[connection signal="cutscene_started" from="." to="QuestTracker" method="hide"]
+[connection signal="cutscene_started" from="." to="TimeLabel" method="hide"]
+[connection signal="cutscene_started" from="." to="LogPanel" method="hide"]
 [connection signal="closed" from="SkillMenu" to="CharacterSheet" method="show"]
 [connection signal="opened" from="SkillMenu" to="CharacterSheet" method="hide"]
 [connection signal="closed" from="CharacterSheet" to="UtilityMenu" method="focus_party_menu"]

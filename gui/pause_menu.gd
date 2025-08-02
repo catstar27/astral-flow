@@ -14,9 +14,11 @@ signal pause_closed ## Emitted when the pause menu is closed
 func _ready() -> void:
 	EventBus.subscribe("START_COMBAT", self, "started_combat")
 	EventBus.subscribe("COMBAT_ENDED", self, "ended_combat")
+	EventBus.subscribe("CUTSCENE_STARTED", self, "started_combat")
+	EventBus.subscribe("CUTSCENE_ENDED", self, "ended_combat")
 
 ## Disables save button when combat starts
-func started_combat(_data: Array[Character])->void:
+func started_combat(_data: Array[Character] = [])->void:
 	save_button.disabled = true
 
 ## Allows saving when combat is over

@@ -1,4 +1,4 @@
-[gd_scene load_steps=65 format=4 uid="uid://qw4hbk40dyvm"]
+[gd_scene load_steps=89 format=4 uid="uid://qw4hbk40dyvm"]
 
 [ext_resource type="TileSet" uid="uid://dpajsxeb15k7l" path="res://maps/tilesets/dungeon.tres" id="1_bnvg4"]
 [ext_resource type="Script" uid="uid://b8kw4ghpy3r8t" path="res://maps/game_map.gd" id="2_rvbrh"]
@@ -6,12 +6,20 @@
 [ext_resource type="Resource" uid="uid://c0qpu0p6pyf07" path="res://dialogue/tutorial/tutorial_help_sign.dtl" id="4_6q77p"]
 [ext_resource type="PackedScene" uid="uid://iwh84j268tml" path="res://maps/interactives/generic/interactive.tscn" id="4_72sth"]
 [ext_resource type="AudioStream" uid="uid://duak0a258sghg" path="res://music/bounce_back.wav" id="4_5082e"]
+[ext_resource type="Script" uid="uid://dt6u4tcd5yhc4" path="res://maps/cutscenes/cutscene.gd" id="5_at7tr"]
 [ext_resource type="Texture2D" uid="uid://b6wcqn56dvd5y" path="res://textures/interactive/sign.tres" id="6_a5lo2"]
 [ext_resource type="Resource" uid="uid://hh2pu7qnxwmr" path="res://dialogue/tutorial/tutorial_sun.dtl" id="6_lwn61"]
+[ext_resource type="Script" uid="uid://mgxtbbq8hp8o" path="res://maps/cutscenes/cutscene_stage.gd" id="6_q1fwp"]
+[ext_resource type="Script" uid="uid://cohdm26du3ln6" path="res://maps/cutscenes/cutscene_event.gd" id="7_6rbxq"]
 [ext_resource type="Resource" uid="uid://bcxwb2tooui81" path="res://dialogue/tutorial/tutorial_couch.dtl" id="8_elwwl"]
+[ext_resource type="Resource" uid="uid://bg2sdq1sfneww" path="res://dialogue/tutorial/tutorial_spawn.dtl" id="8_gr56y"]
+[ext_resource type="Script" uid="uid://cqrd3olk4kwbm" path="res://maps/cutscenes/character_cutscene_event.gd" id="8_q1fwp"]
+[ext_resource type="Script" uid="uid://s7hks512xqih" path="res://maps/cutscenes/wait_cutscene_event.gd" id="9_6rbxq"]
+[ext_resource type="Script" uid="uid://6kpiqm4ci2ii" path="res://maps/cutscenes/dialogue_cutscene_event.gd" id="9_74x4m"]
 [ext_resource type="Texture2D" uid="uid://be0foyybi4008" path="res://textures/interactive/sun.png" id="9_r82r0"]
 [ext_resource type="Resource" uid="uid://dt5ji5p7n6aqh" path="res://dialogue/tutorial/tutorial_dog.dtl" id="10_u1hjs"]
 [ext_resource type="Texture2D" uid="uid://dp8dy1cpk5km0" path="res://textures/interactive/couch.png" id="11_jrvla"]
+[ext_resource type="Resource" uid="uid://hl31j5ci5vm0" path="res://dialogue/tutorial/tutorial_void_god_intro.dtl" id="12_74x4m"]
 [ext_resource type="PackedScene" uid="uid://8hplcp22i5re" path="res://maps/interactives/lights/wall_light.tscn" id="12_kvvyy"]
 [ext_resource type="Resource" uid="uid://dqb1tww6se515" path="res://dialogue/tutorial/tutorial_grapes.dtl" id="12_shqtc"]
 [ext_resource type="Texture2D" uid="uid://b1i0lroq0snm0" path="res://textures/interactive/couch_n.png" id="12_v6peg"]
@@ -49,6 +57,100 @@
 [ext_resource type="Script" uid="uid://cvn861203hxla" path="res://characters/tasks/task_types/wait.gd" id="46_hbbc7"]
 [ext_resource type="Script" uid="uid://dkbyrhd2t1qnd" path="res://characters/tasks/task_types/interact.gd" id="47_at7tr"]
 [ext_resource type="Resource" uid="uid://cqchaqbhpu0cq" path="res://characters/statuses/void_god's_wrath.tres" id="49_ms4id"]
+
+[sub_resource type="Resource" id="Resource_4bg0g"]
+script = ExtResource("9_74x4m")
+dialogue = ExtResource("8_gr56y")
+pause_music = false
+metadata/_custom_type_script = "uid://6kpiqm4ci2ii"
+
+[sub_resource type="Resource" id="Resource_o6abv"]
+script = ExtResource("6_q1fwp")
+cutscene_events = Array[ExtResource("7_6rbxq")]([SubResource("Resource_4bg0g")])
+metadata/_custom_type_script = "uid://mgxtbbq8hp8o"
+
+[sub_resource type="Resource" id="Resource_bjse5"]
+script = ExtResource("8_q1fwp")
+target_name = "Kalin"
+type = 0
+pos = Vector2(-96, 32)
+interact_target = ""
+metadata/_custom_type_script = "uid://cqrd3olk4kwbm"
+
+[sub_resource type="Resource" id="Resource_8450v"]
+script = ExtResource("9_6rbxq")
+time = 2.0
+metadata/_custom_type_script = "uid://s7hks512xqih"
+
+[sub_resource type="Resource" id="Resource_usrvd"]
+script = ExtResource("6_q1fwp")
+cutscene_events = Array[ExtResource("7_6rbxq")]([SubResource("Resource_bjse5"), SubResource("Resource_8450v")])
+metadata/_custom_type_script = "uid://mgxtbbq8hp8o"
+
+[sub_resource type="Resource" id="Resource_mrd8t"]
+script = ExtResource("8_q1fwp")
+target_name = "Kalin"
+type = 0
+pos = Vector2(160, 32)
+interact_target = ""
+metadata/_custom_type_script = "uid://cqrd3olk4kwbm"
+
+[sub_resource type="Resource" id="Resource_8j0st"]
+script = ExtResource("9_6rbxq")
+time = 2.0
+metadata/_custom_type_script = "uid://s7hks512xqih"
+
+[sub_resource type="Resource" id="Resource_vy407"]
+script = ExtResource("6_q1fwp")
+cutscene_events = Array[ExtResource("7_6rbxq")]([SubResource("Resource_mrd8t"), SubResource("Resource_8j0st")])
+metadata/_custom_type_script = "uid://mgxtbbq8hp8o"
+
+[sub_resource type="Resource" id="Resource_h6ygv"]
+script = ExtResource("8_q1fwp")
+target_name = "VoidGod"
+type = 3
+pos = Vector2(96, 32)
+interact_target = ""
+metadata/_custom_type_script = "uid://cqrd3olk4kwbm"
+
+[sub_resource type="Resource" id="Resource_41twl"]
+script = ExtResource("9_6rbxq")
+time = 0.5
+metadata/_custom_type_script = "uid://s7hks512xqih"
+
+[sub_resource type="Resource" id="Resource_jcs36"]
+script = ExtResource("6_q1fwp")
+cutscene_events = Array[ExtResource("7_6rbxq")]([SubResource("Resource_h6ygv"), SubResource("Resource_41twl")])
+metadata/_custom_type_script = "uid://mgxtbbq8hp8o"
+
+[sub_resource type="Resource" id="Resource_8erse"]
+script = ExtResource("9_74x4m")
+dialogue = ExtResource("12_74x4m")
+pause_music = true
+metadata/_custom_type_script = "uid://6kpiqm4ci2ii"
+
+[sub_resource type="Resource" id="Resource_o8stu"]
+script = ExtResource("6_q1fwp")
+cutscene_events = Array[ExtResource("7_6rbxq")]([SubResource("Resource_8erse")])
+metadata/_custom_type_script = "uid://mgxtbbq8hp8o"
+
+[sub_resource type="Resource" id="Resource_u7mxl"]
+script = ExtResource("8_q1fwp")
+target_name = "VoidGod"
+type = 0
+pos = Vector2(-224, 32)
+interact_target = ""
+metadata/_custom_type_script = "uid://cqrd3olk4kwbm"
+
+[sub_resource type="Resource" id="Resource_x0yj4"]
+script = ExtResource("6_q1fwp")
+cutscene_events = Array[ExtResource("7_6rbxq")]([SubResource("Resource_u7mxl")])
+metadata/_custom_type_script = "uid://mgxtbbq8hp8o"
+
+[sub_resource type="Resource" id="Resource_wkol0"]
+script = ExtResource("5_at7tr")
+cutscene_stages = Array[ExtResource("6_q1fwp")]([SubResource("Resource_o6abv"), SubResource("Resource_usrvd"), SubResource("Resource_vy407"), SubResource("Resource_jcs36"), SubResource("Resource_o8stu"), SubResource("Resource_x0yj4")])
+metadata/_custom_type_script = "uid://dt6u4tcd5yhc4"
 
 [sub_resource type="CanvasTexture" id="CanvasTexture_7i0lg"]
 diffuse_texture = ExtResource("9_r82r0")
@@ -163,6 +265,10 @@ script = ExtResource("2_rvbrh")
 calm_theme = ExtResource("3_j2ofq")
 battle_theme = ExtResource("4_5082e")
 map_name = "Tutorial"
+cutscenes = Dictionary[String, ExtResource("5_at7tr")]({
+"Awakening": SubResource("Resource_wkol0")
+})
+entry_cutscene_name = "Awakening"
 
 [node name="LightingModulate" type="CanvasModulate" parent="."]
 unique_name_in_owner = true
@@ -361,8 +467,8 @@ schedules = Dictionary[String, ExtResource("42_llove")]({
 "RunSign": SubResource("Resource_k202b"),
 "Surrender": SubResource("Resource_ob4ip")
 })
-initial_schedule = "Init"
 surrendered_schedule = "Surrender"
+active = false
 signal_statuses = Dictionary[String, ExtResource("37_cjebi")]({
 "RunSign": ExtResource("49_ms4id")
 })
