@@ -5,6 +5,9 @@ class_name StagePath
 @export var id: String ## ID of this stage path
 @export var path_objectives: Array[QuestObjective]
 
+func _to_string() -> String:
+	return "StagePath:'"+id+"'<"+str(path_objectives)+">"
+
 ## Duplicates this quest path
 func duplicate_path()->StagePath:
 	var clone: StagePath = duplicate(true)

@@ -17,6 +17,10 @@ signal quest_complete(quest: QuestInfo) ## Emitted when the quest is completed
 signal stage_started(stage: QuestStage) ## Emitted when the current stage is completed
 signal objective_updated(objective: QuestObjective) ## Emitted when an active objective is updated
 signal objective_completed(objective: QuestObjective) ## Emitted when an active objective is completed
+signal path_updated(quest_path: QuestPath, completed_stage: QuestStage) ## Emitted when a stage completes
+
+func  _to_string() -> String:
+	return "QuestInfo:"+quest_id
 
 ## Activates this quest and its first stage
 func activate()->void:
@@ -42,18 +46,23 @@ func quest_stage_complete(stage: QuestStage)->void:
 	stage.stage_completed.disconnect(quest_stage_complete)
 	stage.objective_updated.disconnect(update_quest)
 	var cur_path: QuestPath = null
+	var now_complete: bool = false
 	for path in quest_paths:
 		if stage == path.path_stages[path.current_stage]:
-			path.current_stage += 1
+			if path.current_stage != path.path_stages.size()-1:
+				path.current_stage += 1
+			else:
+				now_complete = true
 			cur_path = path
 			break
-	if cur_path.current_stage == cur_path.path_stages.size():
+	if now_complete:
 		complete = true
 		complete_path = cur_path
 		quest_complete.emit(self)
 	else:
 		stage_started.emit(cur_path.path_stages[cur_path.current_stage])
 		cur_path.path_stages[cur_path.current_stage].activate()
+	path_updated.emit(cur_path, stage)
 
 ## Called when
 func quest_objective_complete(objective: QuestObjective)->void:
@@ -66,18 +75,6 @@ func update_quest(objective: QuestObjective)->void:
 ## Sets this quest to complete
 func set_complete()->void:
 	complete = true
-
-## Gets a list of quest objectives that should be tracked
-func get_tracked_paths()->Dictionary[QuestPath, Array]:
-	var paths: Dictionary[QuestPath, Array]
-	for path in quest_paths:
-		var end_stage: int = path.current_stage
-		var start_stage: int = path.current_stage
-		while path.path_stages[start_stage].show_prev_stage && start_stage > 0:
-			start_stage -= 1
-		for index in range(start_stage, end_stage+1):
-			paths[path] = path.path_stages[index].get_stage_paths()
-	return paths
 
 #region Save and Load
 ## Duplicates this quest and returns the duplicate

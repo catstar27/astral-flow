@@ -1,162 +1,191 @@
-extends Control
+extends VBoxContainer
 class_name QuestTracker
 ## Tracks the currently tracked quest, displaying information about the current stage
 
+@export var manage_manually: bool = false ## Whether this should not use the EventBus to allow manual quest control
+@export var animate: bool = true ## Whether to animate the tracker
+@export var show_all_stages: bool = false ## Whether this should show all stages up to the current one
+@export var show_in_combat: bool = false ## Whether this should hide in combat
 @onready var quest_icon: TextureRect = %Icon ## Icon of the current quest
 @onready var quest_name: Label = %Name ## Name of the current quest
-@onready var quest_container: VBoxContainer = %QuestContainer ## Container holding the display info
 @onready var name_icon_container: HBoxContainer = %NameIconContainer ## Container holding name and icon
-@onready var objective_container: VBoxContainer = %ObjectiveContainer ## Container holding the objective info
-var objective_labels: Dictionary[QuestObjective, RichTextLabel] ## Array of the labels containing objective info
+@onready var objective_container: VBoxContainer = %ObjectiveContainer ## Container holding the objective inf
+var objective_labels: Dictionary[QuestObjective, RichTextLabel] ## Dictionary of QuestObjectives and their labels
+var quest_path_labels: Dictionary[QuestPath, LabelPair] ## Dictionary of QuestPath name and 'or' labels
+var stage_path_labels: Dictionary[StagePath, RichTextLabel] ## Dictionary of StagePath 'or' labels
 var tracked_quest: QuestInfo = null ## Currently tracked quest
 var in_combat: bool = false ## Whether the game is in combat
-var updating_objective: int = 0 ## Number of objectives updating
+var updating_objective: bool = false ## Whether objectives are updating
 var starting_tracking: bool = false ## Whether a quest is starting to be tracked
-signal started_tracking ## Emitted when a new quest is tracked
-signal objective_updated ## Emitted when a quest objective is updated
+var animating: bool = false ## Whether the tracker is currently animating
+signal objective_updated ## Emitted when an objective is done updating
+#signal animation_finished ## Emitted when done animating the tracker
+
+class LabelPair:
+	var name_label: RichTextLabel
+	var or_label: RichTextLabel
+
+	#await create_tween().tween_property(self, "position", 
+		#Vector2(position.x, get_viewport_rect().size.y-quest_container.size.y), .1).finished
+	#if play_anim:
+		#var copy_label: RichTextLabel = get_objective_label()
+		#copy_label.text = objective_labels[objective].text
+		#copy_label.size = objective_labels[objective].size
+		#add_child(copy_label)
+		#copy_label.global_position = objective_labels[objective].global_position
+		#copy_label.global_position.x += objective_labels[objective].size.x
+		#await create_tween().tween_property(copy_label, "global_position", objective_labels[objective].global_position, .5).finished
+		#objective_labels[objective].modulate = Color.WHITE
+		#copy_label.queue_free()
 
 func _ready() -> void:
-	EventBus.subscribe("QUEST_TRACK", self, "change_quest")
-	EventBus.subscribe("QUEST_TRACK_STOP", self, "stop_tracking")
-	EventBus.subscribe("COMBAT_STARTED", self, "start_combat")
-	EventBus.subscribe("COMBAT_ENDED", self, "end_combat")
+	if !manage_manually:
+		EventBus.subscribe("QUEST_TRACK", self, "track_quest")
+		EventBus.subscribe("QUEST_TRACK_STOP", self, "stop_tracking")
+		EventBus.subscribe("COMBAT_STARTED", self, "start_combat")
+		EventBus.subscribe("COMBAT_ENDED", self, "end_combat")
 
-## Changes the currently tracked quest
-func change_quest(quest: QuestInfo)->void:
-	if tracked_quest == quest || starting_tracking:
-		return
-	while updating_objective > 0:
-		await objective_updated
-	if tracked_quest != null:
-		tracked_quest.quest_complete.disconnect(complete_quest)
-		tracked_quest.stage_started.disconnect(build_labels)
-	starting_tracking = true
+## Tracks the given quest
+func track_quest(quest: QuestInfo)->void:
+	stop_tracking()
 	tracked_quest = quest
-	for objective in objective_labels:
-		objective_labels[objective].queue_free()
-		objective_labels.erase(objective)
+	quest_icon.texture = quest.quest_icon
+	quest_name.text = quest.quest_name
+	quest.path_updated.connect(update_quest_path)
 	quest.quest_complete.connect(complete_quest)
-	quest_name.text = tracked_quest.quest_name
-	quest_icon.texture = tracked_quest.quest_icon
-	quest_icon.modulate = Color.TRANSPARENT
-	quest_name.modulate = Color.TRANSPARENT
-	if quest != tracked_quest:
-		return
-	await get_tree().process_frame
-	position.y = get_viewport_rect().size.y-quest_container.size.y
-	if quest != tracked_quest:
-		return
-	objective_container.hide()
-	if !in_combat:
-		show()
-	while !is_visible_in_tree() && !in_combat:
-		await visibility_changed
-	await get_tree().process_frame
-	var fake_name_icon: HBoxContainer = name_icon_container.duplicate()
-	fake_name_icon.get_child(0).modulate = Color.WHITE
-	fake_name_icon.get_child(1).modulate = Color.WHITE
-	add_child(fake_name_icon)
-	fake_name_icon.global_position = Vector2(name_icon_container.global_position.x, get_viewport_rect().size.y)
-	fake_name_icon.size = name_icon_container.size
-	await create_tween().tween_property(fake_name_icon, "global_position", name_icon_container.global_position, .5).finished
-	quest_icon.modulate = Color.WHITE
-	quest_name.modulate = Color.WHITE
-	fake_name_icon.queue_free()
-	objective_container.show()
-	await get_tree().create_timer(.1).timeout
-	build_labels()
-	quest.stage_started.connect(build_labels)
-	starting_tracking = false
-	if !in_combat:
-		show()
-	started_tracking.emit()
-
-## Updates the label corresponding to the quest objective given
-func update_objective(objective: QuestObjective, play_anim: bool = false)->void:
-	updating_objective += 1
-	if play_anim:
-		objective_labels[objective].modulate = Color.TRANSPARENT
-	objective_labels[objective].text = ""
-	if objective.is_optional:
-		objective_labels[objective].text = "[color=sky_blue]"
-	objective_labels[objective].text += objective.description
-	if objective.total_count > 0:
-		objective_labels[objective].text += " ("+str(objective.current_count)+"/"+str(objective.total_count)+")"
-	objective_labels[objective].text += " ["
-	if objective.complete:
-		objective_labels[objective].text += "✓"
-	objective_labels[objective].text += "]"
-	await get_tree().process_frame
-	await create_tween().tween_property(self, "position", 
-		Vector2(position.x, get_viewport_rect().size.y-quest_container.size.y), .1).finished
-	if play_anim:
-		var copy_label: RichTextLabel = get_objective_label()
-		copy_label.text = objective_labels[objective].text
-		copy_label.size = objective_labels[objective].size
-		add_child(copy_label)
-		copy_label.global_position = objective_labels[objective].global_position
-		copy_label.global_position.x += objective_labels[objective].size.x
-		await create_tween().tween_property(copy_label, "global_position", objective_labels[objective].global_position, .5).finished
-		objective_labels[objective].modulate = Color.WHITE
-		copy_label.queue_free()
-	updating_objective -= 1
-	objective_updated.emit()
-
-## Updates the quest tracker information
-func build_labels(_stage: Resource = null)->void:
-	for objective in objective_labels:
-		objective.objective_updated.disconnect(update_objective)
-		objective.objective_completed.disconnect(update_objective)
-		objective_labels[objective].queue_free()
-	objective_labels.clear()
-	for child in objective_container.get_children():
-		child.queue_free()
-	var paths: Dictionary[QuestPath, Array] = tracked_quest.get_tracked_paths()
-	for quest_path in tracked_quest.quest_paths:
-		if paths.size() > 1:
+	for quest_path in quest.quest_paths:
+		if quest.quest_paths.size() > 1:
 			var quest_path_label: RichTextLabel = get_objective_label()
 			quest_path_label.add_theme_font_size_override("bold_font_size", 20)
 			quest_path_label.text = "[b]"+quest_path.id+"[/b]"
 			objective_container.add_child(quest_path_label)
-		var stages: Array[QuestStage]
-		var index: int = quest_path.current_stage
-		var cur_stage: QuestStage = quest_path.path_stages[quest_path.current_stage]
-		stages.append(cur_stage)
-		while cur_stage.show_prev_stage && index > 0:
-			index -= 1
-			cur_stage = quest_path.path_stages[index]
-			stages.append(cur_stage)
-		stages.reverse()
-		for stage in stages:
-			build_stage_labels(stage)
-		if paths.size() > 1 && quest_path != tracked_quest.quest_paths[-1]:
+			quest_path_labels[quest_path] = LabelPair.new()
+			quest_path_labels[quest_path].name_label = quest_path_label
+		if quest.complete && quest_path != quest.complete_path:
+			var label: RichTextLabel = get_objective_label()
+			label.text = "[color=light_coral]Skipped![/color]"
+			objective_container.add_child(label)
+		else:
+			display_quest_path(quest_path, quest.complete)
+		if quest_path != quest.quest_paths[-1]:
 			var quest_path_label: RichTextLabel = get_objective_label()
 			quest_path_label.add_theme_font_size_override("bold_font_size", 20)
 			quest_path_label.text = "[b][color=goldenrod]  --OR--  [/color][/b]"
 			objective_container.add_child(quest_path_label)
+			quest_path_labels[quest_path].or_label = quest_path_label
+	show()
+	#if animate:
+		#animating = true
+		#var fake_name_icon: HBoxContainer = name_icon_container.duplicate()
+		#var fake_objective_container: VBoxContainer = objective_container.duplicate()
+		#%AnimationNode.add_child(fake_name_icon)
+		#%AnimationNode.add_child(fake_objective_container)
+		#name_icon_container.modulate = Color.TRANSPARENT
+		#objective_container.modulate = Color.TRANSPARENT
+		#fake_name_icon.global_position.x = global_position.x
+		#fake_name_icon.global_position.y = get_viewport_rect().size.y
+		#fake_objective_container.global_position.x = global_position.x
+		#fake_objective_container.global_position.y = get_viewport_rect().size.y
+		#create_tween().tween_property(fake_name_icon, "global_position", name_icon_container.global_position, .5)
+		#await create_tween().tween_property(fake_objective_container, "global_position", objective_container.global_position, .5).finished
+		#fake_name_icon.queue_free()
+		#fake_objective_container.queue_free()
+		#name_icon_container.modulate = Color.WHITE
+		#objective_container.modulate = Color.WHITE
+		#animating = false
+		#animation_finished.emit()
 
-## Builds labels for a stage
-func build_stage_labels(stage: QuestStage)->void:
-	for path in stage.stage_paths:
-		if stage.stage_paths.size() > 1:
-			var stage_path_label: RichTextLabel = get_objective_label()
-			stage_path_label.text = "[b]"+path.id+"[/b]"
-			objective_container.add_child(stage_path_label)
+## Displays a quest path
+func display_quest_path(quest_path: QuestPath, complete: bool)->void:
+	var shown_stages: Array[QuestStage] = quest_path.get_path_stages()
+	for stage in quest_path.path_stages:
+		if stage.complete && show_all_stages:
+			for objective in stage.completed_path.path_objectives:
+				display_objective(objective, stage.complete)
+		elif complete || stage in shown_stages:
+			for path in stage.stage_paths:
+				for objective in path.path_objectives:
+					display_objective(objective, stage.complete)
+				if !stage.complete && stage.stage_paths.size() > 1 && path != stage.stage_paths[-1]:
+					var label: RichTextLabel = get_objective_label()
+					label.text = "[b][color=goldenrod]  --OR--  [/color][/b]"
+					objective_container.add_child(label)
+					stage_path_labels[path] = label
+
+func display_objective(objective: QuestObjective, stage_complete: bool)->void:
+	while updating_objective:
+		await objective_updated
+	if objective.is_secret && !objective.complete:
+		return
+	var label: RichTextLabel = get_objective_label()
+	if objective.is_optional:
+		label.text += "[color=sky_blue]"
+	label.text += objective.description
+	if objective.total_count > 0:
+		label.text += " ("+str(objective.current_count)+"/"+str(objective.total_count)+")"
+	if !objective.complete && objective.is_optional && stage_complete:
+		label.text += " ☒"
+	elif !objective.complete:
+		label.text += " ☐"
+	elif objective.complete:
+		label.text += " ☑"
+	objective_container.add_child(label)
+	objective_labels[objective] = label
+	objective.objective_updated.connect(update_objective)
+	objective.objective_completed.connect(update_objective)
+
+## Updates given objective's label
+func update_objective(objective: QuestObjective)->void:
+	while updating_objective:
+		await objective_updated
+	if objective not in objective_labels:
+		return
+	var label: RichTextLabel = objective_labels[objective]
+	label.text = ""
+	if objective.is_optional:
+		label.text += "[color=sky_blue]"
+	label.text += objective.description
+	if objective.total_count > 0:
+		label.text += " ("+str(objective.current_count)+"/"+str(objective.total_count)+")"
+	if !objective.complete:
+		label.text += " ☐"
+	elif objective.complete:
+		label.text += " ☑"
+
+## Updates given quest path
+func update_quest_path(quest_path: QuestPath, completed_stage: QuestStage)->void:
+	while updating_objective:
+		await objective_updated
+	var temp: Array[RichTextLabel]
+	var desired_stages: Array[QuestStage] = quest_path.get_path_stages()
+	var first_child_index: int = -1
+	if completed_stage not in desired_stages:
+		for stage_path in completed_stage.stage_paths:
+			if stage_path in stage_path_labels:
+				stage_path_labels[stage_path].queue_free()
+				stage_path_labels.erase(stage_path)
+			for objective in stage_path.path_objectives:
+				if objective in objective_labels:
+					if first_child_index == -1:
+						first_child_index = objective_labels[objective].get_index()
+					objective_labels[objective].queue_free()
+					objective_labels.erase(objective)
+					objective.objective_updated.disconnect(update_objective)
+					objective.objective_completed.disconnect(update_objective)
+	if completed_stage == desired_stages[-1]:
+		return
+	var next_stage: QuestStage = desired_stages[desired_stages.find(completed_stage)+1]
+	if first_child_index == -1:
+		var last_objective: QuestObjective = completed_stage.stage_paths[-1].path_objectives[-1]
+		first_child_index = objective_labels[last_objective].get_index()+1
+	while objective_container.get_child_count() > first_child_index:
+		temp.append(objective_container.get_child(first_child_index))
+		objective_container.remove_child(objective_container.get_child(first_child_index))
+	for path in next_stage.stage_paths:
 		for objective in path.path_objectives:
-			if objective.is_secret:
-				continue
-			var new_label: RichTextLabel = get_objective_label()
-			objective_container.add_child(new_label)
-			objective_labels[objective] = new_label
-			update_objective(objective, true)
-			if !objective.objective_updated.is_connected(update_objective):
-				objective.objective_updated.connect(update_objective)
-			if !objective.objective_completed.is_connected(update_objective):
-				objective.objective_completed.connect(update_objective)
-		if stage.stage_paths.size() > 1 && path != stage.stage_paths[-1]:
-			var stage_path_label: RichTextLabel = get_objective_label()
-			stage_path_label.text = "[b][color=goldenrod]  --OR--  [/color][/b]"
-			objective_container.add_child(stage_path_label)
+			display_objective(objective, false)
+	while !temp.is_empty():
+		objective_container.add_child(temp.pop_front())
 
 ## Makes an objective label and returns it
 func get_objective_label()->RichTextLabel:
@@ -178,20 +207,28 @@ func complete_quest(_quest: QuestInfo)->void:
 ## Starts the combat state and hides the tracker
 func start_combat()->void:
 	in_combat = true
-	hide()
+	if !show_in_combat:
+		hide()
 
 ## Ends combat and shows the tracker if it was tracking a quest
 func end_combat()->void:
 	in_combat = false
-	var old_tracked: QuestInfo = tracked_quest
-	stop_tracking()
-	change_quest(old_tracked)
+	show()
 
 ## Stops tracking any quests
 func stop_tracking()->void:
-	if tracked_quest != null:
-		tracked_quest.quest_complete.disconnect(complete_quest)
-		tracked_quest.stage_started.disconnect(build_labels)
+	if tracked_quest == null:
+		return
+	for objective in objective_labels:
+		objective.objective_updated.disconnect(update_objective)
+		objective.objective_completed.disconnect(update_objective)
+	for child in objective_container.get_children():
+		child.queue_free()
+	objective_labels.clear()
+	quest_path_labels.clear()
+	stage_path_labels.clear()
+	tracked_quest.path_updated.disconnect(update_quest_path)
+	tracked_quest.quest_complete.disconnect(complete_quest)
 	tracked_quest = null
 	hide()
 

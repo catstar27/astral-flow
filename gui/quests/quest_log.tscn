@@ -1,20 +1,21 @@
-[gd_scene load_steps=7 format=3 uid="uid://bkt6ueeylogtc"]
+[gd_scene load_steps=8 format=3 uid="uid://bkt6ueeylogtc"]
 
 [ext_resource type="Script" uid="uid://1yju7cyvj754" path="res://gui/quests/quest_log.gd" id="1_47374"]
 [ext_resource type="PackedScene" uid="uid://dleye7m8gjxs0" path="res://gui/components/control_display_button.tscn" id="2_sxah1"]
 [ext_resource type="PackedScene" uid="uid://c6kh3esjn5743" path="res://gui/tab_menu.tscn" id="3_l4r7o"]
+[ext_resource type="PackedScene" uid="uid://bsrym6k1vywfo" path="res://gui/quests/quest_tracker.tscn" id="4_47374"]
 
-[sub_resource type="InputEventKey" id="InputEventKey_7312b"]
+[sub_resource type="InputEventKey" id="InputEventKey_sxah1"]
 device = -1
 physical_keycode = 4194305
 
-[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_6s7of"]
+[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_47374"]
 device = -1
 button_index = 1
 pressed = true
 
-[sub_resource type="Shortcut" id="Shortcut_sxah1"]
-events = [SubResource("InputEventKey_7312b"), SubResource("InputEventJoypadButton_6s7of")]
+[sub_resource type="Shortcut" id="Shortcut_47374"]
+events = [SubResource("InputEventKey_sxah1"), SubResource("InputEventJoypadButton_47374")]
 
 [node name="QuestLog" type="Control"]
 layout_mode = 3
@@ -76,9 +77,11 @@ horizontal_scroll_mode = 0
 vertical_scroll_mode = 4
 
 [node name="ActiveQuestList" type="VBoxContainer" parent="Panel/HBoxContainer/QuestListContainer/TabMenu/Active"]
+unique_name_in_owner = true
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Panel/HBoxContainer/QuestListContainer/TabMenu/Active/ActiveQuestList"]
+[node name="ActiveQuestLabel" type="Label" parent="Panel/HBoxContainer/QuestListContainer/TabMenu/Active/ActiveQuestList"]
+unique_name_in_owner = true
 layout_mode = 2
 text = "
 No Active Quests"
@@ -93,9 +96,11 @@ horizontal_scroll_mode = 0
 vertical_scroll_mode = 4
 
 [node name="CompleteQuestList" type="VBoxContainer" parent="Panel/HBoxContainer/QuestListContainer/TabMenu/Complete"]
+unique_name_in_owner = true
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Panel/HBoxContainer/QuestListContainer/TabMenu/Complete/CompleteQuestList"]
+[node name="CompleteQuestLabel" type="Label" parent="Panel/HBoxContainer/QuestListContainer/TabMenu/Complete/CompleteQuestList"]
+unique_name_in_owner = true
 layout_mode = 2
 text = "
 No Complete Quests"
@@ -104,7 +109,7 @@ No Complete Quests"
 layout_mode = 2
 size_flags_horizontal = 4
 focus_mode = 2
-shortcut = SubResource("Shortcut_sxah1")
+shortcut = SubResource("Shortcut_47374")
 text = "Back"
 input_action_name = "menu_back"
 
@@ -113,26 +118,17 @@ custom_minimum_size = Vector2(4, 0)
 layout_mode = 2
 color = Color(0.114897, 0.114897, 0.114897, 1)
 
-[node name="QuestTrackerContainer" type="VBoxContainer" parent="Panel/HBoxContainer"]
+[node name="QuestTracker" parent="Panel/HBoxContainer" instance=ExtResource("4_47374")]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(300, 0)
 layout_mode = 2
-
-[node name="NameIconContainer" type="HBoxContainer" parent="Panel/HBoxContainer/QuestTrackerContainer"]
-layout_mode = 2
-alignment = 1
-
-[node name="QuestIcon" type="TextureRect" parent="Panel/HBoxContainer/QuestTrackerContainer/NameIconContainer"]
-unique_name_in_owner = true
-layout_mode = 2
-
-[node name="QuestName" type="Label" parent="Panel/HBoxContainer/QuestTrackerContainer/NameIconContainer"]
-unique_name_in_owner = true
-layout_mode = 2
-text = "Quest Name"
-
-[node name="ObjectiveContainer" type="VBoxContainer" parent="Panel/HBoxContainer/QuestTrackerContainer"]
-unique_name_in_owner = true
-layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 0
+alignment = 0
+manage_manually = true
+animate = false
+show_all_stages = true
+show_in_combat = true
 
 [connection signal="tab_changed" from="Panel/HBoxContainer/QuestListContainer/TabMenu" to="." method="focus_current"]
 [connection signal="pressed" from="Panel/HBoxContainer/QuestListContainer/ExitButton" to="." method="close"]

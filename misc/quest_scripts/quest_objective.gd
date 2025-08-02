@@ -29,7 +29,7 @@ signal objective_completed(objective: QuestObjective) ## Emitted when the object
 signal objective_updated(objective: QuestObjective) ## Emitted when the objective's count updates
 
 func _to_string() -> String:
-	return id
+	return "QuestObjective<"+id+">"
 
 ## Checks if this objective is complete, and emits the signal if so
 func check_completion()->void:

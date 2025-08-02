@@ -10,6 +10,8 @@ class_name GameMap
 @export var calm_theme: AudioStreamWAV ## Theme to play outside combat
 @export var battle_theme: AudioStreamWAV ## Theme to play in combat
 @export var map_name: String ## Display name of map
+@export_group("Cutscenes")
+@export var cutscene_dict: Dictionary[String, CharacterSchedule]
 @onready var astar: AStarGrid2D ## Astar pathfinding grid
 @onready var light_modulator: CanvasModulate = %LightingModulate ## Modulator for lighting
 var modified_tiles: Dictionary[String, Array] ## Dictionary with terrain/position array pairs for updating tilemap

@@ -60,7 +60,7 @@ metadata/_custom_type_script = "uid://dvjxbtehmvbf6"
 
 [sub_resource type="Resource" id="Resource_oghc3"]
 script = ExtResource("3_s4lj2")
-show_prev_stage = true
+show_prev_stage = false
 stage_paths = Array[ExtResource("4_5j7i5")]([SubResource("Resource_230df")])
 metadata/_custom_type_script = "uid://4v676nts104o"
 

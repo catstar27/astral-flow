@@ -185,6 +185,8 @@ func act_on_pos(pos: Vector2i)->void:
 
 ## Makes the selected character interact with the target
 func selected_interact(pos: Vector2)->void:
+	if hovering == null:
+		return
 	var cur_hover = hovering
 	selected.move(pos)
 	block_deselect = true

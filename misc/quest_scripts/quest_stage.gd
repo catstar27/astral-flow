@@ -15,6 +15,9 @@ signal stage_completed(stage: QuestStage) ## Emitted when the stage is completed
 signal objective_updated(stage: QuestObjective) ## Emitted when an objective in the stage is updated
 signal objective_completed(objective: QuestObjective) ## Emitted when an objective in the stage is completed
 
+func _to_string() -> String:
+	return "QuestStage<"+str(stage_paths)+">"
+
 ## Changes the stage to the active state and begins monitoring its objectives
 func activate()->void:
 	active = true
@@ -49,7 +52,7 @@ func check_completion()->void:
 func update_stage(objective: QuestObjective)->void:
 	objective_updated.emit(objective)
 
-## Returns all paths of the stage, or 
+## Returns all paths of the stage
 func get_stage_paths()->Array[StagePath]:
 	if complete:
 		return [completed_path]
