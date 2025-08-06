@@ -29,7 +29,9 @@ enum state { ## States the gate can be in
 @export_storage var cur_state: state = state.locked ## Current state of the gate
 signal unlocked ## Emitted when unlocked
 signal opened ## Emitted when opened
+signal opened_named(name: String) ## Emitted when opened; shows the name of this
 signal closed ## Emitted when closed
+signal closed_named(name: String) ## Emitted when closed; shows the name of this
 
 func _init() -> void:
 	to_save.append("cur_state")
@@ -61,6 +63,7 @@ func open(quiet_open: bool = false)->void:
 			EventBus.broadcast("TILE_UNOCCUPIED", pos)
 		EventBus.broadcast("QUEST_EVENT", "open_door:"+id)
 	opened.emit()
+	opened_named.emit(name)
 	collision_active = false
 
 ## Closes the gate, even if the signals are fulfilled
@@ -76,6 +79,7 @@ func close()->void:
 		for pos in occupied_positions:
 			EventBus.broadcast("TILE_OCCUPIED", [pos, self])
 	closed.emit()
+	closed_named.emit(name)
 	collision_active = true
 
 ## Advances the unlock in the gate; analyzes the given signal, which must pass a string

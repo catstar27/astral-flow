@@ -1,4 +1,4 @@
-[gd_scene load_steps=89 format=4 uid="uid://qw4hbk40dyvm"]
+[gd_scene load_steps=111 format=4 uid="uid://qw4hbk40dyvm"]
 
 [ext_resource type="TileSet" uid="uid://dpajsxeb15k7l" path="res://maps/tilesets/dungeon.tres" id="1_bnvg4"]
 [ext_resource type="Script" uid="uid://b8kw4ghpy3r8t" path="res://maps/game_map.gd" id="2_rvbrh"]
@@ -24,11 +24,15 @@
 [ext_resource type="Resource" uid="uid://dqb1tww6se515" path="res://dialogue/tutorial/tutorial_grapes.dtl" id="12_shqtc"]
 [ext_resource type="Texture2D" uid="uid://b1i0lroq0snm0" path="res://textures/interactive/couch_n.png" id="12_v6peg"]
 [ext_resource type="PackedScene" uid="uid://b5mdx6baygoum" path="res://maps/interactives/generic/signal_gate.tscn" id="12_xfvy2"]
+[ext_resource type="Resource" uid="uid://beibfk8ikcios" path="res://dialogue/tutorial/tutorial_void_god_stop.dtl" id="13_4xny8"]
+[ext_resource type="Resource" uid="uid://beu168fvfmmfm" path="res://dialogue/tutorial/tutorial_controls_info_1.dtl" id="13_ob4ip"]
 [ext_resource type="Resource" uid="uid://c3spvp8owd4ea" path="res://dialogue/generic_interactives/locked.dtl" id="13_ymmi3"]
+[ext_resource type="Script" uid="uid://dvmbrfhcj5un8" path="res://maps/cutscenes/quest_cutscene_event.gd" id="14_jcs36"]
 [ext_resource type="Texture2D" uid="uid://binxw1c1e5vyc" path="res://textures/interactive/dog.png" id="14_jrvla"]
 [ext_resource type="PackedScene" uid="uid://v2x25sfrymso" path="res://maps/interactives/generic/damage_activation_interactive.tscn" id="14_luyw1"]
 [ext_resource type="Texture2D" uid="uid://dxv2p6xoxo4n0" path="res://textures/interactive/dog_n.png" id="15_v6peg"]
 [ext_resource type="PackedScene" uid="uid://cexm0cxkxol76" path="res://maps/interactives/generic/travel_point.tscn" id="16_c5dte"]
+[ext_resource type="Resource" uid="uid://cv8jclvlhusdr" path="res://dialogue/tutorial/tutorial_interact_puzzle_gate_opened.dtl" id="16_wkol0"]
 [ext_resource type="Texture2D" uid="uid://dei0ir8jap6a" path="res://textures/interactive/grapes.png" id="17_7i0lg"]
 [ext_resource type="Resource" uid="uid://byr6mgv4py3bh" path="res://dialogue/generic_interactives/tesla_coil_active.dtl" id="17_7sy0y"]
 [ext_resource type="Resource" uid="uid://ckggu1n1nt8o3" path="res://dialogue/generic_interactives/tesla_coil_inactive.dtl" id="17_er6pd"]
@@ -43,7 +47,6 @@
 [ext_resource type="PackedScene" uid="uid://bxbk83doy5d81" path="res://characters/generic/npc.tscn" id="31_w8a5m"]
 [ext_resource type="Resource" uid="uid://dprgv3h7cyx52" path="res://dialogue/tutorial/tutorial_void_god.dtl" id="32_lfqa0"]
 [ext_resource type="Script" uid="uid://dxv7e1j21poh5" path="res://characters/statuses/status.gd" id="37_cjebi"]
-[ext_resource type="Resource" uid="uid://djnw1m6acv55m" path="res://dialogue/tutorial/tutorial_duel.dtl" id="37_dpap0"]
 [ext_resource type="Script" uid="uid://b0xbk38jyra5a" path="res://characters/abilities/ability.gd" id="37_gpbd4"]
 [ext_resource type="Script" uid="uid://esjh6105v2l5" path="res://addons/dialogic/Resources/timeline.gd" id="37_k202b"]
 [ext_resource type="Resource" uid="uid://dae4xdag0nd3v" path="res://characters/abilities/strike.tres" id="38_dpap0"]
@@ -52,11 +55,12 @@
 [ext_resource type="Resource" uid="uid://fodmyjuq46f6" path="res://dialogue/tutorial/tutorial_void_god_forgives.dtl" id="41_k202b"]
 [ext_resource type="Script" uid="uid://eg2p4dq2kutt" path="res://characters/tasks/schedule.gd" id="42_llove"]
 [ext_resource type="Script" uid="uid://cuvk331ioveg" path="res://characters/tasks/task.gd" id="43_k202b"]
-[ext_resource type="Script" uid="uid://cc0tmmsk43e7j" path="res://characters/tasks/task_types/patrol.gd" id="44_ms4id"]
 [ext_resource type="Script" uid="uid://co2e1ra3i780n" path="res://characters/tasks/task_types/move.gd" id="45_x3as3"]
-[ext_resource type="Script" uid="uid://cvn861203hxla" path="res://characters/tasks/task_types/wait.gd" id="46_hbbc7"]
 [ext_resource type="Script" uid="uid://dkbyrhd2t1qnd" path="res://characters/tasks/task_types/interact.gd" id="47_at7tr"]
 [ext_resource type="Resource" uid="uid://cqchaqbhpu0cq" path="res://characters/statuses/void_god's_wrath.tres" id="49_ms4id"]
+[ext_resource type="Resource" uid="uid://5brc5cumsbw7" path="res://dialogue/tutorial/tutorial_controls_info_2.dtl" id="51_jcs36"]
+[ext_resource type="Resource" uid="uid://djnw1m6acv55m" path="res://dialogue/tutorial/tutorial_duel.dtl" id="54_jcs36"]
+[ext_resource type="PackedScene" uid="uid://ccexi4kc8fiu7" path="res://maps/map_trigger.tscn" id="58_dtw6w"]
 
 [sub_resource type="Resource" id="Resource_4bg0g"]
 script = ExtResource("9_74x4m")
@@ -147,9 +151,117 @@ script = ExtResource("6_q1fwp")
 cutscene_events = Array[ExtResource("7_6rbxq")]([SubResource("Resource_u7mxl")])
 metadata/_custom_type_script = "uid://mgxtbbq8hp8o"
 
+[sub_resource type="Resource" id="Resource_ku5yb"]
+script = ExtResource("9_74x4m")
+dialogue = ExtResource("13_ob4ip")
+pause_music = false
+metadata/_custom_type_script = "uid://6kpiqm4ci2ii"
+
+[sub_resource type="Resource" id="Resource_76pab"]
+script = ExtResource("14_jcs36")
+start_quest = "AWAKENING"
+quest_event = ""
+metadata/_custom_type_script = "uid://dvmbrfhcj5un8"
+
+[sub_resource type="Resource" id="Resource_yxe06"]
+script = ExtResource("6_q1fwp")
+cutscene_events = Array[ExtResource("7_6rbxq")]([SubResource("Resource_ku5yb"), SubResource("Resource_76pab")])
+metadata/_custom_type_script = "uid://mgxtbbq8hp8o"
+
 [sub_resource type="Resource" id="Resource_wkol0"]
 script = ExtResource("5_at7tr")
-cutscene_stages = Array[ExtResource("6_q1fwp")]([SubResource("Resource_o6abv"), SubResource("Resource_usrvd"), SubResource("Resource_vy407"), SubResource("Resource_jcs36"), SubResource("Resource_o8stu"), SubResource("Resource_x0yj4")])
+cutscene_stages = Array[ExtResource("6_q1fwp")]([SubResource("Resource_o6abv"), SubResource("Resource_usrvd"), SubResource("Resource_vy407"), SubResource("Resource_jcs36"), SubResource("Resource_o8stu"), SubResource("Resource_x0yj4"), SubResource("Resource_yxe06")])
+post_cutscene_schedules = Dictionary[String, String]({})
+metadata/_custom_type_script = "uid://dt6u4tcd5yhc4"
+
+[sub_resource type="Resource" id="Resource_7wjjd"]
+script = ExtResource("8_q1fwp")
+target_name = "VoidGod"
+type = 3
+pos = Vector2(-480, -288)
+interact_target = ""
+metadata/_custom_type_script = "uid://cqrd3olk4kwbm"
+
+[sub_resource type="Resource" id="Resource_vwewm"]
+script = ExtResource("6_q1fwp")
+cutscene_events = Array[ExtResource("7_6rbxq")]([SubResource("Resource_7wjjd")])
+metadata/_custom_type_script = "uid://mgxtbbq8hp8o"
+
+[sub_resource type="Resource" id="Resource_5iotj"]
+script = ExtResource("9_74x4m")
+dialogue = ExtResource("13_4xny8")
+pause_music = false
+metadata/_custom_type_script = "uid://6kpiqm4ci2ii"
+
+[sub_resource type="Resource" id="Resource_eh8xy"]
+script = ExtResource("6_q1fwp")
+cutscene_events = Array[ExtResource("7_6rbxq")]([SubResource("Resource_5iotj")])
+metadata/_custom_type_script = "uid://mgxtbbq8hp8o"
+
+[sub_resource type="Resource" id="Resource_1rlls"]
+script = ExtResource("5_at7tr")
+cutscene_stages = Array[ExtResource("6_q1fwp")]([SubResource("Resource_vwewm"), SubResource("Resource_eh8xy")])
+post_cutscene_schedules = Dictionary[String, String]({
+"VoidGod": "Wait"
+})
+metadata/_custom_type_script = "uid://dt6u4tcd5yhc4"
+
+[sub_resource type="Resource" id="Resource_o2c50"]
+script = ExtResource("8_q1fwp")
+target_name = "VoidGod"
+type = 0
+pos = Vector2(32, -96)
+interact_target = ""
+metadata/_custom_type_script = "uid://cqrd3olk4kwbm"
+
+[sub_resource type="Resource" id="Resource_2arxk"]
+script = ExtResource("6_q1fwp")
+cutscene_events = Array[ExtResource("7_6rbxq")]([SubResource("Resource_o2c50")])
+metadata/_custom_type_script = "uid://mgxtbbq8hp8o"
+
+[sub_resource type="Resource" id="Resource_auvrc"]
+script = ExtResource("9_74x4m")
+dialogue = ExtResource("16_wkol0")
+pause_music = false
+metadata/_custom_type_script = "uid://6kpiqm4ci2ii"
+
+[sub_resource type="Resource" id="Resource_w74xd"]
+script = ExtResource("6_q1fwp")
+cutscene_events = Array[ExtResource("7_6rbxq")]([SubResource("Resource_auvrc")])
+metadata/_custom_type_script = "uid://mgxtbbq8hp8o"
+
+[sub_resource type="Resource" id="Resource_rjecu"]
+script = ExtResource("8_q1fwp")
+target_name = "Kalin"
+type = 0
+pos = Vector2(-32, -160)
+interact_target = ""
+metadata/_custom_type_script = "uid://cqrd3olk4kwbm"
+
+[sub_resource type="Resource" id="Resource_1xpf5"]
+script = ExtResource("6_q1fwp")
+cutscene_events = Array[ExtResource("7_6rbxq")]([SubResource("Resource_rjecu")])
+metadata/_custom_type_script = "uid://mgxtbbq8hp8o"
+
+[sub_resource type="Resource" id="Resource_0yonp"]
+script = ExtResource("8_q1fwp")
+target_name = "VoidGod"
+type = 0
+pos = Vector2(32, -224)
+interact_target = ""
+metadata/_custom_type_script = "uid://cqrd3olk4kwbm"
+
+[sub_resource type="Resource" id="Resource_s1kh3"]
+script = ExtResource("6_q1fwp")
+cutscene_events = Array[ExtResource("7_6rbxq")]([SubResource("Resource_0yonp")])
+metadata/_custom_type_script = "uid://mgxtbbq8hp8o"
+
+[sub_resource type="Resource" id="Resource_crity"]
+script = ExtResource("5_at7tr")
+cutscene_stages = Array[ExtResource("6_q1fwp")]([SubResource("Resource_2arxk"), SubResource("Resource_w74xd"), SubResource("Resource_1xpf5"), SubResource("Resource_s1kh3")])
+post_cutscene_schedules = Dictionary[String, String]({
+"VoidGod": "Duel"
+})
 metadata/_custom_type_script = "uid://dt6u4tcd5yhc4"
 
 [sub_resource type="CanvasTexture" id="CanvasTexture_7i0lg"]
@@ -171,40 +283,6 @@ normal_texture = ExtResource("18_cjebi")
 diffuse_texture = ExtResource("29_ysqq4")
 normal_texture = ExtResource("30_ysqq4")
 specular_texture = ExtResource("31_llove")
-
-[sub_resource type="Resource" id="Resource_q1fwp"]
-script = ExtResource("44_ms4id")
-patrol_points = Array[Vector2]([Vector2(-224, -544), Vector2(352, -544)])
-hour_start = 0
-hour_end = 0
-minute_start = 0
-minute_end = 0
-metadata/_custom_type_script = "uid://cc0tmmsk43e7j"
-
-[sub_resource type="Resource" id="Resource_6rbxq"]
-script = ExtResource("45_x3as3")
-move_location = Vector2(32, -544)
-hour_start = 0
-hour_end = 0
-minute_start = 0
-minute_end = 0
-metadata/_custom_type_script = "uid://co2e1ra3i780n"
-
-[sub_resource type="Resource" id="Resource_vqdpa"]
-script = ExtResource("46_hbbc7")
-wait_time = 5.0
-hour_start = 0
-hour_end = 0
-minute_start = 0
-minute_end = 0
-metadata/_custom_type_script = "uid://cvn861203hxla"
-
-[sub_resource type="Resource" id="Resource_gr56y"]
-script = ExtResource("42_llove")
-tasks = Array[ExtResource("43_k202b")]([SubResource("Resource_q1fwp"), SubResource("Resource_6rbxq"), SubResource("Resource_vqdpa")])
-loop_schedule = true
-use_timed_schedule = false
-metadata/_custom_type_script = "uid://eg2p4dq2kutt"
 
 [sub_resource type="Resource" id="Resource_llove"]
 script = ExtResource("45_x3as3")
@@ -256,6 +334,41 @@ loop_schedule = false
 use_timed_schedule = false
 metadata/_custom_type_script = "uid://eg2p4dq2kutt"
 
+[sub_resource type="Resource" id="Resource_pojme"]
+script = ExtResource("45_x3as3")
+move_location = Vector2(-224, 32)
+hour_start = 0
+hour_end = 0
+minute_start = 0
+minute_end = 0
+metadata/_custom_type_script = "uid://co2e1ra3i780n"
+
+[sub_resource type="Resource" id="Resource_1y8kv"]
+script = ExtResource("42_llove")
+tasks = Array[ExtResource("43_k202b")]([SubResource("Resource_pojme")])
+loop_schedule = false
+use_timed_schedule = false
+metadata/_custom_type_script = "uid://eg2p4dq2kutt"
+
+[sub_resource type="Resource" id="Resource_cj8ap"]
+script = ExtResource("45_x3as3")
+move_location = Vector2(32, -544)
+hour_start = 0
+hour_end = 0
+minute_start = 0
+minute_end = 0
+metadata/_custom_type_script = "uid://co2e1ra3i780n"
+
+[sub_resource type="Resource" id="Resource_ap3km"]
+script = ExtResource("42_llove")
+tasks = Array[ExtResource("43_k202b")]([SubResource("Resource_cj8ap")])
+loop_schedule = false
+use_timed_schedule = false
+metadata/_custom_type_script = "uid://eg2p4dq2kutt"
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_dtw6w"]
+size = Vector2(64, 64)
+
 [node name="TestMap" type="TileMapLayer"]
 process_mode = 1
 z_index = -3
@@ -266,7 +379,9 @@ calm_theme = ExtResource("3_j2ofq")
 battle_theme = ExtResource("4_5082e")
 map_name = "Tutorial"
 cutscenes = Dictionary[String, ExtResource("5_at7tr")]({
-"Awakening": SubResource("Resource_wkol0")
+"Awakening": SubResource("Resource_wkol0"),
+"InteractPuzzleGate": SubResource("Resource_crity"),
+"VoidGodStop": SubResource("Resource_1rlls")
 })
 entry_cutscene_name = "Awakening"
 
@@ -448,14 +563,15 @@ texture = SubResource("CanvasTexture_k202b")
 dialogue = ExtResource("17_er6pd")
 
 [node name="VoidGod" parent="." instance=ExtResource("31_w8a5m")]
-position = Vector2(32, -544)
+position = Vector2(544, -224)
 display_name = "???"
 export_abilities = Array[ExtResource("37_gpbd4")]([ExtResource("38_dpap0")])
 starting_statuses = Array[ExtResource("37_cjebi")]([ExtResource("38_gpbd4")])
 initial_dialogue = "Initial"
 interact_dialogues = Dictionary[String, ExtResource("37_k202b")]({
 "???": ExtResource("32_lfqa0"),
-"Initial": ExtResource("37_dpap0"),
+"Initial": ExtResource("51_jcs36"),
+"InteractPuzzleGate": ExtResource("54_jcs36"),
 "Tutorial Secret Exit": ExtResource("41_k202b")
 })
 signal_dialogues = Dictionary[String, ExtResource("37_k202b")]({
@@ -463,9 +579,10 @@ signal_dialogues = Dictionary[String, ExtResource("37_k202b")]({
 "Nilak": ExtResource("40_ms4id")
 })
 schedules = Dictionary[String, ExtResource("42_llove")]({
-"Init": SubResource("Resource_gr56y"),
+"Duel": SubResource("Resource_ap3km"),
 "RunSign": SubResource("Resource_k202b"),
-"Surrender": SubResource("Resource_ob4ip")
+"Surrender": SubResource("Resource_ob4ip"),
+"Wait": SubResource("Resource_1y8kv")
 })
 surrendered_schedule = "Surrender"
 active = false
@@ -473,14 +590,22 @@ signal_statuses = Dictionary[String, ExtResource("37_cjebi")]({
 "RunSign": ExtResource("49_ms4id")
 })
 
+[node name="StopTrigger" parent="." instance=ExtResource("58_dtw6w")]
+position = Vector2(-480, -352)
+shape = SubResource("RectangleShape2D_dtw6w")
+one_shot = true
+pause_music = false
+cutscene = "VoidGodStop"
+
 [connection signal="updated_tiles" from="RunSign" to="SecretTravelPoint" method="activate"]
 [connection signal="updated_tiles" from="RunSign" to="SecretGate" method="close"]
 [connection signal="updated_tiles" from="RunSign" to="CombatGate" method="open"]
 [connection signal="updated_tiles" from="RunSign" to="VoidGod" method="set_player_enemy"]
-[connection signal="updated_tiles_named" from="RunSign" to="VoidGod" method="add_status_signal"]
 [connection signal="updated_tiles_named" from="RunSign" to="VoidGod" method="start_schedule"]
+[connection signal="updated_tiles_named" from="RunSign" to="VoidGod" method="add_status_signal"]
 [connection signal="interacted_id" from="SecretTravelPoint" to="VoidGod" method="set_dialogue"]
-[connection signal="unlocked" from="InteractPuzzleGate" to="VoidGod" method="stop_looping"]
+[connection signal="opened_named" from="InteractPuzzleGate" to="." method="play_cutscene"]
+[connection signal="opened_named" from="InteractPuzzleGate" to="VoidGod" method="set_dialogue"]
 [connection signal="unlocked" from="TeslaCoil" to="TeslaGate" method="advance_unlock"]
 [connection signal="unlocked" from="TeslaCoil2" to="TeslaGate" method="advance_unlock"]
 [connection signal="combat_entered" from="VoidGod" to="InteractPuzzleGate" method="close"]

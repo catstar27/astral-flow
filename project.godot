@@ -46,18 +46,22 @@ directories/dtl_directory={
 "tesla_coil_active": "res://dialogue/generic_interactives/tesla_coil_active.dtl",
 "tesla_coil_inactive": "res://dialogue/generic_interactives/tesla_coil_inactive.dtl",
 "tutorial_completion": "res://dialogue/tutorial/tutorial_completion.dtl",
+"tutorial_controls_info_1": "res://dialogue/tutorial/tutorial_controls_info_1.dtl",
+"tutorial_controls_info_2": "res://dialogue/tutorial/tutorial_controls_info_2.dtl",
 "tutorial_couch": "res://dialogue/tutorial/tutorial_couch.dtl",
 "tutorial_dog": "res://dialogue/tutorial/tutorial_dog.dtl",
 "tutorial_duel": "res://dialogue/tutorial/tutorial_duel.dtl",
 "tutorial_grapes": "res://dialogue/tutorial/tutorial_grapes.dtl",
 "tutorial_help_sign": "res://dialogue/tutorial/tutorial_help_sign.dtl",
+"tutorial_interact_puzzle_gate_opened": "res://dialogue/tutorial/tutorial_interact_puzzle_gate_opened.dtl",
 "tutorial_run_sign": "res://dialogue/tutorial/tutorial_run_sign.dtl",
 "tutorial_spawn": "res://dialogue/tutorial/tutorial_spawn.dtl",
 "tutorial_sun": "res://dialogue/tutorial/tutorial_sun.dtl",
 "tutorial_void_god": "res://dialogue/tutorial/tutorial_void_god.dtl",
 "tutorial_void_god_forgives": "res://dialogue/tutorial/tutorial_void_god_forgives.dtl",
 "tutorial_void_god_intro": "res://dialogue/tutorial/tutorial_void_god_intro.dtl",
-"tutorial_void_god_revived": "res://dialogue/tutorial/tutorial_void_god_revived.dtl"
+"tutorial_void_god_revived": "res://dialogue/tutorial/tutorial_void_god_revived.dtl",
+"tutorial_void_god_stop": "res://dialogue/tutorial/tutorial_void_god_stop.dtl"
 }
 glossary/default_case_sensitive=true
 variables={

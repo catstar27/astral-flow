@@ -1,0 +1,4 @@
+join kalin left_r [animation="Instant In" length="0.0"]
+join void_god right_l [animation="Slide In Left" mirrored="true"]
+void_god: Great! You opened it! Now. Follow me into the room. I have something to show you!
+[end_timeline]

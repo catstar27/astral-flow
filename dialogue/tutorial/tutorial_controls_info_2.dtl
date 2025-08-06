@@ -1,0 +1,40 @@
+join kalin left_r [animation="Instant In" length="0.0"]
+join void_god right_l [animation="Slide In Left" mirrored="true"]
+void_god: Here for some advice?
+- Yes
+	[signal arg="quest_event:controls_info"]
+	void_god: The button in the top left opens a menu called the Character Info menu. It shows quick information about the selected character's HP (Hit Points), AP (Action Points), and MP (Magic Points). It also shows what Abilities that character has, and information about them.
+	label M1
+	- HP?
+		void_god: HP tracks how much damage you can take. If it hits 0, you die. Plain and simple. You can regenerate by resting or using certain medicines.
+		jump M1
+	- AP?
+		void_god: AP is kinda like your stamina. It only matters when you're fighting. Doing anything in a fight takes a certain amount of AP. It regenerates at the start of your turn.
+		jump M1
+	- MP?
+		void_god: MP is a more difficult concept. Each of us has magical energy within our souls. MP is a simplified way of tracking the amount of energy we can safely use. Of course, the actual energy in your soul isn't that simple... but this measurement works well enough.
+		jump M1
+	- Understood
+		void_god: The button in the top right works similarly, but it opens a menu called the Utility Menu. This menu shows a few useful buttons\: The Party Overview, Quest Journal, World Map, Party Inventory, and Pause Menu.
+		label M2
+		- Party Overview?
+			void_god: The Party Overview shows the status of your party... or in this case, just you. From it, you can access the Character Sheets of each member; the Character Sheets show information about stats, bio, personal inventories, and more.
+			jump M2
+		- Quest Journal
+			void_god: The Quest Journal shows a list of all your active and completed quests. From it, you can also select a quest to track, or untrack.
+			jump M2
+		- World Map
+			void_god: The World Map shows you the map of the world, heh. Pretty self-explanatory. You can use it to travel to map segments you have visited.
+			jump M2
+		- Party Inventory
+			void_god: The Party Inventory shows all the items across your party members. You can use it to keep tabs on all of your items.
+			jump M2
+		- Pause Menu
+			void_god: It pauses the game. What do you want me to say? It has some other things it can do too. Just read the buttons. They explain themselves. You don't need me to walk you through everything, do you?
+			jump M2
+		- That's All
+			void_god: Good luck solving the puzzle!
+			[end_timeline]
+- No
+	void_god: Then what are you waiting for? Solve the puzzle and open the door.
+	[end_timeline]

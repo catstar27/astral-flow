@@ -15,17 +15,17 @@ class_name GameMap
 @export var entry_cutscene_name: String ## Cutscene to play when the map is entered the first time
 @onready var astar: AStarGrid2D ## Astar pathfinding grid
 @onready var light_modulator: CanvasModulate = %LightingModulate ## Modulator for lighting
+var cutscenes_played: Array[String] ## Array of cutscenes which have already played
 var modified_tiles: Dictionary[String, Array] ## Dictionary with terrain/position array pairs for updating tilemap
 var loading: bool = false ## Whether the map is loading
 var occupied_tiles: Dictionary[Vector2i, Node2D] ## Tiles being occupied by an interactive or character
 var last_player_pos: Dictionary[String, Vector2] ## Last saved position of player on this map
-var entry_cutscene_played: bool = false ## Whether the entry cutscene has played
 var cutscene_event_count: int = 0 ## Number of cutscene events being processed
 var to_save: Array[StringName] = [ ## Map variables to save
 	"player_start_pos",
 	"last_player_pos",
 	"modified_tiles",
-	"entry_cutscene_played",
+	"cutscenes_played",
 ]
 signal cutscene_event_count_lowered ## Emitted when a character finishes a cutscene event
 signal map_saved ## Emitted when the entire map is saved
@@ -40,6 +40,7 @@ func _ready()->void:
 	EventBus.subscribe("COMBAT_STARTED", self, "start_combat")
 	EventBus.subscribe("COMBAT_ENDED", self, "end_combat")
 	EventBus.subscribe("MAP_ENTERED", self, "play_entry_cutscene")
+	EventBus.subscribe("PLAY_CUTSCENE", self, "play_cutscene")
 	Dialogic.signal_event.connect(process_dialogue_signal)
 	_astar_setup()
 
@@ -188,15 +189,19 @@ func is_in_bounds(pos: Vector2)->bool:
 #region Cutscenes
 ## Plays the entry cutscene
 func play_entry_cutscene(_map: String = "")->void:
-	if !entry_cutscene_played:
-		play_cutscene(entry_cutscene_name)
+	play_cutscene(entry_cutscene_name)
 
 ## Plays the cutscene with the given name
 func play_cutscene(cutscene_name: String)->void:
-	if cutscene_name not in cutscenes:
+	if cutscene_name not in cutscenes || cutscene_name in cutscenes_played:
 		return
 	EventBus.broadcast("CUTSCENE_STARTED", "NULLDATA")
 	var cutscene: Cutscene = cutscenes[cutscene_name]
+	for character in get_tree().get_nodes_in_group("PartyMember"):
+		character.stop_movement()
+	for character in get_tree().get_nodes_in_group("PartyMember"):
+		while character.state_machine.current_state.state_id != "IDLE":
+			await character.state_machine.state_changed
 	for stage in cutscene.cutscene_stages:
 		for event in stage.cutscene_events:
 			if event is CursorCutsceneEvent:
@@ -218,9 +223,22 @@ func play_cutscene(cutscene_name: String)->void:
 				EventBus.broadcast("ENTER_DIALOGUE", [event.dialogue, event.pause_music])
 				await Dialogic.timeline_ended
 				cutscene_event_count_decrease(null)
+			elif event is QuestCutsceneEvent:
+				if event.start_quest != "":
+					EventBus.broadcast("QUEST_START",event.start_quest)
+				if event.quest_event != "":
+					EventBus.broadcast("QUEST_EVENT", event.quest_event)
 		while cutscene_event_count != 0:
 			await cutscene_event_count_lowered
+	for character_name in cutscene.post_cutscene_schedules:
+		var target: Character = find_child(character_name, true, false)
+		if target == null:
+			printerr("Missing Post-Cutscene Schedule Target '"+character_name+"'")
+			continue
+		target.start_schedule(cutscene.post_cutscene_schedules[character_name])
+	cutscenes_played.append(cutscene_name)
 	EventBus.broadcast("CUTSCENE_ENDED", "NULLDATA")
+	SaveLoad.save_data("Autosave", SaveLoad.recent_slot, true)
 
 ## Decrements cutscene_event_count
 func cutscene_event_count_decrease(source: Character)->void:

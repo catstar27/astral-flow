@@ -1,0 +1,14 @@
+[gd_scene load_steps=2 format=3 uid="uid://ccexi4kc8fiu7"]
+
+[ext_resource type="Script" uid="uid://dmj6oe4783v3t" path="res://maps/map_trigger.gd" id="1_65lwm"]
+
+[node name="MapTrigger" type="Area2D" groups=["Persist"]]
+script = ExtResource("1_65lwm")
+one_shot = null
+pause_music = null
+cutscene = null
+
+[node name="Collision" type="CollisionShape2D" parent="."]
+unique_name_in_owner = true
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

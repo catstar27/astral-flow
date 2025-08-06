@@ -1,0 +1,4 @@
+The blue square in the center of the screen is called the Selection Cursor. It comes paired with an arrow, which points at the character you have selected, or the cursor itself if no character is selected.
+Using the Selection Cursor's Interact key (which defaults to Spacebar on keyboard or the Bottom Action Button on a controller), you can interact with characters and the environment.
+When you have a character selected and use the interact key, that character will determine what is possible at the location of the cursor; if there is only one action available, the character will perform it. Otherwise, a menu showing the options will appear.
+[end_timeline]

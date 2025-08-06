@@ -1,15 +1,16 @@
 join kalin left_r [animation="Instant In" length="0.0"]
 join void_god right_l [animation="Slide In Left" wait="true" mirrored="true"]
-void_god: Hi!
-[signal arg="start_quest:UNCANNY_VALLEY"]
-- Who are you?
-	void_god: I'll tell you, but only after you beat me in a fight!
-- What is this place?
-	void_god: You can't recognize your own unconscious mind? How cute!
-	void_god: Come on, fight me and I'll tell ya more!
-- Hello?
-	void_god: Yes, yes, I'm here. Fight me!
-- (Leave)
-	void_god: What the hell, don't just walk away, asshole! Fight me!
+[signal arg_type="dict" arg="{"InteractPuzzleGate":"close"}"]
+void_god: Perfect. Now that we're here... let's fight! Just a simple duel. Not to the death, mind you.
+label M1
+- Fine.
+	void_god: Good.
+- Why?
+	void_god: Practice! You need to be able to fight once you awaken...
+- No
+	void_god: Yes.
+	jump M1
+- *Turn to Leave*
+	void_god: You can't leave. The door's shut behind you.
 [signal arg_type="dict" arg="{"???":"set_player_enemy"}"]
 [end_timeline]

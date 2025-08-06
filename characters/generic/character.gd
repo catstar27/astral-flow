@@ -264,14 +264,16 @@ func start_schedule(schedule_name: String)->void:
 		printerr("Attempted to change to nonexistent schedule [" + schedule_name + "] in character "+display_name)
 		return
 	stop_looping()
-	schedules[cur_schedule_name].pause.emit()
+	if cur_schedule_name != "":
+		schedules[cur_schedule_name].pause.emit()
 	cur_schedule_name = schedule_name
 	schedules[cur_schedule_name].task_index = 0
 	schedules[cur_schedule_name].process_schedule()
 
 ## Stops the schedule from looping
 func stop_looping()->void:
-	schedules[cur_schedule_name].loop_schedule = false
+	if cur_schedule_name != "":
+		schedules[cur_schedule_name].loop_schedule = false
 
 ## Starts looping the schedule
 func start_looping()->void:
@@ -647,6 +649,8 @@ func deselect()->void:
 
 ## Activates the character, putting them into the game map at given position
 func activate(pos: Vector2)->void:
+	if active:
+		EventBus.broadcast("TILE_UNOCCUPIED", position)
 	active = true
 	collision.set_deferred("disabled", false)
 	combat_trigger.set_deferred("disabled", false)

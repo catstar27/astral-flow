@@ -14,7 +14,8 @@ enum event_type_choices {
 	interact_with, ## Triggers when an npc or interactive is interacted with
 	defeat, ## Triggers when winning a battle with a character (or killing them)
 	enter_map, ## Triggers when entering a map
-	exit_map ## Triggers when exiting a map
+	exit_map, ## Triggers when exiting a map
+	dialogue_event, ## Triggers through dialogue
 }
 @export var id: String ## ID of this objective
 @export var description: String ## Objective explanation that is displayed to player

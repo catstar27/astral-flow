@@ -1,0 +1,9 @@
+join kalin left_r [animation="Instant In" length="0.0"]
+join void_god right_l [animation="Slide In Up" mirrored="true"]
+void_god: Hey, I wouldn't head over there if I were you.
+void_god: This place is crumbling as it is, and that particular spot has it the worst!
+void_god: If you go there, I'm going to have to stop you.
+void_god: So don't, ok?
+void_god: You need to learn how to get out of here. I will teach you, but only if you come back to me.
+void_god: Take that as your warning.
+[end_timeline]
