@@ -110,7 +110,7 @@ func load_map(map: GameMap)->void:
 		map.load_save_data(level_data[map.name])
 
 ## Loads the given player's data
-func load_player(player: Player)->void:
+func load_player(player: Character)->void:
 	if player.name in player_data:
 		load_save_dict(player, player_data[player.name])
 
@@ -119,7 +119,7 @@ func save_map(map: GameMap)->void:
 	level_data[map.name] = map.get_save_data()
 
 ## Saves the player to player_data
-func save_player(player: Player)->void:
+func save_player(player: Character)->void:
 	player_data[player.name] = get_save_dict(player, ["position"])
 
 func get_save_dict(node: Node, skip_values: Array[String] = [])->Dictionary[String, Variant]:
@@ -129,7 +129,7 @@ func get_save_dict(node: Node, skip_values: Array[String] = [])->Dictionary[Stri
 		if value in skip_values:
 			continue
 		dict[value] = node.get(value)
-	if node is Player:
+	if node.is_in_group("PartyMember"):
 		player_data[node.name] = dict
 	node.post_save()
 	return dict
@@ -138,7 +138,7 @@ func load_save_dict(node: Node, dict: Dictionary[String, Variant])->void:
 	node.pre_load()
 	for key in dict:
 		node.set(key, dict[key])
-	if node is Player:
+	if node.is_in_group("PartyMember"):
 		player_data[node.name] = dict
 	node.post_load()
 
@@ -163,7 +163,7 @@ func save_data(save_name: String, slot: String, quiet_save: bool = false)->void:
 	file.store_var(dialogic_vars)
 	var global_data: Dictionary[String, Dictionary]
 	for node in get_tree().get_nodes_in_group("Persist"):
-		if node is Player:
+		if node.is_in_group("PartyMember"):
 			save_player(node)
 		else:
 			global_data[node.name] = get_save_dict(node)

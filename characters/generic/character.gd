@@ -403,9 +403,9 @@ func damage(source: Node, amount: int, _damage_type: Ability.damage_type_options
 
 ## Activates this character's ai, only if not controlled by player
 func take_turn()->void:
-	if self is not Player && combat_target != null:
+	if !is_in_group("PartyMember") && combat_target != null:
 		call_deferred(str(ai_types.keys()[ai_type]))
-	elif self is not Player && combat_target == null:
+	elif !is_in_group("PartyMember") && combat_target == null:
 		end_turn()
 
 ## Waits until the character is idle, then ends their turn
@@ -590,10 +590,11 @@ func _combat_trigger_exited(body: Node2D) -> void:
 func try_combat(character: Character)->void:
 	if !active:
 		return
-	if (!character.in_combat || !in_combat) && ((character is Player && hostile_to_player) || character in enemies):
-		combat_target = character
-		var participants: Array[Character] = [character, self]
-		EventBus.broadcast("START_COMBAT", participants)
+	if !character.in_combat || !in_combat: 
+		if ((character.is_in_group("PartyMember") && hostile_to_player) || character in enemies):
+			combat_target = character
+			var participants: Array[Character] = [character, self]
+			EventBus.broadcast("START_COMBAT", participants)
 #endregion
 
 #region Misc
@@ -617,7 +618,7 @@ func process_cutscene_event(event: CharacterCutsceneEvent, interact_target: Node
 
 ## Called when interacted with
 func _interacted(interactor: Character)->void:
-	if interactor is Player:
+	if interactor.is_in_group("PartyMember"):
 		EventBus.broadcast("QUEST_EVENT", "interact_with:"+display_name)
 		if dialogue_id in interact_dialogues && !hostile_to_player:
 			EventBus.broadcast("ENTER_DIALOGUE", [interact_dialogues[dialogue_id], true])

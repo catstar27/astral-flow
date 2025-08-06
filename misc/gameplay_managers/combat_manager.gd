@@ -74,7 +74,7 @@ func add_to_combat(character: Character)->void:
 ## Determines which character has higher sequence of two.
 ## Ties go in favor of the player
 func sequence_sort(character1: Character, character2: Character)->bool:
-	if character1 is Player && character2 is not Player:
+	if character1.is_in_group("PartyMember") && !character2.is_in_group("PartyMember"):
 		return character1.sequence >= character2.sequence
 	else:
 		return character1.sequence > character2.sequence
@@ -102,6 +102,9 @@ func start_combat(participants: Array[Character])->void:
 	var will_merge: bool = false
 	participants.append_array(participants[0].allies)
 	participants.append_array(participants[1].allies)
+	for party_member in get_tree().get_nodes_in_group("PartyMember"):
+		if party_member not in participants:
+			participants.append(party_member)
 	for participant in participants:
 		if participant.in_combat:
 			will_merge = true

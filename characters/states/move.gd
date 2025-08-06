@@ -39,7 +39,7 @@ func move(cur_target: Vector2)->bool:
 		state_machine.user.cur_ap = ap_arr[0][0]
 		state_machine.user.speed_remainder = ap_arr[0][1]
 		state_machine.user.stats_changed.emit()
-		if state_machine.user is Player:
+		if state_machine.user.is_in_group("PartyMember"):
 			EventBus.broadcast("PRINT_LOG", "Not enough AP!")
 			return true
 		else:

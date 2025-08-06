@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://c6tflifn824fs"]
+[gd_scene load_steps=12 format=3 uid="uid://c6tflifn824fs"]
 
 [ext_resource type="Script" uid="uid://mnr6ks1d3db6" path="res://misc/gameplay_managers/main.gd" id="1_518bh"]
 [ext_resource type="Texture2D" uid="uid://ceeo5gnqb2rcr" path="res://textures/gui/foreground.png" id="3_khi6w"]
@@ -9,6 +9,7 @@
 [ext_resource type="PackedScene" uid="uid://cmd2yidmaqw8e" path="res://misc/gameplay_managers/skill_manager.tscn" id="5_y3pxv"]
 [ext_resource type="PackedScene" uid="uid://81w41aon23of" path="res://misc/gameplay_managers/quest_manager.tscn" id="6_1f2dt"]
 [ext_resource type="PackedScene" uid="uid://t1lqjxny1int" path="res://gui/gui.tscn" id="9_5e0hy"]
+[ext_resource type="PackedScene" uid="uid://qjb7sn1qkk44" path="res://characters/generic/player.tscn" id="10_5e0hy"]
 
 [sub_resource type="Resource" id="Resource_ut36o"]
 metadata/__load_path__ = "res://textures/arrow.png"
@@ -62,5 +63,8 @@ z_index = 30
 unique_name_in_owner = true
 process_mode = 1
 move_arrow_tex = SubResource("Resource_ut36o")
+
+[node name="Kalin" parent="." instance=ExtResource("10_5e0hy")]
+active = false
 
 [connection signal="timeout" from="GlobalTimer" to="." method="global_timer_timeout"]

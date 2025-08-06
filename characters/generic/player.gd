@@ -1,6 +1,5 @@
 extends Character
-class_name Player
-## Class for the player
+## Script for the player
 
 func _ready() -> void:
 	_setup()

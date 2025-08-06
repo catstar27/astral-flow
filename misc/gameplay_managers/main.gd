@@ -2,18 +2,17 @@ extends Node2D
 class_name Main
 ## The game's main node; everything is a descendent of this.
 
+const text_indicator_scene: PackedScene = preload("uid://dtylaymiixbpw") ## Preloaded text indicators
 @onready var global_timer: Timer = %GlobalTimer ## The global timer that determines in game time passage
 @onready var gui: GUI = %GUI
 @onready var selection_cursor: SelectionCursor = %SelectionCursor ## The selection cursor
 @onready var foreground: Sprite2D = %Foreground ## Foreground for fade to black or shaders
 @onready var sound_manager: SoundManager = %SoundManager ## Sound manager node
+var party_members: Array[Character] ## Set of party members
 var num_paused: int = 0 ## Sources causing the game to be paused
 var in_dialogue: bool = false ## Whether the game has dialogue running
-var player: Player = null ## The player node
 var map: GameMap = null ## The currently loaded map node
 var current_timeline: Node = null ## Current dialogue timeline node
-var player_scene: PackedScene = preload("uid://qjb7sn1qkk44") ## Preloaded player character
-var text_indicator_scene: PackedScene = preload("uid://dtylaymiixbpw") ## Preloaded text indicators
 var hour: int = 0 ## In game hour
 var minute: int = 0 ## In game minute
 var prepped: bool = false ## Whether this node has finished preparing
@@ -27,6 +26,8 @@ signal saved(node: Main) ## Emitted when this is saved
 signal loaded(node: Main) ## Emitted when this is loaded
 
 func _ready() -> void:
+	for party_member in get_tree().get_nodes_in_group("PartyMember"):
+		party_members.append(party_member)
 	if get_tree().paused:
 		unpause()
 	Engine.max_fps = maxi(roundi(DisplayServer.screen_get_refresh_rate()), 60)
@@ -182,8 +183,10 @@ func load_map(new_map: String, entrance_id: String = "")->void:
 	gui.hide()
 	await custom_fade_out(.5)
 	selection_cursor.hide()
-	if player != null && player.in_combat:
-		%CombatManager.end_combat()
+	for party_member in party_members:
+		if party_member.in_combat:
+			%CombatManager.end_combat()
+			break
 	await unload_map()
 	selection_cursor.deactivate()
 	var map_to_load: GameMap = load(new_map).instantiate()
@@ -195,27 +198,31 @@ func load_map(new_map: String, entrance_id: String = "")->void:
 	SaveLoad.load_map(map_to_load)
 	while !map_to_load.is_node_ready():
 		await map_to_load.ready
-	if player == null:
-		player = player_scene.instantiate()
-		player.name = "Kalin"
-	else:
-		remove_child(player)
-	map_to_load.add_child(player)
-	var player_pos: Vector2
+	for party_member in party_members:
+		remove_child(party_member)
+		map_to_load.add_child(party_member)
+	var party_pos: Array[Vector2]
+	party_pos.resize(party_members.size())
 	var entrance: TravelPoint = map_to_load.get_entrance(entrance_id)
 	if last_map_name == map_to_load.name:
-		player_pos = map_to_load.last_player_pos[player.name]
+		for index in range(0, party_members.size()):
+			party_pos[index] = map_to_load.last_player_pos[party_members[index].name]
 	elif entrance == null:
-		player_pos = map_to_load.map_to_local(map_to_load.player_start_pos)
+		for index in range(0, party_members.size()):
+			party_pos[index] = map_to_load.map_to_local(map_to_load.player_start_pos)
 	else:
-		player_pos = entrance.get_exit_position()
-	player.position = map_to_load.map_to_local(map_to_load.local_to_map(player_pos))
-	SaveLoad.load_player(player)
+		for index in range(0, party_members.size()):
+			party_pos[index] = entrance.get_exit_position()
+	for index in range(party_members.size()-1, -1, -1):
+		party_members[index].activate(map_to_load.map_to_local(map_to_load.get_nearest_empty_tile(
+			map_to_load.local_to_map(party_pos[index]), map_to_load.local_to_map(party_pos[index]))))
+		map_to_load.set_pos_occupied([party_members[index].position, party_members[index]])
+		SaveLoad.load_player(party_members[index])
 	while selection_cursor.moving:
 		await selection_cursor.move_stopped
-	selection_cursor.position = player.position
+	selection_cursor.position = party_members[0].position
 	selection_cursor.activate()
-	selection_cursor.select(player)
+	selection_cursor.select(party_members[0])
 	map_to_load.prep_map()
 	SaveLoad.save_data("Autosave", SaveLoad.recent_slot, true)
 	if sound_manager.ost.stream != map_to_load.calm_theme:
@@ -231,9 +238,10 @@ func unload_map()->void:
 		last_map_name = map.name
 		SaveLoad.save_map(map)
 		selection_cursor.deselect()
-		if player != null:
-			map.remove_child(player)
-			add_child(player)
+		for party_member in party_members:
+			party_member.deactivate()
+			map.remove_child(party_member)
+			add_child(party_member)
 		map.queue_free()
 		while is_instance_valid(map):
 			await get_tree().process_frame

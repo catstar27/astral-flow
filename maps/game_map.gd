@@ -271,7 +271,7 @@ func get_save_data()->Dictionary[String, Dictionary]:
 	var dict: Dictionary[String, Dictionary]
 	var self_dict: Dictionary[String, Variant]
 	for node in get_children():
-		if node is Player:
+		if node.is_in_group("PartyMember"):
 			last_player_pos[node.name] = node.position
 	for value in to_save:
 		self_dict[value] = get(value)

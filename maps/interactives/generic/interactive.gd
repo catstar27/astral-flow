@@ -91,11 +91,11 @@ func _calc_occupied()->void:
 
 ## Called when this interactive is interacted with
 func _interacted(character: Character)->void:
-	if character is Player:
+	if character.is_in_group("PartyMember"):
 		EventBus.broadcast("QUEST_EVENT", "interact_with:"+id)
 	if interact_sfx != null && !SaveLoad.loading && !NavMaster.map_loading:
 		EventBus.broadcast("PLAY_SOUND", [interact_sfx, "positional", global_position])
-	if dialogue_timeline != null && character is Player && allow_dialogue:
+	if dialogue_timeline != null && character.is_in_group("PartyMember") && allow_dialogue:
 		EventBus.broadcast("ENTER_DIALOGUE", [dialogue_timeline, pause_music])
 	_interact_extra(character)
 	interacted.emit()
